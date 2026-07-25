@@ -45,6 +45,7 @@ from llm_client_shared import (
     prepare_document_input,
     run_document_level,
     run_line_level,
+    write_document_record,
 )
 from vocab_manager import VocabularyManager
 
@@ -150,6 +151,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--ocr", action="store_true", help="OCR text-less pages when auto-converting .pdf inputs."
     )
+    parser.add_argument(
+        "--document-json-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Enable the paired per-document record (atrium_document.py): read "
+            "<doc_id>.document.json from this dir as the baseline and write it back with "
+            "llm-enrich's enrichment block updated. Other tools' blocks pass through."
+        ),
+    )
     parser.add_argument("--max-retries", type=int, default=3)
     parser.add_argument(
         "--timeout",
@@ -252,6 +263,7 @@ def main(argv: Optional[List[str]] = None) -> None:
                 continue
 
             # .pdf/.docx → visually-rich .md (document-level) before dispatch.
+            source_file = f
             try:
                 f = prepare_document_input(f, ocr=args.ocr)
             except Exception as exc:
@@ -284,6 +296,18 @@ def main(argv: Optional[List[str]] = None) -> None:
                     tqdm.write(f"  -> {len(results)} records -> {out_file.name}")
                     logger.log_success("json", count=1)
                     logger.log_document_success()
+
+                    if args.document_json_dir is not None:
+                        write_document_record(
+                            doc_id,
+                            results,
+                            args.document_json_dir,
+                            run_id=logger._run_id,
+                            enriched_path=out_file,
+                            # Only a real conversion leaves a regenerable derivation.
+                            markdown_from=source_file if f != source_file else None,
+                            license_detail=logger._license_block(),
+                        )
                 else:
                     logger.log_skip(f.name, "No records produced.")
 

@@ -25,6 +25,7 @@ prompt over there, mirror the change here.
 import csv
 import enum
 import json
+import sys
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -606,6 +607,85 @@ def prepare_document_input(path: Path, cache_dir: Optional[Path] = None, ocr: bo
         return out
     out.write_text(convert_to_visual_md(path, ocr=ocr), encoding="utf-8")
     return out
+
+
+def enrichment_block(doc_id: str, results: List[dict]) -> dict:
+    """Project this repo's ``*_enriched.json`` records onto the ``enrichment`` block
+    of the paired per-document record (see ``atrium_document.py``).
+
+    Handles both record shapes: the document-level one (``locator``/``page``, from
+    ``run_document_level``) and the line-level one (``page``/``line``, from
+    ``run_line_level``). Only the fields actually present are emitted, and a
+    ``[Source: <doc_id>, Page N]`` citation is added whenever a page is known.
+    """
+    items: List[dict] = []
+    for record in results:
+        item: dict = {}
+        for key in ("locator", "page", "line"):
+            if record.get(key) is not None:
+                item[key] = record[key]
+        item.update(record.get("enrichment") or {})
+        if item.get("page") is not None:
+            item["citation"] = f"[Source: {doc_id}, Page {item['page']}]"
+        items.append(item)
+    return {"items": items}
+
+
+def write_document_record(
+    doc_id: str,
+    results: List[dict],
+    record_dir: Path,
+    run_id: Optional[str] = None,
+    paradata_ref: str = "",
+    enriched_path: Optional[Path] = None,
+    markdown_from: Optional[Path] = None,
+    detail: str = "full",
+    license_detail: Optional[dict] = None,
+) -> Optional[Path]:
+    """Write/update this document's paired record, contributing llm-enrich's block only.
+
+    Reads ``<record_dir>/<doc_id>.document.json`` as the baseline when it exists and
+    writes it back with the ``enrichment`` block replaced — every other tool's block
+    passes through untouched. With no baseline present the record is just this tool's
+    own part, which is the intended standalone behaviour.
+
+    ``markdown_from`` records the annotated Markdown as a *regenerable recipe* rather
+    than a stored path, since it is a disposable derivation. Returns the record path,
+    or None when the optional ``atrium_document`` module is unavailable.
+    """
+    try:
+        from atrium_document import FILE_SUFFIX, DocumentRecord
+    except ImportError:
+        print(
+            "[document] atrium_document.py not available — skipping paired record",
+            file=sys.stderr,
+        )
+        return None
+
+    record_dir = Path(record_dir)
+    record_dir.mkdir(parents=True, exist_ok=True)
+    baseline = record_dir / f"{doc_id}{FILE_SUFFIX}"
+
+    with DocumentRecord.open(
+        doc_id,
+        "llm-enrich",
+        baseline=str(baseline) if baseline.exists() else None,
+        run_id=run_id,
+        paradata_ref=paradata_ref,
+        out_dir=str(record_dir),
+    ) as doc:
+        doc.set_block("enrichment", enrichment_block(doc_id, results))
+        if enriched_path is not None:
+            doc.add_derived_from("enriched", str(enriched_path))
+        if markdown_from is not None:
+            doc.add_regenerable(
+                "markdown",
+                {"from": str(markdown_from), "converter": "doc_to_visual_md", "detail": detail},
+            )
+        if license_detail:
+            doc.add_license_detail(license_detail)
+
+    return baseline
 
 
 def run_document_level(
