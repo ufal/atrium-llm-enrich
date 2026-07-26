@@ -15,13 +15,17 @@ from __future__ import annotations
 
 import asyncio
 import csv
+import json
 import logging
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
+
+from atrium_document import FILE_SUFFIX
+from atrium_paradata import ParadataLogger
 
 # Shared ATRIUM meta-contract helpers (§4). Byte-identical across every service,
 # enforced by para-drift.reusable.yml.
@@ -202,9 +206,25 @@ def _doc_id(filename: str) -> str:
     return name
 
 
-def _run_extraction(tmp_path: str, filename: str, engine: Dict[str, Any]) -> Dict[str, Any]:
-    """Blocking enrichment call, dispatched by file extension (line vs document level)."""
-    from llm_client_shared import run_document_level, run_line_level
+def _run_extraction(
+    tmp_path: str,
+    filename: str,
+    engine: Dict[str, Any],
+    doc_id: str,
+    document_record_dir: Optional[Path] = None,
+) -> Dict[str, Any]:
+    """Blocking enrichment call, dispatched by file extension (line vs document level).
+
+    When ``document_record_dir`` is given, also folds the results into this document's
+    paired ATRIUM record (accretion model, docs/document_schema.md / issue #13): a baseline
+    at ``<document_record_dir>/<doc_id>.document.json``, if the caller placed one there, is
+    read and written back with only llm-enrich's ``enrichment`` block updated — every other
+    tool's block passes through untouched (rule 2). With no baseline present the record holds
+    just llm-enrich's own part (rule 3), mirroring ``llm_run.py``/``openrouter_client.py``/
+    ``ollama_client.py``'s ``write_document_record`` call. No results → nothing is written,
+    same as those batch entry points.
+    """
+    from llm_client_shared import run_document_level, run_line_level, write_document_record
 
     name = filename.lower()
     path = Path(tmp_path)
@@ -219,7 +239,33 @@ def _run_extraction(tmp_path: str, filename: str, engine: Dict[str, Any]) -> Dic
             path, engine["doc_chat_fn"], engine["doc_prompt"], engine["doc_model"]
         )
         mode = "document"
-    return {"mode": mode, "results": records, "stats": stats}
+
+    result: Dict[str, Any] = {"mode": mode, "results": records, "stats": stats}
+
+    if document_record_dir is not None and records:
+        from atrium_document import load_document
+
+        with ParadataLogger(
+            program="llm-enrich-api",
+            config={"mode": mode, "backend": engine["backend"], "model": engine["model"]},
+            paradata_dir=str(Path(document_record_dir) / "paradata"),
+            output_types=["json"],
+        ) as para_logger:
+            record_path = write_document_record(
+                doc_id,
+                records,
+                document_record_dir,
+                run_id=para_logger._run_id,
+                license_detail=para_logger.get_license_block(),
+            )
+            if record_path is not None:
+                para_logger.log_success("json")
+                para_logger.log_document_success()
+
+        if record_path is not None:
+            result["document_json"] = load_document(str(record_path))
+
+    return result
 
 
 def _envelope(engine: Dict[str, Any], doc_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -232,10 +278,18 @@ def _envelope(engine: Dict[str, Any], doc_id: str, payload: Dict[str, Any]) -> D
     }
 
 
-async def _extract_from_path(tmp_path: str, filename: str, engine: Dict[str, Any]) -> Dict[str, Any]:
+async def _extract_from_path(
+    tmp_path: str,
+    filename: str,
+    engine: Dict[str, Any],
+    doc_id: str,
+    document_record_dir: Optional[Path] = None,
+) -> Dict[str, Any]:
     loop = asyncio.get_event_loop()
     try:
-        return await loop.run_in_executor(None, _run_extraction, tmp_path, filename, engine)
+        return await loop.run_in_executor(
+            None, _run_extraction, tmp_path, filename, engine, doc_id, document_record_dir
+        )
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
     except RuntimeError as exc:
@@ -259,7 +313,18 @@ async def info() -> Dict[str, Any]:
 
 
 @app.post("/extract_keywords")
-async def extract_keywords(file: UploadFile = File(...)):  # noqa: B008
+async def extract_keywords(
+    file: UploadFile = File(...),  # noqa: B008
+    document_json: UploadFile = File(  # noqa: B008
+        None,
+        description=(
+            "Optional baseline ATRIUM Document JSON (accretion model, docs/document_schema.md "
+            "/ issue #13). When given, the response's `document_json` carries the record back "
+            "with only llm-enrich's `enrichment` block updated — every other tool's block "
+            "(pages, lines, entities, translations, ...) passes through untouched."
+        ),
+    ),
+):
     """Extract archaeological keywords from an uploaded document (§4.2).
 
     ``.csv`` / ``*.teitok.xml`` → line-level (one record per qualifying line);
@@ -279,15 +344,25 @@ async def extract_keywords(file: UploadFile = File(...)):  # noqa: B008
     if len(data) > MAX_UPLOAD_BYTES:
         raise HTTPException(413, f"File too large. Maximum size is {MAX_UPLOAD_MB} MB.") from None
 
+    doc_id = _doc_id(file.filename)
     suffix = ".teitok.xml" if name.endswith(".teitok.xml") else Path(name).suffix
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-        tmp.write(data)
-        tmp_path = tmp.name
-    try:
-        result = await _extract_from_path(tmp_path, file.filename, engine)
-    finally:
-        Path(tmp_path).unlink(missing_ok=True)
-    return _envelope(engine, _doc_id(file.filename), result)
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        work_dir = Path(tmp_dir)
+        tmp_path = work_dir / f"input{suffix}"
+        tmp_path.write_bytes(data)
+
+        document_record_dir: Optional[Path] = None
+        if document_json is not None:
+            baseline_bytes = await document_json.read()
+            (work_dir / f"{doc_id}{FILE_SUFFIX}").write_bytes(baseline_bytes)
+            document_record_dir = work_dir
+
+        result = await _extract_from_path(
+            str(tmp_path), file.filename, engine, doc_id, document_record_dir
+        )
+
+    return _envelope(engine, doc_id, result)
 
 
 @app.post("/extract_keywords_text")
@@ -295,7 +370,10 @@ async def extract_keywords_text(payload: Dict[str, Any]):
     """Line-level extraction from an inline JSON ``{"lines": [...]}`` body (§4.3 sibling).
 
     ``lines`` items may be plain strings or objects with a ``text`` field; agents can call
-    without materializing a file.
+    without materializing a file. An optional inline ``document_json`` object may also be
+    included as this document's baseline ATRIUM Document JSON (accretion model, docs/
+    document_schema.md / issue #13); the response then carries the updated record back
+    under ``document_json``, with only llm-enrich's ``enrichment`` block changed.
     """
     engine = _require_engine()
     lines = payload.get("lines")
@@ -320,15 +398,29 @@ async def extract_keywords_text(payload: Dict[str, Any]):
         raise HTTPException(422, "No usable text lines found in 'lines'.") from None
 
     doc_id = str(payload.get("doc_id", "document"))
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".csv", mode="w", newline="", encoding="utf-8") as tmp:
-        writer = csv.DictWriter(tmp, fieldnames=["page_num", "line_num", "text", "categ", "quality_score"])
-        writer.writeheader()
-        writer.writerows(rows)
-        tmp_path = tmp.name
-    try:
-        result = await _extract_from_path(tmp_path, f"{doc_id}.csv", engine)
-    finally:
-        Path(tmp_path).unlink(missing_ok=True)
+    baseline_doc = payload.get("document_json")
+    if baseline_doc is not None and not isinstance(baseline_doc, dict):
+        raise HTTPException(422, "'document_json' must be a JSON object.") from None
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        work_dir = Path(tmp_dir)
+        tmp_path = work_dir / f"{doc_id}.csv"
+        with open(tmp_path, "w", newline="", encoding="utf-8") as tmp:
+            writer = csv.DictWriter(tmp, fieldnames=["page_num", "line_num", "text", "categ", "quality_score"])
+            writer.writeheader()
+            writer.writerows(rows)
+
+        document_record_dir: Optional[Path] = None
+        if baseline_doc is not None:
+            (work_dir / f"{doc_id}{FILE_SUFFIX}").write_text(
+                json.dumps(baseline_doc, ensure_ascii=False), encoding="utf-8"
+            )
+            document_record_dir = work_dir
+
+        result = await _extract_from_path(
+            str(tmp_path), f"{doc_id}.csv", engine, doc_id, document_record_dir
+        )
+
     return _envelope(engine, doc_id, result)
 
 

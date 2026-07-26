@@ -24,6 +24,7 @@ from tqdm import tqdm  # noqa: E402
 
 import llm_utils  # noqa: E402  (side-effect: env-var guard + compat patches)
 from atrium_paradata import ParadataLogger  # noqa: E402
+from llm_client_shared import write_document_record  # noqa: E402
 from llm_utils import (  # noqa: E402
     CONTEXT_RESERVED,
     _check_backend_deps,
@@ -267,6 +268,8 @@ def main(config_path: str = "llm_config.txt") -> None:
     INPUT_DIR = Path(config.get("INPUT_DIR", "data_samples/DOC_LINE_LANG_CLASS"))
     VOCAB_PATH = config.get("VOCAB_PATH", "data_samples/teater_nested_vocab.json")
     PARADATA_DIR = config.get("PARADATA_DIR", "paradata")
+    _document_json_dir_raw = config.get("DOCUMENT_JSON_DIR", "").strip()
+    DOCUMENT_JSON_DIR = Path(_document_json_dir_raw) if _document_json_dir_raw else None
 
     _base_out = Path(config.get("OUTPUT_DIR", "data_samples/KW_PER_DOC_LLM"))
     _model_suffix = MODEL_KEY.replace(".", "").replace("-", "_")
@@ -303,6 +306,12 @@ def main(config_path: str = "llm_config.txt") -> None:
         f"\n=== LLM Semantic Enrichment Pipeline ===\n"
         f"    model:   {MODEL_KEY}\n"
         f"    output:  {OUTPUT_DIR}\n"
+        + (
+            f"    document pairing: {DOCUMENT_JSON_DIR}  "
+            "(atrium_document.py — reads/writes <doc_id>.document.json)\n"
+            if DOCUMENT_JSON_DIR is not None
+            else ""
+        )
     )
     print("  Inference parameters:")
     print(f"    {'BACKEND':<26} = {BACKEND:<12}  {_SRC_LABEL[sources['BACKEND']]}")
@@ -334,6 +343,7 @@ def main(config_path: str = "llm_config.txt") -> None:
             "min_char_count": MIN_CHAR_COUNT,
             "min_char_non_text": MIN_CHAR_NON_TEXT,
             "min_alpha_ratio_non_text": MIN_ALPHA_RATIO_NON_TEXT,
+            "document_json_dir": str(DOCUMENT_JSON_DIR) if DOCUMENT_JSON_DIR else None,
         },
         paradata_dir=PARADATA_DIR,
         output_types=["json"],
@@ -486,6 +496,16 @@ def main(config_path: str = "llm_config.txt") -> None:
                     print(f"  -> {len(enriched_results)} records → {out_file.name}")
                     logger.log_success("json", count=1)
                     logger.log_document_success()
+
+                    if DOCUMENT_JSON_DIR is not None:
+                        write_document_record(
+                            doc_id,
+                            enriched_results,
+                            DOCUMENT_JSON_DIR,
+                            run_id=logger._run_id,
+                            enriched_path=out_file,
+                            license_detail=logger.get_license_block(),
+                        )
                 else:
                     logger.log_skip(
                         input_file.name,
