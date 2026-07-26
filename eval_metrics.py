@@ -24,6 +24,7 @@ from typing import Dict, Iterable, List, Sequence, Tuple
 # Text normalization
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def normalize_text(text: str, lowercase: bool = False, collapse_ws: bool = True) -> str:
     """NFC-normalize; optionally lowercase and collapse all whitespace runs to single spaces."""
     out = unicodedata.normalize("NFC", text)
@@ -37,6 +38,7 @@ def normalize_text(text: str, lowercase: bool = False, collapse_ws: bool = True)
 # ──────────────────────────────────────────────────────────────────────────────
 # Edit distance (Levenshtein, two-row DP)
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def levenshtein(ref: Sequence, hyp: Sequence) -> int:
     """Levenshtein distance between two sequences (characters or word lists)."""
@@ -95,12 +97,20 @@ def entity_prf(ref_entities: Iterable[Entity], hyp_entities: Iterable[Entity]) -
     precision = tp / n_hyp if n_hyp else 0.0
     recall = tp / n_ref if n_ref else 0.0
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
-    return {"precision": precision, "recall": recall, "f1": f1, "tp": tp, "n_ref": n_ref, "n_hyp": n_hyp}
+    return {
+        "precision": precision,
+        "recall": recall,
+        "f1": f1,
+        "tp": tp,
+        "n_ref": n_ref,
+        "n_hyp": n_hyp,
+    }
 
 
 # ──────────────────────────────────────────────────────────────────────────────
 # TEDS (optional dependency)
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def teds_score(ref_html: str, hyp_html: str, structure_only: bool = False) -> float:
     """Tree-Edit-Distance-based Similarity between two HTML tables.
@@ -121,6 +131,7 @@ def teds_score(ref_html: str, hyp_html: str, structure_only: bool = False) -> fl
 # ──────────────────────────────────────────────────────────────────────────────
 # Page / corpus scoring
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def score_page(ref_text: str, hyp_text: str) -> Dict[str, float]:
     """All transcription metrics for one page."""

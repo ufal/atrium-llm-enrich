@@ -118,6 +118,7 @@ DEFAULTS: Dict[str, object] = {
 # Input loading
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def parse_pred_specs(specs: Iterable[str]) -> Dict[str, str]:
     """Parse ``NAME=PATH`` prediction specs into an order-preserving dict."""
     out: Dict[str, str] = {}
@@ -153,9 +154,7 @@ def load_manifest(path: str, split: Optional[str] = None) -> List[Dict[str, obje
             row = {(k or "").strip(): (v or "").strip() for k, v in raw.items()}
             tier = row[TIER_COL]
             if tier == OVERALL_KEY:
-                raise ValueError(
-                    f"Manifest {path} uses reserved tier name {OVERALL_KEY!r}"
-                )
+                raise ValueError(f"Manifest {path} uses reserved tier name {OVERALL_KEY!r}")
             if split is not None and row.get(SPLIT_COL) != split:
                 continue
             rows.append(
@@ -214,6 +213,7 @@ def read_entities(path: str) -> List[Tuple[str, str]]:
 # ──────────────────────────────────────────────────────────────────────────────
 # Scoring
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def score_pages(
     rows: List[Dict[str, object]],
@@ -348,11 +348,7 @@ def aggregate(
                 tp, n_ref, n_hyp = pool["tp"], pool["n_ref"], pool["n_hyp"]
                 precision = tp / n_hyp if n_hyp else 0.0
                 recall = tp / n_ref if n_ref else 0.0
-                f1 = (
-                    2 * precision * recall / (precision + recall)
-                    if (precision + recall)
-                    else 0.0
-                )
+                f1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
                 agg_row.update(
                     {
                         "entity_precision": precision,
@@ -383,6 +379,7 @@ def aggregate(
 # ──────────────────────────────────────────────────────────────────────────────
 # Reporting
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def _fmt_pct(value: Optional[float]) -> str:
     return f"{value * 100:.2f}" if value is not None else "–"
@@ -456,9 +453,7 @@ def render_markdown(
             cells.append(cell(row.get("entity_f1"), best_f1, _fmt_f1))
         lines.append("| " + " | ".join(cells) + " |")
 
-    tiers = _tier_order(
-        str(r[TIER_COL]) for r in agg_rows if r[TIER_COL] != OVERALL_KEY
-    )
+    tiers = _tier_order(str(r[TIER_COL]) for r in agg_rows if r[TIER_COL] != OVERALL_KEY)
     for title, metric, fmt in (
         ("CER (%)", "cer", _fmt_pct),
         ("WER (%)", "wer", _fmt_pct),
@@ -505,6 +500,7 @@ def write_csv(path: str, rows: List[Dict[str, object]], fieldnames: List[str]) -
 # ──────────────────────────────────────────────────────────────────────────────
 # CLI
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def _load_config(path: Optional[str]) -> Dict[str, object]:
     out = dict(DEFAULTS)

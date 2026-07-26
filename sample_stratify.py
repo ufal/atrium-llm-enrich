@@ -69,6 +69,7 @@ DEFAULTS: Dict[str, object] = {
 # Input loading
 # ──────────────────────────────────────────────────────────────────────────────
 
+
 def load_page_stats(path: str) -> pd.DataFrame:
     """Load an aggregated per-page stats CSV (output of langID_aggregate_STAT.py)."""
     df = pd.read_csv(path)
@@ -117,6 +118,7 @@ def aggregate_line_csvs(lines_dir: str) -> pd.DataFrame:
 # ──────────────────────────────────────────────────────────────────────────────
 # Tiering & sampling
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def assign_tiers(
     page_df: pd.DataFrame,
@@ -175,14 +177,15 @@ def assign_splits(
         n = len(idx)
         n_train = int(round(n * train_r))
         n_dev = int(round(n * dev_r))
-        df.loc[idx[n_train:n_train + n_dev], SPLIT_COL] = "dev"
-        df.loc[idx[n_train + n_dev:], SPLIT_COL] = "test"
+        df.loc[idx[n_train : n_train + n_dev], SPLIT_COL] = "dev"
+        df.loc[idx[n_train + n_dev :], SPLIT_COL] = "test"
     return df
 
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CLI
 # ──────────────────────────────────────────────────────────────────────────────
+
 
 def _load_config(path: Optional[str]) -> Dict[str, object]:
     out = dict(DEFAULTS)
@@ -196,7 +199,9 @@ def _load_config(path: Optional[str]) -> Dict[str, object]:
         out["lines_dir"] = s.get("LINES_DIR", fallback=None)
         out["clean_min"] = s.getfloat("CLEAN_MIN", fallback=float(DEFAULTS["clean_min"]))
         out["degraded_min"] = s.getfloat("DEGRADED_MIN", fallback=float(DEFAULTS["degraded_min"]))
-        out["valid_ratio_min"] = s.getfloat("VALID_RATIO_MIN", fallback=float(DEFAULTS["valid_ratio_min"]))
+        out["valid_ratio_min"] = s.getfloat(
+            "VALID_RATIO_MIN", fallback=float(DEFAULTS["valid_ratio_min"])
+        )
         out["n_pages"] = s.getint("N_PAGES", fallback=int(DEFAULTS["n_pages"]))
         out["seed"] = s.getint("SEED", fallback=int(DEFAULTS["seed"]))
         out["output"] = s.get("OUTPUT_MANIFEST", fallback=str(DEFAULTS["output"]))
@@ -237,7 +242,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     sampled = stratified_sample(tiered, n_pages=n_pages, seed=seed)
     manifest = assign_splits(sampled, seed=seed)
 
-    cols = ["file", "page_num", TIER_COL, SPLIT_COL, "avg_quality_score", "valid_line_ratio"] + ALL_CATEGS
+    cols = [
+        "file",
+        "page_num",
+        TIER_COL,
+        SPLIT_COL,
+        "avg_quality_score",
+        "valid_line_ratio",
+    ] + ALL_CATEGS
     manifest = manifest[[c for c in cols if c in manifest.columns]]
     manifest.to_csv(output, index=False, encoding="utf-8")
 

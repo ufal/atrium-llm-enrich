@@ -135,7 +135,9 @@ def resolve_effective_license(
             best_license = lic
 
     determined_by = [
-        c["name"] for c in catalogue if (LICENSE_RANK.get(str(c["license"]), max(LICENSE_RANK.values())) == best_rank)
+        c["name"]
+        for c in catalogue
+        if (LICENSE_RANK.get(str(c["license"]), max(LICENSE_RANK.values())) == best_rank)
     ]
 
     is_nc = best_license in _NON_COMMERCIAL

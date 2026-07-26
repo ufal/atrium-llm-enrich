@@ -371,7 +371,7 @@ def main(argv: Optional[List[str]] = None) -> None:
                             enriched_path=out_file,
                             # Only a real conversion leaves a regenerable derivation.
                             markdown_from=source_file if f != source_file else None,
-                            license_detail=logger._license_block(),
+                            license_detail=logger.get_license_block(),
                         )
                 else:
                     logger.log_skip(f.name, "No records produced.")

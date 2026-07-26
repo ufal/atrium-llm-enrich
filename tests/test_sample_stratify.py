@@ -41,7 +41,9 @@ def _page_stats_df():
 # ── load_page_stats ─────────────────────────────────────────────────────────
 def test_load_page_stats_fills_missing_categ_columns(tmp_path):
     path = tmp_path / "s.csv"
-    pd.DataFrame({"file": ["a"], "page_num": [1], "avg_quality_score": [0.9]}).to_csv(path, index=False)
+    pd.DataFrame({"file": ["a"], "page_num": [1], "avg_quality_score": [0.9]}).to_csv(
+        path, index=False
+    )
     df = load_page_stats(str(path))
     for col in ["Clear", "Noisy", "Trash", "Non-text", "Empty"]:
         assert col in df.columns

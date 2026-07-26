@@ -64,7 +64,7 @@ ALTO_SAMPLE = """<?xml version="1.0" encoding="UTF-8"?>
 </alto>
 """
 
-NON_XML_SAMPLE = "<?xml version=\"1.0\"?>\n<some_other_format><thing/></some_other_format>\n"
+NON_XML_SAMPLE = '<?xml version="1.0"?>\n<some_other_format><thing/></some_other_format>\n'
 
 
 # ── is_alto ──────────────────────────────────────────────────────────────────

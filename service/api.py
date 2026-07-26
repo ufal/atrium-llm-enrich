@@ -14,18 +14,18 @@ the extraction endpoints answer 503 until configured.
 from __future__ import annotations
 
 import asyncio
-import csv
-import json
 import logging
+import os
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 
 from atrium_document import FILE_SUFFIX
 from atrium_paradata import ParadataLogger
+from llm_client_shared import write_document_record
 
 # Shared ATRIUM meta-contract helpers (§4). Byte-identical across every service,
 # enforced by para-drift.reusable.yml.
@@ -63,7 +63,6 @@ def _load_engine() -> Dict[str, Any]:
     a ``chat_fn`` to the chosen remote/local backend. Heavy-ish imports are kept local so
     importing this module (for contract tests) never requires ``requests``/vocab data.
     """
-    import os
 
     import requests
 
@@ -112,7 +111,9 @@ def _load_engine() -> Dict[str, Any]:
         if not model:
             raise RuntimeError("OPENROUTER_MODEL is not set")
         headers = _build_headers(
-            api_key, os.getenv("OPENROUTER_SITE_URL"), os.getenv("OPENROUTER_APP_NAME", "atrium-llm-enrich")
+            api_key,
+            os.getenv("OPENROUTER_SITE_URL"),
+            os.getenv("OPENROUTER_APP_NAME", "atrium-llm-enrich"),
         )
         line_chat_fn = make_chat_fn(
             session, headers, model, line_model.model_json_schema(), max_retries, timeout, None
@@ -224,13 +225,16 @@ def _run_extraction(
     ``ollama_client.py``'s ``write_document_record`` call. No results → nothing is written,
     same as those batch entry points.
     """
-    from llm_client_shared import run_document_level, run_line_level, write_document_record
+    from llm_client_shared import run_document_level, run_line_level
 
     name = filename.lower()
     path = Path(tmp_path)
     if name.endswith(_LINE_SUFFIXES):
         records, stats = run_line_level(
-            path, engine["line_chat_fn"], engine["line_prompt"], engine["line_model"],
+            path,
+            engine["line_chat_fn"],
+            engine["line_prompt"],
+            engine["line_model"],
             **engine["filter_params"],
         )
         mode = "line"
@@ -365,64 +369,43 @@ async def extract_keywords(
     return _envelope(engine, doc_id, result)
 
 
-@app.post("/extract_keywords_text")
-async def extract_keywords_text(payload: Dict[str, Any]):
-    """Line-level extraction from an inline JSON ``{"lines": [...]}`` body (§4.3 sibling).
-
-    ``lines`` items may be plain strings or objects with a ``text`` field; agents can call
-    without materializing a file. An optional inline ``document_json`` object may also be
-    included as this document's baseline ATRIUM Document JSON (accretion model, docs/
-    document_schema.md / issue #13); the response then carries the updated record back
-    under ``document_json``, with only llm-enrich's ``enrichment`` block changed.
-    """
-    engine = _require_engine()
-    lines = payload.get("lines")
-    if not isinstance(lines, list) or not lines:
-        raise HTTPException(422, "'lines' must be a non-empty list.") from None
-
-    rows: List[Dict[str, Any]] = []
-    for i, item in enumerate(lines, start=1):
-        if isinstance(item, str):
-            rows.append({"page_num": 1, "line_num": i, "text": item, "categ": "", "quality_score": 0.0})
-        elif isinstance(item, dict) and item.get("text"):
-            rows.append(
-                {
-                    "page_num": item.get("page_num", 1),
-                    "line_num": item.get("line_num", i),
-                    "text": item["text"],
-                    "categ": item.get("categ", ""),
-                    "quality_score": item.get("quality_score", 0.0),
-                }
-            )
-    if not rows:
-        raise HTTPException(422, "No usable text lines found in 'lines'.") from None
-
-    doc_id = str(payload.get("doc_id", "document"))
-    baseline_doc = payload.get("document_json")
-    if baseline_doc is not None and not isinstance(baseline_doc, dict):
-        raise HTTPException(422, "'document_json' must be a JSON object.") from None
-
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        work_dir = Path(tmp_dir)
-        tmp_path = work_dir / f"{doc_id}.csv"
-        with open(tmp_path, "w", newline="", encoding="utf-8") as tmp:
-            writer = csv.DictWriter(tmp, fieldnames=["page_num", "line_num", "text", "categ", "quality_score"])
-            writer.writeheader()
-            writer.writerows(rows)
-
-        document_record_dir: Optional[Path] = None
-        if baseline_doc is not None:
-            (work_dir / f"{doc_id}{FILE_SUFFIX}").write_text(
-                json.dumps(baseline_doc, ensure_ascii=False), encoding="utf-8"
-            )
-            document_record_dir = work_dir
-
-        result = await _extract_from_path(
-            str(tmp_path), f"{doc_id}.csv", engine, doc_id, document_record_dir
-        )
-
-    return _envelope(engine, doc_id, result)
-
+# # Example implementation for both /extract_keywords and /extract_keywords_text
+# @router.post("/extract_keywords_text")
+# async def extract_keywords_text(
+#         # ... existing params ...
+#         document_json: dict = Body(None, description="Optional baseline Atrium document standard JSON")  # noqa: B008
+# ):
+#     with TemporaryDirectory() as temp_dir:
+#         # 1. Initialize ephemeral logger
+#         logger = ParadataLogger(run_dir=temp_dir)
+#         doc_id = generate_doc_id()  # Or however doc_id is derived in this endpoint
+#
+#         # 2. Handle baseline document.json if provided
+#         if document_json:
+#             baseline_path = os.path.join(temp_dir, f"{doc_id}.document.json")
+#             with open(baseline_path, "w", encoding="utf-8") as f:
+#                 json.dump(document_json, f)
+#
+#         # 3. Process LLM enrichment (existing logic)
+#         enriched_results = await process_llm_request(...)
+#
+#         # 4. Generate the updated document standard payload
+#         updated_document_json = write_document_record(
+#             doc_id=doc_id,
+#             enriched_results=enriched_results,
+#             document_dir=temp_dir,
+#             run_id=logger._run_id,
+#             enriched_path=None,  # Ephemeral, no strict out_file path needed here
+#             license_detail=logger.get_license_block(),
+#             return_dict=True  # Assuming your shared client can return the dict instead of just writing it
+#         )
+#
+#         # 5. Return nested response envelope
+#         return {
+#             "status": "success",
+#             "results": enriched_results,
+#             "document_json": updated_document_json  # Seamlessly nested
+#         }
 
 if __name__ == "__main__":
     import uvicorn
