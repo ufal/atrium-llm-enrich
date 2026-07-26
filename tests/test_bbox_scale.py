@@ -85,11 +85,7 @@ def test_rewrite_bboxes_applies_scale_fn():
 
 # ── detect_source_size ──────────────────────────────────────────────────────
 def test_detect_source_size_from_surface():
-    assert detect_source_size('<surface lrx="1000" lry="2000"></surface>') == (
-        1000,
-        2000,
-        "surface",
-    )
+    assert detect_source_size('<surface lrx="1000" lry="2000"></surface>') == (1000, 2000, "surface")
 
 
 def test_detect_source_size_from_bbox_extent():

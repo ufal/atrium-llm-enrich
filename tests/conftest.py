@@ -56,10 +56,10 @@ def page_break_conllu(tmp_path):
     dest.write_text(content, encoding="utf-8")
     return str(dest)
 
-
 @pytest.fixture
 def empty_conllu(tmp_path):
     """CoNLL-U file with only a comment header — no token lines."""
     dest = tmp_path / "empty.conllu"
     dest.write_text("# newdoc\n", encoding="utf-8")
     return str(dest)
+

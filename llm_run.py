@@ -61,8 +61,6 @@ _EXAMPLES_FOOTER = (
     "}\n"
 )
 
-DOCUMENT_JSON_DIR = os.environ.get("DOCUMENT_JSON_DIR", "document_records")
-
 
 def build_schema(term_names: List[str]) -> type:
     if not term_names:

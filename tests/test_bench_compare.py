@@ -200,7 +200,9 @@ def test_aggregate_macro_average_and_row_order(tmp_path):
     page_rows, stats = score_pages(rows, str(gold), pred_dirs)
     agg_rows = aggregate(page_rows, ["perfect", "noisy"], stats)
 
-    noisy_overall = next(r for r in agg_rows if r["model"] == "noisy" and r["tier"] == "overall")
+    noisy_overall = next(
+        r for r in agg_rows if r["model"] == "noisy" and r["tier"] == "overall"
+    )
     noisy_scores = [r["cer"] for r in page_rows if r["model"] == "noisy"]
     assert noisy_overall["cer"] == pytest.approx(sum(noisy_scores) / len(noisy_scores))
     assert noisy_overall["n_pages"] == 3
@@ -217,7 +219,9 @@ def test_aggregate_pools_entities_micro(tmp_path):
     page_rows, stats = score_pages(rows, str(gold), pred_dirs, entities=True)
     agg_rows = aggregate(page_rows, ["perfect", "noisy"], stats)
 
-    noisy_overall = next(r for r in agg_rows if r["model"] == "noisy" and r["tier"] == "overall")
+    noisy_overall = next(
+        r for r in agg_rows if r["model"] == "noisy" and r["tier"] == "overall"
+    )
     # single entity page: tp=1, n_ref=2, n_hyp=2 → micro P = R = F1 = 0.5
     assert noisy_overall["entity_f1"] == pytest.approx(0.5)
     assert noisy_overall["n_entity_pages"] == 1
@@ -268,17 +272,11 @@ def test_load_config_reads_benchmark_section(tmp_path):
 def _run_main(tmp_path, out_name, para_name, entities=False):
     manifest, gold, pred_dirs = _make_bench(tmp_path, entities=entities)
     argv = [
-        "--manifest",
-        str(manifest),
-        "--gold",
-        str(gold),
-        "--pred",
-        f"perfect={pred_dirs['perfect']}",
-        f"noisy={pred_dirs['noisy']}",
-        "--output-dir",
-        str(tmp_path / out_name),
-        "--paradata-dir",
-        str(tmp_path / para_name),
+        "--manifest", str(manifest),
+        "--gold", str(gold),
+        "--pred", f"perfect={pred_dirs['perfect']}", f"noisy={pred_dirs['noisy']}",
+        "--output-dir", str(tmp_path / out_name),
+        "--paradata-dir", str(tmp_path / para_name),
     ]
     if entities:
         argv.append("--entities")
