@@ -366,59 +366,32 @@ async def extract_keywords(
 
 
 @app.post("/extract_keywords_text")
-async def extract_keywords_text(payload: Dict[str, Any]):
-    """Line-level extraction from an inline JSON ``{"lines": [...]}`` body (§4.3 sibling).
-
-    ``lines`` items may be plain strings or objects with a ``text`` field; agents can call
-    without materializing a file. An optional inline ``document_json`` object may also be
-    included as this document's baseline ATRIUM Document JSON (accretion model, docs/
-    document_schema.md / issue #13); the response then carries the updated record back
-    under ``document_json``, with only llm-enrich's ``enrichment`` block changed.
-    """
+async def extract_keywords_text(
+        text: str = Body(..., description="Raw text for document-level archaeological keyword extraction."),
+        document_json: dict = Body(
+            None,
+            description="Optional baseline ATRIUM Document JSON. When given, the response's `document_json` carries the record back with only llm-enrich's `enrichment` block updated."
+        ),
+):
+    """Extract archaeological keywords from inline text (§4.2)."""
     engine = _require_engine()
-    lines = payload.get("lines")
-    if not isinstance(lines, list) or not lines:
-        raise HTTPException(422, "'lines' must be a non-empty list.") from None
 
-    rows: List[Dict[str, Any]] = []
-    for i, item in enumerate(lines, start=1):
-        if isinstance(item, str):
-            rows.append({"page_num": 1, "line_num": i, "text": item, "categ": "", "quality_score": 0.0})
-        elif isinstance(item, dict) and item.get("text"):
-            rows.append(
-                {
-                    "page_num": item.get("page_num", 1),
-                    "line_num": item.get("line_num", i),
-                    "text": item["text"],
-                    "categ": item.get("categ", ""),
-                    "quality_score": item.get("quality_score", 0.0),
-                }
-            )
-    if not rows:
-        raise HTTPException(422, "No usable text lines found in 'lines'.") from None
-
-    doc_id = str(payload.get("doc_id", "document"))
-    baseline_doc = payload.get("document_json")
-    if baseline_doc is not None and not isinstance(baseline_doc, dict):
-        raise HTTPException(422, "'document_json' must be a JSON object.") from None
+    # Assign a dummy doc_id for inline text (or generate a UUID if preferred)
+    doc_id = "inline_text"
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         work_dir = Path(tmp_dir)
-        tmp_path = work_dir / f"{doc_id}.csv"
-        with open(tmp_path, "w", newline="", encoding="utf-8") as tmp:
-            writer = csv.DictWriter(tmp, fieldnames=["page_num", "line_num", "text", "categ", "quality_score"])
-            writer.writeheader()
-            writer.writerows(rows)
+        tmp_path = work_dir / "input.txt"
+        tmp_path.write_text(text, encoding="utf-8")
 
         document_record_dir: Optional[Path] = None
-        if baseline_doc is not None:
-            (work_dir / f"{doc_id}{FILE_SUFFIX}").write_text(
-                json.dumps(baseline_doc, ensure_ascii=False), encoding="utf-8"
-            )
+        if document_json is not None:
+            baseline_path = work_dir / f"{doc_id}{FILE_SUFFIX}"
+            baseline_path.write_text(json.dumps(document_json), encoding="utf-8")
             document_record_dir = work_dir
 
         result = await _extract_from_path(
-            str(tmp_path), f"{doc_id}.csv", engine, doc_id, document_record_dir
+            str(tmp_path), "input.txt", engine, doc_id, document_record_dir
         )
 
     return _envelope(engine, doc_id, result)
