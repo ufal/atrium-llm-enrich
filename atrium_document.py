@@ -12,7 +12,7 @@ returns it with **only its own block** updated. Nothing else is touched.
     doc.json ──► [tool A] ──► doc.json ──► [tool B] ──► doc.json ──► …
                   writes A's block only     writes B's block only
 
-Contract (see docs/document-schema.md):
+Contract (see docs/document_schema.md):
   1. Optional baseline in, updated record out.
   2. A tool writes its own block(s) only; every other block is passed through untouched.
   3. No baseline given → the tool emits just its own part (standalone-safe).
@@ -54,9 +54,7 @@ RECORD_TYPE_MERGED = "atrium-document-merged"
 FILE_SUFFIX = ".document.json"
 
 #: Structural keys the module itself maintains — never a tool's "own block".
-RESERVED_KEYS = frozenset(
-    {"schema_version", "record_type", "doc_id", "source", "provenance", "assembled"}
-)
+RESERVED_KEYS = frozenset({"schema_version", "record_type", "doc_id", "source", "provenance", "assembled"})
 
 #: Which tool owns which top-level block. One owner per block; blocks shared between
 #: tools are split by FIELD instead (see BLOCK_FIELD_OWNERS) so nothing is co-mutated.
@@ -336,14 +334,12 @@ class DocumentRecord:
             prov["license"] = LICENSE_NAME
             prov["license_url"] = LICENSE_URL
             prov["license_note"] = (
-                "License helper unavailable or no components recorded; "
-                "defaulted conservatively to CC BY-NC 4.0."
+                "License helper unavailable or no components recorded; defaulted conservatively to CC BY-NC 4.0."
             )
 
         contributors: List[Dict[str, str]] = list(prov.get("contributors") or [])
         if self._touched and not any(
-            c.get("program") == self.program and c.get("run_id") == self.run_id
-            for c in contributors
+            c.get("program") == self.program and c.get("run_id") == self.run_id for c in contributors
         ):
             contributors.append(
                 {
@@ -365,9 +361,7 @@ class DocumentRecord:
         out["provenance"] = self._provenance()
         assembled = out.setdefault("assembled", {})
         assembled["had_baseline"] = self._had_baseline
-        assembled["note"] = (
-            "Blocks reflect CONTRIBUTED steps only; a block is absent until its tool has run."
-        )
+        assembled["note"] = "Blocks reflect CONTRIBUTED steps only; a block is absent until its tool has run."
         # Stable, predictable key order for diff-friendly output.
         order = [
             "schema_version",
@@ -448,9 +442,7 @@ def load_document(path: str) -> Dict[str, Any]:
     current_major = int(SCHEMA_VERSION.split(".")[0])
 
     if major > current_major:
-        raise ValueError(
-            f"Schema version {v} is newer than supported {SCHEMA_VERSION}. Please update tools."
-        )
+        raise ValueError(f"Schema version {v} is newer than supported {SCHEMA_VERSION}. Please update tools.")
     elif major < current_major:
         data = migrate_document(data)
 
