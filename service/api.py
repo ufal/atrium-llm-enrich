@@ -14,15 +14,14 @@ the extraction endpoints answer 503 until configured.
 from __future__ import annotations
 
 import asyncio
-import csv
 import json
 import logging
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile, Body
+from fastapi import Body, FastAPI, File, HTTPException, UploadFile
 
 from atrium_document import FILE_SUFFIX
 from atrium_paradata import ParadataLogger
