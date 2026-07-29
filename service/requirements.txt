@@ -3,6 +3,6 @@
 # openrouter/ollama clients), so it needs only the light remote stack plus the
 # web server — never torch/transformers/vllm.
 -r ../requirements_remote.txt
-fastapi>=0.115
+fastapi>=0.140.13
 uvicorn[standard]>=0.30
 python-multipart>=0.0.9
