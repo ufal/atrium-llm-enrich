@@ -1,15 +1,9 @@
-# .github/workflows/pre-commit.yml
-# BLOCKING pre-commit run against the full file tree.
+# atrium-llm-enrich — pre-commit in CI
 #
-# Was advisory (continue-on-error) until 2026-07-30. The only thing holding it
-# there was a single ruff B008 finding in service/api.py — FastAPI's
-# `arg: T = Body(...)` idiom, a false positive. Fixed properly by adding
-# fastapi.* to extend-immutable-calls in ruff.toml (mirroring
-# atrium-alto-postprocess), so the suite is clean and the gate can bite (#18).
-#
-# Hooks configured in .pre-commit-config.yaml (repo root):
-#   • ruff (lint + format) — reads the repo's own ruff.toml
-#   • shellcheck — present for ecosystem consistency; this repo ships no *.sh.
+# Thin caller for ufal/atrium-project's pre-commit.reusable.yml (#18, T3).
+# BLOCKING: a failing hook fails the check. This repo's own
+# .pre-commit-config.yaml and ruff.toml still decide WHAT runs; the reusable
+# standardises how it is invoked and adds the hook-environment cache.
 
 name: pre-commit
 
@@ -24,33 +18,8 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read   # least privilege: these jobs only ever read the tree
+  contents: read
 
 jobs:
   pre-commit:
-    name: Lint
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v7
-        with:
-          python-version: '3.11'
-
-      - name: Cache pre-commit environments
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
-          restore-keys: |
-            pre-commit-${{ runner.os }}-
-
-      - name: Install pre-commit
-        run: pip install pre-commit
-
-      - name: Run pre-commit
-        run: pre-commit run --all-files --show-diff-on-failure
+    uses: ufal/atrium-project/.github/workflows/pre-commit.reusable.yml@v1

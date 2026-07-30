@@ -1,11 +1,10 @@
-# .github/workflows/codeql.yml
-# CodeQL static-analysis for Python.
-# Pure-Python repo: build-mode: none — no compilation step required.
-# Results surface in the Security tab; findings never block CI.
-# Relevant surfaces here: openrouter_client.py / ollama_client.py make
-# outbound HTTP calls with user-configurable hosts (OLLAMA_HOST) and handle
-# API keys — CodeQL will flag SSRF / credential-handling patterns in that
-# request layer.
+# atrium-llm-enrich — CodeQL static analysis
+#
+# Thin caller for ufal/atrium-project's codeql.reusable.yml (#18, T3). Was a
+# ~44-line standalone workflow; five near-identical copies differed only by an
+# arbitrary weekly cron.
+#
+# The schedule stays here because `on:` can only be declared by the caller.
 
 name: CodeQL
 
@@ -15,8 +14,9 @@ on:
   pull_request:
     branches: [test, main]
   schedule:
-    # Weekly Monday 06:00 UTC — avoids peak CI hours
-    - cron: '0 6 * * 1'
+    # Weekly, catching advisories published since the last push. Staggered
+    # 15 min apart across the ecosystem rather than all firing at once.
+    - cron: "15 5 * * 1"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -24,25 +24,12 @@ concurrency:
 
 jobs:
   analyze:
-    name: Analyze (python)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
     permissions:
+      # REQUIRED — a reusable workflow's permissions are capped by this block.
+      # Omitting security-events makes GitHub reject this file at parse time
+      # (startup_failure, not a step failure), exactly as the Wave B change did
+      # to docker.yml in all five repos (#18).
       security-events: write
       actions: read
       contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: python
-          build-mode: none
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
-        with:
-          category: "/language:python"
+    uses: ufal/atrium-project/.github/workflows/codeql.reusable.yml@v1
