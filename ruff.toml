@@ -9,6 +9,23 @@ ignore = [
     "E501",  # Line too long (handled by formatter)
 ]
 
+[lint.flake8-bugbear]
+# FastAPI's dependency-injection idiom is `arg: T = Body(...)` in the signature,
+# which B008 ("do not perform function call in argument defaults") flags. These
+# calls are immutable markers, not shared mutable state, so the warning is a
+# false positive here. Mirrors atrium-alto-postprocess/ruff.toml, extended with
+# Body/Query/Path/Header — service/api.py uses Body (#18: this single finding was
+# the only thing keeping this repo's pre-commit on advisory instead of blocking).
+extend-immutable-calls = [
+    "fastapi.Body",
+    "fastapi.Depends",
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Header",
+    "fastapi.Path",
+    "fastapi.Query",
+]
+
 [format]
 quote-style = "double"
 indent-style = "space"

@@ -1,14 +1,15 @@
 # .github/workflows/pre-commit.yml
-# Advisory (non-blocking) pre-commit run against the full file tree.
+# BLOCKING pre-commit run against the full file tree.
 #
-# The pre-commit step carries continue-on-error: true — mirrors the
-# "advisory first" policy used across the other ATRIUM tool repos. Findings
-# are visible in the Actions tab but never turn a PR red.
+# Was advisory (continue-on-error) until 2026-07-30. The only thing holding it
+# there was a single ruff B008 finding in service/api.py — FastAPI's
+# `arg: T = Body(...)` idiom, a false positive. Fixed properly by adding
+# fastapi.* to extend-immutable-calls in ruff.toml (mirroring
+# atrium-alto-postprocess), so the suite is clean and the gate can bite (#18).
 #
 # Hooks configured in .pre-commit-config.yaml (repo root):
 #   • ruff (lint + format) — reads the repo's own ruff.toml
-#   • shellcheck — present in the hook config for ecosystem consistency, but
-#     this repo ships no *.sh files, so it is effectively a no-op here.
+#   • shellcheck — present for ecosystem consistency; this repo ships no *.sh.
 
 name: pre-commit
 
@@ -27,7 +28,7 @@ permissions:
 
 jobs:
   pre-commit:
-    name: Lint (advisory)
+    name: Lint
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -48,6 +49,8 @@ jobs:
           restore-keys: |
             pre-commit-${{ runner.os }}-
 
-      - name: Run pre-commit (advisory — non-blocking)
-        uses: pre-commit/action@v3.0.1
-        continue-on-error: true
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files --show-diff-on-failure

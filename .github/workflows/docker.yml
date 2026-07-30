@@ -20,7 +20,10 @@ jobs:
       contents: read
       packages: write
     uses: ufal/atrium-project/.github/workflows/docker-tool.reusable.yml@test
-    secrets: inherit
+    secrets:
+      # Explicit instead of `secrets: inherit` — the reusable declares and
+      # needs only this one (#18). inherit handed it every repo secret.
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     with:
       image-name: ufal/atrium-llm-enrich
       apt-packages: ""
@@ -33,9 +36,7 @@ jobs:
       # (llm), not the base layer. Including "base" here would publish the
       # llm image a second time under the unsuffixed tag instead of a real
       # lean base image. base has no ENTRYPOINT and is not meant to be run
-      # standalone — only remote and llm are publishable targets.
-      # base has no ENTRYPOINT and is not meant to be run standalone — only
-      # remote and llm are publishable targets. (Since the template fix,
-      # targets pass through verbatim, so listing "base" would now build the
-      # real base stage — still pointless here, so it stays excluded.)
+      # standalone — only remote and llm are publishable targets. (Targets now
+      # pass through verbatim, so listing "base" would build the real base
+      # stage — still pointless here, so it stays excluded.)
       build-targets: '["remote", "llm"]'
