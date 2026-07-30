@@ -17,8 +17,17 @@ concurrency:
 jobs:
   build:
     permissions:
+      # security-events:write is required because docker-tool.reusable.yml's
+      # build-and-push job uploads the post-publish Trivy SARIF. A reusable
+      # workflow's permissions are CAPPED BY THIS BLOCK, so omitting it makes
+      # GitHub reject the whole file at parse time with "requesting
+      # 'security-events: write', but is only allowed 'security-events: none'"
+      # — a startup_failure, not a step failure (#18). Same grant security.yml
+      # already makes for its own SARIF upload. Not an escalation: this job
+      # already holds packages: write.
       contents: read
       packages: write
+      security-events: write
     uses: ufal/atrium-project/.github/workflows/docker-tool.reusable.yml@test
     secrets:
       # Explicit instead of `secrets: inherit` — the reusable declares and
@@ -30,13 +39,4 @@ jobs:
       pre-install-torch: ""
       requirements: "requirements.txt requirements_remote.txt"
       hf-model-cache: false
-      # NOTE: "base" is deliberately NOT listed. The Dockerfile stage order is
-      # base -> remote -> llm; the reusable workflow maps target="base" to an
-      # *empty* --target, which Docker resolves to the LAST declared stage
-      # (llm), not the base layer. Including "base" here would publish the
-      # llm image a second time under the unsuffixed tag instead of a real
-      # lean base image. base has no ENTRYPOINT and is not meant to be run
-      # standalone — only remote and llm are publishable targets. (Targets now
-      # pass through verbatim, so listing "base" would build the real base
-      # stage — still pointless here, so it stays excluded.)
-      build-targets: '["remote", "llm"]'
+      # NOTE: "base" is deliberately NOT
