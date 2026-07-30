@@ -31,7 +31,7 @@ jobs:
   # both now run the SAME vendored check_version.py, so the two cannot drift
   # apart the way the old inline copies did. It stays a VENDORED FILE rather
   # than a `uses:` on purpose: the guard must not depend on a cross-repo
-  # `uses: …@test` resolving at tag-push time.
+  # `uses: …@v1` resolving at tag-push time.
   version-guard:
     name: Verify tag == CITATION.cff == para_config.txt
     runs-on: ubuntu-latest
