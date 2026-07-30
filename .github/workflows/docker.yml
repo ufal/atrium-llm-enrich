@@ -39,4 +39,13 @@ jobs:
       pre-install-torch: ""
       requirements: "requirements.txt requirements_remote.txt"
       hf-model-cache: false
-      # NOTE: "base" is deliberately NOT
+      # NOTE: "base" is deliberately NOT listed. The Dockerfile stage order is
+      # base -> remote -> llm; the reusable workflow maps target="base" to an
+      # *empty* --target, which Docker resolves to the LAST declared stage
+      # (llm), not the base layer. Including "base" here would publish the
+      # llm image a second time under the unsuffixed tag instead of a real
+      # lean base image. base has no ENTRYPOINT and is not meant to be run
+      # standalone — only remote and llm are publishable targets. (Targets now
+      # pass through verbatim, so listing "base" would build the real base
+      # stage — still pointless here, so it stays excluded.)
+      build-targets: '["remote", "llm"]'
