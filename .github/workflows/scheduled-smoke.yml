@@ -18,6 +18,13 @@
 
 name: Scheduled Smoke Tests
 
+permissions:
+  contents: read
+  actions: read
+  issues: write          # required by "Open Issue on Failure"; GitHub's 403 asked
+                         # for exactly this (x-accepted-github-permissions: issues=write).
+                         # A permissions block WITHOUT it pins issues=none -> 403.
+
 on:
   schedule:
     # Weekly Monday 04:00 UTC
@@ -33,6 +40,7 @@ jobs:
   smoke:
     name: Smoke (slow tests)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -64,3 +72,19 @@ jobs:
           python -m pytest -m slow -v --tb=short || rc=$?
           if [ "$rc" -eq 5 ]; then echo "[smoke] No slow tests collected — OK"; exit 0; fi
           exit $rc
+
+      - name: Open Issue on Failure
+        # Ported from atrium-translator / alto-postprocess (#18, 2026-07-29 audit):
+        # this repo's smoke test previously failed into the void — nobody was
+        # notified, so a red scheduled run looked identical to a green one.
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Scheduled Smoke Test Failed',
+              body: 'The automated smoke test failed. Please review the action logs: ' + context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId,
+              labels: ['bug', 'automated issue']
+            })

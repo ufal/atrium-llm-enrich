@@ -18,10 +18,18 @@ on:
   pull_request:
     branches: [test, main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read   # least privilege: these jobs only ever read the tree
+
 jobs:
   pre-commit:
     name: Lint (advisory)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository

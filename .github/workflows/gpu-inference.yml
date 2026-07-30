@@ -15,9 +15,17 @@
 name: GPU Inference Tests
 
 on:
-  schedule:
-    # Weekly Monday 03:00 UTC (off-peak for shared cluster)
-    - cron: '0 3 * * 1'
+  # INFRA-GATED — needs a self-hosted runner labelled [self-hosted, gpu].
+  # No such runner is registered yet (owner: @rharasim), so scheduled runs only
+  # queued forever and never reported. The cron is deliberately removed until the
+  # runner exists: a weekly job that can never start advertises GPU coverage this
+  # repo does not have (#18, 2026-07-29 audit). Every `slow`-marked test lives
+  # here — docker-tool.reusable.yml runs `pytest -m "not slow"` — so this is a
+  # real gap, not a cosmetic one.
+  #
+  # RESTORE when the runner is live:
+  #   schedule:
+  #     - cron: '0 3 * * 1'   # weekly Monday 03:00 UTC (off-peak for shared cluster)
   workflow_dispatch:
 
 env:
@@ -25,10 +33,14 @@ env:
   PRE_INSTALL_TORCH: ""
   REQUIREMENTS: "requirements.txt requirements-test.txt requirements_llm.txt"
 
+permissions:
+  contents: read   # least privilege: these jobs only ever read the tree
+
 jobs:
   gpu-inference:
     name: GPU slow tests
     runs-on: [self-hosted, gpu]
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
