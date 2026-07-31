@@ -4,7 +4,7 @@
 
 [tool]
 program = llm-enrich
-version = v0.4.0
+version = v0.5.0
 repository_fallback = https://github.com/ufal/atrium-llm-enrich
 
 [components]
