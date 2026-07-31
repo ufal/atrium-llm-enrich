@@ -641,6 +641,7 @@ def write_document_record(
     markdown_from: Optional[Path] = None,
     detail: str = "full",
     license_detail: Optional[dict] = None,
+    used_markdown_input: bool = False,
 ) -> Optional[Path]:
     """Write/update this document's paired record, contributing llm-enrich's block only.
 
@@ -649,9 +650,23 @@ def write_document_record(
     passes through untouched. With no baseline present the record is just this tool's
     own part, which is the intended standalone behaviour.
 
-    ``markdown_from`` records the annotated Markdown as a *regenerable recipe* rather
-    than a stored path, since it is a disposable derivation. Returns the record path,
-    or None when the optional ``atrium_document`` module is unavailable.
+    The ``regenerable.markdown`` recipe records how to rebuild the Markdown this run
+    actually fed the LLM (rule: never reference a transient artifact by a stored path).
+    Two cases, in priority order:
+
+    * ``used_markdown_input=True`` (a real ``run_document_level`` call, i.e. the input
+      was ``.md``/``.txt`` — whether from a pre-converted PDF/DOCX or an upstream
+      ``xml_to_md.py --format layout`` pass over TEITOK) — the recipe points at THIS
+      SAME document JSON via ``json_to_md``, since it is self-sufficient: a consumer
+      holding only the JSON can regenerate equivalent Markdown without also having to
+      retain the original PDF/DOCX/TEITOK file (issue #13 §5).
+    * Otherwise, if ``markdown_from`` is given (the legacy PDF/DOCX-source path,
+      pre-``json_to_md``), fall back to the original ``doc_to_visual_md`` recipe.
+
+    Neither is written for a line-level run (CSV/TEITOK row-by-row) — no Markdown was
+    ever fed to the LLM in that case, so no recipe should claim one can be regenerated.
+    Returns the record path, or None when the optional ``atrium_document`` module is
+    unavailable.
     """
     try:
         from atrium_document import FILE_SUFFIX, DocumentRecord
@@ -677,7 +692,12 @@ def write_document_record(
         doc.set_block("enrichment", enrichment_block(doc_id, results))
         if enriched_path is not None:
             doc.add_derived_from("enriched", str(enriched_path))
-        if markdown_from is not None:
+        if used_markdown_input:
+            doc.add_regenerable(
+                "markdown",
+                {"from": f"{doc_id}{FILE_SUFFIX}", "converter": "json_to_md@1.0", "detail": detail},
+            )
+        elif markdown_from is not None:
             doc.add_regenerable(
                 "markdown",
                 {"from": str(markdown_from), "converter": "doc_to_visual_md", "detail": detail},

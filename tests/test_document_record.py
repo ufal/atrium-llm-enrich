@@ -167,6 +167,40 @@ def test_no_markdown_recipe_when_input_needed_no_conversion(tmp_path):
     assert "regenerable" not in load_document(str(path))
 
 
+def test_used_markdown_input_writes_self_referential_json_to_md_recipe(tmp_path):
+    """A document-level run (real Markdown fed to the LLM, whether from a pre-converted
+    PDF/DOCX or an upstream xml_to_md.py TEITOK pass) gets a recipe pointing at THIS
+    SAME document JSON via json_to_md — self-sufficient, no external file required."""
+    path = write_document_record(DOC, DOC_LEVEL, tmp_path, run_id="R1", used_markdown_input=True)
+    recipe = load_document(str(path))["regenerable"]["markdown"]
+
+    assert recipe["from"] == f"{DOC}{FILE_SUFFIX}"
+    assert recipe["converter"] == "json_to_md@1.0"
+    assert recipe["detail"] == "full"
+
+
+def test_used_markdown_input_takes_priority_over_markdown_from(tmp_path):
+    path = write_document_record(
+        DOC,
+        DOC_LEVEL,
+        tmp_path,
+        run_id="R1",
+        markdown_from=tmp_path / f"{DOC}.pdf",
+        used_markdown_input=True,
+    )
+    recipe = load_document(str(path))["regenerable"]["markdown"]
+    assert recipe["converter"] == "json_to_md@1.0"
+
+
+def test_no_markdown_recipe_for_line_level_run(tmp_path):
+    """A line-level run never fed Markdown to the LLM, so no recipe should claim one
+    can be regenerated, even when a source file happens to be passed in."""
+    path = write_document_record(
+        DOC, LINE_LEVEL, tmp_path, run_id="R1", used_markdown_input=False, markdown_from=None
+    )
+    assert "regenerable" not in load_document(str(path))
+
+
 def test_rerun_replaces_only_its_own_block(tmp_path):
     """Granularity: a second llm-enrich run rewrites `enrichment`, not the neighbours."""
     write_document_record(DOC, DOC_LEVEL, tmp_path, run_id="R1")

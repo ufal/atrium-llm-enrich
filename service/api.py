@@ -16,6 +16,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -254,7 +255,11 @@ def _run_extraction(
                 doc_id,
                 records,
                 document_record_dir,
-                run_id=para_logger._run_id,
+                run_id=para_logger.run_id,
+                paradata_ref=os.path.join(
+                    para_logger.paradata_dir, f"{para_logger.run_id}_{para_logger.program}.json"
+                ),
+                used_markdown_input=(mode == "document"),
                 license_detail=para_logger.get_license_block(),
             )
             if record_path is not None:

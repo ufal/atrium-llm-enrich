@@ -273,6 +273,11 @@ def rows_to_layout_markdown(rows: List[dict], pages: dict, title: str = "") -> s
     ``## Page N`` + ``<!-- PAGE_BREAK -->``, ``<!-- DOC_META -->`` (canvas size),
     ``<!-- BBOX -->`` per line, and ``![figure]`` placeholders — so TEITOK/ALTO
     input lands on the one annotated-Markdown schema (issue #11).
+
+    A page's meta dict may also carry ``needs_ocr`` (bool) and ``ocr``
+    (``{"engine": ..., "lang": ...}``) — populated only by json_to_md.py, which
+    reads them straight off the AtriumDocument record's ``pages[]`` block; no
+    other caller sets them today, so this is purely additive for existing ones.
     """
     pages = pages or {}
     parts: List[str] = [f"# {title}"] if title else []
@@ -290,6 +295,11 @@ def rows_to_layout_markdown(rows: List[dict], pages: dict, title: str = "") -> s
                 parts.append(L.doc_meta(size=f"{w}x{h}px"))
             for fig in meta.get("figures", []):
                 parts.append(L.image(fig.get("type", "figure"), "", fig.get("bbox")))
+            if meta.get("needs_ocr"):
+                parts.append(L.needs_ocr(page, reason=meta.get("needs_ocr_reason", "no extractable text layer")))
+            ocr_meta = meta.get("ocr")
+            if ocr_meta:
+                parts.append(L.ocr_meta(engine=ocr_meta.get("engine", "unknown"), lang=ocr_meta.get("lang")))
             current_page = page
 
         text = str(row.get("text", "")).strip()

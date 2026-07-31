@@ -18,6 +18,11 @@ comment cues are inert text that passes straight through to the LLM.
 Scope (first pass): DOCX and digital-born PDF. Scanned / curve-only PDF pages are
 marked with a ``NEEDS_OCR`` cue rather than transcribed; the OCR path is a
 benchmark-gated follow-up (hub ``atrium-project#22``).
+
+A fourth source joined the dispatcher later: ``*.document.json``, an
+AtriumDocument record (issue #13's JSON plane), via ``json_to_md.py`` — the
+regenerable-recipe path for a consumer that holds only the JSON, not a stored
+TEITOK/PDF/DOCX file.
 """
 
 from __future__ import annotations
@@ -30,24 +35,33 @@ _repo_root = str(Path(__file__).resolve().parent.parent)
 if _repo_root not in sys.path:
     sys.path.insert(0, _repo_root)
 
-from api_util import docx_to_md, pdf_to_md  # noqa: E402
+from api_util import docx_to_md, json_to_md, pdf_to_md  # noqa: E402
 
 SUPPORTED_EXTENSIONS = frozenset({".docx", ".pdf"})
 
+#: Not a simple extension — checked separately (see is_supported/convert_to_visual_md).
+_DOCUMENT_JSON_SUFFIX = ".document.json"
+
 
 def is_supported(path: str | Path) -> bool:
-    """Whether this file's extension has a visual-MD converter."""
-    return Path(path).suffix.lower() in SUPPORTED_EXTENSIONS
+    """Whether this file has a visual-MD converter — by extension, or as an
+    AtriumDocument record (``*.document.json``)."""
+    name = str(path).lower()
+    return name.endswith(_DOCUMENT_JSON_SUFFIX) or Path(path).suffix.lower() in SUPPORTED_EXTENSIONS
 
 
-def convert_to_visual_md(path: str | Path, ocr: bool = False) -> str:
-    """Convert a DOCX or PDF to visually-rich Markdown.
+def convert_to_visual_md(path: str | Path, ocr: bool = False, min_quality: float = 0.0) -> str:
+    """Convert a DOCX, PDF, or AtriumDocument JSON to visually-rich Markdown.
 
     ``ocr`` (PDF only) transcribes scanned / curve-only pages with Tesseract
-    instead of flagging them ``NEEDS_OCR``. Raises ``ValueError`` for unsupported
-    extensions, and the converter's own ``*NotInstalled`` error when the backing
-    library is missing.
+    instead of flagging them ``NEEDS_OCR``. ``min_quality`` (JSON only) drops
+    lines below that ``quality_score`` before rendering. Raises ``ValueError``
+    for unsupported extensions or an unrenderable record, and the converter's
+    own ``*NotInstalled`` error when a backing library is missing.
     """
+    name = str(path).lower()
+    if name.endswith(_DOCUMENT_JSON_SUFFIX):
+        return json_to_md.convert(path, min_quality=min_quality)
     ext = Path(path).suffix.lower()
     if ext == ".docx":
         return docx_to_md.convert(path)
@@ -55,7 +69,7 @@ def convert_to_visual_md(path: str | Path, ocr: bool = False) -> str:
         return pdf_to_md.convert(path, ocr=ocr)
     raise ValueError(
         f"Unsupported input '{ext or '(none)'}'. "
-        f"Supported: {', '.join(sorted(SUPPORTED_EXTENSIONS))}."
+        f"Supported: {', '.join(sorted(SUPPORTED_EXTENSIONS))}, {_DOCUMENT_JSON_SUFFIX}."
     )
 
 
@@ -70,6 +84,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--ocr", action="store_true", help="PDF only: transcribe text-less pages with Tesseract."
     )
+    parser.add_argument(
+        "--min-quality",
+        type=float,
+        default=0.0,
+        help="AtriumDocument JSON only: drop lines below this quality_score.",
+    )
     args = parser.parse_args()
 
     if not args.input_file.exists():
@@ -77,8 +97,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     try:
-        rendered = convert_to_visual_md(args.input_file, ocr=args.ocr)
-    except ValueError as exc:
+        rendered = convert_to_visual_md(args.input_file, ocr=args.ocr, min_quality=args.min_quality)
+    except (ValueError, NotImplementedError) as exc:
         print(exc, file=sys.stderr)
         sys.exit(2)
     except (docx_to_md.DocxNotInstalled, pdf_to_md.PdfPlumberNotInstalled) as exc:

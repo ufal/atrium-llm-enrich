@@ -272,7 +272,8 @@ def main(argv: Optional[List[str]] = None) -> None:
                 continue
 
             try:
-                if f.suffix.lower() in _DOC_INPUT_EXTENSIONS:
+                is_document_level = f.suffix.lower() in _DOC_INPUT_EXTENSIONS
+                if is_document_level:
                     results, stats = run_document_level(f, doc_chat_fn, doc_prompt, DocModel)
                 else:
                     results, stats = run_line_level(
@@ -302,11 +303,15 @@ def main(argv: Optional[List[str]] = None) -> None:
                             doc_id,
                             results,
                             args.document_json_dir,
-                            run_id=logger._run_id,
+                            run_id=logger.run_id,
+                            paradata_ref=os.path.join(
+                                logger.paradata_dir, f"{logger.run_id}_{logger.program}.json"
+                            ),
                             enriched_path=out_file,
                             # Only a real conversion leaves a regenerable derivation.
                             markdown_from=source_file if f != source_file else None,
-                            license_detail=logger._license_block(),
+                            used_markdown_input=is_document_level,
+                            license_detail=logger.get_license_block(),
                         )
                 else:
                     logger.log_skip(f.name, "No records produced.")

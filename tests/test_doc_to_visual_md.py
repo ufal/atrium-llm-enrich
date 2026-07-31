@@ -49,3 +49,23 @@ def test_convert_routes_pdf(monkeypatch, tmp_path):
     out = doc_to_visual_md.convert_to_visual_md(tmp_path / "a.pdf")
     assert out == "# pdf md\n"
     assert called["pdf"].endswith("a.pdf")
+
+
+def test_is_supported_by_document_json_suffix():
+    assert doc_to_visual_md.is_supported("CTX01.document.json") is True
+    assert doc_to_visual_md.is_supported("CTX01.categories.json") is False
+
+
+def test_convert_routes_document_json(monkeypatch, tmp_path):
+    called = {}
+
+    def fake_json_to_md(path, min_quality=0.0):
+        called["path"] = str(path)
+        called["min_quality"] = min_quality
+        return "# json md\n"
+
+    monkeypatch.setattr(doc_to_visual_md.json_to_md, "convert", fake_json_to_md)
+    out = doc_to_visual_md.convert_to_visual_md(tmp_path / "CTX01.document.json", min_quality=0.5)
+    assert out == "# json md\n"
+    assert called["path"].endswith("CTX01.document.json")
+    assert called["min_quality"] == 0.5

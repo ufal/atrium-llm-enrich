@@ -502,7 +502,10 @@ def main(config_path: str = "llm_config.txt") -> None:
                             doc_id,
                             enriched_results,
                             DOCUMENT_JSON_DIR,
-                            run_id=logger._run_id,
+                            run_id=logger.run_id,
+                            paradata_ref=os.path.join(
+                                logger.paradata_dir, f"{logger.run_id}_{logger.program}.json"
+                            ),
                             enriched_path=out_file,
                             license_detail=logger.get_license_block(),
                         )
