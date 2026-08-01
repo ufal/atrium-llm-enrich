@@ -25,9 +25,12 @@ Env:
 
 import argparse
 import base64
+import glob
 import json
 import os
+import shutil
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
@@ -201,6 +204,23 @@ def build_arg_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--document-json",
+        type=Path,
+        default=None,
+        help=(
+            "Single-file convenience form of --document-json-dir (issue #13): baseline "
+            "ATRIUM Document JSON for a ONE-document run (--input must be a single file, "
+            "not a directory). Mutually redirects into --document-json-dir internally."
+        ),
+    )
+    parser.add_argument(
+        "--document-json-out",
+        type=Path,
+        default=None,
+        help="Exact path to write the updated ATRIUM Document JSON. Pairs with --document-json "
+        "or with --input pointed at a single file.",
+    )
+    parser.add_argument(
         "--context-window",
         type=int,
         default=128_000,
@@ -313,6 +333,34 @@ def main(argv: Optional[List[str]] = None) -> None:
                 or p.name.lower().endswith(".teitok.xml")
             )
 
+        # --document-json/--document-json-out (issue #13): a single-file convenience
+        # wrapper around the existing, working --document-json-dir path below. Redirect
+        # into it here so the write_document_record() call site further down needs no
+        # changes at all.
+        doc_json_scratch_dir: Optional[Path] = None
+        if args.document_json or args.document_json_out:
+            if len(input_files) != 1:
+                print(
+                    f"[document] --document-json/-out require exactly one input file, "
+                    f"got {len(input_files)} — skipping the document record for this run",
+                    file=sys.stderr,
+                )
+            else:
+                doc_json_scratch_dir = Path(tempfile.mkdtemp(prefix="atrium_document_json_"))
+                if args.document_json:
+                    if not Path(args.document_json).exists():
+                        print(
+                            f"[document] baseline {args.document_json} not found — "
+                            "emitting llm-enrich's own part only",
+                            file=sys.stderr,
+                        )
+                    else:
+                        doc_id = input_files[0].stem
+                        shutil.copyfile(
+                            args.document_json, doc_json_scratch_dir / f"{doc_id}.document.json"
+                        )
+                args.document_json_dir = doc_json_scratch_dir
+
         total_processed = total_errors = total_aborted = 0
         for f in tqdm(input_files, desc="Documents", unit="doc", dynamic_ncols=True):
             doc_id = f.stem
@@ -393,6 +441,20 @@ def main(argv: Optional[List[str]] = None) -> None:
             f"    files processed:   {len(input_files)}\n"
         )
         logger.finalize(input_total=len(input_files))
+
+        if doc_json_scratch_dir is not None and args.document_json_out:
+            records = glob.glob(str(doc_json_scratch_dir / "*.document.json"))
+            if not records:
+                print(
+                    f"[document] no document record was produced in {doc_json_scratch_dir} — "
+                    f"{args.document_json_out} was NOT written",
+                    file=sys.stderr,
+                )
+            else:
+                out_path = Path(args.document_json_out)
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(records[0], out_path)
+                print(f"[document] Record written → {out_path}", flush=True)
 
 
 if __name__ == "__main__":
