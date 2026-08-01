@@ -14,6 +14,7 @@ identical across all repositories; anything repo-specific is called out explicit
 
 | Version    | Highlights                                                                                                                                                              | Status      |
 |:-----------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------|
+| **v0.5.1** | End-to-end GHA pipeline for JSON input-output by `atrium_document` standard is refined, and tested for the draft JSON schema design. Template updated.                  | Pre-release |
 | **v0.5.0** | Major GHA workflows update with references to `@v1` on hub repo. Updated template scripts. Added atrium_document dtandard for input-output of JSONs.                    | Pre-release |
 | **v0.4.0** | OpenAPI standards applied - draft. `atrium_document` draft added for cross-repo JSON expansion. Added PDF and DOCS to MD convertors draft. Edited GHA release workflow. | Pre-release |
 | **v0.3.0** | Updated dependencies. Added DU code. Added <PDF/DOCX>-2-MD transformers draft. Updated tests coverage. Refreshed issue logs (digests+plans)                             | Pre-release |
