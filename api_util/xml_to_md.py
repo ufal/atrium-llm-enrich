@@ -29,7 +29,7 @@ if _repo_root not in sys.path:
     sys.path.insert(0, _repo_root)
 
 from api_util import layout_md as L  # noqa: E402
-from api_util.teitok_read import doc_id_from_path, read_teitok_rows  # noqa: E402
+from api_util.teitok_read import doc_id_from_path, parse_teitok, read_teitok_rows  # noqa: E402
 
 
 def _local_tag(elem: ET.Element) -> str:
@@ -191,14 +191,14 @@ def _read_teitok_layout(path: str | Path) -> tuple:
     dimensions from ``<surface lrx lry>`` (in document order), and figure
     regions from ``<figure bbox type>``.
     """
-    tree = ET.parse(path)
-    root = tree.getroot()
+    root = parse_teitok(path)
     rows: List[dict] = []
     pages: dict = {}
     surface_dims: List[tuple] = []
 
     page_num = 1
     line_num = 1
+    page_order: List[int] = []
     pages.setdefault(page_num, {"width": None, "height": None, "figures": []})
 
     for elem in root.iter():
@@ -211,8 +211,17 @@ def _read_teitok_layout(path: str | Path) -> tuple:
             except (ValueError, TypeError):
                 surface_dims.append((None, None))
         elif tag == "pb":
-            page_num = int(elem.get("n", page_num + 1))
+            # `n` is usually a plain page count, but archival front matter /
+            # appendices legitimately use roman numerals or other non-numeric
+            # labels (e.g. n="I") — fall back to a simple increment rather
+            # than crashing on int(), mirroring the ALTO reader's existing
+            # handling of an unparseable PHYSICAL_IMG_NR just below.
+            try:
+                page_num = int(elem.get("n", page_num + 1))
+            except (TypeError, ValueError):
+                page_num += 1
             pages.setdefault(page_num, {"width": None, "height": None, "figures": []})
+            page_order.append(page_num)
         elif tag == "lb":
             line_num += 1
         elif tag == "figure":
@@ -247,11 +256,22 @@ def _read_teitok_layout(path: str | Path) -> tuple:
                 ]
             rows.append({"page_num": page_num, "line_num": line_num, "text": text, "bbox": bbox})
 
-    # Surfaces are written one-per-page in document order; align by index.
-    for i, (w, h) in enumerate(surface_dims, start=1):
-        if i in pages:
-            pages[i]["width"] = w
-            pages[i]["height"] = h
+    # Surfaces are written one-per-page, in the same document order that
+    # <pb> elements introduce pages — align positionally against THAT order,
+    # not against the page's own `n` label. A label-as-index assumption
+    # (surface #1 -> pages[1], surface #2 -> pages[2], ...) silently drops
+    # dimensions whenever numbering doesn't start at 1 or isn't contiguous
+    # (continuation volumes, roman-numeral front matter, an appendix
+    # restarting the count) — the surface data lands on a phantom page key
+    # instead of the real one. Fall back to the single implicit page when
+    # the document has no <pb> at all.
+    if not page_order:
+        page_order = [page_num]
+    for i, (w, h) in enumerate(surface_dims):
+        if i < len(page_order):
+            target_page = page_order[i]
+            pages[target_page]["width"] = w
+            pages[target_page]["height"] = h
 
     return rows, pages
 

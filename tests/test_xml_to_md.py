@@ -8,6 +8,7 @@ ollama, .md/.txt input) via run_document_level() in llm_client_shared.py.
 
 from api_util.xml_to_md import (
     _read_alto_rows,
+    _read_teitok_layout,
     convert,
     is_alto,
     read_document_rows,
@@ -191,6 +192,125 @@ def test_rows_to_plain_text_no_leading_blank_for_first_page():
     rows = [{"page_num": 1, "line_num": 1, "text": "Only line"}]
     txt = rows_to_plain_text(rows)
     assert txt == "Only line\n"
+
+
+# ── _read_teitok_layout ──────────────────────────────────────────────────────
+# Previously zero test coverage despite backing both `xml_to_md.py --format
+# layout` and (transitively, via rows_to_layout_markdown) json_to_md.py's
+# renderer -- the two converters issue #13's TODO calls out by name
+# ("Make sure JSON-2-MD and TEITOK-2-MD pipelines work correctly ... with
+# ... complex XMLs of pages").
+
+TEITOK_LAYOUT_SAMPLE = """<?xml version="1.0" encoding="UTF-8"?>
+<TEI>
+<facsimile>
+  <surface id="CTX1.surface1" lrx="2480" lry="3508"><graphic url="CTX1-1.png"/></surface>
+</facsimile>
+<text><body><div>
+<pb n="1"/>
+<s text="Prvni veta."><tok bbox="100 200 300 240">Prvni</tok></s>
+<figure bbox="50 50 500 600" type="illustration"/>
+</div></body></text>
+</TEI>
+"""
+
+
+def test_read_teitok_layout_happy_path(tmp_path):
+    p = tmp_path / "sample.teitok.xml"
+    p.write_text(TEITOK_LAYOUT_SAMPLE, encoding="utf-8")
+    rows, pages = _read_teitok_layout(p)
+
+    assert rows == [
+        {"page_num": 1, "line_num": 1, "text": "Prvni veta.", "bbox": [100, 200, 300, 240]}
+    ]
+    assert pages[1]["width"] == 2480
+    assert pages[1]["height"] == 3508
+    assert pages[1]["figures"] == [{"bbox": [50, 50, 500, 600], "type": "illustration"}]
+
+
+def test_read_teitok_layout_survives_non_numeric_pb_n(tmp_path):
+    """Same crash as read_teitok_rows() (int() on a roman-numeral <pb n>),
+    independently reachable through the layout reader's own <pb> handling."""
+    p = tmp_path / "roman.teitok.xml"
+    p.write_text(
+        '<TEI><text><body><div><pb n="I"/><s text="Front matter."/>'
+        '<pb n="1"/><s text="Content."/></div></body></text></TEI>',
+        encoding="utf-8",
+    )
+    rows, _pages = _read_teitok_layout(p)  # must not raise
+    assert [r["text"] for r in rows] == ["Front matter.", "Content."]
+
+
+def test_read_teitok_layout_survives_name_misclose(tmp_path):
+    """<name>...</n> used to raise ET.ParseError before the layout reader
+    was routed through teitok_read.parse_teitok()'s repair."""
+    p = tmp_path / "misclose.teitok.xml"
+    p.write_text(
+        '<TEI><text><body><div><pb n="1"/>'
+        '<s text="Zaklady kostela"><name>kostela</n></s>'
+        "</div></body></text></TEI>",
+        encoding="utf-8",
+    )
+    rows, _pages = _read_teitok_layout(p)  # must not raise
+    assert rows[0]["text"] == "Zaklady kostela"
+
+
+def test_read_teitok_layout_aligns_surfaces_when_pages_dont_start_at_one(tmp_path):
+    """Regression for the silent data-loss bug: surface dimensions were
+    aligned by treating a page's own <pb n="..."> label as an array index
+    (surface #1 -> pages[1], #2 -> pages[2], ...), so any document whose
+    page numbering doesn't start at 1 -- a continuation volume, an excerpt
+    of a larger bound archive -- silently lost its canvas width/height.
+    Surfaces must align by encounter order against the order <pb> elements
+    introduce pages instead."""
+    p = tmp_path / "continuation.teitok.xml"
+    p.write_text(
+        """<?xml version="1.0" encoding="UTF-8"?>
+        <TEI>
+        <facsimile>
+          <surface lrx="2480" lry="3508"/>
+          <surface lrx="2490" lry="3510"/>
+        </facsimile>
+        <text><body><div>
+        <pb n="47"/>
+        <s text="Continuation page forty-seven."/>
+        <pb n="48"/>
+        <s text="Continuation page forty-eight."/>
+        </div></body></text>
+        </TEI>
+        """,
+        encoding="utf-8",
+    )
+    _rows, pages = _read_teitok_layout(p)
+
+    assert pages[47]["width"] == 2480
+    assert pages[47]["height"] == 3508
+    assert pages[48]["width"] == 2490
+    assert pages[48]["height"] == 3510
+
+
+def test_convert_layout_reflects_correct_page_dims_for_continuation_numbering(tmp_path):
+    """End-to-end through convert(fmt="layout") -- the DOC_META cue for a
+    continuation-numbered page must carry that page's own real dimensions,
+    not a phantom page's or none at all."""
+    p = tmp_path / "continuation.teitok.xml"
+    p.write_text(
+        """<?xml version="1.0" encoding="UTF-8"?>
+        <TEI>
+        <facsimile>
+          <surface lrx="2480" lry="3508"/>
+        </facsimile>
+        <text><body><div>
+        <pb n="47"/>
+        <s text="Continuation page forty-seven."/>
+        </div></body></text>
+        </TEI>
+        """,
+        encoding="utf-8",
+    )
+    md = convert(p, fmt="layout")
+    assert "## Page 47" in md
+    assert "DOC_META: size=2480x3508px" in md
 
 
 # ── convert() end-to-end ─────────────────────────────────────────────────────
