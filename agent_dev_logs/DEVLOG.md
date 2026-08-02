@@ -56,19 +56,79 @@
   `<!-- HEADER_START -->`, `~~strike~~`, footnotes, tables, `<!-- WATERMARK -->`, …).
 
 ## 2026-07-22
-- **#10** — **First implementation landed** (`3e7a909`): a visually-rich Markdown converter for **DOCX
-  + digital-born PDF** (scope confirmed with K4TEL; standalone pre-convert CLI; pragmatic-core cue
-  coverage). New `api_util/` modules — `layout_md.py` (dependency-free cue vocabulary + `CUE_SCHEMA`,
-  single-sourcing the taxonomy), `docx_to_md.py` (python-docx), `pdf_to_md.py` (pdfplumber, with the
-  decode-sanity check → `NEEDS_OCR` for text-less/garbled pages), `doc_to_visual_md.py` (dispatcher +
-  CLI). Lands a `.md` in `INPUT_DIR`, consumed unchanged by `run_document_level()` — HTML-comment cues
-  pass through as inert text. Optional `requirements_docmd.txt` (python-docx + pdfplumber, both MIT);
-  four hermetic test modules. README + `plans/10.plan.md` (§6) + `digests/10.digest.md` refreshed.
-  Full suite **255 passed, 3 skipped**; ruff clean. The scanned/curve-only **OCR path stays deferred**
-  (pages flagged `NEEDS_OCR`; tool choice benchmark-gated under hub #22).
 
----
-_Timeline index rebuilt for `atrium-llm-enrich` on 2026-07-22 against `test` HEAD `3e7a909`, the
-per-issue digests/plans, and the dated commit history — replacing an earlier copy that had been left
-as `atrium-translator`'s DEVLOG (flagged in `digests/10.digest.md`). This file is a derived reading
-aid in `agent_dev_logs/`; nothing is removed from the issues themselves._
+* **#10** — **First implementation landed** (`3e7a909`): a visually-rich Markdown converter for **DOCX + digital-born PDF**.
+* New `api_util/` modules introduced: `layout_md.py` (dependency-free cue vocabulary + `CUE_SCHEMA`), `docx_to_md.py`, 
+`pdf_to_md.py`, and `doc_to_visual_md.py`.
+* Pipeline creates a `.md` in `INPUT_DIR`, which is consumed unchanged by `run_document_level()` — HTML-comment cues 
+pass through as inert text.
+* The scanned/curve-only **OCR path stays deferred** (pages flagged `NEEDS_OCR`; tool choice benchmark-gated under hub #22).
+
+## 2026-07-23
+
+* **#10** — Implementation updated on the `test` branch: unified schema via `api_util/xml_to_md.py --format layout` 
+now emits identical cues for TEITOK/ALTO based on coordinate sets.
+* The opt-in OCR path is enabled via `--ocr`, resolving pages with `pypdfium2` and transcribing with Tesseract `ces`, 
+tagged explicitly with `<!-- OCR: engine=tesseract, lang=ces -->`.
+* Pipeline integration auto-converts `.pdf`/`.docx` files dropped into `INPUT_DIR` via openrouter/ollama clients, 
+fetching citations natively via the `page` field.
+* **#11** — Decision drafted: the ingestion diet is annotated Markdown, utilizing HTML comments as low-token positional 
+hints, bypassing HTML and keeping TEITOK as the spatial truth.
+* Slated a bake-off through the #22 harness with Docling/Marker for robust table processing and token cost analyses.
+* **#13 The intermediate steps - data format to use** — Opened by K4TEL to solidify intermediate candidates: MD with 
+HTML for forms/tables as LLM input, TEITOK.XML for correct layout, and JSON for search and metadata storage.
+* Drafted a systemic approach allocating separate authority for each plane: Reading (Annotated Markdown),
+Layout/preservation (TEITOK.XML), and Search/knowledge (`AtriumDocument` JSON).
+
+## 2026-07-24
+
+* **#13** — Opus 5 ultracode refinements proposed preventing the pipeline from being forced into full monolithic 
+runs by relying entirely on a deterministic merger.
+* Transient images and thumbnail paths were entirely dropped from references to restrict linkages solely to persistent 
+items like original inputs or output artifacts.
+* Proposed a dedicated stateless pure function service called `atrium-aggregate` to assemble the `AtriumDocument` via `POST /aggregate`.
+
+## 2026-07-25
+
+* **#10** — Concluded that MD equipped with visual info inside comments supplies LLM input, whereas JSON defines 
+the overarching document schema per Issue #13, and TEITOK.XML acts as the visually accurate record alongside NLP enrichment capabilities.
+* **#13** — Adopted the paradata-pair model where every tool receives a document JSON, modifies its owned blocks,
+and emits an updated JSON byte-identical to untouched parameters.
+* `atrium_document.py` and `atrium_document.schema.json` defined as hub-canonical shared files within the ecosystem.
+* `alto-postprocess` refined internally to remove redundant langID values and coordinate closely with the `atrium_document` 
+draft added initially to `atrium-project` and `llm-enrich` (commit `4175b06`).
+
+## 2026-07-26
+
+* **#13** — `AtriumDocument` ecosystem integration expanded: the JSON schema draft landed on `atrium-nlp-enrich`, 
+`atrium-page-classification`, and `atrium-translator`.
+* `para-drift` GHA check added to the `atrium-project` hub.
+* Component beta releases shipped: `atrium-alto-postprocess` (v1.3.0-beta), `atrium-page-classification` 
+(v1.7.0-beta), `atrium-nlp-enrich` (v0.18.0), and `atrium-translator` (v0.10.0).
+* `atrium-llm-enrich` integrated the schema at the API and `llm_run` levels (Commit `c565e1a`), pending decisions 
+approval for a formal release.
+
+## 2026-07-31
+
+* **#13** — Alignment pass completed by Sonnet uncovering and resolving critical pipeline bugs.
+* `atrium-nlp-enrich` `run_document_hook()` rewritten with real ALTO+CoNLL-U integration testing after failing to 
+produce entities natively in production due to key errors.
+* `atrium-alto-postprocess` switched from `set_blocks` to `merge_blocks` for field-split outputs, preventing 
+downstream overwrites.
+* `atrium-translator` logic cleaned up by stripping dead entity translation code and enforcing correct schema boundaries.
+* `atrium-llm-enrich` introduced `api_util/json_to_md.py` to regenerate the annotated-Markdown diet efficiently 
+straight from the JSON record, rather than re-requesting a TEITOK or PDF file.
+
+## 2026-08-01
+
+* **#13** — E2E-related pipeline smoke achieved CLI convergence: `--document-json`/`--document-json-out` file-pair 
+flags successfully added to `atrium-page-classification`, `atrium-translator`, `atrium-alto-postprocess`, 
+`atrium-nlp-enrich`, and `atrium-llm-enrich`.
+* `openrouter_client.py` within `atrium-llm-enrich` fully supports the converged flag structure for single-file scoping.
+* A silent baseline dropping bug triggered by a mismatch in `doc_id` derivation between the translator file output and
+`nlp-enrich` expectations was permanently fixed.
+
+## 2026-08-02
+
+* **#13** — Identified the necessity to build a PDF and DOCX to JSON converter explicitly to service digital-born 
+documents appropriately, mapping required actions back to the criteria in Issue #10.
