@@ -4,6 +4,10 @@
 # Kept out of the base install: only users converting PDF/DOCX inputs to
 # visually-rich Markdown need these. Both are permissive (MIT), matching the
 # license pressure noted in para_config.txt.
+#
+# Legacy MD-era stack (Issue #10). Superseded by Issue #18's direct-to-JSON
+# converter (api_util/digital_to_json.py, requirements_digital.txt) once that
+# lands; kept here and functional until PR 7 of #18 formally deprecates it.
 python-docx   # DOCX reader (MIT) — styles, fonts, tables, headers/footers
 pdfplumber    # digital-born PDF reader (MIT) — word/char bboxes, fonts, tables (pulls pypdfium2)
 

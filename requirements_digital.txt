@@ -1,0 +1,19 @@
+# requirements_digital.txt — deps for the digital-born PDF/DOCX -> atrium_document
+# JSON converter (Issue #18: api_util/digital_to_json.py, once it lands).
+#
+# Kept out of the base install, same rationale as requirements_docmd.txt: only
+# users converting digital-born PDF/DOCX to atrium_document JSON need these.
+#
+# Currently used by the Phase 0 exploration scripts in digital_born/
+# (test_docling.py, test_pymupdf.py, test_ooxml.py) — declared here now so
+# those scripts stop depending on ad-hoc local installs.
+docling       # MIT — structure extraction (headings, paragraphs, tables, lists) for PDF + DOCX
+pymupdf       # AGPL-3.0 — exact PDF text-block/line/span bounding boxes (imports as `fitz`)
+docx2python   # MIT — DOCX fallback: headers/footers/core-properties Docling may drop
+
+# NOTE (license): pymupdf is AGPL-3.0, not MIT/Apache like the rest of this
+# file and requirements_docmd.txt. That's a different license posture than the
+# "permissive-first" note in para_config.txt / Issue #10's research pass —
+# flag for review before this becomes a hard runtime dependency rather than a
+# Phase 0 exploration tool. (PyMuPDF also offers a commercial license if AGPL
+# terms are a blocker.)
