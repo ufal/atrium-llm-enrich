@@ -112,21 +112,15 @@ def collect_errors(citation_path: str, para_path: str, tag: str, require_tag: bo
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--citation", default="CITATION.cff", help="path to CITATION.cff")
     ap.add_argument(
         "--para-config",
         default="para_config.txt",
         help="path to para_config.txt; repos with a setup/ layout pass setup/para_config.txt",
     )
-    ap.add_argument(
-        "--tag", default="", help="tag being released, e.g. v1.2.3; empty to skip tag comparison"
-    )
-    ap.add_argument(
-        "--require-tag", action="store_true", help="fail when --tag is empty (release gate)"
-    )
+    ap.add_argument("--tag", default="", help="tag being released, e.g. v1.2.3; empty to skip tag comparison")
+    ap.add_argument("--require-tag", action="store_true", help="fail when --tag is empty (release gate)")
     args = ap.parse_args(argv)
 
     errors = collect_errors(args.citation, args.para_config, args.tag, args.require_tag)
