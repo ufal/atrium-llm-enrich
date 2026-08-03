@@ -54,9 +54,7 @@ RECORD_TYPE_MERGED = "atrium-document-merged"
 FILE_SUFFIX = ".document.json"
 
 #: Structural keys the module itself maintains — never a tool's "own block".
-RESERVED_KEYS = frozenset(
-    {"schema_version", "record_type", "doc_id", "source", "provenance", "assembled"}
-)
+RESERVED_KEYS = frozenset({"schema_version", "record_type", "doc_id", "source", "provenance", "assembled"})
 
 #: Which tool owns which top-level block. One owner per block; blocks shared between
 #: tools are split by FIELD instead (see BLOCK_FIELD_OWNERS) so nothing is co-mutated.
@@ -426,8 +424,7 @@ class DocumentRecord:
 
         contributors: List[Dict[str, str]] = list(prov.get("contributors") or [])
         if self._touched and not any(
-            c.get("program") == self.program and c.get("run_id") == self.run_id
-            for c in contributors
+            c.get("program") == self.program and c.get("run_id") == self.run_id for c in contributors
         ):
             contributors.append(
                 {
@@ -449,9 +446,7 @@ class DocumentRecord:
         out["provenance"] = self._provenance()
         assembled = out.setdefault("assembled", {})
         assembled["had_baseline"] = self._had_baseline
-        assembled["note"] = (
-            "Blocks reflect CONTRIBUTED steps only; a block is absent until its tool has run."
-        )
+        assembled["note"] = "Blocks reflect CONTRIBUTED steps only; a block is absent until its tool has run."
         # Stable, predictable key order for diff-friendly output.
         order = [
             "schema_version",
@@ -538,9 +533,7 @@ def load_document(path: str) -> Dict[str, Any]:
     current_major = int(SCHEMA_VERSION.split(".")[0])
 
     if major > current_major:
-        raise ValueError(
-            f"Schema version {v} is newer than supported {SCHEMA_VERSION}. Please update tools."
-        )
+        raise ValueError(f"Schema version {v} is newer than supported {SCHEMA_VERSION}. Please update tools.")
     elif major < current_major:
         data = migrate_document(data)
 
@@ -659,9 +652,7 @@ def _cli() -> None:
     args = p.parse_args()
 
     if args.cmd == "set-block":
-        raw = (
-            sys.stdin.read() if args.payload == "-" else open(args.payload, encoding="utf-8").read()
-        )
+        raw = sys.stdin.read() if args.payload == "-" else open(args.payload, encoding="utf-8").read()
         with DocumentRecord.open(
             args.doc_id,
             args.program,
