@@ -16,16 +16,16 @@ def explore_pymupdf_geometry(pdf_path):
         print(f"Found {len(blocks)} blocks on page {page_num + 1}")
 
         for b_idx, block in enumerate(blocks):  # Look at the first 3 blocks
-            if block['type'] == 0:  # 0 means text block (1 is image)
-                bbox = block['bbox']
+            if block["type"] == 0:  # 0 means text block (1 is image)
+                bbox = block["bbox"]
                 print(f"\nBlock {b_idx} BBOX: {bbox}")
 
                 # Inspect the first line in the block
-                if block['lines']:
-                    first_line = block['lines'][0]
-                    line_bbox = first_line['bbox']
+                if block["lines"]:
+                    first_line = block["lines"][0]
+                    line_bbox = first_line["bbox"]
                     # Spans contain the actual text and font styling
-                    text = "".join([span['text'] for span in first_line['spans']])
+                    text = "".join([span["text"] for span in first_line["spans"]])
                     print(f"  └─ Line 1 BBOX: {line_bbox} | Text: '{text.strip()}'")
 
 

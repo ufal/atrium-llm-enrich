@@ -15,7 +15,8 @@ def explore_python_docx(docx_path):
     if doc.sections:
         header = doc.sections[0].header
         print(
-            f"\n[python-docx] First Section Header Text: '{header.paragraphs[0].text if header.paragraphs else 'None'}'")
+            f"\n[python-docx] First Section Header Text: '{header.paragraphs[0].text if header.paragraphs else 'None'}'"
+        )
 
     # 2. Using docx2python for a flatter, raw extraction (often catches things python-docx misses)
     print("\n[docx2python] Raw Structure:")

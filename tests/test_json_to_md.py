@@ -22,7 +22,13 @@ def test_convert_renders_page_sectioned_markdown_with_bbox(tmp_path):
         tmp_path,
         pages=[{"page": "1", "canvas": {"width": 612, "height": 792, "unit": "pt"}}],
         lines=[
-            {"page": "1", "line": 1, "text": "First line.", "bbox": [10, 10, 100, 20], "categ": "Text"},
+            {
+                "page": "1",
+                "line": 1,
+                "text": "First line.",
+                "bbox": [10, 10, 100, 20],
+                "categ": "Text",
+            },
             {"page": "1", "line": 2, "text": "Second line.", "categ": "Text"},
         ],
     )
@@ -100,7 +106,9 @@ def test_convert_never_reads_enrichment_block(tmp_path):
     path = _write_record(
         tmp_path,
         lines=[{"page": "1", "line": 1, "text": "Real source text."}],
-        enrichment={"items": [{"locator": "should never appear", "extracted_keywords_en": ["bogus"]}]},
+        enrichment={
+            "items": [{"locator": "should never appear", "extracted_keywords_en": ["bogus"]}]
+        },
     )
     md = json_to_md.convert(path)
     assert "Real source text." in md

@@ -316,10 +316,16 @@ def rows_to_layout_markdown(rows: List[dict], pages: dict, title: str = "") -> s
             for fig in meta.get("figures", []):
                 parts.append(L.image(fig.get("type", "figure"), "", fig.get("bbox")))
             if meta.get("needs_ocr"):
-                parts.append(L.needs_ocr(page, reason=meta.get("needs_ocr_reason", "no extractable text layer")))
+                parts.append(
+                    L.needs_ocr(
+                        page, reason=meta.get("needs_ocr_reason", "no extractable text layer")
+                    )
+                )
             ocr_meta = meta.get("ocr")
             if ocr_meta:
-                parts.append(L.ocr_meta(engine=ocr_meta.get("engine", "unknown"), lang=ocr_meta.get("lang")))
+                parts.append(
+                    L.ocr_meta(engine=ocr_meta.get("engine", "unknown"), lang=ocr_meta.get("lang"))
+                )
             current_page = page
 
         text = str(row.get("text", "")).strip()

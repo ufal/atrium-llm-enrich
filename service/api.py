@@ -112,7 +112,9 @@ def _load_engine() -> Dict[str, Any]:
         if not model:
             raise RuntimeError("OPENROUTER_MODEL is not set")
         headers = _build_headers(
-            api_key, os.getenv("OPENROUTER_SITE_URL"), os.getenv("OPENROUTER_APP_NAME", "atrium-llm-enrich")
+            api_key,
+            os.getenv("OPENROUTER_SITE_URL"),
+            os.getenv("OPENROUTER_APP_NAME", "atrium-llm-enrich"),
         )
         line_chat_fn = make_chat_fn(
             session, headers, model, line_model.model_json_schema(), max_retries, timeout, None
@@ -230,7 +232,10 @@ def _run_extraction(
     path = Path(tmp_path)
     if name.endswith(_LINE_SUFFIXES):
         records, stats = run_line_level(
-            path, engine["line_chat_fn"], engine["line_prompt"], engine["line_model"],
+            path,
+            engine["line_chat_fn"],
+            engine["line_prompt"],
+            engine["line_model"],
             **engine["filter_params"],
         )
         mode = "line"
@@ -371,11 +376,13 @@ async def extract_keywords(
 
 @app.post("/extract_keywords_text")
 async def extract_keywords_text(
-        text: str = Body(..., description="Raw text for document-level archaeological keyword extraction."),
-        document_json: dict = Body(
-            None,
-            description="Optional baseline ATRIUM Document JSON. When given, the response's `document_json` carries the record back with only llm-enrich's `enrichment` block updated."
-        ),
+    text: str = Body(
+        ..., description="Raw text for document-level archaeological keyword extraction."
+    ),
+    document_json: dict = Body(
+        None,
+        description="Optional baseline ATRIUM Document JSON. When given, the response's `document_json` carries the record back with only llm-enrich's `enrichment` block updated.",
+    ),
 ):
     """Extract archaeological keywords from inline text (§4.2)."""
     engine = _require_engine()

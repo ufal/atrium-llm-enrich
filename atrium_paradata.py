@@ -312,7 +312,9 @@ def load_paradata(path: str) -> Dict[str, Any]:
     current_major = int(SCHEMA_VERSION.split(".")[0])
 
     if major > current_major:
-        raise ValueError(f"Schema version {v} is newer than supported {SCHEMA_VERSION}. Please update tools.")
+        raise ValueError(
+            f"Schema version {v} is newer than supported {SCHEMA_VERSION}. Please update tools."
+        )
     elif major < current_major:
         data = migrate_paradata(data)
 
@@ -438,7 +440,9 @@ def merge_run_paradata(
                 "run_id": data.get("run_id"),
                 "input_dir": cfg.get("input_dir"),
                 "input_csv": cfg.get("input_csv"),
-                "output_dir": cfg.get("output_dir") or cfg.get("output_csv") or cfg.get("output_manifest"),
+                "output_dir": cfg.get("output_dir")
+                or cfg.get("output_csv")
+                or cfg.get("output_manifest"),
                 "output_formats": out_counts,
                 "duration_seconds": data.get("duration_seconds"),
                 "license": data.get("license"),
@@ -489,7 +493,8 @@ def merge_run_paradata(
         "skipped_files_detail": all_skips,
         "skipped_stages": skipped_stages or [],
         "license_note": (
-            "Effective license/intermediate_formats reflect EXECUTED stages only; skipped: " + ", ".join(skipped_stages)
+            "Effective license/intermediate_formats reflect EXECUTED stages only; skipped: "
+            + ", ".join(skipped_stages)
         )
         if skipped_stages
         else "",

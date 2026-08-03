@@ -18,7 +18,7 @@ def explore_docling(file_path):
 
     # Inspect the first few texts/items
     print("\nSample extracted items:")
-    for item in doc_dict.get('texts', []):
+    for item in doc_dict.get("texts", []):
         print(f"Type: {item.get('label')} | Content: {item.get('text')}")
 
     # Optional: Dump full JSON to a file for deep inspection

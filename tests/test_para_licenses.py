@@ -120,7 +120,9 @@ class TestResolveEffectiveLicense:
         assert len(result["components"]) == 1
 
     def test_most_restrictive_component_wins(self):
-        result = resolve_effective_license([("code", "MIT"), ("cubbitt", "CC BY-NC-SA 4.0"), ("lib", "Apache-2.0")])
+        result = resolve_effective_license(
+            [("code", "MIT"), ("cubbitt", "CC BY-NC-SA 4.0"), ("lib", "Apache-2.0")]
+        )
         assert result["effective_license"] == "CC BY-NC-SA 4.0"
         assert result["determined_by"] == ["cubbitt"]
 
@@ -174,7 +176,9 @@ class TestResolveEffectiveLicense:
     def test_unknown_does_not_displace_known_max_seen_first(self):
         """A known max-rank license seen first keeps the title; the unknown
         still ranks equal-max, so both components share determined_by."""
-        result = resolve_effective_license([("cubbitt", "CC BY-NC-SA 4.0"), ("blob", "Mystery-1.0")])
+        result = resolve_effective_license(
+            [("cubbitt", "CC BY-NC-SA 4.0"), ("blob", "Mystery-1.0")]
+        )
         assert result["effective_license"] == "CC BY-NC-SA 4.0"
         assert result["unknown_licenses"] == ["Mystery-1.0"]
         assert set(result["determined_by"]) == {"cubbitt", "blob"}
@@ -234,7 +238,9 @@ class TestMergeEffectiveLicenses:
     def test_merge_resolution_matches_flat_resolution(self):
         """Merging blocks must give the same answer as resolving the deduped
         union directly."""
-        merged = merge_effective_licenses([_block(("code", "MIT")), _block(("cubbitt", "CC BY-NC-SA 4.0"))])
+        merged = merge_effective_licenses(
+            [_block(("code", "MIT")), _block(("cubbitt", "CC BY-NC-SA 4.0"))]
+        )
         flat = resolve_effective_license([("code", "MIT"), ("cubbitt", "CC BY-NC-SA 4.0")])
         assert merged["effective_license"] == flat["effective_license"]
         assert merged["is_non_commercial"] is True
@@ -257,7 +263,9 @@ class TestMergeEffectiveLicenses:
         assert len(merged["components"]) == 1
 
     def test_unknowns_propagate_through_merge(self):
-        merged = merge_effective_licenses([_block(("blob", "Mystery-1.0")), _block(("code", "MIT"))])
+        merged = merge_effective_licenses(
+            [_block(("blob", "Mystery-1.0")), _block(("code", "MIT"))]
+        )
         assert merged["unknown_licenses"] == ["Mystery-1.0"]
         assert "WARNING" in merged["notes"]
 
