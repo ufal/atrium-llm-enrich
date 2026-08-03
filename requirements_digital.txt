@@ -17,3 +17,17 @@ docx2python   # MIT — DOCX fallback: headers/footers/core-properties Docling m
 # flag for review before this becomes a hard runtime dependency rather than a
 # Phase 0 exploration tool. (PyMuPDF also offers a commercial license if AGPL
 # terms are a blocker.)
+
+# ── PDF geometry ─────────────────────────────────────────────────────────────
+# Issue #18 §3 needs exact per-line/span coordinates. Two candidates, and the choice
+# is a LICENCE decision as much as a technical one — see the note below. Measured on
+# tests/fixtures/digital/minimal.pdf, pdfplumber returns char-level geometry to three
+# decimal places (x0=72.000 x1=80.004 top=62.484 bottom=74.484), plus fontname, size
+# and the transformation matrix, and inter-line gaps that make block boundaries
+# detectable (2.0 pt within a paragraph vs 34.0 pt between them).
+pdfplumber    # MIT — char/word/line bboxes, font, size, matrix. Already a docmd-stack dep.
+
+# pymupdf     # AGPL-3.0 — DO NOT UNCOMMENT WITHOUT THE REVIEW BELOW (imports as `fitz`)
+
+# ── DOCX fallback ────────────────────────────────────────────────────────────
+python-docx   # MIT — paragraph/run/table structure; already a docmd-stack dep

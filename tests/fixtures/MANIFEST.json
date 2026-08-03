@@ -1,0 +1,17 @@
+{
+  "garbled.pdf": {
+    "bytes": 722,
+    "note": "WinAnsi declared over cp1250, no /ToUnicode — must trip decode-sanity",
+    "sha256": "f985edd2a1f886e3f0f37a381b5aff3736d01e0f8f031febd08a8e927a09fcde"
+  },
+  "minimal.docx": {
+    "bytes": 2366,
+    "note": "heading + 2 paragraphs + 2x2 table + explicit page break",
+    "sha256": "0bc3d217ad05176bc824360f64f0dbfd49b2a31b1826e52d73ffd6dc10224ea5"
+  },
+  "minimal.pdf": {
+    "bytes": 1039,
+    "note": "2 pages, 3 text blocks, no diacritics — happy path for bbox + group_id",
+    "sha256": "a1a820cec34892d05880fb22a0b900acd3eede535869aed4c6732b0e83cddece"
+  }
+}
