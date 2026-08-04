@@ -37,7 +37,19 @@ jobs:
       image-name: ufal/atrium-llm-enrich
       apt-packages: ""
       pre-install-torch: ""
-      requirements: "requirements.txt requirements_remote.txt"
+      # requirements-test.txt is listed because THIS job is the one that runs
+      # `pytest -m "not slow" --cov` (docker-tool.reusable.yml). It was omitted, so the
+      # file named "test requirements" was never installed in the job that runs the
+      # tests — the reusable's own `pip install pytest pytest-cov ruff` was the only
+      # reason pytest worked at all. Two consequences, both real:
+      #   * every runtime dep a test needs had to be duplicated into requirements.txt
+      #     (pandas, pydantic, tqdm are there for exactly this reason);
+      #   * anything declared only in requirements-test.txt silently did not exist, so
+      #     tests/test_api_contract.py module-skipped on missing fastapi and the schema
+      #     validation tests failed on missing jsonschema.
+      # Adding it installs fastapi/httpx/python-multipart/openapi-spec-validator and
+      # jsonschema, which un-skips 5 previously-skipped tests (all passing).
+      requirements: "requirements.txt requirements_remote.txt requirements-test.txt"
       hf-model-cache: false
       # NOTE: "base" is deliberately NOT listed. The Dockerfile stage order is
       # base -> remote -> llm; the reusable workflow maps target="base" to an

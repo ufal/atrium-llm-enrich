@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated golden fixtures (Issue #18). The GENERATOR and the sha256 MANIFEST are
+# committed; the fixture BYTES are not — a binary in a code review is unreviewable, and
+# tests/test_digital_fixtures.py regenerates and hash-checks them on every run.
+# tests/fixtures/MANIFEST.json is the canonical manifest and is deliberately NOT ignored
+# (the bare `MANIFEST` pattern above is Python packaging's and does not match *.json).
+/tests/fixtures/digital/*.pdf
+/tests/fixtures/digital/*.docx
+/tests/fixtures/digital/MANIFEST.json

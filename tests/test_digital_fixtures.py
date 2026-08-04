@@ -43,7 +43,11 @@ import pytest
 
 FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures" / "digital"
 GENERATOR = FIXTURE_DIR / "make_fixtures.py"
-MANIFEST = FIXTURE_DIR / "MANIFEST.json"
+#: The canonical manifest: `tests/fixtures/MANIFEST.json`, beside the other committed
+#: fixtures and NOT inside `digital/`. Its path is deliberately independent of the
+#: generator's `--outdir`, which is a scratch parameter — see CANONICAL_MANIFEST in
+#: make_fixtures.py for why moving it with `--outdir` makes `--verify` verify nothing.
+MANIFEST = FIXTURE_DIR.parent / "MANIFEST.json"
 
 
 @pytest.fixture(scope="module")
@@ -65,20 +69,18 @@ def _recorded_manifest() -> dict:
 
     A bare `MANIFEST.json` read raises FileNotFoundError, which says nothing about what to
     do. The file is the reviewable stand-in for fixture bytes that are deliberately NOT
-    committed, so its absence is a real failure and must not be skipped — but the most
-    likely cause is a partially-applied change (it moved from tests/fixtures/ to
-    tests/fixtures/digital/, and a move is a delete plus an add), so say that.
+    committed, so its absence is a real failure and must not be skipped — it just has to say
+    how to fix it.
     """
     if MANIFEST.exists():
         return json.loads(MANIFEST.read_text(encoding="utf-8"))
 
-    stale = FIXTURE_DIR.parent / "MANIFEST.json"
+    stray = FIXTURE_DIR / "MANIFEST.json"
     hint = (
-        f"\n\n{stale} DOES exist. That is the OLD location: the manifest belongs beside "
-        f"the fixtures it describes, which is also where make_fixtures.py writes it. "
-        f"A file-by-file copy of this change cannot express the deletion — apply it as a "
-        f"patch (`git am`), or `git mv` the file yourself."
-        if stale.exists()
+        f"\n\n{stray} exists and is NOT the canonical location — an older revision of the "
+        f"generator wrote the manifest into --outdir. Delete it; the canonical path is "
+        f"independent of --outdir."
+        if stray.exists()
         else ""
     )
     pytest.fail(
@@ -139,10 +141,11 @@ def test_verify_mode_fails_on_manifest_drift(tmp_path, blobs, make_fixtures):
     """A --verify that cannot fail is not a check."""
     tampered = make_fixtures.manifest_for(blobs)
     tampered["minimal.pdf"]["sha256"] = "0" * 64
-    (tmp_path / "MANIFEST.json").write_text(json.dumps(tampered), encoding="utf-8")
+    path = tmp_path / "tampered.json"
+    path.write_text(json.dumps(tampered), encoding="utf-8")
 
     proc = subprocess.run(
-        [sys.executable, str(GENERATOR), "--verify", "--outdir", str(tmp_path)],
+        [sys.executable, str(GENERATOR), "--verify", "--manifest", str(path)],
         capture_output=True,
         text=True,
     )
@@ -150,23 +153,26 @@ def test_verify_mode_fails_on_manifest_drift(tmp_path, blobs, make_fixtures):
     assert "minimal.pdf" in proc.stderr and "DRIFT" in proc.stderr
 
 
-def test_manifest_lives_beside_the_fixtures_it_describes(make_fixtures, tmp_path):
-    """It was committed one directory up from where the generator writes it, so running the
-    generator produced a second manifest and left the committed one permanently stale.
+def test_canonical_manifest_path_is_independent_of_outdir(make_fixtures, tmp_path):
+    """The generator and the tests must agree on ONE committed manifest, and `--outdir` must
+    not be able to move it.
 
-    Asserting the absence of a file elsewhere in the tree looks over-specified, and earns its
-    place anyway: this is the assertion that catches the move being half-applied, which is
-    exactly what a file-by-file copy of this change does.
+    The original defect was a manifest written to `outdir/MANIFEST.json` while the committed
+    one sat elsewhere, so running the generator produced a second file git had never seen and
+    the committed one went stale, read by nothing. Pinning the path is only half the fix; the
+    other half is that `--outdir` is a SCRATCH parameter. If it relocated the manifest too,
+    `--verify --outdir /tmp/fx` would verify the bytes against a manifest it had just written
+    from those same bytes — a check that cannot fail.
     """
-    assert MANIFEST.parent == FIXTURE_DIR
-    stale = FIXTURE_DIR.parent / "MANIFEST.json"
-    assert not stale.exists(), (
-        f"{stale} is the OLD manifest location and must be deleted — make_fixtures.py writes "
-        f"to {MANIFEST}, so leaving both means the one git sees is never the one the "
-        f"generator updates. `git rm {stale.relative_to(stale.parents[2])}`."
+    assert make_fixtures.CANONICAL_MANIFEST == MANIFEST, (
+        "make_fixtures.py and this module disagree about where the manifest lives"
     )
-    make_fixtures.main(["--outdir", str(tmp_path)])
-    assert (tmp_path / make_fixtures.MANIFEST_NAME).exists()
+    make_fixtures.main(["--outdir", str(tmp_path), "--manifest", str(tmp_path / "m.json")])
+    assert (tmp_path / "minimal.pdf").exists(), "--outdir governs the bytes"
+    assert (tmp_path / "m.json").exists(), "--manifest governs the manifest"
+    assert not (tmp_path / "MANIFEST.json").exists(), (
+        "--outdir must not write a manifest of its own"
+    )
 
 
 # ── the fixtures are structurally real ───────────────────────────────────────

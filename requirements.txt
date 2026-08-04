@@ -3,3 +3,13 @@ pydantic
 requests
 tqdm
 pandas
+# atrium_document.validate_document() — the Layer D output gate for Issue #18's converter,
+# and the only way any tool can check a record against atrium_document.schema.json. Declared
+# HERE, in the base install, for two reasons:
+#   * atrium_document.py is hub-canonical and vendored into all five repos, so its public API
+#     must work wherever it lands — a validator that raises ImportError is not an API;
+#   * this is the file the test job actually installs. `.github/workflows/docker.yml` passes
+#     `requirements: "requirements.txt requirements_remote.txt ..."` to the hub's
+#     docker-tool.reusable.yml, so a dep declared only in requirements-test.txt does not
+#     exist in the job that runs pytest — which is exactly why pandas is in this list.
+jsonschema

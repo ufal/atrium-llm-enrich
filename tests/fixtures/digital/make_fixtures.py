@@ -29,8 +29,12 @@ For anything that is not a golden fixture, use reportlab / python-docx as normal
 
 Usage:
     python tests/fixtures/digital/make_fixtures.py            # write fixtures + manifest
-    python tests/fixtures/digital/make_fixtures.py --verify    # fail if bytes changed
-    python tests/fixtures/digital/make_fixtures.py --outdir /tmp/fx
+    python tests/fixtures/digital/make_fixtures.py --verify    # fail on drift
+    python tests/fixtures/digital/make_fixtures.py --outdir /tmp/fx   # scratch bytes only
+
+The sha256 manifest is committed at `tests/fixtures/MANIFEST.json` and its path is
+INDEPENDENT of `--outdir`: the bytes are scratch, the manifest is the repo's canonical
+record of what they must be. Override it only with an explicit `--manifest`.
 
 The three fixtures and what each one is for:
 
@@ -335,17 +339,29 @@ NOTES = {
 }
 
 
-#: Where the committed manifest lives — beside the fixtures it describes, and beside this
-#: generator. It used to be committed one directory up, at tests/fixtures/MANIFEST.json,
-#: while the generator wrote outdir/MANIFEST.json with outdir defaulting to this directory.
-#: So running the generator created a SECOND manifest that git had never seen and left the
-#: committed one to go stale forever, unread by anything.
 MANIFEST_NAME = "MANIFEST.json"
 
 #: Fixture BYTES are not committed — only this generator and the manifest are. That is a
 #: deliberate trade (no binaries in review), but it means the sha256s are inert unless
 #: something regenerates and checks them; tests/test_digital_fixtures.py is what does.
 DEFAULT_OUTDIR = Path(__file__).resolve().parent
+
+#: THE canonical manifest: one fixed, committed, repo-relative path — `tests/fixtures/`,
+#: alongside the other committed fixtures, NOT inside `digital/`.
+#:
+#: The original defect was that the generator wrote `outdir/MANIFEST.json` while the
+#: committed manifest lived one directory up, so running the generator created a second
+#: manifest git had never seen and left the committed one stale forever, read by nothing.
+#: There are two ways to close that gap — move the committed file down, or make the
+#: generator write where the committed file already is. This is the second, and it is the
+#: better one for a reason beyond convenience:
+#:
+#: `--outdir` is a SCRATCH parameter. `--outdir /tmp/fx` means "put the bytes somewhere I can
+#: poke at them", and it should never relocate the repo's canonical record of what those bytes
+#: must be — otherwise `--verify --outdir /tmp/fx` silently verifies against a manifest it
+#: just wrote, which is not a check at all. So the manifest path is now independent of
+#: `--outdir` and overridable only by an explicit `--manifest`.
+CANONICAL_MANIFEST = DEFAULT_OUTDIR.parent / MANIFEST_NAME
 
 
 def build_all() -> Dict[str, bytes]:
@@ -370,11 +386,21 @@ def main(argv: List[str] | None = None) -> int:
         epilog=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    ap.add_argument("--outdir", default=str(DEFAULT_OUTDIR))
+    ap.add_argument(
+        "--outdir",
+        default=str(DEFAULT_OUTDIR),
+        help="where to write/read the fixture BYTES. Scratch parameter — it does not move "
+        "the canonical manifest (use --manifest for that).",
+    )
+    ap.add_argument(
+        "--manifest",
+        default=str(CANONICAL_MANIFEST),
+        help=f"path to the committed manifest of sha256s (default: {CANONICAL_MANIFEST}).",
+    )
     ap.add_argument(
         "--verify",
         action="store_true",
-        help="regenerate in memory and fail on any drift from the on-disk bytes OR the manifest",
+        help="regenerate in memory and fail on any drift from the manifest OR the on-disk bytes",
     )
     args = ap.parse_args(argv)
     outdir = Path(args.outdir)
@@ -382,7 +408,7 @@ def main(argv: List[str] | None = None) -> int:
 
     blobs = build_all()
     manifest = manifest_for(blobs)
-    manifest_path = outdir / MANIFEST_NAME
+    manifest_path = Path(args.manifest)
 
     if args.verify:
         drifted: List[str] = []
@@ -429,11 +455,13 @@ def main(argv: List[str] | None = None) -> int:
         (outdir / name).write_bytes(data)
         print(f"  {name:<14} {len(data):>6} bytes  {manifest[name]['sha256'][:16]}…")
 
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(f"wrote {len(blobs)} fixtures + {MANIFEST_NAME} to {outdir}")
+    print(f"wrote {len(blobs)} fixtures to {outdir}")
+    print(f"wrote {MANIFEST_NAME} to {manifest_path}")
     return 0
 
 
