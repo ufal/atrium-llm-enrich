@@ -28,7 +28,7 @@ while [[ $# -gt 0 ]]; do
         --hub)   HUB="$2"; shift 2 ;;
         --check) MODE="check"; shift ;;
         --all)   ALL_ROOT="$2"; shift 2 ;;
-        -h|--help) sed -n '2,22p' "$0"; exit 0 ;;
+        -h|--help) sed -n '3,18p' "$0"; exit 0 ;;
         *) echo "unknown argument: $1" >&2; exit 2 ;;
     esac
 done
@@ -100,11 +100,24 @@ revendor_one_repo() {
 
 status=0
 if [[ -n "$ALL_ROOT" ]]; then
-    for repo in "$ALL_ROOT"/atrium-*; do
+    # nullglob, or a non-matching glob leaves the literal string "…/atrium-*" as the loop
+    # variable, `[[ -d $repo/.git ]]` fails, every iteration is skipped and the script exits
+    # 0 having checked NOTHING — reported as success by the one tool whose job is to prove
+    # the vendored copies are in step.
+    shopt -s nullglob
+    repos=("$ALL_ROOT"/atrium-*)
+    shopt -u nullglob
+    checked=0
+    for repo in "${repos[@]}"; do
         [[ -d "$repo/.git" ]] || continue
         [[ "$(basename "$repo")" == "atrium-project" ]] && continue
+        checked=$((checked + 1))
         revendor_one_repo "$repo" || status=1
     done
+    if [[ $checked -eq 0 ]]; then
+        echo "error: --all $ALL_ROOT matched no atrium-* git checkouts — nothing verified" >&2
+        exit 2
+    fi
 else
     revendor_one_repo "." || status=1
 fi

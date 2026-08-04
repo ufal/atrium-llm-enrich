@@ -14,6 +14,30 @@ repository_fallback = https://github.com/ufal/atrium-llm-enrich
 #                  (or, via the CLI shim, when `--component NAME` is passed to
 #                  `start`/`success`).
 #
+# ── digital-born converter (Issue #18, program identity `digital-convert`) ────
+# The hub's docs/document_schema.md changelog records that `digital-convert` "is
+# also a ParadataLogger identity needing a para_config.txt component->licence
+# mapping, so it is a two-schema commitment". This is that commitment.
+#
+# It is not bookkeeping. Without these rows log_component("docling") stores
+# "UNKNOWN", and para_licenses.resolve_effective_license() treats UNKNOWN as
+# MAXIMALLY RESTRICTIVE, so a digital-born record came out with
+# `provenance.license = "UNKNOWN"` — worse than the conservative CC BY-NC 4.0
+# default, and the exact opposite of the permissive result that the whole
+# pdfplumber-over-PyMuPDF argument in requirements_digital.txt exists to secure.
+# The licence decision was inert until it was declared here.
+#
+# All "conditional": a run only touches the libraries the input format needs, and
+# none of them is loaded by the LLM enrichment path at all.
+docling     = MIT ; conditional ; digital-born structure extraction (PDF + DOCX)
+pdfplumber  = MIT ; conditional ; digital-born PDF geometry (char/word/line bboxes, fonts)
+python-docx = MIT ; conditional ; DOCX paragraph/run/table/style structure
+docx2python = MIT ; conditional ; DOCX fallback for headers/footers/core-properties
+#
+# PyMuPDF is intentionally NOT listed. It is AGPL-3.0, and rule 5's
+# most-restrictive union would put AGPL-3.0 into provenance.license for every
+# digital-born document. See requirements_digital.txt before adding it.
+#
 # TODO(K4TEL/DanaKriv): this section was inherited from atrium-nlp-enrich and
 # stripped of the NameTag3/UDPipe/YAKE/KeyBERT rows, which don't apply here
 # (this repo never loads those). It needs a real pass:

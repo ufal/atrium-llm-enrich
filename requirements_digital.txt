@@ -5,29 +5,62 @@
 # users converting digital-born PDF/DOCX to atrium_document JSON need these.
 #
 # Currently used by the Phase 0 exploration scripts in digital_born/
-# (test_docling.py, test_pymupdf.py, test_ooxml.py) — declared here now so
+# (probe_docling.py, probe_pdf_geometry.py, probe_ooxml.py) — declared here so
 # those scripts stop depending on ad-hoc local installs.
-docling       # MIT — structure extraction (headings, paragraphs, tables, lists) for PDF + DOCX
-pymupdf       # AGPL-3.0 — exact PDF text-block/line/span bounding boxes (imports as `fitz`)
-docx2python   # MIT — DOCX fallback: headers/footers/core-properties Docling may drop
+#
+# ── LICENCE POSTURE: PERMISSIVE-ONLY, AND IT IS LOAD-BEARING ──────────────────
+# Accretion rule 5 merges component licences as a MOST-RESTRICTIVE UNION into
+# `provenance.license` on every document record, and that field goes to FAIR
+# catalogue export. So a single copyleft dependency here does not just constrain
+# this repo — it sets the output licence for EVERY digital-born document. The
+# stack below is therefore MIT-only by design, not by accident.
+#
+# Every name in this file must also have a row in para_config.txt [components],
+# or ParadataLogger records it as UNKNOWN and para_licenses treats UNKNOWN as
+# maximally restrictive — silently producing `provenance.license = UNKNOWN` no
+# matter how permissive the actual stack is. Adding a dependency here without
+# adding it there defeats the point of choosing permissive libraries at all.
 
-# NOTE (license): pymupdf is AGPL-3.0, not MIT/Apache like the rest of this
-# file and requirements_docmd.txt. That's a different license posture than the
-# "permissive-first" note in para_config.txt / Issue #10's research pass —
-# flag for review before this becomes a hard runtime dependency rather than a
-# Phase 0 exploration tool. (PyMuPDF also offers a commercial license if AGPL
-# terms are a blocker.)
+# ── Structure extraction ─────────────────────────────────────────────────────
+docling       # MIT — headings, paragraphs, tables, lists; one API for PDF + DOCX
 
 # ── PDF geometry ─────────────────────────────────────────────────────────────
-# Issue #18 §3 needs exact per-line/span coordinates. Two candidates, and the choice
-# is a LICENCE decision as much as a technical one — see the note below. Measured on
+# Issue #18 §3 needs exact per-line/span coordinates. Measured on
 # tests/fixtures/digital/minimal.pdf, pdfplumber returns char-level geometry to three
 # decimal places (x0=72.000 x1=80.004 top=62.484 bottom=74.484), plus fontname, size
 # and the transformation matrix, and inter-line gaps that make block boundaries
-# detectable (2.0 pt within a paragraph vs 34.0 pt between them).
+# detectable (2.0 pt within a paragraph vs 34.0 pt between them). Its `top`/`bottom`
+# are already the top-left-origin convention $defs/bbox requires, so no conversion
+# step — and `y0`/`y1` are the bottom-up pair that must NOT be written.
 pdfplumber    # MIT — char/word/line bboxes, font, size, matrix. Already a docmd-stack dep.
 
-# pymupdf     # AGPL-3.0 — DO NOT UNCOMMENT WITHOUT THE REVIEW BELOW (imports as `fitz`)
+# PyMuPDF is DELIBERATELY ABSENT, not merely unpinned.
+#
+# It is AGPL-3.0, so declaring it as a component sets provenance.license = AGPL-3.0
+# for every digital-born document (rule 5, above). Docling already owns structural
+# grouping, so PyMuPDF's only unique contribution is precise span geometry — which
+# pdfplumber supplies under MIT. Before this file was corrected it listed `pymupdf`
+# as an ACTIVE dependency a few lines above a commented-out copy of itself marked
+# "DO NOT UNCOMMENT WITHOUT THE REVIEW BELOW", so the licence trap the plan, the
+# digest and digital_born/README.md all describe as avoided was still declared.
+#
+# If the A/B in digital_born/README.md ever shows deltas that matter (rotated text,
+# CID fonts, multi-column), the AGPL question goes to the maintainers WITH THE
+# NUMBERS ATTACHED — and to para_config.txt in the same change. It does not come
+# back as an uncommented line. `pip install pymupdf` in a scratch venv is enough to
+# run the comparison; digital_born/probe_pdf_geometry.py skips that engine cleanly
+# when it is not installed.
+#
+# pymupdf   # AGPL-3.0 — imports as `fitz`. Read the paragraph above before touching this.
 
-# ── DOCX fallback ────────────────────────────────────────────────────────────
-python-docx   # MIT — paragraph/run/table structure; already a docmd-stack dep
+# ── DOCX ─────────────────────────────────────────────────────────────────────
+python-docx   # MIT — paragraph/run/table structure, styles; already a docmd-stack dep
+docx2python   # MIT — fallback for headers/footers/core-properties Docling may drop
+
+# ── Output gate ──────────────────────────────────────────────────────────────
+# Plan §2's Layer D refuses to emit a doc.json whose schema validation fails, via
+# atrium_document.validate_document(). That is a hard requirement of the converter,
+# not a test-only extra: without jsonschema installed validate_document() raises
+# rather than passing silently, because a validation gate that quietly no-ops is
+# indistinguishable from a passing one in the output.
+jsonschema    # MIT — validates the record against atrium_document.schema.json

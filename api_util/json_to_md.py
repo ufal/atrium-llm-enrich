@@ -54,7 +54,67 @@ DROP_CATEGORIES = frozenset({"Garbage", "Inverted"})
 IMPLEMENTED_DETAIL_LEVELS = frozenset({"full"})
 
 
-def _rows_from_lines(lines: List[dict], min_quality: float) -> List[dict]:
+def _label(value: object) -> Optional[str]:
+    """A page label as the schema stores it — a string — or None when absent."""
+    if value is None:
+        return None
+    label = str(value).strip()
+    return label or None
+
+
+def page_ordinals(pages: List[dict], lines: List[dict]) -> Dict[str, int]:
+    """
+    Map each page LABEL to the integer the renderer sorts and sections on.
+
+    The renderer needs an int key; the schema deliberately keeps ``page`` a string "so 'iv'
+    or 'A-1' survive". Reconciling those used to be a bare ``int(line["page"])`` with a
+    ``continue`` on failure, so a document with roman-numeral front matter — precisely the
+    digital-born archival material Issue #18 exists to ingest — lost those lines with no
+    diagnostic, and then died with ``ValueError("nothing to render")`` blaming upstream
+    stages for text they had in fact produced.
+
+    Three cases, in order:
+
+    1. **Every label is a plain non-negative integer** — use ``int(label)``. This is the ALTO
+       path and every record written before ``page_index`` existed; output is unchanged.
+    2. **Some label is not** — use ``pages[].page_index`` when every listed page declares
+       one, since that is the field the schema names as the ordering key.
+    3. **Neither** — fall back to first-appearance order, ``pages[]`` first (it is in
+       document order) and then any page only ``lines[]`` mentions.
+    """
+    labels: List[str] = []
+    for source in (pages, lines):
+        for item in source:
+            label = _label(item.get("page")) if isinstance(item, dict) else None
+            if label and label not in labels:
+                labels.append(label)
+
+    if labels and all(label.isdigit() for label in labels):
+        return {label: int(label) for label in labels}
+
+    declared: Dict[str, int] = {}
+    for p in pages:
+        label = _label(p.get("page"))
+        idx = p.get("page_index")
+        if label and isinstance(idx, int) and not isinstance(idx, bool):
+            declared[label] = idx
+    listed = [lbl for lbl in ({_label(p.get("page")) for p in pages} - {None}) if lbl]
+    if listed and len(declared) == len(listed) and len(set(declared.values())) == len(declared):
+        ordinals = dict(declared)
+        nxt = max(declared.values())
+        for label in labels:
+            if label not in ordinals:
+                nxt += 1
+                ordinals[label] = nxt
+        return ordinals
+
+    return {label: i + 1 for i, label in enumerate(labels)}
+
+
+def _rows_from_lines(
+    lines: List[dict], min_quality: float, ordinals: Optional[Dict[str, int]] = None
+) -> List[dict]:
+    ordinals = ordinals if ordinals is not None else page_ordinals([], lines)
     rows: List[dict] = []
     for line in lines:
         if line.get("categ") in DROP_CATEGORIES:
@@ -65,32 +125,61 @@ def _rows_from_lines(lines: List[dict], min_quality: float) -> List[dict]:
         text = str(line.get("text") or "").strip()
         if not text:
             continue
-        try:
-            page_num = int(line["page"])
-        except (KeyError, TypeError, ValueError):
+        label = _label(line.get("page"))
+        if label is None:
             continue
+        page_num = ordinals.get(label)
+        if page_num is None:
+            print(
+                f"[json_to_md] line on page {label!r} has no position in the document's page "
+                f"order — rendering it after the known pages. Populate pages[].page_index.",
+                file=sys.stderr,
+            )
+            page_num = max(ordinals.values(), default=0) + 1
+            ordinals[label] = page_num
         row = {"page_num": page_num, "line_num": line.get("line", 0), "text": text}
+        # Only added when it carries information the ordinal does not, so a numeric-label
+        # record (the whole ALTO path) produces exactly the rows it produced before.
+        if label != str(page_num):
+            row["page_label"] = label
         if line.get("bbox"):
             row["bbox"] = line["bbox"]
+        # Issue #18 §1c: the paragraph grouping the converter went to the trouble of
+        # extracting has to reach the renderer, or the schema field is a no-op with extra
+        # steps. Absent on the ALTO path, where it stays absent from the row too.
+        if line.get("group_id") is not None:
+            row["group_id"] = line["group_id"]
         rows.append(row)
     rows.sort(key=lambda r: (r["page_num"], r["line_num"]))
     return rows
 
 
-def _pages_meta(pages: List[dict]) -> Dict[int, dict]:
+def _pages_meta(pages: List[dict], ordinals: Optional[Dict[str, int]] = None) -> Dict[int, dict]:
+    ordinals = ordinals if ordinals is not None else page_ordinals(pages, [])
     meta: Dict[int, dict] = {}
     for p in pages:
-        try:
-            page_num = int(p["page"])
-        except (KeyError, TypeError, ValueError):
+        label = _label(p.get("page"))
+        page_num = ordinals.get(label) if label else None
+        if page_num is None:
             continue
         canvas = p.get("canvas") or {}
         entry: Dict[str, object] = {}
         if canvas.get("width") and canvas.get("height"):
             entry["width"] = canvas["width"]
             entry["height"] = canvas["height"]
+            # The DOC_META cue used to hardcode "px". A digital-born PDF page is in points,
+            # so every such cue told the model a page was 595x842 PIXELS — and api_util/
+            # pdf_to_md.py already emitted "pt" for the same document, so the two front-ends
+            # disagreed on one cue. Absent unit still renders "px", unchanged.
+            if canvas.get("unit"):
+                entry["unit"] = canvas["unit"]
         if p.get("needs_ocr"):
             entry["needs_ocr"] = True
+            # Without this the renderer's default fires and every digital-born page reads
+            # "no extractable text layer" — the opposite of what needs_ocr means on that
+            # path, where the text layer exists and merely decodes to garbage.
+            if p.get("needs_ocr_reason"):
+                entry["needs_ocr_reason"] = p["needs_ocr_reason"]
         if p.get("ocr"):
             entry["ocr"] = p["ocr"]
         meta[page_num] = entry
@@ -111,8 +200,12 @@ def read_document_rows(
     """
     record = load_document(str(doc_json_path))
     lines = record.get("lines") or []
-    rows = _rows_from_lines(lines, min_quality)
-    pages = _pages_meta(record.get("pages") or [])
+    page_block = record.get("pages") or []
+    # One ordinal map shared by both, so a line and its page's metadata cannot end up under
+    # different keys — which is what would happen if each derived its own.
+    ordinals = page_ordinals(page_block, lines)
+    rows = _rows_from_lines(lines, min_quality, ordinals)
+    pages = _pages_meta(page_block, ordinals)
     fallback_text = None
     if not rows:
         fallback_text = (record.get("content") or {}).get("text")

@@ -16,6 +16,10 @@ import pytest
 
 
 def pytest_configure(config):
+    # `slow` is declared in pytest.ini; this stays as the belt-and-braces registration for
+    # anyone invoking pytest with a different ini (e.g. `-c` in a container), and is
+    # harmless when both are present. With --strict-markers now on, one of the two has to
+    # be authoritative — pytest.ini is.
     config.addinivalue_line("markers", "slow: marks tests as slow integration smoke tests")
 
 

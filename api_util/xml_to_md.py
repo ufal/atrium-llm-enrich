@@ -294,31 +294,53 @@ def rows_to_layout_markdown(rows: List[dict], pages: dict, title: str = "") -> s
     ``<!-- BBOX -->`` per line, and ``![figure]`` placeholders — so TEITOK/ALTO
     input lands on the one annotated-Markdown schema (issue #11).
 
-    A page's meta dict may also carry ``needs_ocr`` (bool) and ``ocr``
-    (``{"engine": ..., "lang": ...}``) — populated only by json_to_md.py, which
-    reads them straight off the AtriumDocument record's ``pages[]`` block; no
-    other caller sets them today, so this is purely additive for existing ones.
+    A page's meta dict may also carry ``needs_ocr`` (bool), ``needs_ocr_reason``
+    (str), ``ocr`` (``{"engine": ..., "lang": ...}``) and ``unit`` (the canvas
+    unit, default ``px``) — populated only by json_to_md.py, which reads them
+    straight off the AtriumDocument record's ``pages[]`` block; no other caller
+    sets them today, so this is purely additive for existing ones.
+
+    A row may additionally carry ``group_id`` and ``page_label`` (issue #18):
+
+    * ``group_id`` — the source-structural unit the line came from (a DOCX
+      paragraph, a table cell, a PDF text block). A change of value emits a
+      **blank line**, which is Markdown's own paragraph primitive, so the
+      grouping needs no new ``layout_md`` cue. This is the consumer half of the
+      contract stated in ``atrium_document.schema.json``'s ``lines[].group_id``:
+      without it the field was inert and the converter's paragraph fidelity never
+      reached the model.
+    * ``page_label`` — the page's real label when it is not simply ``str(page_num)``,
+      so ``iv`` or ``A-1`` is what appears in ``## Page …`` and in the PAGE_BREAK
+      cue the citation format keys off, rather than a synthetic ordinal.
+
+    Rows without either key render exactly as before, so the ALTO/TEITOK path is
+    byte-for-byte unchanged.
     """
     pages = pages or {}
     parts: List[str] = [f"# {title}"] if title else []
     current_page = None
+    # A distinct sentinel, because `None` is a legitimate group_id (the ALTO path): the first
+    # text row of a page must never emit a boundary, whatever its group is.
+    no_group = object()
+    current_group: object = no_group
 
     for row in rows:
         page = row.get("page_num")
+        label = row.get("page_label", page)
         if page != current_page:
             if current_page is not None:
-                parts.append(L.page_break(page))
-            parts.append(f"\n## Page {page}\n")
+                parts.append(L.page_break(label))
+            parts.append(f"\n## Page {label}\n")
             meta = pages.get(page, {})
             w, h = meta.get("width"), meta.get("height")
             if w and h:
-                parts.append(L.doc_meta(size=f"{w}x{h}px"))
+                parts.append(L.doc_meta(size=f"{w}x{h}{meta.get('unit', 'px')}"))
             for fig in meta.get("figures", []):
                 parts.append(L.image(fig.get("type", "figure"), "", fig.get("bbox")))
             if meta.get("needs_ocr"):
                 parts.append(
                     L.needs_ocr(
-                        page, reason=meta.get("needs_ocr_reason", "no extractable text layer")
+                        label, reason=meta.get("needs_ocr_reason", "no extractable text layer")
                     )
                 )
             ocr_meta = meta.get("ocr")
@@ -327,10 +349,15 @@ def rows_to_layout_markdown(rows: List[dict], pages: dict, title: str = "") -> s
                     L.ocr_meta(engine=ocr_meta.get("engine", "unknown"), lang=ocr_meta.get("lang"))
                 )
             current_page = page
+            current_group = no_group
 
         text = str(row.get("text", "")).strip()
         if not text:
             continue
+        group = row.get("group_id")
+        if current_group is not no_group and group != current_group:
+            parts.append("")
+        current_group = group
         box = row.get("bbox")
         parts.append(f"{L.bbox(box)}\n{text}" if box else text)
 

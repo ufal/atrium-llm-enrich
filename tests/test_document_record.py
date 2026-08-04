@@ -17,7 +17,6 @@ which is the part most likely to drift if the enrichment schema changes.
 """
 
 import json
-from pathlib import Path
 
 import pytest
 
@@ -231,9 +230,15 @@ def test_license_detail_accretes_into_provenance(tmp_path):
 
 
 def test_record_validates_against_the_shared_schema(tmp_path):
-    jsonschema = pytest.importorskip("jsonschema")
-    schema_path = Path(__file__).resolve().parent.parent / "atrium_document.schema.json"
-    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    """A real gate, not an importorskip.
+
+    `jsonschema` was in no requirements file, so this guarded on
+    `pytest.importorskip("jsonschema")` and therefore SKIPPED on a clean venv — the only
+    schema check in the repo, silently not running. It is now declared in
+    requirements-test.txt and requirements_digital.txt, and the locator lives in
+    atrium_document.validate_document() so the hub and tool-repo layouts both resolve.
+    """
+    from atrium_document import validate_document
 
     path = write_document_record(DOC, DOC_LEVEL, tmp_path, run_id="R1")
-    jsonschema.validate(load_document(str(path)), schema)
+    validate_document(load_document(str(path)))

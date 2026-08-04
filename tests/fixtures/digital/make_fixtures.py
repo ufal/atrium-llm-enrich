@@ -50,6 +50,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import sys
 import zipfile
@@ -58,6 +59,27 @@ from typing import Dict, List, Tuple
 
 #: Fixed zip timestamp. Any real clock value makes the DOCX non-reproducible.
 ZIP_EPOCH: Tuple[int, int, int, int, int, int] = (1980, 1, 1, 0, 0, 0)
+
+#: Pinned so the DOCX bytes do not depend on the machine that generated them.
+#:
+#: `zipfile.ZipInfo.__init__` sets `create_system = 0` on win32 and `3` (Unix) everywhere
+#: else, and that byte lands in every local and central directory header. So the sha256 in
+#: MANIFEST.json was silently platform-specific: a contributor on Windows regenerating the
+#: fixture would see `--verify` fail with a "drift" that is not a content change at all.
+#: 3 (Unix) matches what CI and every developer machine here already produced, so the
+#: existing hash is unaffected on those platforms.
+ZIP_CREATE_SYSTEM = 3
+
+#: STORED, not DEFLATED.
+#:
+#: DEFLATE output is not specified byte-for-byte — it depends on the zlib version and build
+#: options linked into the interpreter. A fixture whose whole premise is "git diff on a
+#: regenerated fixture has to be empty" cannot be compressed with a codec whose output may
+#: legitimately change under a zlib upgrade. The six XML parts total a few KB, so storing
+#: them uncompressed costs nothing and removes the entire class of drift. This DOES change
+#: the fixture's bytes and size once, which is why MANIFEST.json is regenerated in the same
+#: commit — python-docx, Word and every conformant reader accept stored entries.
+ZIP_COMPRESSION = zipfile.ZIP_STORED
 
 #: Letter, in points. Matches pages[].canvas {width, height, unit: "pt"}.
 PAGE_W, PAGE_H = 612, 792
@@ -155,8 +177,14 @@ def minimal_pdf() -> bytes:
     """Two pages, three text blocks, no diacritics — the clean happy path."""
     page1 = b"\n".join(
         [
-            _text_block(72, 720, [b"Excavation report, block one, line one.",
-                                  b"Excavation report, block one, line two."]),
+            _text_block(
+                72,
+                720,
+                [
+                    b"Excavation report, block one, line one.",
+                    b"Excavation report, block one, line two.",
+                ],
+            ),
             _text_block(72, 660, [b"Block two is a separate paragraph."]),
         ]
     )
@@ -214,13 +242,13 @@ STYLES = XML_DECL + (
     '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>'
     '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>'
     '<w:basedOn w:val="Normal"/><w:pPr><w:outlineLvl w:val="0"/></w:pPr>'
-    "<w:rPr><w:b/><w:sz w:val=\"32\"/></w:rPr></w:style>"
+    '<w:rPr><w:b/><w:sz w:val="32"/></w:rPr></w:style>'
     "</w:styles>"
 )
 
 #: Fixed dates. dcterms values are the DOCX equivalent of a PDF /CreationDate.
 CORE_PROPS = XML_DECL + (
-    '<cp:coreProperties '
+    "<cp:coreProperties "
     'xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
     'xmlns:dc="http://purl.org/dc/elements/1.1/" '
     'xmlns:dcterms="http://purl.org/dc/terms/" '
@@ -254,7 +282,7 @@ def _document_xml() -> str:
         f"<w:tr>{_cell('Ornice')}{_cell('30 cm')}</w:tr>"
         "</w:tbl>"
     )
-    page_break = "<w:p><w:r><w:br w:type=\"page\"/></w:r></w:p>"
+    page_break = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
     body = (
         _p("Zpráva o sondě", style="Heading1")
         # Two runs in ONE paragraph: the adapter must emit these as one group_id, not two.
@@ -270,10 +298,9 @@ def _document_xml() -> str:
 
 
 def minimal_docx() -> bytes:
-    """A .docx is a zip of XML parts; fixed entry order + fixed timestamps make it
-    byte-reproducible, which no high-level writer will do for you."""
-    import io
-
+    """A .docx is a zip of XML parts; fixed entry order, fixed timestamps, a pinned
+    create_system byte and no compression make it byte-reproducible, which no high-level
+    writer will do for you."""
     parts = [
         ("[Content_Types].xml", CONTENT_TYPES),
         ("_rels/.rels", ROOT_RELS),
@@ -283,10 +310,11 @@ def minimal_docx() -> bytes:
         ("word/styles.xml", STYLES),
     ]
     buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(buf, "w", compression=ZIP_COMPRESSION) as zf:
         for name, text in parts:
             info = zipfile.ZipInfo(name, date_time=ZIP_EPOCH)
-            info.compress_type = zipfile.ZIP_DEFLATED
+            info.compress_type = ZIP_COMPRESSION
+            info.create_system = ZIP_CREATE_SYSTEM
             info.external_attr = 0o600 << 16
             zf.writestr(info, text.encode("utf-8"))
     return buf.getvalue()
@@ -307,46 +335,105 @@ NOTES = {
 }
 
 
+#: Where the committed manifest lives — beside the fixtures it describes, and beside this
+#: generator. It used to be committed one directory up, at tests/fixtures/MANIFEST.json,
+#: while the generator wrote outdir/MANIFEST.json with outdir defaulting to this directory.
+#: So running the generator created a SECOND manifest that git had never seen and left the
+#: committed one to go stale forever, unread by anything.
+MANIFEST_NAME = "MANIFEST.json"
+
+#: Fixture BYTES are not committed — only this generator and the manifest are. That is a
+#: deliberate trade (no binaries in review), but it means the sha256s are inert unless
+#: something regenerates and checks them; tests/test_digital_fixtures.py is what does.
+DEFAULT_OUTDIR = Path(__file__).resolve().parent
+
+
+def build_all() -> Dict[str, bytes]:
+    """Every fixture, generated in memory. The one source of truth for both modes."""
+    return {name: build() for name, build in BUILDERS.items()}
+
+
+def manifest_for(blobs: Dict[str, bytes]) -> Dict[str, Dict[str, object]]:
+    return {
+        name: {
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "bytes": len(data),
+            "note": NOTES[name],
+        }
+        for name, data in blobs.items()
+    }
+
+
 def main(argv: List[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n")[3])
-    ap.add_argument("--outdir", default=str(Path(__file__).resolve().parent))
+    ap = argparse.ArgumentParser(
+        description="Generate the deterministic digital-born golden fixtures for Issue #18.",
+        epilog=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    ap.add_argument("--outdir", default=str(DEFAULT_OUTDIR))
     ap.add_argument(
         "--verify",
         action="store_true",
-        help="regenerate in memory and fail if the on-disk bytes differ",
+        help="regenerate in memory and fail on any drift from the on-disk bytes OR the manifest",
     )
     args = ap.parse_args(argv)
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
-    manifest: Dict[str, Dict[str, object]] = {}
-    drifted: List[str] = []
-
-    for name, build in BUILDERS.items():
-        data = build()
-        digest = hashlib.sha256(data).hexdigest()
-        manifest[name] = {"sha256": digest, "bytes": len(data), "note": NOTES[name]}
-        target = outdir / name
-        if args.verify:
-            if not target.exists() or target.read_bytes() != data:
-                drifted.append(name)
-            continue
-        target.write_bytes(data)
-        print(f"  {name:<14} {len(data):>6} bytes  {digest[:16]}…")
+    blobs = build_all()
+    manifest = manifest_for(blobs)
+    manifest_path = outdir / MANIFEST_NAME
 
     if args.verify:
+        drifted: List[str] = []
+        # 1. Against the committed manifest. This is the check --verify advertised and did
+        #    not perform: it only ever compared regenerated bytes to on-disk bytes, so with
+        #    the fixtures absent (they are not committed) it compared nothing at all and the
+        #    pinned sha256s were never read by any code path.
+        if manifest_path.exists():
+            recorded = json.loads(manifest_path.read_text(encoding="utf-8"))
+            for name, entry in manifest.items():
+                was = recorded.get(name)
+                if was is None:
+                    drifted.append(f"{name}: absent from {MANIFEST_NAME}")
+                elif was.get("sha256") != entry["sha256"]:
+                    drifted.append(
+                        f"{name}: sha256 {was.get('sha256', '?')[:16]}… recorded, "
+                        f"{entry['sha256'][:16]}… generated ({was.get('bytes')} -> {entry['bytes']} bytes)"
+                    )
+            for name in set(recorded) - set(manifest):
+                drifted.append(f"{name}: in {MANIFEST_NAME} but no builder produces it")
+        else:
+            drifted.append(f"{manifest_path} is missing — nothing to verify against")
+
+        # 2. Against any fixture bytes that happen to be on disk.
+        for name, data in blobs.items():
+            target = outdir / name
+            if target.exists() and target.read_bytes() != data:
+                drifted.append(f"{name}: on-disk bytes differ from the generator")
+
         if drifted:
-            print(f"FIXTURE DRIFT: {', '.join(drifted)}", file=sys.stderr)
-            print("Regenerate and review the golden diffs deliberately.", file=sys.stderr)
+            print("FIXTURE DRIFT:", file=sys.stderr)
+            for line in drifted:
+                print(f"  - {line}", file=sys.stderr)
+            print(
+                "\nIf the change is intended, regenerate and review the golden diffs "
+                "deliberately:\n  python tests/fixtures/digital/make_fixtures.py",
+                file=sys.stderr,
+            )
             return 1
-        print("fixtures match the generator")
+        print(f"fixtures and {MANIFEST_NAME} match the generator")
         return 0
 
-    (outdir / "MANIFEST.json").write_text(
+    for name, data in blobs.items():
+        (outdir / name).write_bytes(data)
+        print(f"  {name:<14} {len(data):>6} bytes  {manifest[name]['sha256'][:16]}…")
+
+    manifest_path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(f"wrote {len(BUILDERS)} fixtures + MANIFEST.json to {outdir}")
+    print(f"wrote {len(blobs)} fixtures + {MANIFEST_NAME} to {outdir}")
     return 0
 
 

@@ -20,9 +20,18 @@ These tests pin three things that were each a live defect before this landed:
      `merge_block()` honours SILENTLY — `text` was filtered out with no warning and the
      record still validated, because `lines[]` requires only `page`+`line`.
 
-Style follows tests/test_atrium_document.py (one rule per test, named in the docstring),
+Style follows tests/test_document_record.py (one rule per test, named in the docstring),
 but uses the public `logger.run_id` rather than `logger._run_id` — the #13 hardening pass
 added it precisely so tests stop reaching into privates.
+
+(That reference used to read `tests/test_atrium_document.py`, which does not exist in this
+repo. Worth more than a pointer fix: plan §1b deferred the `merge_block()` dropped-field
+warning on the grounds that "at least one existing call site passes context fields it
+doesn't own for readability (tests/test_atrium_document.py has the translator merging
+entities with surface)". No such call site exists here — the only translator usage is
+`set_block("translations", ...)` — so the stated cost of that fix was unverified. It is now
+available opt-in via `warn_dropped_fields=True` and `assert_fields_survived()`, which needs
+no call-site cleanup at all.)
 """
 
 import json
@@ -31,9 +40,13 @@ import pytest
 
 from atrium_document import (
     BLOCK_FIELD_OWNERS,
+    BLOCK_KEY_FIELDS,
     BLOCK_OWNERS,
     ORIGIN_ORIGINATORS,
     DocumentRecord,
+    merge_document_records,
+    resolve_originator,
+    validate_document,
 )
 from atrium_paradata import ParadataLogger
 
@@ -53,7 +66,13 @@ def mock_paradata(tmp_path):
 
 
 def _open(tmp_path, mock_paradata, program, origin=None, baseline=None, strict=True):
-    """A record opened as `program`, with `source.origin` seeded when given."""
+    """A record opened as `program`, with `source.origin` seeded when given.
+
+    `out_dir` is pinned to tmp_path. Without it `out_dir` defaults to ".", so every test
+    using this as a context manager without an explicit `finalize(path)` had __exit__ write
+    CTX000000001.document.json into the REPO ROOT — an untracked file appearing after a test
+    run, and a dirty tree in CI.
+    """
     run_id, paradata_ref = mock_paradata
     doc = DocumentRecord(
         doc_id="CTX000000001",
@@ -61,6 +80,7 @@ def _open(tmp_path, mock_paradata, program, origin=None, baseline=None, strict=T
         baseline=baseline,
         run_id=run_id,
         paradata_ref=paradata_ref,
+        out_dir=str(tmp_path),
         strict=strict,
     )
     if origin is not None:
@@ -178,12 +198,30 @@ def test_digital_convert_lines_round_trip_keeps_text_and_bbox(tmp_path, mock_par
     would have passed while the data was being eaten.
     """
     rows = [
-        {"page": "1", "line": 0, "text": "První odstavec, řádek jedna.",
-         "bbox": [72.0, 700.0, 300.0, 712.0], "group_id": "p1", "lang": "cs"},
-        {"page": "1", "line": 1, "text": "První odstavec, řádek dvě.",
-         "bbox": [72.0, 686.0, 290.0, 698.0], "group_id": "p1", "lang": "cs"},
-        {"page": "1", "line": 2, "text": "Druhý odstavec.",
-         "bbox": [72.0, 660.0, 250.0, 672.0], "group_id": "p2", "lang": "cs"},
+        {
+            "page": "1",
+            "line": 0,
+            "text": "První odstavec, řádek jedna.",
+            "bbox": [72.0, 700.0, 300.0, 712.0],
+            "group_id": "p1",
+            "lang": "cs",
+        },
+        {
+            "page": "1",
+            "line": 1,
+            "text": "První odstavec, řádek dvě.",
+            "bbox": [72.0, 686.0, 290.0, 698.0],
+            "group_id": "p1",
+            "lang": "cs",
+        },
+        {
+            "page": "1",
+            "line": 2,
+            "text": "Druhý odstavec.",
+            "bbox": [72.0, 660.0, 250.0, 672.0],
+            "group_id": "p2",
+            "lang": "cs",
+        },
     ]
     out = tmp_path / "lines.document.json"
     with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as doc:
@@ -202,14 +240,19 @@ def test_digital_convert_may_write_page_canvas_and_needs_ocr(tmp_path, mock_para
     handoff for Issue #10's undecodable-text-layer case."""
     out = tmp_path / "pages.document.json"
     with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as doc:
-        doc.merge_block(
-            "lines", [{"page": "1", "line": 0, "text": "sondI"}]
-        )
+        doc.merge_block("lines", [{"page": "1", "line": 0, "text": "sondI"}])
         doc.merge_block(
             "pages",
-            [{"page": "1", "page_index": 1,
-              "canvas": {"width": 612, "height": 792, "unit": "pt"},
-              "quality_score": 0.21, "quality_band": "Trash", "needs_ocr": True}],
+            [
+                {
+                    "page": "1",
+                    "page_index": 1,
+                    "canvas": {"width": 612, "height": 792, "unit": "pt"},
+                    "quality_score": 0.21,
+                    "quality_band": "Trash",
+                    "needs_ocr": True,
+                }
+            ],
         )
         doc.finalize(str(out))
 
@@ -259,8 +302,8 @@ def test_nlp_enrich_merging_into_lines_is_unaffected(tmp_path, mock_paradata):
 
     line = json.loads(out.read_text(encoding="utf-8"))["lines"][0]
     assert line["lemma"] == "původní"
-    assert line["text"] == "Původní řádek."   # rule 2: co-contributor's field survives
-    assert line["group_id"] == "p1"           # and so does the originator's
+    assert line["text"] == "Původní řádek."  # rule 2: co-contributor's field survives
+    assert line["group_id"] == "p1"  # and so does the originator's
 
 
 # ── the read-time contract ───────────────────────────────────────────────────
@@ -279,7 +322,7 @@ def test_read_time_contract_is_the_stamp_not_the_table(tmp_path, mock_paradata):
     blocks = json.loads(out.read_text(encoding="utf-8"))["assembled"]["blocks"]
     assert blocks["content"]["program"] == DIGITAL
     assert blocks["lines"]["program"] == DIGITAL
-    assert BLOCK_OWNERS["lines"] != DIGITAL      # the table alone would have said otherwise
+    assert BLOCK_OWNERS["lines"] != DIGITAL  # the table alone would have said otherwise
 
 
 def test_contributors_records_the_originating_run(tmp_path, mock_paradata):
@@ -311,3 +354,409 @@ def test_non_strict_warns_instead_of_raising(tmp_path, mock_paradata, capsys):
     assert "WARNING" in err
     assert "originated by 'alto-postprocess'" in err
     assert doc.get_block("content")["text"] == "written anyway"
+
+
+# ── the write-order hole: blocks written before set_source() ──────────────────
+
+
+def test_origin_check_is_deferred_not_skipped_when_source_comes_last(tmp_path, mock_paradata):
+    """The check reads `source.origin`, so writing first used to escape it PERMANENTLY.
+
+    Plan §2's Layer C says set_source() must be called "before any block write, since that
+    is what authorizes them", but nothing enforced the order: a run that wrote its positional
+    plane and only then set an OCR origin produced exactly the half-digital/half-OCR record
+    §1a exists to refuse — under strict=True, with no error. set_source() being
+    first-writer-wins then froze the wrong origin in.
+    """
+    doc = _open(tmp_path, mock_paradata, DIGITAL, origin=None)
+    doc.merge_block("lines", [{"page": "1", "line": 0, "text": "digital text"}])
+    with pytest.raises(ValueError, match="originated by 'alto-postprocess'"):
+        doc.set_source(origin="ocr:pero")
+
+
+def test_deferred_check_also_fires_at_write_time(tmp_path, mock_paradata):
+    """Same hole reached the other way: an origin arriving from a baseline, not set_source()."""
+    doc = _open(tmp_path, mock_paradata, DIGITAL, origin=None)
+    doc.set_block("content", {"text": "digital body"})
+    doc._data["source"] = {"origin": "ABBYY-ALTO"}  # e.g. a merge or a hand-edited baseline
+    with pytest.raises(ValueError, match="originated by 'alto-postprocess'"):
+        doc.to_dict()
+
+
+def test_a_matching_late_origin_is_accepted(tmp_path, mock_paradata):
+    """Deferring must not turn a legitimate write order into a failure."""
+    doc = _open(tmp_path, mock_paradata, DIGITAL, origin=None)
+    doc.merge_block("lines", [{"page": "1", "line": 0, "text": "ok"}])
+    doc.set_source(origin="digital-born-pdf")
+    assert doc.to_dict()["lines"][0]["text"] == "ok"
+
+
+def test_source_conflict_is_reported_rather_than_discarded(tmp_path, mock_paradata):
+    """`source` stays immutable, but a second writer disagreeing is no longer silent —
+    since §1a it means the routing that picks the positional plane ran twice and disagreed."""
+    doc = _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf")
+    with pytest.raises(ValueError, match="source is immutable"):
+        doc.set_source(origin="ocr:pero")
+    assert doc.to_dict()["source"]["origin"] == "digital-born-pdf"
+
+    doc2 = _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf")
+    doc2.set_source(origin="digital-born-pdf")  # re-asserting the same value stays silent
+
+
+# ── origin spelling ──────────────────────────────────────────────────────────
+
+
+@pytest.mark.parametrize(
+    "origin,expected",
+    [
+        ("digital-born-pdf", DIGITAL),
+        ("digital-born-docx", DIGITAL),
+        ("docx", DIGITAL),
+        ("pdf", DIGITAL),  # the symmetric bare spelling; had no entry at all
+        ("DOCX", DIGITAL),  # matching used to be case-sensitive
+        ("Digital-Born-PDF", DIGITAL),
+        ("ABBYY-ALTO", ALTO),
+        ("abbyy-alto", ALTO),
+        ("ocr:pero", ALTO),
+        ("OCR:tesseract-ces", ALTO),
+        ("vlm:glm-4v", ALTO),
+        ("some-future-acquisition", None),  # abstain, per rule 6's spirit
+        (None, None),
+        ("", None),
+    ],
+)
+def test_origin_spellings_resolve(origin, expected):
+    """A non-match makes the check ABSTAIN, so every unmatched spelling silently switched
+    §1a off for that document — the opposite of the intended behaviour, and invisible."""
+    assert resolve_originator(origin) == expected
+
+
+def test_unmatched_origin_is_noted_on_stderr(tmp_path, mock_paradata, capsys):
+    """Abstaining is correct; abstaining in total silence is how §1a stops applying."""
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="some-future-acquisition") as doc:
+        doc.set_block("content", {"text": "allowed"})
+    err = capsys.readouterr().err
+    assert "NOTE" in err and "matches no ORIGIN_ORIGINATORS prefix" in err
+
+
+# ── the needs_ocr hand-off ───────────────────────────────────────────────────
+
+
+def test_needs_ocr_handoff_lets_alto_re_originate(tmp_path, mock_paradata):
+    """§3's "route per page before deferring to OCR" was unreachable.
+
+    `needs_ocr` is granted to digital-convert precisely so it can say "this page's embedded
+    text layer does not decode — re-acquire it by OCR". But `source.origin` is frozen at
+    `digital-born-pdf`, so every pages/lines write alto-postprocess made afterwards was
+    refused, and §3 contradicted §1a's "no document is ever both". The converter's own
+    recorded request is the authorisation, and it is auditable from the record.
+    """
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as first:
+        first.merge_block(
+            "pages",
+            [
+                {
+                    "page": "1",
+                    "page_index": 1,
+                    "needs_ocr": True,
+                    "needs_ocr_reason": "text layer decodes to corrupt diacritics (no /ToUnicode)",
+                }
+            ],
+        )
+        first.merge_block("lines", [{"page": "1", "line": 0, "text": "sondI", "categ": "Garbage"}])
+        baseline = first.to_dict()
+
+    second = DocumentRecord(
+        "CTX000000001", ALTO, baseline=baseline, out_dir=str(tmp_path), strict=True
+    )
+    second.merge_block("lines", [{"page": "1", "line": 0, "text": "sondě", "categ": "Text"}])
+    assert second.get_block("lines")[0]["text"] == "sondě"
+    # Rule 4: the read-time truth is the stamp, and `ocr` stays alto's alone.
+    assert second.to_dict()["assembled"]["blocks"]["lines"]["program"] == ALTO
+    assert second.to_dict()["source"]["origin"] == "digital-born-pdf"
+
+
+def test_without_needs_ocr_alto_is_still_refused(tmp_path, mock_paradata):
+    """The hand-off must be the converter's explicit request, not a general escape hatch."""
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as first:
+        first.merge_block("pages", [{"page": "1", "page_index": 1, "needs_ocr": False}])
+        baseline = first.to_dict()
+
+    second = DocumentRecord(
+        "CTX000000001", ALTO, baseline=baseline, out_dir=str(tmp_path), strict=True
+    )
+    with pytest.raises(ValueError, match="originated by 'digital-convert'"):
+        second.merge_block("lines", [{"page": "1", "line": 0, "text": "x"}])
+
+
+# ── merge_block field discipline ─────────────────────────────────────────────
+
+
+def test_own_fields_empty_writes_only_the_keys(tmp_path, mock_paradata):
+    """`allowed = own_fields or ...` treated an explicit [] as "not supplied" and handed back
+    the program's full grant, writing more than the caller asked for."""
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as doc:
+        doc.merge_block(
+            "lines", [{"page": "1", "line": 0, "text": "not mine to write"}], own_fields=[]
+        )
+        assert doc.get_block("lines") == [{"page": "1", "line": 0}]
+
+
+def test_own_fields_does_not_confer_writership(tmp_path, mock_paradata):
+    """merge_block() never called _assert_owner(), and the origin check abstains for
+    non-candidates, so own_fields was the one way an undeclared program could write any
+    block and be stamped as its author. The merge_block counterpart of
+    test_a_third_program_is_still_refused_outright."""
+    doc = _open(tmp_path, mock_paradata, "some-random-tool", origin="digital-born-pdf")
+    with pytest.raises(ValueError, match="neither an owner nor a declared field contributor"):
+        doc.merge_block("lines", [{"page": "1", "line": 0, "text": "x"}], own_fields=["text"])
+
+
+def test_int_and_str_page_labels_are_one_row(tmp_path, mock_paradata):
+    """Rows keyed on `json.dumps(value)` forked on TYPE: the schema types `page` as a string
+    but nothing coerces it, so an originator passing "1" and a contributor passing 1 built
+    two rows for one line — one with the text, one with the morphology, neither complete,
+    and the record still validated."""
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as first:
+        first.merge_block("lines", [{"page": 1, "line": 0, "text": "int page"}])
+        baseline = first.to_dict()
+
+    with DocumentRecord(
+        "CTX000000001", "nlp-enrich", baseline=baseline, out_dir=str(tmp_path), strict=True
+    ) as doc:
+        doc.merge_block("lines", [{"page": "1", "line": 0, "lemma": "x"}])
+        rows = doc.get_block("lines")
+
+    assert len(rows) == 1, "the same physical line must not become two rows"
+    assert rows[0]["text"] == "int page" and rows[0]["lemma"] == "x"
+
+
+def test_assert_fields_survived_catches_the_1b_drop(tmp_path, mock_paradata):
+    """The §1b round-trip assertion plan §2's Layer D is specified to run before validate().
+
+    jsonschema cannot catch this: `lines[]` requires only page+line, so a row stripped of its
+    text is a valid row.
+    """
+    rows = [{"page": "1", "line": 0, "text": "nlp-enrich may not originate text"}]
+    doc = _open(tmp_path, mock_paradata, "nlp-enrich", origin="digital-born-pdf", strict=False)
+    doc.merge_block("lines", rows)
+    assert doc.dropped_fields() == {"lines": ["text"]}
+    with pytest.raises(RuntimeError, match="dropped by merge_block"):
+        doc.assert_fields_survived("lines", rows)
+
+
+def test_assert_fields_survived_passes_for_the_declared_originator(tmp_path, mock_paradata):
+    rows = [
+        {
+            "page": "1",
+            "line": 0,
+            "text": "a",
+            "bbox": [1, 2, 3, 4],
+            "group_id": "p1",
+            "style": {"bold": True, "heading_level": 1},
+            "lang": "cs",
+        },
+    ]
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as doc:
+        doc.merge_block("lines", rows)
+        doc.assert_fields_survived("lines", rows)
+        assert doc.dropped_fields() == {}
+
+
+def test_warn_dropped_fields_is_opt_in(tmp_path, mock_paradata, capsys):
+    """Ecosystem-wide it is a tightening pass with call-site cleanup (§1b), so it is a flag."""
+    run_id, ref = mock_paradata
+    quiet = DocumentRecord(
+        "D", "nlp-enrich", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path)
+    )
+    quiet.merge_block("lines", [{"page": "1", "line": 0, "text": "eaten"}])
+    assert "may not write" not in capsys.readouterr().err
+
+    loud = DocumentRecord(
+        "D",
+        "nlp-enrich",
+        run_id=run_id,
+        paradata_ref=ref,
+        out_dir=str(tmp_path),
+        warn_dropped_fields=True,
+    )
+    loud.merge_block("lines", [{"page": "1", "line": 0, "text": "eaten"}])
+    assert "may not write ['text']" in capsys.readouterr().err
+
+
+# ── tables ───────────────────────────────────────────────────────────────────
+
+
+def test_tables_is_mergeable_and_keeps_its_fields(tmp_path, mock_paradata):
+    """`tables` had two declared originators, no BLOCK_KEY_FIELDS entry and no
+    BLOCK_FIELD_OWNERS entry: merge_block() raised "no key fields known", and with
+    key_fields supplied it emptied every row down to its key — the §1b silent drop again,
+    on a block the Definition of Done requires the converter to originate."""
+    assert BLOCK_KEY_FIELDS["tables"] == ["table_id"]
+    rows = [
+        {
+            "table_id": "t1",
+            "page": "1",
+            "n_rows": 2,
+            "n_cols": 2,
+            "group_id": "t1",
+            "cells": [
+                {"row": 0, "col": 0, "is_header": True, "group_id": "t1.r0c0"},
+                {"row": 0, "col": 1, "is_header": True, "group_id": "t1.r0c1"},
+                {"row": 1, "col": 0, "group_id": "t1.r1c0"},
+                {"row": 1, "col": 1, "group_id": "t1.r1c1"},
+            ],
+        }
+    ]
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="docx") as doc:
+        doc.merge_block("tables", rows)
+        doc.assert_fields_survived("tables", rows)
+        written = doc.get_block("tables")
+
+    assert len(written[0]["cells"]) == 4
+    # The join the schema promises: every cell addresses the lines carrying its text.
+    assert all(c["group_id"] for c in written[0]["cells"])
+
+
+def test_set_block_on_tables_does_not_warn_about_co_contributors(tmp_path, mock_paradata, capsys):
+    """The field-split warning exists because set_block() erases a CO-CONTRIBUTOR's fields.
+    Alternative originators are mutually exclusive per document, so they are not
+    co-contributors — `tables` is declared for both and nobody else."""
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="docx") as doc:
+        doc.set_block("tables", [{"table_id": "t1", "page": "1", "n_rows": 1, "n_cols": 1}])
+    err = capsys.readouterr().err
+    assert "field-split" not in err
+
+
+def test_lines_still_warns_on_set_block(tmp_path, mock_paradata):
+    """Regression guard for the same change: `lines` has a genuine co-contributor."""
+    doc = _open(tmp_path, mock_paradata, DIGITAL, origin="docx")
+    with pytest.raises(ValueError, match="field-split with \\['nlp-enrich'\\]"):
+        doc.set_block("lines", [{"page": "1", "line": 0, "text": "erases morphology"}])
+
+
+# ── fan-in ───────────────────────────────────────────────────────────────────
+
+
+def test_merge_keeps_the_first_source_and_accumulates_derived_from(tmp_path, mock_paradata):
+    """`source` carries no assembled.blocks stamp, so both sides of the `updated_at`
+    comparison were "" and every input overwrote the previous — last-path-wins, dropping the
+    first record's sha256 and able to swap the §1a origin out from under a written plane.
+    `derived_from`/`regenerable` are append-only maps and were replaced wholesale."""
+    run_id, ref = mock_paradata
+    first = DocumentRecord("CTX1", DIGITAL, run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path))
+    first.set_source(sha256="a" * 64, origin="digital-born-pdf", filename="CTX1.pdf")
+    first.add_derived_from("pdf", "IN/CTX1.pdf")
+    first.set_block("content", {"text": "body"})
+    p1 = first.finalize(str(tmp_path / "one.json"))
+
+    second = DocumentRecord(
+        "CTX1", "nlp-enrich", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path)
+    )
+    second.set_source(origin="digital-born-pdf")
+    second.add_derived_from("teitok", "TEITOK/CTX1.teitok.xml")
+    second.merge_block(
+        "entities", [{"page": "1", "line": 0, "char_span": [0, 4], "surface": "body"}]
+    )
+    p2 = second.finalize(str(tmp_path / "two.json"))
+
+    merged = json.loads(
+        open(merge_document_records([p1, p2], str(tmp_path / "m.json")), encoding="utf-8").read()
+    )
+    assert merged["source"]["sha256"] == "a" * 64
+    assert merged["source"]["origin"] == "digital-born-pdf"
+    assert merged["derived_from"] == {"pdf": "IN/CTX1.pdf", "teitok": "TEITOK/CTX1.teitok.xml"}
+
+
+def test_merge_refuses_records_that_disagree_about_source(tmp_path, mock_paradata):
+    run_id, ref = mock_paradata
+    a = DocumentRecord("CTX1", DIGITAL, run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path))
+    a.set_source(origin="digital-born-pdf")
+    a.set_block("content", {"text": "x"})
+    pa = a.finalize(str(tmp_path / "a.json"))
+
+    b = DocumentRecord(
+        "CTX1", "page-classification", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path)
+    )
+    b.set_source(origin="ocr:pero")
+    b.set_block("page_categories", {"1": "Text"})
+    pb = b.finalize(str(tmp_path / "b.json"))
+
+    with pytest.raises(ValueError, match="disagree about the immutable `source`"):
+        merge_document_records([pa, pb], str(tmp_path / "m.json"))
+
+
+# ── the acceptance criterion: schema validation ───────────────────────────────
+
+
+def test_a_full_digital_born_record_validates_against_the_canonical_schema(tmp_path, mock_paradata):
+    """Issue #18's acceptance criterion is "the output JSON strictly passes validation
+    against the canonical atrium_document.schema.json". The only test that validated
+    anything validated an enrichment-only record, so `tables`, `forms`, `lines[].group_id`
+    and `lines[].style` — everything #18 added — had no validation coverage at all."""
+    with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as doc:
+        doc.merge_block(
+            "pages",
+            [
+                {
+                    "page": "iv",
+                    "page_index": 1,
+                    "canvas": {"width": 612, "height": 792, "unit": "pt"},
+                    "quality_score": 0.21,
+                    "quality_band": "Trash",
+                    "needs_ocr": True,
+                    "needs_ocr_reason": "text layer decodes to corrupt diacritics (no /ToUnicode)",
+                }
+            ],
+        )
+        doc.merge_block(
+            "lines",
+            [
+                {
+                    "page": "iv",
+                    "line": 0,
+                    "text": "Zpráva o sondě",
+                    "bbox": [72.0, 60.0, 300.0, 74.0],
+                    "group_id": "p1",
+                    "style": {"bold": True, "heading_level": 1},
+                    "lang": "cs",
+                    "quality_score": 0.9,
+                    "categ": "Heading",
+                }
+            ],
+        )
+        doc.merge_block(
+            "tables",
+            [
+                {
+                    "table_id": "t1",
+                    "page": "iv",
+                    "n_rows": 1,
+                    "n_cols": 1,
+                    "group_id": "t1",
+                    "cells": [
+                        {
+                            "row": 0,
+                            "col": 0,
+                            "is_header": True,
+                            "group_id": "t1.r0c0",
+                            "bbox": [72.0, 100.0, 200.0, 114.0],
+                        }
+                    ],
+                }
+            ],
+        )
+        doc.set_block("content", {"text": "Zpráva o sondě", "reading_order": "ltr-columns"})
+        record = doc.to_dict()
+
+    validate_document(record)  # raises on failure; no doc.json would be emitted
+
+
+def test_schema_is_locatable_next_to_the_module():
+    """Plan §2 makes validation the Layer D gate, but shared code had no way to FIND the
+    schema: the hub keeps it in docs/templates/shared/ and tool repos at the root, and the
+    only locator anywhere was a relative walk inside one test."""
+    from atrium_document import SCHEMA_FILENAME, load_schema, schema_path
+
+    assert schema_path() is not None and schema_path().endswith(SCHEMA_FILENAME)
+    assert load_schema()["title"] == "ATRIUM document record"

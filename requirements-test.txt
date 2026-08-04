@@ -1,6 +1,11 @@
 pytest>=9.1.1
 pytest-cov
 requests
+# atrium_document.schema.json validation. Was absent from every requirements file,
+# so the one test that validated a record against the canonical schema
+# (tests/test_document_record.py) guarded on pytest.importorskip and therefore
+# SKIPPED on a clean venv — a schema gate that silently was not one.
+jsonschema
 # Fast-lane runtime deps (clean-venv collection breaks without these):
 pandas
 pydantic
