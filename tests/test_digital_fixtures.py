@@ -60,6 +60,35 @@ def blobs(make_fixtures):
     return make_fixtures.build_all()
 
 
+def _recorded_manifest() -> dict:
+    """The committed manifest, with an actionable failure when it is not there.
+
+    A bare `MANIFEST.json` read raises FileNotFoundError, which says nothing about what to
+    do. The file is the reviewable stand-in for fixture bytes that are deliberately NOT
+    committed, so its absence is a real failure and must not be skipped — but the most
+    likely cause is a partially-applied change (it moved from tests/fixtures/ to
+    tests/fixtures/digital/, and a move is a delete plus an add), so say that.
+    """
+    if MANIFEST.exists():
+        return json.loads(MANIFEST.read_text(encoding="utf-8"))
+
+    stale = FIXTURE_DIR.parent / "MANIFEST.json"
+    hint = (
+        f"\n\n{stale} DOES exist. That is the OLD location: the manifest belongs beside "
+        f"the fixtures it describes, which is also where make_fixtures.py writes it. "
+        f"A file-by-file copy of this change cannot express the deletion — apply it as a "
+        f"patch (`git am`), or `git mv` the file yourself."
+        if stale.exists()
+        else ""
+    )
+    pytest.fail(
+        f"{MANIFEST} is missing. It is committed, not generated at test time — the fixture "
+        f"BYTES are uncommitted, so this manifest is the only reviewable record of what the "
+        f"generator is supposed to produce. Regenerate with:\n"
+        f"    python tests/fixtures/digital/make_fixtures.py{hint}"
+    )
+
+
 # ── determinism and the manifest ─────────────────────────────────────────────
 
 
@@ -86,7 +115,7 @@ def test_docx_is_not_deflated(blobs):
 
 def test_generated_bytes_match_committed_manifest(blobs):
     """The manifest is the reviewable stand-in for binaries that are not committed."""
-    recorded = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    recorded = _recorded_manifest()
     assert sorted(recorded) == sorted(blobs), "MANIFEST.json and the builders disagree"
     for name, data in blobs.items():
         assert recorded[name]["sha256"] == hashlib.sha256(data).hexdigest(), (
@@ -97,6 +126,7 @@ def test_generated_bytes_match_committed_manifest(blobs):
 
 
 def test_verify_mode_passes_against_the_committed_manifest():
+    _recorded_manifest()  # fail with the actionable message rather than on returncode
     proc = subprocess.run(
         [sys.executable, str(GENERATOR), "--verify"],
         capture_output=True,
@@ -122,9 +152,19 @@ def test_verify_mode_fails_on_manifest_drift(tmp_path, blobs, make_fixtures):
 
 def test_manifest_lives_beside_the_fixtures_it_describes(make_fixtures, tmp_path):
     """It was committed one directory up from where the generator writes it, so running the
-    generator produced a second manifest and left the committed one permanently stale."""
+    generator produced a second manifest and left the committed one permanently stale.
+
+    Asserting the absence of a file elsewhere in the tree looks over-specified, and earns its
+    place anyway: this is the assertion that catches the move being half-applied, which is
+    exactly what a file-by-file copy of this change does.
+    """
     assert MANIFEST.parent == FIXTURE_DIR
-    assert not (FIXTURE_DIR.parent / "MANIFEST.json").exists()
+    stale = FIXTURE_DIR.parent / "MANIFEST.json"
+    assert not stale.exists(), (
+        f"{stale} is the OLD manifest location and must be deleted — make_fixtures.py writes "
+        f"to {MANIFEST}, so leaving both means the one git sees is never the one the "
+        f"generator updates. `git rm {stale.relative_to(stale.parents[2])}`."
+    )
     make_fixtures.main(["--outdir", str(tmp_path)])
     assert (tmp_path / make_fixtures.MANIFEST_NAME).exists()
 

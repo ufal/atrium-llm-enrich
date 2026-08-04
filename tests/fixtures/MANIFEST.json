@@ -5,9 +5,9 @@
     "sha256": "f985edd2a1f886e3f0f37a381b5aff3736d01e0f8f031febd08a8e927a09fcde"
   },
   "minimal.docx": {
-    "bytes": 2366,
+    "bytes": 4455,
     "note": "heading + 2 paragraphs + 2x2 table + explicit page break",
-    "sha256": "0bc3d217ad05176bc824360f64f0dbfd49b2a31b1826e52d73ffd6dc10224ea5"
+    "sha256": "d7b7922e7fa6ccc12087382ae050d10e3a3b71ddf2005012ca6fc178594ad98e"
   },
   "minimal.pdf": {
     "bytes": 1039,
