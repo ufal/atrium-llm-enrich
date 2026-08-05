@@ -4,5 +4,5 @@
 # web server — never torch/transformers/vllm.
 -r ../requirements_remote.txt
 fastapi>=0.141.1
-uvicorn[standard]>=0.52.0
+uvicorn[standard]>=0.52.1
 python-multipart>=0.0.32
