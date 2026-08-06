@@ -617,18 +617,82 @@ def enrichment_block(doc_id: str, results: List[dict]) -> dict:
     ``run_document_level``) and the line-level one (``page``/``line``, from
     ``run_line_level``). Only the fields actually present are emitted, and a
     ``[Source: <doc_id>, Page N]`` citation is added whenever a page is known.
+
+    ``page`` is emitted as a STRING because that is what the schema says it is — the same
+    reason ``lines[].page`` is a string, so a label like ``"iv"`` or ``"A-1"`` survives.
+    ``run_line_level`` coerces ``page_num`` to an int for its own arithmetic, so every
+    line-level run used to write an integer here and the resulting record was
+    schema-INVALID — caught the moment the Layer D gate below was actually wired
+    (atrium-project#10, D4), having gone unnoticed for as long as nothing validated.
     """
     items: List[dict] = []
     for record in results:
         item: dict = {}
         for key in ("locator", "page", "line"):
-            if record.get(key) is not None:
-                item[key] = record[key]
+            value = record.get(key)
+            if value is not None:
+                # `line` stays an int: the schema does not constrain it, and
+                # BLOCK_KEY_FIELDS keys `lines[]` on it as an integer.
+                item[key] = str(value) if key == "page" else value
         item.update(record.get("enrichment") or {})
         if item.get("page") is not None:
             item["citation"] = f"[Source: {doc_id}, Page {item['page']}]"
         items.append(item)
     return {"items": items}
+
+
+#: One-shot latch so a DISABLED gate is announced once per process, not once per document.
+#: See schema_gate().
+_schema_gate_disabled_warned = False
+
+
+def schema_gate(record: Dict[str, Any], what: str) -> Optional[str]:
+    """Validate one record against ``atrium_document.schema.json``.
+
+    Returns None when it validates, or a one-line description of the schema error when it
+    does not. This is plan §2's **Layer D** — "no doc.json is emitted if validation fails" —
+    adopted here for atrium-project#10 (D4), which found ``validate_document()`` called from
+    no production path in any of the five repos: the gate documented as normative in
+    ``docs/document_schema.md`` was protecting nothing at all.
+
+    Deliberately only answers *"is it valid"*. The POLICY — who raises and who merely warns —
+    lives at the two call sites, because it differs for an inherited baseline and for this
+    tool's own output; see ``write_document_record()``.
+
+    A missing ``jsonschema`` (RuntimeError from ``validate_document()``), a module vendored
+    without its schema (FileNotFoundError from ``load_schema()``) or an unparseable schema
+    (JSONDecodeError) all mean the GATE is absent, not that the record is bad — a
+    ``jsonschema.ValidationError`` is none of those three, so nothing real is swallowed here.
+    They degrade to ONE loud warning and a pass: a gate that
+    silently no-ops is indistinguishable in the output from a gate that passed, which is the
+    precise failure mode D4 is about. ``jsonschema`` is declared in ``requirements.txt`` — the
+    base install every image and the test job actually build from — so the degraded path
+    should never be taken in a supported deployment.
+    """
+    global _schema_gate_disabled_warned
+    try:
+        from atrium_document import validate_document
+    except ImportError:
+        return None
+
+    try:
+        validate_document(record)
+    except (RuntimeError, FileNotFoundError, json.JSONDecodeError) as exc:
+        if not _schema_gate_disabled_warned:
+            print(
+                f"[document] WARNING - schema validation is DISABLED for {what} and every "
+                f"record after it: {exc}",
+                file=sys.stderr,
+            )
+            _schema_gate_disabled_warned = True
+        return None
+    except Exception as exc:
+        # jsonschema.ValidationError: `.message` is the human-readable half and `.json_path`
+        # points at the offending node. Both are absent on any other validator, hence getattr.
+        detail = getattr(exc, "message", None) or str(exc)
+        path = getattr(exc, "json_path", "") or ""
+        return f"{detail}{f' at {path}' if path else ''}"
+    return None
 
 
 def write_document_record(
@@ -667,9 +731,20 @@ def write_document_record(
     ever fed to the LLM in that case, so no recipe should claim one can be regenerated.
     Returns the record path, or None when the optional ``atrium_document`` module is
     unavailable.
+
+    This is also the repo's **single Layer D chokepoint** (atrium-project#10, D4). Every
+    write path — both batch clients and ``service/api.py`` — comes through here, so the
+    schema gate is applied once, not once per caller. The ecosystem-wide policy is:
+
+    * an **inherited baseline** that does not validate warns and continues (refusing to run
+      because an upstream tool wrote something invalid turns one bad record into a stalled
+      pipeline, and rule 6 already commits to passing unknown content through);
+    * **this tool's own output** that does not validate raises, so the record is never
+      emitted — unless the baseline was already invalid, in which case the defect is
+      inherited rather than ours and it warns instead.
     """
     try:
-        from atrium_document import FILE_SUFFIX, DocumentRecord
+        from atrium_document import FILE_SUFFIX, SCHEMA_FILENAME, DocumentRecord, load_document
     except ImportError:
         print(
             "[document] atrium_document.py not available — skipping paired record",
@@ -680,6 +755,22 @@ def write_document_record(
     record_dir = Path(record_dir)
     record_dir.mkdir(parents=True, exist_ok=True)
     baseline = record_dir / f"{doc_id}{FILE_SUFFIX}"
+
+    # Layer D, first half: judge the baseline as it ARRIVED. Read separately from
+    # DocumentRecord.open() below (which re-reads it) so the verdict is about the upstream
+    # tool's output and not about anything this run has since applied to it. It also sets the
+    # severity of the second half — a schema error we inherited is not ours to fail on.
+    baseline_was_invalid = False
+    if baseline.exists():
+        baseline_error = schema_gate(load_document(str(baseline)), f"baseline {baseline.name}")
+        if baseline_error:
+            baseline_was_invalid = True
+            print(
+                f"[document] WARNING - inherited baseline {baseline.name} does not validate "
+                f"against {SCHEMA_FILENAME} ({baseline_error}) - continuing anyway (rule 6), "
+                f"and demoting this run's own output check to a warning",
+                file=sys.stderr,
+            )
 
     with DocumentRecord.open(
         doc_id,
@@ -704,6 +795,26 @@ def write_document_record(
             )
         if license_detail:
             doc.add_license_detail(license_detail)
+
+        # Layer D, second half: never EMIT an invalid record. Raising here — INSIDE the
+        # `with` — is what enforces that: DocumentRecord.__exit__ finalises only when no
+        # exception is in flight, so nothing reaches disk and the next tool never loads a
+        # record this one knew was broken. Both clients call this from inside their per-file
+        # try/except, so one bad document is logged and skipped rather than killing the run.
+        own_error = schema_gate(doc.to_dict(), f"{doc_id}{FILE_SUFFIX}")
+        if own_error:
+            if baseline_was_invalid:
+                print(
+                    f"[document] WARNING - {doc_id}{FILE_SUFFIX} does not validate against "
+                    f"{SCHEMA_FILENAME} ({own_error}) - emitting it anyway because the "
+                    f"baseline was already invalid; fix the upstream record first",
+                    file=sys.stderr,
+                )
+            else:
+                raise RuntimeError(
+                    f"llm-enrich's own document record for {doc_id} does not validate against "
+                    f"{SCHEMA_FILENAME}: {own_error} - refusing to emit it (Layer D)"
+                )
 
     return baseline
 

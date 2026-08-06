@@ -16,7 +16,9 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 
-from ollama_client import ensure_model_pulled
+import ollama_client
+import openrouter_client
+from ollama_client import build_arg_parser, ensure_model_pulled
 
 # ── ensure_model_pulled ──────────────────────────────────────────────────────
 
@@ -94,3 +96,146 @@ def test_ensure_model_pulled_unreachable_host_raises_runtime_error():
 
     with pytest.raises(RuntimeError, match="Could not reach Ollama"):
         ensure_model_pulled("http://x", "qwen2.5:7b", session, timeout=10)
+
+
+# ── document-json flag parity with openrouter_client — J5 ────────────────────
+
+
+def _document_json_flags(parser):
+    """The document-record options a parser exposes, read through its public surface."""
+    return {name for name in vars(parser.parse_args([])) if name.startswith("document_json")}
+
+
+def test_document_json_flags_match_the_openrouter_client():
+    """atrium-project#10, J5: this parser had only --document-json-dir while
+    openrouter_client had the --document-json/--document-json-out single-file pair too — an
+    incomplete port of the issue #13 feature, not a decision (the two clients mirror each
+    other line-for-line otherwise). Comparing the two parsers, rather than asserting a
+    hard-coded list, is what makes the NEXT one-sided addition fail here."""
+    assert _document_json_flags(build_arg_parser()) == _document_json_flags(
+        openrouter_client.build_arg_parser()
+    ) == {"document_json_dir", "document_json", "document_json_out"}
+
+
+def test_document_json_flags_default_to_none_and_parse_as_paths():
+    from pathlib import Path
+
+    assert build_arg_parser().parse_args([]).document_json is None
+    assert build_arg_parser().parse_args([]).document_json_out is None
+
+    args = build_arg_parser().parse_args(
+        ["--document-json", "in.json", "--document-json-out", "out.json"]
+    )
+    assert args.document_json == Path("in.json")
+    assert args.document_json_out == Path("out.json")
+
+
+# ── main() end-to-end over a .teitok.xml input — D1 regression ───────────────
+#
+# The same P0 as openrouter_client's (atrium-project#10, D1): `doc_id = f.stem` on an
+# accepted `CTX000000001.teitok.xml` input yielded `CTX000000001.teitok`, so
+# write_document_record() missed the upstream baseline entirely and emitted an orphan with
+# every upstream block discarded. Kept parallel to tests/test_openrouter_client.py, because
+# the two clients are maintained as line-for-line mirrors and a fix applied to only one of
+# them is exactly how this defect arose.
+
+
+def _run_main(env, extra=()):
+    ollama_client.main(
+        [
+            "--config",
+            str(env.config),
+            "--input",
+            str(env.teitok),
+            "--output-dir",
+            str(env.output_dir),
+            "--model",
+            "qwen2.5:7b",
+            "--skip-pull-check",
+            *extra,
+        ]
+    )
+
+
+def test_teitok_run_preserves_every_upstream_block(remote_client_env, seeded_baseline, stub_llm):
+    """llm-enrich adds `enrichment` and touches nothing else. Before the fix this failed on
+    pages, lines and entities at once."""
+    from atrium_document import load_document
+
+    env = remote_client_env
+    stub_llm(ollama_client)
+
+    _run_main(env, ["--document-json-dir", str(env.record_dir)])
+
+    assert env.baseline.exists(), (
+        f"no record at the canonical doc_id; dir holds "
+        f"{sorted(p.name for p in env.record_dir.iterdir())}"
+    )
+    assert not env.forked_record.exists(), "record written under the forked `.teitok` doc_id"
+
+    record = load_document(str(env.baseline))
+    assert record["doc_id"] == env.doc_id
+    assert record["assembled"]["had_baseline"] is True
+    for block in ("pages", "lines", "entities"):
+        assert block in record, f"upstream {block!r} block was discarded"
+    assert record["lines"][0]["text"].startswith("Výzkum odhalil")
+    assert record["entities"][0]["surface"] == "gotického kostela"
+    assert record["source"]["origin"] == "ABBYY-ALTO"
+    assert record["enrichment"]["items"][0]["extracted_keywords_en"] == ["church"]
+    assert record["assembled"]["blocks"]["enrichment"]["program"] == "llm-enrich"
+
+
+def test_document_json_single_file_pair_round_trips_the_baseline(
+    remote_client_env, seeded_baseline, stub_llm
+):
+    """The ported pair (J5) end-to-end: baseline in, updated record at the exact path
+    requested — the shape the hub's e2e-pipeline-smoke chains stage to stage."""
+    from atrium_document import load_document
+
+    env = remote_client_env
+    stub_llm(ollama_client)
+    out_path = env.root / "5_llm.json"
+
+    _run_main(
+        env,
+        ["--document-json", str(seeded_baseline), "--document-json-out", str(out_path)],
+    )
+
+    assert out_path.exists()
+    record = load_document(str(out_path))
+    assert record["doc_id"] == env.doc_id
+    assert record["enrichment"]["items"][0]["teater_category"] == "kostel"
+    for block in ("pages", "lines", "entities"):
+        assert block in record, f"upstream {block!r} block was discarded"
+
+
+def test_document_json_out_without_a_record_says_so_and_writes_nothing(
+    remote_client_env, stub_llm, capsys
+):
+    """Degrade-gracefully, but audibly (the J4 concern, ported with the flags): when no
+    record was produced the promised file must not silently appear empty."""
+    env = remote_client_env
+    stub_llm(ollama_client)
+    # No results -> no record -> nothing to copy out.
+    empty_teitok = env.root / "empty.teitok.xml"
+    empty_teitok.write_text("<teiCorpus><text/></teiCorpus>", encoding="utf-8")
+    out_path = env.root / "5_llm.json"
+
+    ollama_client.main(
+        [
+            "--config",
+            str(env.config),
+            "--input",
+            str(empty_teitok),
+            "--output-dir",
+            str(env.output_dir),
+            "--model",
+            "qwen2.5:7b",
+            "--skip-pull-check",
+            "--document-json-out",
+            str(out_path),
+        ]
+    )
+
+    assert not out_path.exists()
+    assert "was NOT written" in capsys.readouterr().err

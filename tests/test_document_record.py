@@ -17,9 +17,11 @@ which is the part most likely to drift if the enrichment schema changes.
 """
 
 import json
+import sys
 
 import pytest
 
+import llm_client_shared
 from llm_client_shared import enrichment_block, write_document_record
 
 atrium_document = pytest.importorskip("atrium_document")
@@ -79,7 +81,11 @@ def test_enrichment_block_flattens_document_level_records():
 def test_enrichment_block_keeps_line_numbers_for_line_level_records():
     item = enrichment_block(DOC, LINE_LEVEL)["items"][0]
     assert item["line"] == 14
-    assert item["page"] == 1
+    # `page` is a STRING in atrium_document.schema.json, so the projection stringifies the
+    # int run_line_level() coerces page_num into (atrium-project#10, D4). This assertion
+    # expected the raw int, which is what the record used to carry — and what made every
+    # line-level record schema-invalid until the Layer D gate started checking.
+    assert item["page"] == "1"
     assert "locator" not in item  # line-level records have none
 
 
@@ -227,6 +233,97 @@ def test_license_detail_accretes_into_provenance(tmp_path):
 
     assert provenance["license"] == "CC BY-NC-SA 4.0"
     assert provenance["contributors"][0]["program"] == "llm-enrich"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Layer D — the schema gate on the write path (atrium-project#10, D4)
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# `validate_document()` existed, was documented as normative in docs/document_schema.md,
+# and was called from no production path in any of the five repos. These tests pin the
+# ecosystem-wide policy now that write_document_record() applies it:
+#
+#   * our own invalid output      -> raise, emit nothing;
+#   * an invalid inherited baseline -> warn, continue, and demote the check above;
+#   * no `jsonschema` installed   -> one loud warning, and still write.
+#
+# The middle rule is the one that needs a test rather than a comment: refusing to run
+# because an upstream tool wrote something invalid would turn one bad record into a
+# stalled pipeline, and rule 6 already commits to passing unknown content through.
+
+#: A result whose projection violates the schema: `confidence_score` is capped at 1.
+INVALID_RESULTS = [
+    {
+        "file_id": DOC,
+        "locator": "gotického kostela",
+        "page": "1",
+        "enrichment": {"teater_category": "kostel", "confidence_score": 42},
+    }
+]
+
+#: A baseline no tool in this repo could have produced — `pages` must be an array.
+INVALID_BASELINE = {
+    "schema_version": "1.0",
+    "record_type": "atrium-document",
+    "doc_id": DOC,
+    "pages": "not-an-array",
+}
+
+
+def _write_invalid_baseline(tmp_path):
+    path = tmp_path / f"{DOC}{FILE_SUFFIX}"
+    path.write_text(json.dumps(INVALID_BASELINE), encoding="utf-8")
+    return path
+
+
+def test_refuses_to_emit_its_own_invalid_record(tmp_path):
+    """Layer D's actual promise: "no doc.json is emitted if validation fails"."""
+    with pytest.raises(RuntimeError, match="refusing to emit"):
+        write_document_record(DOC, INVALID_RESULTS, tmp_path, run_id="R1")
+
+    assert not (tmp_path / f"{DOC}{FILE_SUFFIX}").exists()
+    # finalize() writes `<path>.tmp` then renames, so a gate that fired too late would
+    # leave the temp file behind for the next load_document() to trip over.
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_invalid_inherited_baseline_warns_and_still_writes(tmp_path, capsys):
+    """An upstream tool's bad record must not stall this stage (rule 6)."""
+    _write_invalid_baseline(tmp_path)
+
+    path = write_document_record(DOC, DOC_LEVEL, tmp_path, run_id="R1")
+
+    assert "inherited baseline" in capsys.readouterr().err
+    record = load_document(str(path))
+    assert record["enrichment"]["items"][0]["teater_category"] == "kostel"  # our part landed
+    assert record["pages"] == "not-an-array"  # …and theirs passed through untouched
+
+
+def test_inherited_invalidity_demotes_our_own_check_to_a_warning(tmp_path, capsys):
+    """With the baseline already broken, refusing to emit would punish this tool for
+    somebody else's output — and lose our block as well as theirs."""
+    _write_invalid_baseline(tmp_path)
+
+    path = write_document_record(DOC, INVALID_RESULTS, tmp_path, run_id="R1")
+
+    assert "emitting it anyway" in capsys.readouterr().err
+    assert path.exists()
+
+
+def test_missing_jsonschema_degrades_loudly_and_once(tmp_path, capsys, monkeypatch):
+    """A gate that quietly becomes a no-op is worse than no gate: you cannot tell the two
+    apart from the output. So it announces itself — once per process, not once per
+    document — and never turns a missing dependency into a missing record."""
+    monkeypatch.setitem(sys.modules, "jsonschema", None)  # `import jsonschema` -> ImportError
+    monkeypatch.setattr(llm_client_shared, "_schema_gate_disabled_warned", False)
+
+    first = write_document_record(DOC, INVALID_RESULTS, tmp_path, run_id="R1")
+    err = capsys.readouterr().err
+    assert "DISABLED" in err and "jsonschema" in err
+    assert first.exists()
+
+    write_document_record(DOC, INVALID_RESULTS, tmp_path, run_id="R2")
+    assert "DISABLED" not in capsys.readouterr().err
 
 
 def test_record_validates_against_the_shared_schema(tmp_path):

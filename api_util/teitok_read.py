@@ -2,16 +2,28 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from api_util.bbox_scale import fix_name_close_tags
+from atrium_document import canonical_doc_id
 
 
 def doc_id_from_path(path: str | Path) -> str:
-    """Strips .conllu or .teitok.xml to produce a clean document ID."""
-    name = Path(path).name
-    if name.lower().endswith(".teitok.xml"):
-        return name[:-11]
-    if name.lower().endswith(".conllu"):
-        return name[:-7]
-    return Path(path).stem
+    """Strips a known pipeline suffix (.teitok.xml, .udpipe.conllu, .conllu, …) to
+    produce a clean document ID.
+
+    Delegates to ``atrium_document.canonical_doc_id()`` (atrium-project#10, D3). This
+    function is the "bespoke TEITOK/CoNLL-U stripper" the hub changelog names as one of the
+    four derivations ``canonical_doc_id()`` was written to retire, and it was wrong in a way
+    no caller could see: it sliced ``.teitok.xml`` and ``.conllu`` off by LITERAL LENGTH, so
+    ``X.udpipe.conllu`` came back as ``X.udpipe`` while every other tool in the pipeline
+    resolves that same file to ``X`` — ``KNOWN_PIPELINE_SUFFIXES`` lists ``.udpipe.conllu``
+    ahead of ``.conllu`` precisely so the longer suffix matches first. Latent only because
+    this repo's input filters never feed it a ``.conllu`` today; the function is public and
+    documented for it.
+
+    The name and signature stay: ``llm_run.py``, ``llm_client_shared.py``, ``xml_to_md.py``,
+    ``docx_to_md.py`` and ``pdf_to_md.py`` all call it, so delegating here fixes every
+    caller at one change point instead of eleven.
+    """
+    return canonical_doc_id(path)
 
 
 def parse_teitok(path: str | Path) -> ET.Element:

@@ -38,6 +38,7 @@ from typing import Any, Callable, Dict, List, Optional
 import requests
 from tqdm import tqdm
 
+from atrium_document import canonical_doc_id
 from atrium_paradata import ParadataLogger
 from llm_client_shared import (
     DOC_CONVERT_EXTENSIONS,
@@ -355,7 +356,10 @@ def main(argv: Optional[List[str]] = None) -> None:
                             file=sys.stderr,
                         )
                     else:
-                        doc_id = input_files[0].stem
+                        # Must agree with the loop's derivation below, or the copy is
+                        # filed under a name write_document_record() never looks for
+                        # (atrium-project#10, D1).
+                        doc_id = canonical_doc_id(input_files[0])
                         shutil.copyfile(
                             args.document_json, doc_json_scratch_dir / f"{doc_id}.document.json"
                         )
@@ -363,7 +367,15 @@ def main(argv: Optional[List[str]] = None) -> None:
 
         total_processed = total_errors = total_aborted = 0
         for f in tqdm(input_files, desc="Documents", unit="doc", dynamic_ncols=True):
-            doc_id = f.stem
+            # canonical_doc_id(), never Path.stem (atrium-project#10, D1). `.stem` strips
+            # only the LAST extension, so an accepted `CTX000000001.teitok.xml` input gave
+            # the doc_id `CTX000000001.teitok`; write_document_record() then looked for a
+            # baseline named `CTX000000001.teitok.document.json`, which no upstream tool
+            # ever writes, so DocumentRecord.open() fell back to rule 3 and DISCARDED every
+            # upstream block (pages/lines/entities/translations) — emitting an orphan record
+            # under a doc_id nothing else in the pipeline uses. llm_run.py has always
+            # derived it correctly; this loop and ollama_client.py's were the two that did not.
+            doc_id = canonical_doc_id(f)
             out_file = output_dir / f"{doc_id}_enriched.json"
             if out_file.exists():
                 logger.log_skip(f.name, "already_exists")

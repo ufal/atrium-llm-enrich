@@ -24,9 +24,12 @@ the first inference call.
 """
 
 import argparse
+import glob
 import json
 import os
+import shutil
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -34,6 +37,7 @@ from typing import Any, Dict, List, Optional
 import requests
 from tqdm import tqdm
 
+from atrium_document import canonical_doc_id
 from atrium_paradata import ParadataLogger
 from llm_client_shared import (
     DOC_CONVERT_EXTENSIONS,
@@ -161,6 +165,27 @@ def build_arg_parser() -> argparse.ArgumentParser:
             "llm-enrich's enrichment block updated. Other tools' blocks pass through."
         ),
     )
+    # Kept identical to openrouter_client.py's pair (atrium-project#10, J5): the two
+    # clients mirror each other line-for-line, and these two flags were simply never
+    # ported when issue #13 added them there — not a decision. An E2E stage that pipes
+    # `--document-json <prev> --document-json-out <next>` could not use this backend at all.
+    parser.add_argument(
+        "--document-json",
+        type=Path,
+        default=None,
+        help=(
+            "Single-file convenience form of --document-json-dir (issue #13): baseline "
+            "ATRIUM Document JSON for a ONE-document run (--input must be a single file, "
+            "not a directory). Mutually redirects into --document-json-dir internally."
+        ),
+    )
+    parser.add_argument(
+        "--document-json-out",
+        type=Path,
+        default=None,
+        help="Exact path to write the updated ATRIUM Document JSON. Pairs with --document-json "
+        "or with --input pointed at a single file.",
+    )
     parser.add_argument("--max-retries", type=int, default=3)
     parser.add_argument(
         "--timeout",
@@ -254,9 +279,48 @@ def main(argv: Optional[List[str]] = None) -> None:
                 or p.name.lower().endswith(".teitok.xml")
             )
 
+        # --document-json/--document-json-out (issue #13, ported for atrium-project#10 J5):
+        # a single-file convenience wrapper around the existing, working --document-json-dir
+        # path below. Redirect into it here so the write_document_record() call site further
+        # down needs no changes at all.
+        doc_json_scratch_dir: Optional[Path] = None
+        if args.document_json or args.document_json_out:
+            if len(input_files) != 1:
+                print(
+                    f"[document] --document-json/-out require exactly one input file, "
+                    f"got {len(input_files)} — skipping the document record for this run",
+                    file=sys.stderr,
+                )
+            else:
+                doc_json_scratch_dir = Path(tempfile.mkdtemp(prefix="atrium_document_json_"))
+                if args.document_json:
+                    if not Path(args.document_json).exists():
+                        print(
+                            f"[document] baseline {args.document_json} not found — "
+                            "emitting llm-enrich's own part only",
+                            file=sys.stderr,
+                        )
+                    else:
+                        # Must agree with the loop's derivation below, or the copy is
+                        # filed under a name write_document_record() never looks for
+                        # (atrium-project#10, D1).
+                        doc_id = canonical_doc_id(input_files[0])
+                        shutil.copyfile(
+                            args.document_json, doc_json_scratch_dir / f"{doc_id}.document.json"
+                        )
+                args.document_json_dir = doc_json_scratch_dir
+
         total_processed = total_errors = total_aborted = 0
         for f in tqdm(input_files, desc="Documents", unit="doc", dynamic_ncols=True):
-            doc_id = f.stem
+            # canonical_doc_id(), never Path.stem (atrium-project#10, D1). `.stem` strips
+            # only the LAST extension, so an accepted `CTX000000001.teitok.xml` input gave
+            # the doc_id `CTX000000001.teitok`; write_document_record() then looked for a
+            # baseline named `CTX000000001.teitok.document.json`, which no upstream tool
+            # ever writes, so DocumentRecord.open() fell back to rule 3 and DISCARDED every
+            # upstream block (pages/lines/entities/translations) — emitting an orphan record
+            # under a doc_id nothing else in the pipeline uses. llm_run.py has always
+            # derived it correctly; this loop and openrouter_client.py's were the two that did not.
+            doc_id = canonical_doc_id(f)
             out_file = output_dir / f"{doc_id}_enriched.json"
             if out_file.exists():
                 logger.log_skip(f.name, "already_exists")
@@ -328,6 +392,20 @@ def main(argv: Optional[List[str]] = None) -> None:
             f"    files processed:   {len(input_files)}\n"
         )
         logger.finalize(input_total=len(input_files))
+
+        if doc_json_scratch_dir is not None and args.document_json_out:
+            records = glob.glob(str(doc_json_scratch_dir / "*.document.json"))
+            if not records:
+                print(
+                    f"[document] no document record was produced in {doc_json_scratch_dir} — "
+                    f"{args.document_json_out} was NOT written",
+                    file=sys.stderr,
+                )
+            else:
+                out_path = Path(args.document_json_out)
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(records[0], out_path)
+                print(f"[document] Record written → {out_path}", flush=True)
 
 
 if __name__ == "__main__":

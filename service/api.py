@@ -24,7 +24,7 @@ from typing import Any, Dict, Optional
 
 from fastapi import Body, FastAPI, File, HTTPException, UploadFile
 
-from atrium_document import FILE_SUFFIX
+from atrium_document import FILE_SUFFIX, canonical_doc_id
 from atrium_paradata import ParadataLogger
 
 # Shared ATRIUM meta-contract helpers (§4). Byte-identical across every service,
@@ -201,11 +201,16 @@ def _require_engine() -> Dict[str, Any]:
 
 
 def _doc_id(filename: str) -> str:
-    name = Path(filename).name
-    for suffix in (".teitok.xml", ".csv", ".md", ".txt"):
-        if name.lower().endswith(suffix):
-            return name[: -len(suffix)]
-    return name
+    """The uploaded document's identity, derived the one canonical way.
+
+    Delegates to ``atrium_document.canonical_doc_id()`` (atrium-project#10, D3): this was a
+    THIRD independent suffix-stripper in this repo, alongside
+    ``api_util/teitok_read.doc_id_from_path`` and the two batch clients' ``Path.stem``. The
+    accretion contract is keyed on ``doc_id``, so a service that re-keys the record it was
+    handed silently orphans the caller's baseline — which is exactly what D1/D2 did in the
+    batch clients and in alto's ``/process``.
+    """
+    return canonical_doc_id(filename)
 
 
 def _run_extraction(
@@ -225,8 +230,17 @@ def _run_extraction(
     just llm-enrich's own part (rule 3), mirroring ``llm_run.py``/``openrouter_client.py``/
     ``ollama_client.py``'s ``write_document_record`` call. No results → nothing is written,
     same as those batch entry points.
+
+    The Layer D schema gate (atrium-project#10, D4) lives in ``write_document_record()`` —
+    the repo's single write chokepoint — so an invalid record is never written here either.
+    What this function adds is the gate on the record it hands BACK: see below.
     """
-    from llm_client_shared import run_document_level, run_line_level, write_document_record
+    from llm_client_shared import (
+        run_document_level,
+        run_line_level,
+        schema_gate,
+        write_document_record,
+    )
 
     name = filename.lower()
     path = Path(tmp_path)
@@ -256,23 +270,51 @@ def _run_extraction(
             paradata_dir=str(Path(document_record_dir) / "paradata"),
             output_types=["json"],
         ) as para_logger:
-            record_path = write_document_record(
-                doc_id,
-                records,
-                document_record_dir,
-                run_id=para_logger.run_id,
-                paradata_ref=os.path.join(
-                    para_logger.paradata_dir, f"{para_logger.run_id}_{para_logger.program}.json"
-                ),
-                used_markdown_input=(mode == "document"),
-                license_detail=para_logger.get_license_block(),
-            )
+            try:
+                record_path = write_document_record(
+                    doc_id,
+                    records,
+                    document_record_dir,
+                    run_id=para_logger.run_id,
+                    paradata_ref=os.path.join(
+                        para_logger.paradata_dir,
+                        f"{para_logger.run_id}_{para_logger.program}.json",
+                    ),
+                    used_markdown_input=(mode == "document"),
+                    license_detail=para_logger.get_license_block(),
+                )
+            except RuntimeError as exc:
+                # The Layer D refusal (D4). Translated here rather than left to
+                # _extract_from_path's blanket `RuntimeError -> 502 LLM backend error`,
+                # which would blame the upstream provider for a record WE built wrong —
+                # and 502 invites a retry that would fail identically. A record llm-enrich
+                # cannot emit is a defect on this side, so it is a 500, named as such.
+                raise HTTPException(
+                    500, f"Document record rejected by its own schema: {exc}"
+                ) from exc
             if record_path is not None:
                 para_logger.log_success("json")
                 para_logger.log_document_success()
 
         if record_path is not None:
-            result["document_json"] = load_document(str(record_path))
+            record = load_document(str(record_path))
+            # Layer D on the way OUT (atrium-project#10, D4). write_document_record() has
+            # already refused to emit a record whose invalidity was ours, so anything caught
+            # here is a record it deliberately let through because the caller's own uploaded
+            # baseline did not validate. Re-raising would contradict that decision (and 500
+            # on somebody else's bad data), and returning it in silence is what D4 is about —
+            # so the response says so, in a field an automated caller can test instead of
+            # grepping the service log.
+            schema_error = schema_gate(record, f"{doc_id}{FILE_SUFFIX}")
+            if schema_error:
+                logger.warning(
+                    "returned document record for %s does not validate against the ATRIUM "
+                    "document schema: %s",
+                    doc_id,
+                    schema_error,
+                )
+                result["document_json_schema_error"] = schema_error
+            result["document_json"] = record
 
     return result
 
@@ -330,7 +372,9 @@ async def extract_keywords(
             "Optional baseline ATRIUM Document JSON (accretion model, docs/document_schema.md "
             "/ issue #13). When given, the response's `document_json` carries the record back "
             "with only llm-enrich's `enrichment` block updated — every other tool's block "
-            "(pages, lines, entities, translations, ...) passes through untouched."
+            "(pages, lines, entities, translations, ...) passes through untouched. A baseline "
+            "that does not validate against atrium_document.schema.json is still accepted "
+            "(rule 6), but the response then also carries `document_json_schema_error`."
         ),
     ),
 ):
@@ -381,7 +425,7 @@ async def extract_keywords_text(
     ),
     document_json: dict = Body(
         None,
-        description="Optional baseline ATRIUM Document JSON. When given, the response's `document_json` carries the record back with only llm-enrich's `enrichment` block updated.",
+        description="Optional baseline ATRIUM Document JSON. When given, the response's `document_json` carries the record back with only llm-enrich's `enrichment` block updated. An invalid baseline is still accepted, and the response then also carries `document_json_schema_error`.",
     ),
 ):
     """Extract archaeological keywords from inline text (§4.2)."""

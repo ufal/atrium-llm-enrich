@@ -32,6 +32,28 @@ entities with surface)". No such call site exists here — the only translator u
 `set_block("translations", ...)` — so the stated cost of that fix was unverified. It is now
 available opt-in via `warn_dropped_fields=True` and `assert_fields_survived()`, which needs
 no call-site cleanup at all.)
+
+Canonical copy (issue #10, finding D9)
+--------------------------------------
+This file is **hub-canonical**. It lives in atrium-project as
+`docs/templates/shared/test_document_originators.py`, beside the canonical
+`atrium_document.py` + `atrium_document.schema.json` it exercises, and is vendored into
+every tool repo at `tests/test_document_originators.py` — exactly the arrangement
+`test_para_licenses.py` uses. `para-drift.reusable.yml` `diff -u`s all six copies, so edit
+the hub copy and re-vendor with `scripts/revendor_shared.sh`; never edit a vendored one.
+
+It was promoted out of atrium-llm-enrich, which held the only copy. The hub cited this
+path as what "pins" the §1a contract (`docs/document_schema.md`, `atrium_document.py`'s
+`BLOCK_FIELD_OWNERS` comment) while containing no such file, and the other four repos had
+no origin coverage at all — so a regression in `_assert_origin_consistent()` passed Hub
+Self-Check cleanly and propagated to five repos the moment `v1` moved.
+
+The imports below are deliberately plain top-level imports, and must stay that way: pytest
+puts the test file's own directory on `sys.path`, which resolves
+`atrium_document`/`atrium_paradata` both from here in `docs/templates/shared/` and once
+vendored into a tool repo (where the repo root is importable via `pytest.ini`'s
+`pythonpath = .` or `tests/__init__.py`). Any path arithmetic added here would resolve in
+one layout and not the other.
 """
 
 import json

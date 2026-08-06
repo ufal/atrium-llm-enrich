@@ -55,6 +55,58 @@ def test_doc_id_from_path():
     assert doc_id_from_path("/path/to/CTX001.txt") == "CTX001"
 
 
+# ── doc_id derivation: one answer, every entry point (atrium-project#10, D3) ──
+
+#: Every multi-dot name the pipeline actually passes around. Each must resolve to the SAME
+#: doc_id everywhere, because the accretion contract is keyed on it: a stage that disagrees
+#: looks for `<other_id>.document.json`, does not find it, and silently emits an orphan with
+#: every upstream block discarded (that is D1/D2, in llm-enrich and in alto's service).
+_MULTI_DOT_NAMES = [
+    "CTX000000001.alto.xml",
+    "CTX000000001.teitok.xml",
+    "CTX000000001.udpipe.conllu",
+    "CTX000000001.conllu",
+    "CTX000000001.document.json",
+    "CTX000000001.categories.json",
+    "CTX000000001.csv",
+    "CTX000000001.md",
+]
+
+
+@pytest.mark.parametrize("name", _MULTI_DOT_NAMES)
+def test_doc_id_from_path_matches_canonical_doc_id(name):
+    """The regression that mattered is ``.udpipe.conllu``.
+
+    The old implementation sliced ``.conllu`` off by literal length (7 chars), so
+    ``CTX000000001.udpipe.conllu`` came back as ``CTX000000001.udpipe`` while
+    ``canonical_doc_id()`` — whose ``KNOWN_PIPELINE_SUFFIXES`` lists the longer
+    ``.udpipe.conllu`` first, deliberately — answers ``CTX000000001``. Latent only because
+    this repo's input filters never feed it a ``.conllu`` today; the function is public and
+    its own docstring advertised the suffix.
+    """
+    from atrium_document import canonical_doc_id
+
+    assert doc_id_from_path(name) == canonical_doc_id(name) == "CTX000000001"
+    # …and the same answer wherever the path came from.
+    assert doc_id_from_path(f"/archive/2026/{name}") == "CTX000000001"
+
+
+@pytest.mark.parametrize("name", _MULTI_DOT_NAMES)
+def test_every_doc_id_entry_point_in_this_repo_agrees(name):
+    """The cross-entry-point half of D3's gate.
+
+    Three mutually-inconsistent derivations used to coexist here: this module's literal-slice
+    stripper, ``service/api.py``'s ``_doc_id()``, and a bare ``Path.stem`` in both remote
+    clients. They are now one function with three call sites, and this test is what keeps the
+    fourth implementation from being written.
+    """
+    pytest.importorskip("fastapi")  # service/api.py imports FastAPI at module level
+    from atrium_document import canonical_doc_id
+    from service.api import _doc_id
+
+    assert {doc_id_from_path(name), _doc_id(name), canonical_doc_id(name)} == {"CTX000000001"}
+
+
 def test_read_teitok_rows(sample_teitok):
     rows = read_teitok_rows(sample_teitok)
     assert len(rows) == 3
