@@ -21,3 +21,12 @@ TEMP/
 *.pt
 *.onnx
 .env
+
+# W8: the born-digital exploration corpus — 5.1 MB (sample.docx 3.0 MB,
+# sample.pdf 1.98 MB, sample.pdf_docling_ir.json 197 KB) plus the Phase 0 probe
+# scripts. These are research inputs for the pdfplumber-vs-PyMuPDF A/B, not
+# runtime data, and they were being baked into EVERY published image (-remote and
+# -llm today, -digital as of this change). The generated test fixtures under
+# tests/fixtures/digital/ are 1-4 KB and are produced deterministically by
+# make_fixtures.py, so nothing needs the big samples at runtime.
+digital_born/

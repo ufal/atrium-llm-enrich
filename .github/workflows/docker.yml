@@ -60,4 +60,14 @@ jobs:
       # standalone — only remote and llm are publishable targets. (Targets now
       # pass through verbatim, so listing "base" would build the real base
       # stage — still pointless here, so it stays excluded.)
-      build-targets: '["remote", "llm"]'
+      # W8: "digital" added. api_util/digital_to_json.py (808 lines, PROGRAM =
+      # "digital-convert") has existed and been tested for a while, but no Dockerfile
+      # stage built it and no target published it — so
+      # ghcr.io/ufal/atrium-llm-enrich-digital did not exist at ANY tag, and the
+      # two-originator path (scan vs born-digital) was reachable only through unit
+      # tests inside this repo. That is the "needs a published image" blocker on the
+      # sixth E2E stage.
+      #
+      # Still declared-but-unpublished: the `api` stage. Same failure mode, older and
+      # pre-existing; flagged rather than fixed here so this change stays reviewable.
+      build-targets: '["remote", "llm", "digital"]'

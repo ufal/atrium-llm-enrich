@@ -54,6 +54,45 @@ CMD ["openrouter_client.py", "--help"]
 
 
 # ---------------------------------------------------------------------------
+# Digital-born converter — published as :<version>-digital  (W8)
+#
+# api_util/digital_to_json.py turns a born-digital PDF/DOCX directly into an
+# atrium_document record. It is an ORIGINATOR, like page-classification's scan
+# path: it takes no --document-json baseline, it creates the record.
+#
+# Why a separate stage rather than folding it into `remote`: the two have disjoint
+# dependency sets and disjoint reasons to exist. `remote` talks to OpenRouter and
+# needs no document parsing; this needs pdfplumber/python-docx and no network at
+# all. Merging them would put a PDF parser in the image whose whole selling point
+# is being the torch-free API client.
+#
+# NOTE ON THE MANIFEST: requirements_digital.txt currently also declares `docling`
+# and `docx2python`, which NOTHING SHIPPED IMPORTS — digital_to_json.py imports
+# pdfplumber (line ~427) and docx (line ~496) lazily, and jsonschema arrives via
+# atrium_document.validate_document(). They are left in the manifest because the
+# licence posture documented there is load-bearing (accretion rule 5 merges
+# component licences into provenance.license for every digital-born document, so
+# the MIT-only stack is a deliberate constraint, not a preference) and dropping a
+# name from that file without also dropping its para_config.txt [components] row
+# would make ParadataLogger record it as UNKNOWN — which para_licenses treats as
+# maximally restrictive. Splitting a runtime subset out of the manifest is the
+# right fix and is a licence-review change, not a Dockerfile one; until then this
+# stage installs the declared manifest so the image matches what para_config.txt
+# claims is in it.
+# ---------------------------------------------------------------------------
+FROM base AS digital
+
+USER root
+COPY requirements_digital.txt ./
+RUN pip install -r requirements_digital.txt
+RUN chown -R atrium:atrium /app
+USER atrium
+
+ENTRYPOINT ["python", "api_util/digital_to_json.py"]
+CMD ["--help"]
+
+
+# ---------------------------------------------------------------------------
 # Local multi-GPU variant — published as :<version>-llm
 # ---------------------------------------------------------------------------
 FROM base AS llm

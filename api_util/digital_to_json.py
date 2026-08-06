@@ -765,7 +765,25 @@ def build_parser() -> argparse.ArgumentParser:
         description="Convert a digital-born PDF/DOCX into an atrium_document JSON record.",
     )
     parser.add_argument("input", help="path to the .pdf or .docx to convert")
-    parser.add_argument("--out", default=None, help="output path (default <doc_id>.document.json)")
+    # W9: `--document-json-out` is the CANONICAL name, `--out` a retained alias.
+    #
+    # Every other stage in the ecosystem takes the PAIR --document-json /
+    # --document-json-out (alto-postprocess, translator, page-classification,
+    # nlp-enrich, llm-enrich). This converter took --document-json in and `--out`
+    # out, so the one asymmetric spelling in the ecosystem sat on the newest tool —
+    # and a pipeline step written by pattern-matching the others would silently write
+    # to the default path instead of the requested one.
+    #
+    # `--out` still works: it is in digital_born/README.md and in the existing tests.
+    # argparse resolves both to `args.out` via the shared dest.
+    parser.add_argument(
+        "--document-json-out",
+        "--out",
+        dest="out",
+        default=None,
+        help="output path for the record (default <out-dir>/<doc_id>.document.json). "
+        "`--out` is a retained alias for the canonical --document-json-out.",
+    )
     parser.add_argument(
         "--document-json",
         default=None,

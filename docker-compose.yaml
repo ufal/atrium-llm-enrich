@@ -24,6 +24,29 @@ services:
     #   docker compose --profile remote run --rm llm-enrich-remote \
     #     ollama_client.py --input /data/sample.csv --model qwen2.5:7b
 
+  # W8: the born-digital originator. Takes a PDF/DOCX and PRODUCES an
+  # atrium_document record — it consumes no --document-json baseline, because it is
+  # the start of the born-digital branch, not a stage in the scanned chain.
+  llm-enrich-digital:
+    profiles: [digital]
+    image: ghcr.io/ufal/atrium-llm-enrich:${ATRIUM_VERSION:-dev}-digital
+    build:
+      context: .
+      target: digital
+      args:
+        ATRIUM_RUNNER_IMAGE: ghcr.io/ufal/atrium-llm-enrich:${ATRIUM_VERSION:-dev}-digital
+        ATRIUM_RUNNER_REPO: https://github.com/ufal/atrium-llm-enrich
+        ATRIUM_RUNNER_REF: ${ATRIUM_RUNNER_REF:-dev}
+    environment:
+      ATRIUM_RUNNER_IMAGE: ghcr.io/ufal/atrium-llm-enrich:${ATRIUM_VERSION:-dev}-digital
+      ATRIUM_RUNNER_REPO: https://github.com/ufal/atrium-llm-enrich
+      ATRIUM_RUNNER_REF: ${ATRIUM_RUNNER_REF:-dev}
+    volumes:
+      - ./data:/data
+    # ENTRYPOINT is api_util/digital_to_json.py, so pass its args directly:
+    #   docker compose --profile digital run --rm llm-enrich-digital \
+    #     /data/report.pdf --document-json-out /data/report.document.json
+
   llm-enrich-llm:
     profiles: [llm]
     image: ghcr.io/ufal/atrium-llm-enrich:${ATRIUM_VERSION:-dev}-llm
