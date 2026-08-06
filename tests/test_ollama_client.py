@@ -112,9 +112,11 @@ def test_document_json_flags_match_the_openrouter_client():
     incomplete port of the issue #13 feature, not a decision (the two clients mirror each
     other line-for-line otherwise). Comparing the two parsers, rather than asserting a
     hard-coded list, is what makes the NEXT one-sided addition fail here."""
-    assert _document_json_flags(build_arg_parser()) == _document_json_flags(
-        openrouter_client.build_arg_parser()
-    ) == {"document_json_dir", "document_json", "document_json_out"}
+    assert (
+        _document_json_flags(build_arg_parser())
+        == _document_json_flags(openrouter_client.build_arg_parser())
+        == {"document_json_dir", "document_json", "document_json_out"}
+    )
 
 
 def test_document_json_flags_default_to_none_and_parse_as_paths():

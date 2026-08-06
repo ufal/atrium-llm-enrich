@@ -1,5 +1,12 @@
 # ruff.toml
 line-length = 100
+# Apply exclude/extend-exclude even to EXPLICIT command-line paths. Without this the
+# [format] exclude below is inert exactly where it must work: pre-commit runs
+# `ruff-format <changed files>`, and ruff otherwise honours exclusions only while
+# walking directories -- so a vendored canonical file still gets re-wrapped on commit.
+# (issue atrium-project#10)
+force-exclude = true
+
 target-version = "py311"
 
 [lint]
@@ -29,3 +36,26 @@ extend-immutable-calls = [
 [format]
 quote-style = "double"
 indent-style = "space"
+
+# DO NOT FORMAT THE VENDORED CANONICAL FILES.
+#
+# para-drift requires them byte-identical across the hub and all five tool repos, but
+# `ruff format` reflows to the LOCAL `line-length` -- 100 in this repo, 120 in
+# page-classification, alto-postprocess and translator -- while the hub is deliberately
+# never auto-formatted. So a shared file's bytes became a function of which repo
+# committed it last: vendoring tests/test_document_originators.py on 2026-08-05 split it
+# into two wrap-variants and turned Paradata Canonical Drift red in the three 120-repos.
+# This repo authored the file at 100 columns, which is why the hub carried that form.
+# Each form is a fixed point of its own config, so re-vendoring alone would not hold.
+#
+# Linting still applies -- this excludes formatting only. Full rationale in the hub
+# template. If you add a file to the para-drift set, add it here too. (issue atrium-project#10)
+exclude = [
+    "atrium_document.py",
+    "atrium_paradata.py",
+    "para_licenses.py",
+    "check_version.py",
+    "service/atrium_service.py",
+    "tests/test_para_licenses.py",
+    "tests/test_document_originators.py",
+]

@@ -488,9 +488,7 @@ def test_needs_ocr_handoff_lets_alto_re_originate(tmp_path, mock_paradata):
         first.merge_block("lines", [{"page": "1", "line": 0, "text": "sondI", "categ": "Garbage"}])
         baseline = first.to_dict()
 
-    second = DocumentRecord(
-        "CTX000000001", ALTO, baseline=baseline, out_dir=str(tmp_path), strict=True
-    )
+    second = DocumentRecord("CTX000000001", ALTO, baseline=baseline, out_dir=str(tmp_path), strict=True)
     second.merge_block("lines", [{"page": "1", "line": 0, "text": "sondě", "categ": "Text"}])
     assert second.get_block("lines")[0]["text"] == "sondě"
     # Rule 4: the read-time truth is the stamp, and `ocr` stays alto's alone.
@@ -504,9 +502,7 @@ def test_without_needs_ocr_alto_is_still_refused(tmp_path, mock_paradata):
         first.merge_block("pages", [{"page": "1", "page_index": 1, "needs_ocr": False}])
         baseline = first.to_dict()
 
-    second = DocumentRecord(
-        "CTX000000001", ALTO, baseline=baseline, out_dir=str(tmp_path), strict=True
-    )
+    second = DocumentRecord("CTX000000001", ALTO, baseline=baseline, out_dir=str(tmp_path), strict=True)
     with pytest.raises(ValueError, match="originated by 'digital-convert'"):
         second.merge_block("lines", [{"page": "1", "line": 0, "text": "x"}])
 
@@ -518,9 +514,7 @@ def test_own_fields_empty_writes_only_the_keys(tmp_path, mock_paradata):
     """`allowed = own_fields or ...` treated an explicit [] as "not supplied" and handed back
     the program's full grant, writing more than the caller asked for."""
     with _open(tmp_path, mock_paradata, DIGITAL, origin="digital-born-pdf") as doc:
-        doc.merge_block(
-            "lines", [{"page": "1", "line": 0, "text": "not mine to write"}], own_fields=[]
-        )
+        doc.merge_block("lines", [{"page": "1", "line": 0, "text": "not mine to write"}], own_fields=[])
         assert doc.get_block("lines") == [{"page": "1", "line": 0}]
 
 
@@ -543,9 +537,7 @@ def test_int_and_str_page_labels_are_one_row(tmp_path, mock_paradata):
         first.merge_block("lines", [{"page": 1, "line": 0, "text": "int page"}])
         baseline = first.to_dict()
 
-    with DocumentRecord(
-        "CTX000000001", "nlp-enrich", baseline=baseline, out_dir=str(tmp_path), strict=True
-    ) as doc:
+    with DocumentRecord("CTX000000001", "nlp-enrich", baseline=baseline, out_dir=str(tmp_path), strict=True) as doc:
         doc.merge_block("lines", [{"page": "1", "line": 0, "lemma": "x"}])
         rows = doc.get_block("lines")
 
@@ -588,9 +580,7 @@ def test_assert_fields_survived_passes_for_the_declared_originator(tmp_path, moc
 def test_warn_dropped_fields_is_opt_in(tmp_path, mock_paradata, capsys):
     """Ecosystem-wide it is a tightening pass with call-site cleanup (§1b), so it is a flag."""
     run_id, ref = mock_paradata
-    quiet = DocumentRecord(
-        "D", "nlp-enrich", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path)
-    )
+    quiet = DocumentRecord("D", "nlp-enrich", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path))
     quiet.merge_block("lines", [{"page": "1", "line": 0, "text": "eaten"}])
     assert "may not write" not in capsys.readouterr().err
 
@@ -672,19 +662,13 @@ def test_merge_keeps_the_first_source_and_accumulates_derived_from(tmp_path, moc
     first.set_block("content", {"text": "body"})
     p1 = first.finalize(str(tmp_path / "one.json"))
 
-    second = DocumentRecord(
-        "CTX1", "nlp-enrich", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path)
-    )
+    second = DocumentRecord("CTX1", "nlp-enrich", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path))
     second.set_source(origin="digital-born-pdf")
     second.add_derived_from("teitok", "TEITOK/CTX1.teitok.xml")
-    second.merge_block(
-        "entities", [{"page": "1", "line": 0, "char_span": [0, 4], "surface": "body"}]
-    )
+    second.merge_block("entities", [{"page": "1", "line": 0, "char_span": [0, 4], "surface": "body"}])
     p2 = second.finalize(str(tmp_path / "two.json"))
 
-    merged = json.loads(
-        open(merge_document_records([p1, p2], str(tmp_path / "m.json")), encoding="utf-8").read()
-    )
+    merged = json.loads(open(merge_document_records([p1, p2], str(tmp_path / "m.json")), encoding="utf-8").read())
     assert merged["source"]["sha256"] == "a" * 64
     assert merged["source"]["origin"] == "digital-born-pdf"
     assert merged["derived_from"] == {"pdf": "IN/CTX1.pdf", "teitok": "TEITOK/CTX1.teitok.xml"}
@@ -697,9 +681,7 @@ def test_merge_refuses_records_that_disagree_about_source(tmp_path, mock_paradat
     a.set_block("content", {"text": "x"})
     pa = a.finalize(str(tmp_path / "a.json"))
 
-    b = DocumentRecord(
-        "CTX1", "page-classification", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path)
-    )
+    b = DocumentRecord("CTX1", "page-classification", run_id=run_id, paradata_ref=ref, out_dir=str(tmp_path))
     b.set_source(origin="ocr:pero")
     b.set_block("page_categories", {"1": "Text"})
     pb = b.finalize(str(tmp_path / "b.json"))
