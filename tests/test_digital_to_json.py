@@ -78,7 +78,9 @@ def test_score_is_a_ratio_so_long_and_short_lines_compare():
 
 def test_one_foreign_character_does_not_condemn_a_clean_line():
     """The failure mode is systematic; a single legitimate `ì` must stay above the cut."""
-    report = d2j.decode_sanity("Vrstva ornice, srov. italsky citta ma pekne pole a ratio " * 2 + "ì")
+    report = d2j.decode_sanity(
+        "Vrstva ornice, srov. italsky citta ma pekne pole a ratio " * 2 + "ì"
+    )
     assert not report.is_garbage
 
 
@@ -129,7 +131,9 @@ def test_needs_ocr_is_never_set_without_its_reason():
     """The two mean OPPOSITE things on the two originator paths; the reason disambiguates."""
     page = d2j.DigitalPage(page="1", page_index=1)
     page.lines = [d2j.DigitalLine(page="1", line=0, text="sondì èíslo høeby mìla")]
-    d2j.normalize(d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page]))
+    d2j.normalize(
+        d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page])
+    )
     assert page.needs_ocr is True
     assert page.needs_ocr_reason
     assert "does not decode" in page.needs_ocr_reason
@@ -140,7 +144,9 @@ def test_needs_ocr_is_never_set_without_its_reason():
 def test_clean_page_is_not_routed_to_ocr():
     page = d2j.DigitalPage(page="1", page_index=1)
     page.lines = [d2j.DigitalLine(page="1", line=0, text="Zpráva o sondě číslo 3.")]
-    d2j.normalize(d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page]))
+    d2j.normalize(
+        d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page])
+    )
     assert page.needs_ocr is False
     assert page.quality_band == "Clear"
 
@@ -298,7 +304,7 @@ def test_valid_record_is_written_and_validates(tmp_path):
 
 
 def test_invalid_record_is_not_written_at_all(tmp_path):
-    """"No doc.json is emitted if validation fails" — not written-then-flagged.
+    """ "No doc.json is emitted if validation fails" — not written-then-flagged.
 
     Also asserts no stray `.tmp` survives: `finalize()` writes to a temp path and renames,
     so a gate that fired after the write would leave one behind.

@@ -277,7 +277,9 @@ def decode_sanity(text: str) -> DecodeReport:
         if candidate and candidate != text:
             recovered = candidate
 
-    return DecodeReport(score=score, suspicious=suspicious, letters=len(letters), recovered=recovered)
+    return DecodeReport(
+        score=score, suspicious=suspicious, letters=len(letters), recovered=recovered
+    )
 
 
 def classify_line(line: DigitalLine, report: DecodeReport) -> Optional[str]:
