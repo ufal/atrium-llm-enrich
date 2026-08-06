@@ -13,9 +13,26 @@ tqdm
 # API meta-contract test deps (issue #32) — the service imports torch-free, so
 # its contract test runs in the fast lane.
 fastapi
-httpx
+httpx2
 python-multipart
 openapi-spec-validator
+# Digital-born EXTRACTION deps (issue atrium-project#10 Phase 5). Same reasoning as
+# jsonschema above: without them the tests exist but never run, which is not a lighter
+# test suite — it is an untested module wearing a green tick.
+#
+# 17 tests were skipping in CI on their absence, and only three of them are new:
+#   tests/test_pdf_to_md.py       (4)  — pre-existing, skipped since it was written
+#   tests/test_docx_to_md.py     (10)  — likewise; the module sat at 15% coverage
+#   tests/test_digital_to_json.py (3)  — Layer A of the digital-convert converter
+# With these two installed all 17 run and pass, and the three modules go
+# 41% -> 77% (pdf_to_md), 15% -> 74% (docx_to_md), 77% -> 94% (digital_to_json).
+#
+# Deliberately NOT docling: no test needs it, and it is the heavy one. These two are
+# small, pure-Python-ish and already the documented docmd/geometry stack. This does not
+# contradict "requirements_digital.txt is outside the base install" — that is about the
+# RUNTIME install; this file defines the test lane, which is where tests must actually run.
+pdfplumber
+python-docx
 # Optional heavy deps only if the suite truly needs them:
 # torch
 # transformers
