@@ -13,3 +13,8 @@ pandas
 #     docker-tool.reusable.yml, so a dep declared only in requirements-test.txt does not
 #     exist in the job that runs pytest — which is exactly why pandas is in this list.
 jsonschema
+# vocab_sources.py's OAI-PMH harvest parses remote XML with entity expansion and
+# network access disabled, which xml.etree cannot do. Import is confined to
+# vocab_sources.py: vocab_manager.py stays stdlib+requests only, so the service
+# import path (service/api.py -> vocab_manager) never pulls lxml in.
+lxml

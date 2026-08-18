@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <ListRecords>
+    <record>
+      <header><identifier>https://api.aiscr.cz/id/HES-000348</identifier></header>
+      <metadata>
+        <heslo xmlns="https://api.aiscr.cz/schema/amcr/2.2/">
+          <ident_cely>HES-000348</ident_cely>
+          <nazev_heslare xml:lang="cs">obdobi</nazev_heslare>
+          <heslo xml:lang="cs">magdalénien</heslo>
+          <heslo_en xml:lang="en">magdalenian</heslo_en>
+          <razeni>7</razeni>
+        </heslo>
+      </metadata>
+    </record>
+  </ListRecords>
+</OAI-PMH>

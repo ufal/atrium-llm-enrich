@@ -72,6 +72,7 @@ def _load_engine() -> Dict[str, Any]:
         build_document_system_prompt,
         build_schema,
         build_system_prompt,
+        excluded_prompt_themes,
         load_config,
     )
     from vocab_manager import VocabularyManager
@@ -95,9 +96,17 @@ def _load_engine() -> Dict[str, Any]:
         "min_alpha_ratio_non_text": float(config.get("MIN_ALPHA_RATIO_NON_TEXT", "0.40")),
     }
 
-    vocab_data = VocabularyManager(vocab_path=vocab_path).load()
-    line_prompt, line_terms = build_system_prompt(vocab_data, max_tokens=max_input_tokens)
-    doc_prompt, doc_terms = build_document_system_prompt(vocab_data, max_tokens=max_input_tokens)
+    vocab_mgr = VocabularyManager(vocab_path=vocab_path)
+    vocab_data = vocab_mgr.load()
+    # Which themes reach the model is a taxonomy_config decision (in_prompt), not a
+    # literal in the prompt builder — see excluded_prompt_themes().
+    excluded_themes = excluded_prompt_themes(vocab_mgr)
+    line_prompt, line_terms = build_system_prompt(
+        vocab_data, max_tokens=max_input_tokens, excluded_themes=excluded_themes
+    )
+    doc_prompt, doc_terms = build_document_system_prompt(
+        vocab_data, max_tokens=max_input_tokens, excluded_themes=excluded_themes
+    )
     line_model = build_schema(line_terms)
     doc_model = build_document_schema(doc_terms)
     session = requests.Session()

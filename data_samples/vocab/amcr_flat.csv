@@ -1,0 +1,1461 @@
+source_lemma,target_translation,source,source_id,uri,scheme,broader,sort
+obývání,residential activity,amcr,HES-000001,https://api.aiscr.cz/id/HES-000001,aktivita,HES-000013 HES-000014 HES-000015 HES-000016 HES-000017 HES-000018 HES-000028 HES-000043 HES-000046 HES-000064 HES-000065 HES-000066 HES-000067 HES-000068 HES-000069 HES-000070 HES-000072 HES-000073 HES-000074 HES-000075 HES-000076 HES-000081,1
+pohřbívání,burial activity,amcr,HES-000002,https://api.aiscr.cz/id/HES-000002,aktivita,HES-000025 HES-000026 HES-000027 HES-000077,2
+výroba,production activity,amcr,HES-000003,https://api.aiscr.cz/id/HES-000003,aktivita,HES-000014 HES-000028 HES-000029 HES-000030 HES-000031 HES-000036 HES-000037 HES-000038 HES-000039 HES-000040 HES-000052 HES-000053 HES-000054 HES-000055 HES-000074 HES-000075 HES-000076 HES-000078 HES-000079 HES-000080 HES-000082,3
+těžba,mining activity,amcr,HES-000004,https://api.aiscr.cz/id/HES-000004,aktivita,HES-000032 HES-000033 HES-000034 HES-000035,4
+kult,ritual activity,amcr,HES-000005,https://api.aiscr.cz/id/HES-000005,aktivita,HES-000012 HES-000019 HES-000020 HES-000021 HES-000022 HES-000023 HES-000024 HES-000073 HES-000077,5
+komunikace,transportation activity,amcr,HES-000006,https://api.aiscr.cz/id/HES-000006,aktivita,HES-000047 HES-000048 HES-000049 HES-000050,6
+deponování,deposition activity,amcr,HES-000007,https://api.aiscr.cz/id/HES-000007,aktivita,HES-000051,7
+boj,fighting activity,amcr,HES-000008,https://api.aiscr.cz/id/HES-000008,aktivita,HES-000015 HES-000017 HES-000041 HES-000042 HES-000043 HES-000044 HES-000045 HES-000046,8
+jiná aktivita,other activity,amcr,HES-000009,https://api.aiscr.cz/id/HES-000009,aktivita,HES-000056 HES-000057 HES-000058 HES-000059,9
+intruze,intrusion,amcr,HES-000010,https://api.aiscr.cz/id/HES-000010,aktivita,,10
+nadkomunitní areál,supracommunity site,amcr,HES-000011,https://api.aiscr.cz/id/HES-000011,areal,HES-000084,20
+rondel/rondeloid,roundel/rondeloid,amcr,HES-000012,https://api.aiscr.cz/id/HES-000012,areal,HES-000084,27
+sídlo elity,elite settlement,amcr,HES-000013,https://api.aiscr.cz/id/HES-000013,areal,HES-000085,31
+dvorec/dvůr,curia/manorial farm,amcr,HES-000014,https://api.aiscr.cz/id/HES-000014,areal,HES-000085,32
+hrad,castle,amcr,HES-000015,https://api.aiscr.cz/id/HES-000015,areal,HES-000085,33
+městský palác,town palace,amcr,HES-000016,https://api.aiscr.cz/id/HES-000016,areal,HES-000085,34
+tvrz/hrádek,fortified manor,amcr,HES-000017,https://api.aiscr.cz/id/HES-000017,areal,HES-000085,35
+zámek/zámeček/vila,chateau/villa,amcr,HES-000018,https://api.aiscr.cz/id/HES-000018,areal,HES-000085,36
+kultovní areál,ritual site,amcr,HES-000019,https://api.aiscr.cz/id/HES-000019,areal,HES-000086,40
+kaple,chapel,amcr,HES-000020,https://api.aiscr.cz/id/HES-000020,areal,HES-000086,41
+kostel,church,amcr,HES-000021,https://api.aiscr.cz/id/HES-000021,areal,HES-000086,42
+kříž/boží muka,cross/calvary,amcr,HES-000022,https://api.aiscr.cz/id/HES-000022,areal,HES-000086,43
+kultovní místo,ritual place,amcr,HES-000023,https://api.aiscr.cz/id/HES-000023,areal,HES-000086,44
+synagoga,synagogue,amcr,HES-000024,https://api.aiscr.cz/id/HES-000024,areal,HES-000086,45
+pohřební areál,burial site,amcr,HES-000025,https://api.aiscr.cz/id/HES-000025,areal,HES-000087,50
+izolovaný pohřeb,isolated grave,amcr,HES-000026,https://api.aiscr.cz/id/HES-000026,areal,HES-000087,51
+pohřebiště/hřbitov,cemetery/graveyard,amcr,HES-000027,https://api.aiscr.cz/id/HES-000027,areal,HES-000087,52
+mlýn,mill,amcr,HES-000028,https://api.aiscr.cz/id/HES-000028,areal,HES-000088,61
+milířiště,charcoal kiln,amcr,HES-000029,https://api.aiscr.cz/id/HES-000029,areal,HES-000088,63
+sklárna,glassworks,amcr,HES-000030,https://api.aiscr.cz/id/HES-000030,areal,HES-000088,65
+železářský areál,iron production site,amcr,HES-000031,https://api.aiscr.cz/id/HES-000031,areal,HES-000088,66
+areál těžby,extracting site,amcr,HES-000032,https://api.aiscr.cz/id/HES-000032,areal,HES-000089,70
+důl,mine,amcr,HES-000033,https://api.aiscr.cz/id/HES-000033,areal,HES-000089,71
+lom,quarry,amcr,HES-000034,https://api.aiscr.cz/id/HES-000034,areal,HES-000089,72
+rýžoviště,panning site,amcr,HES-000035,https://api.aiscr.cz/id/HES-000035,areal,HES-000089,73
+areál zemědělské výroby,agricultural production site,amcr,HES-000036,https://api.aiscr.cz/id/HES-000036,areal,HES-000090,80
+obora,game park,amcr,HES-000037,https://api.aiscr.cz/id/HES-000037,areal,HES-000090,81
+pastvina/louka,pasture/meadow,amcr,HES-000038,https://api.aiscr.cz/id/HES-000038,areal,HES-000090,82
+pole,cropland,amcr,HES-000039,https://api.aiscr.cz/id/HES-000039,areal,HES-000090,83
+zahrada/sad,garden,amcr,HES-000040,https://api.aiscr.cz/id/HES-000040,areal,HES-000090,84
+areál vojenských aktivit,military site,amcr,HES-000041,https://api.aiscr.cz/id/HES-000041,areal,HES-000091,90
+bojiště,battlefield,amcr,HES-000042,https://api.aiscr.cz/id/HES-000042,areal,HES-000091,91
+pevnost,fortress,amcr,HES-000043,https://api.aiscr.cz/id/HES-000043,areal,HES-000091,92
+polní opevnění,field fortification,amcr,HES-000044,https://api.aiscr.cz/id/HES-000044,areal,HES-000091,93
+strážnice/předsunutá bašta,outpost/watchtower,amcr,HES-000045,https://api.aiscr.cz/id/HES-000045,areal,HES-000091,94
+vojenský tábor,military camp,amcr,HES-000046,https://api.aiscr.cz/id/HES-000046,areal,HES-000091,95
+komunikace,transportation structure,amcr,HES-000047,https://api.aiscr.cz/id/HES-000047,areal,HES-000092,100
+cesta,roads,amcr,HES-000048,https://api.aiscr.cz/id/HES-000048,areal,HES-000092,101
+most/brod,bridge/ford,amcr,HES-000049,https://api.aiscr.cz/id/HES-000049,areal,HES-000092,102
+železnice,railway,amcr,HES-000050,https://api.aiscr.cz/id/HES-000050,areal,HES-000092,103
+depot,hoard,amcr,HES-000051,https://api.aiscr.cz/id/HES-000051,areal,HES-000093,110
+jez,weir,amcr,HES-000052,https://api.aiscr.cz/id/HES-000052,areal,HES-000094,121
+kanál/náhon,channel/millrace,amcr,HES-000053,https://api.aiscr.cz/id/HES-000053,areal,HES-000094,122
+přehrada,dam,amcr,HES-000054,https://api.aiscr.cz/id/HES-000054,areal,HES-000094,123
+rybník,pond,amcr,HES-000055,https://api.aiscr.cz/id/HES-000055,areal,HES-000094,124
+areál jiné aktivity,other site,amcr,HES-000056,https://api.aiscr.cz/id/HES-000056,areal,HES-000095,130
+místo sběru,collection site,amcr,HES-000057,https://api.aiscr.cz/id/HES-000057,areal,HES-000095,131
+popraviště,execution site,amcr,HES-000058,https://api.aiscr.cz/id/HES-000058,areal,HES-000095,132
+park,park,amcr,HES-000059,https://api.aiscr.cz/id/HES-000059,areal,HES-000095,133
+neurčený areál,unspecified site,amcr,HES-000060,https://api.aiscr.cz/id/HES-000060,areal,HES-000096,150
+nález v druhotné poloze,find in secondary context,amcr,HES-000061,https://api.aiscr.cz/id/HES-000061,areal,HES-000096,151
+ojedinělý nález,single find,amcr,HES-000062,https://api.aiscr.cz/id/HES-000062,areal,HES-000096,152
+zničený prostor,destroyed site,amcr,HES-000063,https://api.aiscr.cz/id/HES-000063,areal,HES-000096,153
+hrazené sídliště,enclosed settlement,amcr,HES-000064,https://api.aiscr.cz/id/HES-000064,areal,HES-000083,11
+osídlený skalní prostor,cave settlement,amcr,HES-000065,https://api.aiscr.cz/id/HES-000065,areal,HES-000083,12
+stanice/tábořiště,camp,amcr,HES-000066,https://api.aiscr.cz/id/HES-000066,areal,HES-000083,13
+samostatná usedlost,individual homestead,amcr,HES-000067,https://api.aiscr.cz/id/HES-000067,areal,HES-000083,14
+vesnice/městečko,village/town,amcr,HES-000068,https://api.aiscr.cz/id/HES-000068,areal,HES-000083,15
+výšinné sídliště,hill settlement,amcr,HES-000069,https://api.aiscr.cz/id/HES-000069,areal,HES-000083,16
+sídliště specializované komunity,special-community settlement,amcr,HES-000070,https://api.aiscr.cz/id/HES-000070,areal,HES-000083,17
+hrazený areál,enclosure,amcr,HES-000071,https://api.aiscr.cz/id/HES-000071,areal,HES-000084,21
+hradiště,hillfort,amcr,HES-000072,https://api.aiscr.cz/id/HES-000072,areal,HES-000084,22
+klášter,monastery,amcr,HES-000073,https://api.aiscr.cz/id/HES-000073,areal,HES-000084,23
+město,city,amcr,HES-000074,https://api.aiscr.cz/id/HES-000074,areal,HES-000084,24
+protourbánní aglomerace,proto-urban agglomeration,amcr,HES-000075,https://api.aiscr.cz/id/HES-000075,areal,HES-000084,25
+předměstí,suburb,amcr,HES-000076,https://api.aiscr.cz/id/HES-000076,areal,HES-000084,26
+pohřebiště v sakrální stavbě,burials in sacral building,amcr,HES-000077,https://api.aiscr.cz/id/HES-000077,areal,HES-000087,53
+areál nezemědělské výroby,production site,amcr,HES-000078,https://api.aiscr.cz/id/HES-000078,areal,HES-000088,60
+dehtárna,tar kiln,amcr,HES-000079,https://api.aiscr.cz/id/HES-000079,areal,HES-000088,62
+pivovar,brewery,amcr,HES-000080,https://api.aiscr.cz/id/HES-000080,areal,HES-000088,64
+sídliště,settlement,amcr,HES-000081,https://api.aiscr.cz/id/HES-000081,areal,HES-000083,10
+vodní dílo,hydraulic structure,amcr,HES-000082,https://api.aiscr.cz/id/HES-000082,areal,HES-000094,120
+sídliště,settlement,amcr,HES-000083,https://api.aiscr.cz/id/HES-000083,areal_kat,,10
+nadkomunitní areál,supracommunity site,amcr,HES-000084,https://api.aiscr.cz/id/HES-000084,areal_kat,,20
+sídlo elity,elite settlement,amcr,HES-000085,https://api.aiscr.cz/id/HES-000085,areal_kat,,31
+kultovní areál,ritual site,amcr,HES-000086,https://api.aiscr.cz/id/HES-000086,areal_kat,,40
+pohřební areál,burial site,amcr,HES-000087,https://api.aiscr.cz/id/HES-000087,areal_kat,,50
+areál nezemědělské výroby,production site,amcr,HES-000088,https://api.aiscr.cz/id/HES-000088,areal_kat,,60
+areál těžby,extracting site,amcr,HES-000089,https://api.aiscr.cz/id/HES-000089,areal_kat,,70
+areál zemědělské výroby,agricultural production site,amcr,HES-000090,https://api.aiscr.cz/id/HES-000090,areal_kat,,80
+areál vojenských aktivit,military site,amcr,HES-000091,https://api.aiscr.cz/id/HES-000091,areal_kat,,90
+komunikace,transportation structure,amcr,HES-000092,https://api.aiscr.cz/id/HES-000092,areal_kat,,100
+depot,hoard,amcr,HES-000093,https://api.aiscr.cz/id/HES-000093,areal_kat,,110
+vodní dílo,hydraulic structure,amcr,HES-000094,https://api.aiscr.cz/id/HES-000094,areal_kat,,120
+areál jiné aktivity,other site,amcr,HES-000095,https://api.aiscr.cz/id/HES-000095,areal_kat,,130
+neurčený areál,unspecified site,amcr,HES-000096,https://api.aiscr.cz/id/HES-000096,areal_kat,,150
+neznámá,unknown,amcr,HES-000099,https://api.aiscr.cz/id/HES-000099,dohlednost,,1
+<10 km,<10 km,amcr,HES-000100,https://api.aiscr.cz/id/HES-000100,dohlednost,,2
+10–20 km,10–20 km,amcr,HES-000101,https://api.aiscr.cz/id/HES-000101,dohlednost,,3
+20–30 km,20–30 km,amcr,HES-000102,https://api.aiscr.cz/id/HES-000102,dohlednost,,4
+30–40 km,30–40 km,amcr,HES-000103,https://api.aiscr.cz/id/HES-000103,dohlednost,,5
+40–50 km,40–50 km,amcr,HES-000104,https://api.aiscr.cz/id/HES-000104,dohlednost,,6
+50–60 km,50–60 km,amcr,HES-000105,https://api.aiscr.cz/id/HES-000105,dohlednost,,7
+60–70 km,60–70 km,amcr,HES-000106,https://api.aiscr.cz/id/HES-000106,dohlednost,,8
+70–80 km,70–80 km,amcr,HES-000107,https://api.aiscr.cz/id/HES-000107,dohlednost,,9
+80–90 km,80–90 km,amcr,HES-000108,https://api.aiscr.cz/id/HES-000108,dohlednost,,10
+90–100 km,90–100 km,amcr,HES-000109,https://api.aiscr.cz/id/HES-000109,dohlednost,,11
+>100 km,>100 km,amcr,HES-000110,https://api.aiscr.cz/id/HES-000110,dohlednost,,12
+polygon leteckého průzkumu,aerial survey polygon,amcr,HES-000111,https://api.aiscr.cz/id/HES-000111,lokalita_druh,HES-000132,10
+osídlený skalní prostor,cave settlement,amcr,HES-000112,https://api.aiscr.cz/id/HES-000112,lokalita_druh,HES-000133,20
+krajina,landscape,amcr,HES-000117,https://api.aiscr.cz/id/HES-000117,lokalita_druh,HES-000136,40
+pomník/památník,memorial,amcr,HES-000128,https://api.aiscr.cz/id/HES-000128,lokalita_druh,HES-000136,42
+muzeum/skanzen,museum/open-air museum,amcr,HES-000129,https://api.aiscr.cz/id/HES-000129,lokalita_druh,HES-000136,41
+polygon archeologického průzkumu,archaeological survey polygon,amcr,HES-000132,https://api.aiscr.cz/id/HES-000132,lokalita_druh_kat,HES-001123,1
+přírodní útvar s lidskou aktivitou,inhabited natural landform,amcr,HES-000133,https://api.aiscr.cz/id/HES-000133,lokalita_druh_kat,HES-001122,2
+zaniklý/historický areál,deserted/historical site,amcr,HES-000134,https://api.aiscr.cz/id/HES-000134,lokalita_druh_kat,HES-001122,3
+krajina,landscape,amcr,HES-000136,https://api.aiscr.cz/id/HES-000136,lokalita_druh_kat,HES-001124,4
+kinofilm (24 x 36 mm),cine film (24 x 36 mm),amcr,HES-000141,https://api.aiscr.cz/id/HES-000141,dokument_format,,1
+6 x 6 cm,6 x 6 cm,amcr,HES-000142,https://api.aiscr.cz/id/HES-000142,dokument_format,,2
+6 x 9 cm,6 x 9 cm,amcr,HES-000143,https://api.aiscr.cz/id/HES-000143,dokument_format,,3
+9 x 12 cm,9 x 12 cm,amcr,HES-000144,https://api.aiscr.cz/id/HES-000144,dokument_format,,4
+a5 (15 x 21 cm),A5 (15 x 21 cm),amcr,HES-000145,https://api.aiscr.cz/id/HES-000145,dokument_format,,5
+a4 (21 x 30 cm),A4 (21 x 30 cm),amcr,HES-000146,https://api.aiscr.cz/id/HES-000146,dokument_format,,6
+a3 (30 x 42 cm),A3 (30 x 42 cm),amcr,HES-000147,https://api.aiscr.cz/id/HES-000147,dokument_format,,7
+a2 (42 x 59 cm),A2 (42 x 59 cm),amcr,HES-000148,https://api.aiscr.cz/id/HES-000148,dokument_format,,8
+a1 (59 x 84 cm),A1 (59 x 84 cm),amcr,HES-000149,https://api.aiscr.cz/id/HES-000149,dokument_format,,9
+a0 (84 x 119 cm),A0 (84 x 119 cm),amcr,HES-000150,https://api.aiscr.cz/id/HES-000150,dokument_format,,10
+>a0,>A0,amcr,HES-000151,https://api.aiscr.cz/id/HES-000151,dokument_format,,11
+3d – autocad (*.dwg),3D – Autocad (*.dwg),amcr,HES-000152,https://api.aiscr.cz/id/HES-000152,dokument_format,,12
+3d – autodesk exchange (*.fbx),3D – Autodesk Exchange (*.fbx),amcr,HES-000153,https://api.aiscr.cz/id/HES-000153,dokument_format,,13
+3d – blender (*.blend),3D – Blender (*.blend),amcr,HES-000154,https://api.aiscr.cz/id/HES-000154,dokument_format,,14
+3d – collada (*.dae),3D – Collada (*.dae),amcr,HES-000155,https://api.aiscr.cz/id/HES-000155,dokument_format,,15
+"3d – leica (*.pts, *.ptx)","3D – Leica (*.pts, *.ptx)",amcr,HES-000156,https://api.aiscr.cz/id/HES-000156,dokument_format,,16
+3d – obj (*.obj),3D – OBJ (*.obj),amcr,HES-000157,https://api.aiscr.cz/id/HES-000157,dokument_format,,17
+3d – 3d printing (*.3mf),3D – 3D Printing (*.3mf),amcr,HES-000158,https://api.aiscr.cz/id/HES-000158,dokument_format,,18
+3d – revit (*.rvt),3D – Revit (*.rvt),amcr,HES-000159,https://api.aiscr.cz/id/HES-000159,dokument_format,,19
+3d – sketchup (*.skp),3D – Sketchup (*.skp),amcr,HES-000160,https://api.aiscr.cz/id/HES-000160,dokument_format,,20
+3d – stanford ply (*.ply),3D – Stanford PLY (*.ply),amcr,HES-000161,https://api.aiscr.cz/id/HES-000161,dokument_format,,21
+3d – universal (*.u3d),3D – Universal (*.u3d),amcr,HES-000162,https://api.aiscr.cz/id/HES-000162,dokument_format,,24
+3d – stereo litography (*.stl),3D – Stereo Litography (*.stl),amcr,HES-000163,https://api.aiscr.cz/id/HES-000163,dokument_format,,22
+"3d – 3d studio max (*.max, *.3ds)","3D – 3D Studio Max (*.max, *.3ds)",amcr,HES-000164,https://api.aiscr.cz/id/HES-000164,dokument_format,,23
+3d – vrml (*.wrl),3D – VRML (*.wrl),amcr,HES-000165,https://api.aiscr.cz/id/HES-000165,dokument_format,,25
+3d – jiný,3D – other,amcr,HES-000166,https://api.aiscr.cz/id/HES-000166,dokument_format,,26
+čeština,Czech,amcr,HES-000167,https://api.aiscr.cz/id/HES-000167,jazyk,,1
+němčina,German,amcr,HES-000168,https://api.aiscr.cz/id/HES-000168,jazyk,,2
+angličtina,English,amcr,HES-000169,https://api.aiscr.cz/id/HES-000169,jazyk,,3
+francouzština,French,amcr,HES-000170,https://api.aiscr.cz/id/HES-000170,jazyk,,4
+slovenština,Slovak,amcr,HES-000171,https://api.aiscr.cz/id/HES-000171,jazyk,,6
+latina,Latin,amcr,HES-000172,https://api.aiscr.cz/id/HES-000172,jazyk,,7
+ruština,Russian,amcr,HES-000173,https://api.aiscr.cz/id/HES-000173,jazyk,,8
+nerelevantní,irrelevant,amcr,HES-000174,https://api.aiscr.cz/id/HES-000174,jazyk,,9
+bez ochrany,unprotected,amcr,HES-000175,https://api.aiscr.cz/id/HES-000175,pamatkova_ochrana,,1
+kulturní památka,listed monument,amcr,HES-000177,https://api.aiscr.cz/id/HES-000177,pamatkova_ochrana,,2
+národní kulturní památka,listed national monument,amcr,HES-000178,https://api.aiscr.cz/id/HES-000178,pamatkova_ochrana,,3
+památková zóna,heritage zone,amcr,HES-000179,https://api.aiscr.cz/id/HES-000179,pamatkova_ochrana,,4
+památková rezervace,heritage reserve,amcr,HES-000180,https://api.aiscr.cz/id/HES-000180,pamatkova_ochrana,,5
+brno-černovice,Brno-Černovice,amcr,HES-000182,https://api.aiscr.cz/id/HES-000182,letiste,,2
+brno-tuřany,Brno-Tuřany,amcr,HES-000184,https://api.aiscr.cz/id/HES-000184,letiste,,4
+czestochowa,Czestochowa,amcr,HES-000185,https://api.aiscr.cz/id/HES-000185,letiste,,5
+czestochowa-rudniky,Czestochowa-Rudniky,amcr,HES-000186,https://api.aiscr.cz/id/HES-000186,letiste,,6
+české budějovice-hosín,České Budějovice-Hosín,amcr,HES-000187,https://api.aiscr.cz/id/HES-000187,letiste,,7
+choceň,Choceň,amcr,HES-000188,https://api.aiscr.cz/id/HES-000188,letiste,,8
+chomutov,Chomutov,amcr,HES-000189,https://api.aiscr.cz/id/HES-000189,letiste,,9
+chomutov-pesvice,Chomutov-Pesvice,amcr,HES-000190,https://api.aiscr.cz/id/HES-000190,letiste,,10
+jaroměř,Jaroměř,amcr,HES-000191,https://api.aiscr.cz/id/HES-000191,letiste,,11
+jičín,Jičín,amcr,HES-000192,https://api.aiscr.cz/id/HES-000192,letiste,,12
+benešov-nesvačily,Benešov-Nesvačily,amcr,HES-000193,https://api.aiscr.cz/id/HES-000193,letiste,,1
+znojmo,Znojmo,amcr,HES-000194,https://api.aiscr.cz/id/HES-000194,letiste,,30
+jihlava-henčov,Jihlava-Henčov,amcr,HES-000195,https://api.aiscr.cz/id/HES-000195,letiste,,13
+karlovy vary,Karlovy Vary,amcr,HES-000196,https://api.aiscr.cz/id/HES-000196,letiste,,14
+kladno,Kladno,amcr,HES-000197,https://api.aiscr.cz/id/HES-000197,letiste,,15
+kolín,Kolín,amcr,HES-000198,https://api.aiscr.cz/id/HES-000198,letiste,,16
+krakow,Krakow,amcr,HES-000199,https://api.aiscr.cz/id/HES-000199,letiste,,17
+krakow-balice,Krakow-Balice,amcr,HES-000200,https://api.aiscr.cz/id/HES-000200,letiste,,18
+leszno,Leszno,amcr,HES-000201,https://api.aiscr.cz/id/HES-000201,letiste,,19
+mělník-hořín,Mělník-Hořín,amcr,HES-000202,https://api.aiscr.cz/id/HES-000202,letiste,,20
+mnichovo hradiště,Mnichovo Hradiště,amcr,HES-000203,https://api.aiscr.cz/id/HES-000203,letiste,,21
+plasy,Plasy,amcr,HES-000204,https://api.aiscr.cz/id/HES-000204,letiste,,22
+praha-kbely,Praha-Kbely,amcr,HES-000205,https://api.aiscr.cz/id/HES-000205,letiste,,23
+praha-letňany,Praha-Letňany,amcr,HES-000206,https://api.aiscr.cz/id/HES-000206,letiste,,24
+sazená,Sazená,amcr,HES-000207,https://api.aiscr.cz/id/HES-000207,letiste,,25
+strunkovice,Strunkovice,amcr,HES-000208,https://api.aiscr.cz/id/HES-000208,letiste,,26
+velká dobrá,Velká Dobrá,amcr,HES-000209,https://api.aiscr.cz/id/HES-000209,letiste,,27
+vlašim,Vlašim,amcr,HES-000210,https://api.aiscr.cz/id/HES-000210,letiste,,28
+vrchlabí,Vrchlabí,amcr,HES-000211,https://api.aiscr.cz/id/HES-000211,letiste,,29
+papír milimetrový,graph paper,amcr,HES-000212,https://api.aiscr.cz/id/HES-000212,dokument_material,,16
+papír s fotografiemi,paper with photographs,amcr,HES-000213,https://api.aiscr.cz/id/HES-000213,dokument_material,,17
+papír sešit,booklet,amcr,HES-000214,https://api.aiscr.cz/id/HES-000214,dokument_material,,18
+papír vázaný,bounded paper,amcr,HES-000215,https://api.aiscr.cz/id/HES-000215,dokument_material,,19
+pauzák,tracing paper,amcr,HES-000216,https://api.aiscr.cz/id/HES-000216,dokument_material,,20
+digitální soubor,digital file,amcr,HES-000217,https://api.aiscr.cz/id/HES-000217,dokument_material,,1
+astralon,astralon (transparent foil),amcr,HES-000218,https://api.aiscr.cz/id/HES-000218,dokument_material,,2
+bromkopie,hectograph copy,amcr,HES-000219,https://api.aiscr.cz/id/HES-000219,dokument_material,,3
+diapozitiv barevný,colour photoslide,amcr,HES-000220,https://api.aiscr.cz/id/HES-000220,dokument_material,,4
+diapozitiv černobílý (film),black-and-white photoslide (film),amcr,HES-000221,https://api.aiscr.cz/id/HES-000221,dokument_material,,5
+diapozitiv černobílý (sklo),black-and-white photoslide (glass),amcr,HES-000222,https://api.aiscr.cz/id/HES-000222,dokument_material,,6
+fotografie černobílá,black-and-white photograph,amcr,HES-000223,https://api.aiscr.cz/id/HES-000223,dokument_material,,8
+fotoplán,photogrammetric plan,amcr,HES-000224,https://api.aiscr.cz/id/HES-000224,dokument_material,,9
+fotografie barevná,colour photograph,amcr,HES-000225,https://api.aiscr.cz/id/HES-000225,dokument_material,,7
+karton,cardboard,amcr,HES-000226,https://api.aiscr.cz/id/HES-000226,dokument_material,,10
+negativ barevný,colour negative,amcr,HES-000227,https://api.aiscr.cz/id/HES-000227,dokument_material,,11
+negativ černobílý (film),black-and-white negative (film),amcr,HES-000228,https://api.aiscr.cz/id/HES-000228,dokument_material,,12
+negativ černobílý (sklo),black-and-white negative (glass),amcr,HES-000229,https://api.aiscr.cz/id/HES-000229,dokument_material,,13
+papír,paper,amcr,HES-000230,https://api.aiscr.cz/id/HES-000230,dokument_material,,14
+papír kladívkový,drawing paper,amcr,HES-000231,https://api.aiscr.cz/id/HES-000231,dokument_material,,15
+neurčený materiál,unspecified material,amcr,HES-000232,https://api.aiscr.cz/id/HES-000232,dokument_material,,25
+tisk,print,amcr,HES-000233,https://api.aiscr.cz/id/HES-000233,dokument_material,,21
+tisková fólie,printing foil,amcr,HES-000234,https://api.aiscr.cz/id/HES-000234,dokument_material,,22
+xerokopie barevná,colour xerographic copy,amcr,HES-000235,https://api.aiscr.cz/id/HES-000235,dokument_material,,23
+xerokopie černobílá,black-and-white xerographic copy,amcr,HES-000236,https://api.aiscr.cz/id/HES-000236,dokument_material,,24
+tisková kvalita,print quality,amcr,HES-000237,https://api.aiscr.cz/id/HES-000237,dokument_nahrada,,1
+použitelný,useable,amcr,HES-000238,https://api.aiscr.cz/id/HES-000238,dokument_nahrada,,2
+nízká kvalita,poor quality,amcr,HES-000239,https://api.aiscr.cz/id/HES-000239,dokument_nahrada,,3
+"není, nezjištěno",unavailable/unknown,amcr,HES-000240,https://api.aiscr.cz/id/HES-000240,dokument_nahrada,,4
+mikroštítek,microfiche,amcr,HES-000241,https://api.aiscr.cz/id/HES-000241,dokument_nahrada,,5
+povrch,surface,amcr,HES-000242,https://api.aiscr.cz/id/HES-000242,nalezove_okolnosti,,1
+ornice,arable topsoil,amcr,HES-000243,https://api.aiscr.cz/id/HES-000243,nalezove_okolnosti,,2
+pastvina/louka,pasture topsoil,amcr,HES-000244,https://api.aiscr.cz/id/HES-000244,nalezove_okolnosti,,3
+lesní hrabanka,woodland topsoil,amcr,HES-000245,https://api.aiscr.cz/id/HES-000245,nalezove_okolnosti,,4
+přirozený půdní horizont,natural topsoil,amcr,HES-000246,https://api.aiscr.cz/id/HES-000246,nalezove_okolnosti,,5
+kulturní vrstva/objekt,cultural layer/feature,amcr,HES-000247,https://api.aiscr.cz/id/HES-000247,nalezove_okolnosti,,6
+podorničí/podloží,subsoil,amcr,HES-000248,https://api.aiscr.cz/id/HES-000248,nalezove_okolnosti,,7
+vodní plocha/tok,water body/stream,amcr,HES-000249,https://api.aiscr.cz/id/HES-000249,nalezove_okolnosti,,8
+budova,building,amcr,HES-000250,https://api.aiscr.cz/id/HES-000250,nalezove_okolnosti,,9
+jiný kontext,other context,amcr,HES-000251,https://api.aiscr.cz/id/HES-000251,nalezove_okolnosti,,10
+novověk,Modern Period,amcr,HES-000252,https://api.aiscr.cz/id/HES-000252,obdobi,HES-000415,2100
+paleolit,Palaeolithic,amcr,HES-000253,https://api.aiscr.cz/id/HES-000253,obdobi,HES-000395,100
+doba laténská,La Tène Period,amcr,HES-000254,https://api.aiscr.cz/id/HES-000254,obdobi,HES-000404,1000
+mladší–pozdní doba laténská (ltc2–d),Late–Final La Tène Period (LtC2–D),amcr,HES-000255,https://api.aiscr.cz/id/HES-000255,obdobi,HES-001461,1030
+kultura púchovská,Púchov Culture,amcr,HES-000256,https://api.aiscr.cz/id/HES-000256,obdobi,HES-001461,1031
+kultura przeworská,Przeworsk Culture,amcr,HES-000257,https://api.aiscr.cz/id/HES-000257,obdobi,HES-001461,1032
+pozdní doba laténská (ltd),Final La Tène Period (LtD),amcr,HES-000258,https://api.aiscr.cz/id/HES-000258,obdobi,HES-001462,1040
+kobylská skupina,Kobyly Group,amcr,HES-000259,https://api.aiscr.cz/id/HES-000259,obdobi,HES-001462,1041
+szeletien,Szeletian,amcr,HES-000260,https://api.aiscr.cz/id/HES-000260,obdobi,HES-001467,131
+bohunicien,Bohunician,amcr,HES-000261,https://api.aiscr.cz/id/HES-000261,obdobi,HES-001467,132
+aurignacien,Aurignacian,amcr,HES-000262,https://api.aiscr.cz/id/HES-000262,obdobi,HES-001467,133
+epigravettien,Epigravettian,amcr,HES-000263,https://api.aiscr.cz/id/HES-000263,obdobi,HES-001467,137
+pozdní paleolit,Epipalaeolithic,amcr,HES-000264,https://api.aiscr.cz/id/HES-000264,obdobi,HES-001468,140
+epimagdalénien,Epimagdalenian,amcr,HES-000265,https://api.aiscr.cz/id/HES-000265,obdobi,HES-001468,141
+ostroměřská skupina,Ostroměř Group,amcr,HES-000266,https://api.aiscr.cz/id/HES-000266,obdobi,HES-001468,142
+neolit,Neolithic,amcr,HES-000267,https://api.aiscr.cz/id/HES-000267,obdobi,HES-000398,400
+starší neolit,Early Neolithic,amcr,HES-000268,https://api.aiscr.cz/id/HES-000268,obdobi,HES-001473,410
+kultura s lineární keramikou,Linear Pottery Culture,amcr,HES-000269,https://api.aiscr.cz/id/HES-000269,obdobi,HES-001473,411
+přechod raný/vrcholný středověk,Early/High Middle Ages Transition,amcr,HES-000270,https://api.aiscr.cz/id/HES-000270,obdobi,HES-000413,1860
+pozdní středověk,Late Middle Ages,amcr,HES-000271,https://api.aiscr.cz/id/HES-000271,obdobi,HES-000413,1920
+přechod pozdní středověk/novověk,Late Middle Ages/Modern Transition,amcr,HES-000272,https://api.aiscr.cz/id/HES-000272,obdobi,HES-000413,1930
+vrcholný středověk–novověk,High Middle Ages–Modern Period,amcr,HES-000273,https://api.aiscr.cz/id/HES-000273,obdobi,HES-000416,2200
+střední paleolit,Middle Palaeolithic,amcr,HES-000274,https://api.aiscr.cz/id/HES-000274,obdobi,HES-001464,120
+mezolit,Mesolithic,amcr,HES-000275,https://api.aiscr.cz/id/HES-000275,obdobi,HES-000396,200
+raný středověk 2–4,Early Middle Ages 2–4,amcr,HES-000276,https://api.aiscr.cz/id/HES-000276,obdobi,HES-000412,1820
+rané středohradištní období,Early Middle Hillfort Period,amcr,HES-000277,https://api.aiscr.cz/id/HES-000277,obdobi,HES-001471,1841
+pozdní středohradištní období,Final Middle Hillfort Period,amcr,HES-000278,https://api.aiscr.cz/id/HES-000278,obdobi,HES-001471,1843
+kultura kulovitých amfor,Globular Amphora Culture,amcr,HES-000279,https://api.aiscr.cz/id/HES-000279,obdobi,HES-001477,534
+mladší eneolit,Late Eneolithic,amcr,HES-000280,https://api.aiscr.cz/id/HES-000280,obdobi,HES-001478,540
+období popelnicových polí,Urnfield Period,amcr,HES-000281,https://api.aiscr.cz/id/HES-000281,obdobi,HES-001482,730
+miškovický typ,Míškovice Type,amcr,HES-000282,https://api.aiscr.cz/id/HES-000282,obdobi,HES-001467,134
+magdalénien,Magdalenian,amcr,HES-000283,https://api.aiscr.cz/id/HES-000283,obdobi,HES-001467,136
+paleolit–mezolit,Palaeolithic–Mesolithic,amcr,HES-000284,https://api.aiscr.cz/id/HES-000284,obdobi,HES-000397,300
+eneolit,Eneolithic,amcr,HES-000285,https://api.aiscr.cz/id/HES-000285,obdobi,HES-000399,500
+časný eneolit,Proto-Eneolithic,amcr,HES-000286,https://api.aiscr.cz/id/HES-000286,obdobi,HES-001475,510
+jordanovská kultura,Jordanów Culture,amcr,HES-000287,https://api.aiscr.cz/id/HES-000287,obdobi,HES-001475,512
+doba laténská–římská,La Tène–Roman Period,amcr,HES-000288,https://api.aiscr.cz/id/HES-000288,obdobi,HES-000407,1300
+pravěk,prehistory,amcr,HES-000289,https://api.aiscr.cz/id/HES-000289,obdobi,HES-000411,1700
+mladší doba bronzová,Late Bronze Age,amcr,HES-000290,https://api.aiscr.cz/id/HES-000290,obdobi,HES-001483,740
+starší paleolit,Lower Palaeolithic,amcr,HES-000291,https://api.aiscr.cz/id/HES-000291,obdobi,HES-001463,110
+micoquien,Micoquien,amcr,HES-000292,https://api.aiscr.cz/id/HES-000292,obdobi,HES-001464,123
+knovízská kultura,Knovíz Culture,amcr,HES-000293,https://api.aiscr.cz/id/HES-000293,obdobi,HES-001483,744
+chebská kultura,Cheb Culture,amcr,HES-000294,https://api.aiscr.cz/id/HES-000294,obdobi,HES-001483,745
+slezskoplatěnická kultura,Silesian-Platěnice Culture,amcr,HES-000295,https://api.aiscr.cz/id/HES-000295,obdobi,HES-001484,751
+slezskoplatěnická kultura (hab),Silesian-Platěnice Culture (HaB),amcr,HES-000296,https://api.aiscr.cz/id/HES-000296,obdobi,HES-001484,752
+štítarská kultura,Štítary Culture,amcr,HES-000297,https://api.aiscr.cz/id/HES-000297,obdobi,HES-001484,754
+slezská kultura,Silesian Culture,amcr,HES-000298,https://api.aiscr.cz/id/HES-000298,obdobi,HES-001484,755
+nynická kultura,Nynice Culture,amcr,HES-000299,https://api.aiscr.cz/id/HES-000299,obdobi,HES-001484,756
+platěnická kultura,Platěnice Culture,amcr,HES-000300,https://api.aiscr.cz/id/HES-000300,obdobi,HES-001485,815
+raný středověk 2,Early Middle Ages 2,amcr,HES-000301,https://api.aiscr.cz/id/HES-000301,obdobi,HES-000412,1830
+vyspělé středohradištní období,Advanced Middle Hillfort Period,amcr,HES-000302,https://api.aiscr.cz/id/HES-000302,obdobi,HES-001471,1842
+vyspělé mladohradištní období,Advanced Late Hillfort Period,amcr,HES-000303,https://api.aiscr.cz/id/HES-000303,obdobi,HES-001472,1852
+zemědělský pravěk,farming prehistory,amcr,HES-000304,https://api.aiscr.cz/id/HES-000304,obdobi,HES-000411,1600
+oberlauterbašská skupina,Oberlauterbach Group,amcr,HES-000305,https://api.aiscr.cz/id/HES-000305,obdobi,HES-001473,414
+lengyelská kultura,Lengyel Culture,amcr,HES-000306,https://api.aiscr.cz/id/HES-000306,obdobi,HES-001474,423
+horákovská kultura,Horákov Culture,amcr,HES-000307,https://api.aiscr.cz/id/HES-000307,obdobi,HES-001485,814
+turnovský typ,Turnov type,amcr,HES-000308,https://api.aiscr.cz/id/HES-000308,obdobi,HES-001485,817
+had–lta,HaD–LtA,amcr,HES-000309,https://api.aiscr.cz/id/HES-000309,obdobi,HES-001486,820
+mladší doba halštatská (had2–3),Late Hallstatt Period (HaD2–3),amcr,HES-000310,https://api.aiscr.cz/id/HES-000310,obdobi,HES-001487,830
+gravettien,Gravettian,amcr,HES-000311,https://api.aiscr.cz/id/HES-000311,obdobi,HES-001467,135
+moustérien,Mousterian,amcr,HES-000312,https://api.aiscr.cz/id/HES-000312,obdobi,HES-001464,121
+taubachien,Taubachian,amcr,HES-000313,https://api.aiscr.cz/id/HES-000313,obdobi,HES-001464,122
+krumlovien,Krumlovian,amcr,HES-000314,https://api.aiscr.cz/id/HES-000314,obdobi,HES-001464,124
+mladší paleolit,Upper Palaeolithic,amcr,HES-000315,https://api.aiscr.cz/id/HES-000315,obdobi,HES-001467,130
+datace neurčena,unspecified dating,amcr,HES-000316,https://api.aiscr.cz/id/HES-000316,obdobi,HES-000418,2600
+badenská kultura,Baden Culture,amcr,HES-000317,https://api.aiscr.cz/id/HES-000317,obdobi,HES-001477,531
+kultura zvoncovitých pohárů,Bell Beaker Culture,amcr,HES-000318,https://api.aiscr.cz/id/HES-000318,obdobi,HES-001479,553
+starší doba bronzová,Early Bronze Age,amcr,HES-000319,https://api.aiscr.cz/id/HES-000319,obdobi,HES-001480,710
+hatvanská kultura,Hatvan Culture,amcr,HES-000320,https://api.aiscr.cz/id/HES-000320,obdobi,HES-001480,714
+věteřovská kultura,Věteřov Culture,amcr,HES-000321,https://api.aiscr.cz/id/HES-000321,obdobi,HES-001480,715
+střední doba bronzová,Middle Bronze Age,amcr,HES-000322,https://api.aiscr.cz/id/HES-000322,obdobi,HES-001481,720
+středodunajská mohylová kultura,Middle-Danubian Tumulus Culture,amcr,HES-000323,https://api.aiscr.cz/id/HES-000323,obdobi,HES-001481,721
+českofalcká mohylová kultura,Bohemian-Palatinate Tumulus Culture,amcr,HES-000324,https://api.aiscr.cz/id/HES-000324,obdobi,HES-001481,722
+raný středověk 4,Early Middle Ages 4,amcr,HES-000325,https://api.aiscr.cz/id/HES-000325,obdobi,HES-001472,1850
+pozdněhradištní období,Final Hillfort Period,amcr,HES-000326,https://api.aiscr.cz/id/HES-000326,obdobi,HES-001472,1853
+vrcholný–pozdní středověk,High–Late Middle Ages,amcr,HES-000327,https://api.aiscr.cz/id/HES-000327,obdobi,HES-000413,1900
+vrcholný středověk,High Middle Ages,amcr,HES-000328,https://api.aiscr.cz/id/HES-000328,obdobi,HES-000413,1910
+podmokelská skupina,Podmokly Group,amcr,HES-000329,https://api.aiscr.cz/id/HES-000329,obdobi,HES-001458,1011
+billendorfská kultura,Billendorf Culture,amcr,HES-000330,https://api.aiscr.cz/id/HES-000330,obdobi,HES-001484,757
+bylanská kultura,Bylany Culture,amcr,HES-000331,https://api.aiscr.cz/id/HES-000331,obdobi,HES-001485,812
+halštatská mohylová kultura,Hallstatt Tumulus Culture,amcr,HES-000332,https://api.aiscr.cz/id/HES-000332,obdobi,HES-001485,813
+střední doba laténská (ltb–c1),Middle La Tène Period (LtB–C1),amcr,HES-000333,https://api.aiscr.cz/id/HES-000333,obdobi,HES-001459,1020
+doba halštatská–laténská,Hallstatt–La Tène Period,amcr,HES-000334,https://api.aiscr.cz/id/HES-000334,obdobi,HES-000405,1100
+doba římská,Roman Period,amcr,HES-000335,https://api.aiscr.cz/id/HES-000335,obdobi,HES-000406,1200
+starší doba římská,Early Roman Period,amcr,HES-000336,https://api.aiscr.cz/id/HES-000336,obdobi,HES-001465,1210
+lužická kultura,Lusatian Culture,amcr,HES-000337,https://api.aiscr.cz/id/HES-000337,obdobi,HES-001483,741
+velatická kultura,Velatice Culture,amcr,HES-000338,https://api.aiscr.cz/id/HES-000338,obdobi,HES-001483,742
+milavečská kultura,Milavče Culture,amcr,HES-000339,https://api.aiscr.cz/id/HES-000339,obdobi,HES-001483,743
+želiezovská skupina,Želizovce Group,amcr,HES-000340,https://api.aiscr.cz/id/HES-000340,obdobi,HES-001473,413
+mladší doba římská,Late Roman Period,amcr,HES-000341,https://api.aiscr.cz/id/HES-000341,obdobi,HES-001466,1220
+doba stěhování národů,Migration Period,amcr,HES-000342,https://api.aiscr.cz/id/HES-000342,obdobi,HES-000408,1400
+starší doba stěhování národů,Early Migration Period,amcr,HES-000343,https://api.aiscr.cz/id/HES-000343,obdobi,HES-001469,1410
+dobrodzieńská skupina,Dobrodzień Group,amcr,HES-000344,https://api.aiscr.cz/id/HES-000344,obdobi,HES-001469,1411
+mladší doba stěhování národů,Late Migration Period,amcr,HES-000345,https://api.aiscr.cz/id/HES-000345,obdobi,HES-001470,1420
+doba římská–stěhování národů,Roman–Migration Period,amcr,HES-000346,https://api.aiscr.cz/id/HES-000346,obdobi,HES-000409,1500
+industriální období,Industrial Period,amcr,HES-000347,https://api.aiscr.cz/id/HES-000347,obdobi,HES-000417,2400
+industriální období 1,Industrial Period 1,amcr,HES-000348,https://api.aiscr.cz/id/HES-000348,obdobi,HES-000417,2410
+industriální období 2,Industrial Period 2,amcr,HES-000349,https://api.aiscr.cz/id/HES-000349,obdobi,HES-000417,2420
+novověk–industriální období,Modern–Industrial Period,amcr,HES-000350,https://api.aiscr.cz/id/HES-000350,obdobi,HES-000420,2500
+kultura kosihy-čaka,Kosihy-Čaka Culture,amcr,HES-000351,https://api.aiscr.cz/id/HES-000351,obdobi,HES-001479,552
+kultura chlopice-veselé,Chlopice-Veselé Culture,amcr,HES-000352,https://api.aiscr.cz/id/HES-000352,obdobi,HES-001479,554
+podolská kultura,Podolí Culture,amcr,HES-000353,https://api.aiscr.cz/id/HES-000353,obdobi,HES-001484,753
+doba halštatská,Hallstatt Period,amcr,HES-000354,https://api.aiscr.cz/id/HES-000354,obdobi,HES-000402,800
+časná doba laténská (lta),Early La Tène Period (LtA),amcr,HES-000355,https://api.aiscr.cz/id/HES-000355,obdobi,HES-001458,1010
+rané mladohradištní období,Early Late Hillfort Period,amcr,HES-000356,https://api.aiscr.cz/id/HES-000356,obdobi,HES-001472,1851
+bošácká skupina,Bošáca Group,amcr,HES-000357,https://api.aiscr.cz/id/HES-000357,obdobi,HES-001478,542
+únětická kultura,Únětice Culture,amcr,HES-000358,https://api.aiscr.cz/id/HES-000358,obdobi,HES-001480,712
+nitranská kultura,Nitra Culture,amcr,HES-000359,https://api.aiscr.cz/id/HES-000359,obdobi,HES-001480,713
+střední–mladší neolit,Middle–Late Neolithic,amcr,HES-000360,https://api.aiscr.cz/id/HES-000360,obdobi,HES-001474,420
+kultura s vypíchanou keramikou,Stroke Pottery Culture,amcr,HES-000361,https://api.aiscr.cz/id/HES-000361,obdobi,HES-001474,421
+kultura s moravskou malovanou keramikou 1,Moravian Painted Ware Culture 1,amcr,HES-000362,https://api.aiscr.cz/id/HES-000362,obdobi,HES-001474,422
+kultura s moravskou malovanou keramikou 2,Moravian Painted Ware Culture 2,amcr,HES-000363,https://api.aiscr.cz/id/HES-000363,obdobi,HES-001475,511
+schusseriedská kultura,Schussenried Culture,amcr,HES-000364,https://api.aiscr.cz/id/HES-000364,obdobi,HES-001475,513
+michelsberská kultura,Michelsberg Culture,amcr,HES-000365,https://api.aiscr.cz/id/HES-000365,obdobi,HES-001475,514
+starší eneolit,Early Eneolithic,amcr,HES-000366,https://api.aiscr.cz/id/HES-000366,obdobi,HES-001476,520
+kultura retz-bajč-křepice,Retz-Bajč-Křepice (Furchenstich) Culture,amcr,HES-000367,https://api.aiscr.cz/id/HES-000367,obdobi,HES-001476,521
+kultura nálevkovitých pohárů,Funnel Beaker Culture,amcr,HES-000368,https://api.aiscr.cz/id/HES-000368,obdobi,HES-001476,522
+ohrozimský typ,Ohrozim Type,amcr,HES-000369,https://api.aiscr.cz/id/HES-000369,obdobi,HES-001476,523
+střední eneolit,Middle Eneolithic,amcr,HES-000370,https://api.aiscr.cz/id/HES-000370,obdobi,HES-001477,530
+chamská kultura,Cham Culture,amcr,HES-000371,https://api.aiscr.cz/id/HES-000371,obdobi,HES-001477,532
+řivnáčská kultura,Řivnáč Culture,amcr,HES-000372,https://api.aiscr.cz/id/HES-000372,obdobi,HES-001477,533
+jevišovická kultura,Jevišovice Culture,amcr,HES-000373,https://api.aiscr.cz/id/HES-000373,obdobi,HES-001478,541
+mladší/pozdní eneolit,Late/Final Eneolithic,amcr,HES-000374,https://api.aiscr.cz/id/HES-000374,obdobi,HES-001479,550
+kultura se šňůrovou keramikou,Corded Ware Culture,amcr,HES-000375,https://api.aiscr.cz/id/HES-000375,obdobi,HES-001479,551
+starší doba halštatská (hac–d1),Early Hallstatt Period (HaC–D1),amcr,HES-000376,https://api.aiscr.cz/id/HES-000376,obdobi,HES-001485,810
+billendorfská kultura (hac),Billendorf Culture (HaC),amcr,HES-000377,https://api.aiscr.cz/id/HES-000377,obdobi,HES-001485,811
+slezskoplatěnická kultura (hac–d),Silesian–Platěnice Culture (HaC–D),amcr,HES-000378,https://api.aiscr.cz/id/HES-000378,obdobi,HES-001485,816
+raný středověk 3,Early Middle Ages 3,amcr,HES-000379,https://api.aiscr.cz/id/HES-000379,obdobi,HES-001471,1840
+středověk,Middle Ages,amcr,HES-000380,https://api.aiscr.cz/id/HES-000380,obdobi,HES-000414,2000
+novověk 1,Modern Period 1,amcr,HES-000381,https://api.aiscr.cz/id/HES-000381,obdobi,HES-000415,2110
+novověk 2,Modern Period 2,amcr,HES-000382,https://api.aiscr.cz/id/HES-000382,obdobi,HES-000415,2120
+pozdní doba bronzová,Final Bronze Age,amcr,HES-000383,https://api.aiscr.cz/id/HES-000383,obdobi,HES-001484,750
+doba bronzová–halštatská,Bronze Age–Hallstatt Period,amcr,HES-000384,https://api.aiscr.cz/id/HES-000384,obdobi,HES-000403,900
+raný středověk,Early Middle Ages,amcr,HES-000385,https://api.aiscr.cz/id/HES-000385,obdobi,HES-000412,1800
+raný středověk 1,Early Middle Ages 1,amcr,HES-000386,https://api.aiscr.cz/id/HES-000386,obdobi,HES-000412,1810
+neolit–eneolit,Neolithic–Eneolithic,amcr,HES-000387,https://api.aiscr.cz/id/HES-000387,obdobi,HES-000400,600
+saská lužická kultura,Saxonian-Lusatian Culture,amcr,HES-000388,https://api.aiscr.cz/id/HES-000388,obdobi,HES-001483,746
+kultura münchshöfenská,Münchshofen Culture,amcr,HES-000389,https://api.aiscr.cz/id/HES-000389,obdobi,HES-001474,424
+doba bronzová,Bronze Age,amcr,HES-000390,https://api.aiscr.cz/id/HES-000390,obdobi,HES-000401,700
+protoúnětická kultura,Proto-Únětice Culture,amcr,HES-000391,https://api.aiscr.cz/id/HES-000391,obdobi,HES-001480,711
+středověk–novověk,Middle Ages–Modern Period,amcr,HES-000392,https://api.aiscr.cz/id/HES-000392,obdobi,HES-000416,2300
+plaňanský typ,Plaňany Type,amcr,HES-000393,https://api.aiscr.cz/id/HES-000393,obdobi,HES-001465,1211
+šárecký typ,Šárka Type,amcr,HES-000394,https://api.aiscr.cz/id/HES-000394,obdobi,HES-001473,412
+paleolit,Palaeolithic,amcr,HES-000395,https://api.aiscr.cz/id/HES-000395,obdobi_kat,,100
+mezolit,Mesolithic,amcr,HES-000396,https://api.aiscr.cz/id/HES-000396,obdobi_kat,,200
+paleolit–mezolit,Palaeolithic–Mesolithic,amcr,HES-000397,https://api.aiscr.cz/id/HES-000397,obdobi_kat,,300
+neolit,Neolithic,amcr,HES-000398,https://api.aiscr.cz/id/HES-000398,obdobi_kat,,400
+eneolit,Eneolithic,amcr,HES-000399,https://api.aiscr.cz/id/HES-000399,obdobi_kat,,500
+neolit–eneolit,Neolithic–Eneolithic,amcr,HES-000400,https://api.aiscr.cz/id/HES-000400,obdobi_kat,,600
+doba bronzová,Bronze Age,amcr,HES-000401,https://api.aiscr.cz/id/HES-000401,obdobi_kat,,700
+doba halštatská,Hallstatt Period,amcr,HES-000402,https://api.aiscr.cz/id/HES-000402,obdobi_kat,,800
+doba bronzová–halštatská,Bronze Age–Hallstatt Period,amcr,HES-000403,https://api.aiscr.cz/id/HES-000403,obdobi_kat,,900
+doba laténská,La Tène Period,amcr,HES-000404,https://api.aiscr.cz/id/HES-000404,obdobi_kat,,1000
+doba halštatská–laténská,Hallstatt–La Tène Period,amcr,HES-000405,https://api.aiscr.cz/id/HES-000405,obdobi_kat,,1100
+doba římská,Roman Period,amcr,HES-000406,https://api.aiscr.cz/id/HES-000406,obdobi_kat,,1200
+doba laténská–římská,La Tène–Roman Period,amcr,HES-000407,https://api.aiscr.cz/id/HES-000407,obdobi_kat,,1300
+doba stěhování národů,Migration Period,amcr,HES-000408,https://api.aiscr.cz/id/HES-000408,obdobi_kat,,1400
+doba římská–stěhování národů,Roman–Migration Period,amcr,HES-000409,https://api.aiscr.cz/id/HES-000409,obdobi_kat,,1500
+pravěk,prehistory,amcr,HES-000411,https://api.aiscr.cz/id/HES-000411,obdobi_kat,,1700
+raný středověk,Early Middle Ages,amcr,HES-000412,https://api.aiscr.cz/id/HES-000412,obdobi_kat,,1800
+vrcholný–pozdní středověk,High–Late Middle Ages,amcr,HES-000413,https://api.aiscr.cz/id/HES-000413,obdobi_kat,,1900
+středověk,Middle Ages,amcr,HES-000414,https://api.aiscr.cz/id/HES-000414,obdobi_kat,,2000
+novověk,Modern Period,amcr,HES-000415,https://api.aiscr.cz/id/HES-000415,obdobi_kat,,2100
+středověk–novověk,Middle Ages–Modern Period,amcr,HES-000416,https://api.aiscr.cz/id/HES-000416,obdobi_kat,,2300
+industriální období,Industrial Period,amcr,HES-000417,https://api.aiscr.cz/id/HES-000417,obdobi_kat,,2400
+datace neurčena,unspecified dating,amcr,HES-000418,https://api.aiscr.cz/id/HES-000418,obdobi_kat,,2600
+novověk–industriální období,Modern–Industrial Period,amcr,HES-000420,https://api.aiscr.cz/id/HES-000420,obdobi_kat,,2500
+otopné zařízení,heating equipment,amcr,HES-000421,https://api.aiscr.cz/id/HES-000421,objekt_druh,HES-000580,1000
+kamna,stove,amcr,HES-000422,https://api.aiscr.cz/id/HES-000422,objekt_druh,HES-000580,1001
+ohniště,fireplace,amcr,HES-000423,https://api.aiscr.cz/id/HES-000423,objekt_druh,HES-000580,1002
+otopná pec,oven,amcr,HES-000424,https://api.aiscr.cz/id/HES-000424,objekt_druh,HES-000580,1003
+topný kanál,heating channel,amcr,HES-000425,https://api.aiscr.cz/id/HES-000425,objekt_druh,HES-000580,1004
+pohřební objekt,funerary structure,amcr,HES-000426,https://api.aiscr.cz/id/HES-000426,objekt_druh,HES-000581,1100
+hrob,grave,amcr,HES-000427,https://api.aiscr.cz/id/HES-000427,objekt_druh,HES-000581,1101
+hrob komorový,chamber grave,amcr,HES-000428,https://api.aiscr.cz/id/HES-000428,objekt_druh,HES-000581,1102
+hrob skříňkový,cist grave,amcr,HES-000429,https://api.aiscr.cz/id/HES-000429,objekt_druh,HES-000581,1103
+hrobka,tomb,amcr,HES-000430,https://api.aiscr.cz/id/HES-000430,objekt_druh,HES-000581,1104
+mohyla,burial mound,amcr,HES-000431,https://api.aiscr.cz/id/HES-000431,objekt_druh,HES-000581,1105
+kostnice,ossuary,amcr,HES-000432,https://api.aiscr.cz/id/HES-000432,objekt_druh,HES-000581,1106
+náhrobek/náhrobní kámen,gravestone,amcr,HES-000433,https://api.aiscr.cz/id/HES-000433,objekt_druh,HES-000581,1107
+pohřeb kostrový,inhumation burial,amcr,HES-000434,https://api.aiscr.cz/id/HES-000434,objekt_druh,HES-000581,1108
+pohřeb žárový,cremation burial,amcr,HES-000435,https://api.aiscr.cz/id/HES-000435,objekt_druh,HES-000581,1109
+pohřeb zvířete,animal burial,amcr,HES-000436,https://api.aiscr.cz/id/HES-000436,objekt_druh,HES-000581,1110
+pohřeb v sídlištním objektu,burial in settlement context,amcr,HES-000437,https://api.aiscr.cz/id/HES-000437,objekt_druh,HES-000581,1111
+budova/stavba,building/structure,amcr,HES-000438,https://api.aiscr.cz/id/HES-000438,objekt_druh,HES-000571,100
+budova obytná,residential building,amcr,HES-000439,https://api.aiscr.cz/id/HES-000439,objekt_druh,HES-000571,101
+budova hospodářská,non-residential building,amcr,HES-000440,https://api.aiscr.cz/id/HES-000440,objekt_druh,HES-000571,102
+jáma,pit,amcr,HES-000441,https://api.aiscr.cz/id/HES-000441,objekt_druh,HES-000572,201
+jáma kůlová/sloupová,stakehole/posthole,amcr,HES-000442,https://api.aiscr.cz/id/HES-000442,objekt_druh,HES-000572,202
+jáma stavební,construction pit,amcr,HES-000443,https://api.aiscr.cz/id/HES-000443,objekt_druh,HES-000572,204
+jáma zásobní,storage pit,amcr,HES-000444,https://api.aiscr.cz/id/HES-000444,objekt_druh,HES-000572,205
+cisterna,cistern,amcr,HES-000445,https://api.aiscr.cz/id/HES-000445,objekt_druh,HES-000572,206
+jáma odpadní/jímka,waste pit/cesspit,amcr,HES-000446,https://api.aiscr.cz/id/HES-000446,objekt_druh,HES-000572,203
+kůl/sloup,stake/post,amcr,HES-000447,https://api.aiscr.cz/id/HES-000447,objekt_druh,HES-000573,305
+nika,niche,amcr,HES-000448,https://api.aiscr.cz/id/HES-000448,objekt_druh,HES-000573,306
+pilíř,pillar,amcr,HES-000449,https://api.aiscr.cz/id/HES-000449,objekt_druh,HES-000573,307
+pilota,pier,amcr,HES-000450,https://api.aiscr.cz/id/HES-000450,objekt_druh,HES-000573,308
+podlaha (konstrukce),floor (construction),amcr,HES-000451,https://api.aiscr.cz/id/HES-000451,objekt_druh,HES-000573,309
+schodiště,staircase,amcr,HES-000452,https://api.aiscr.cz/id/HES-000452,objekt_druh,HES-000573,310
+vrstva/souvrství,layer/layer sequence,amcr,HES-000453,https://api.aiscr.cz/id/HES-000453,objekt_druh,HES-000574,400
+destrukční vrstva/souvrství,destruction layer/sequence,amcr,HES-000454,https://api.aiscr.cz/id/HES-000454,objekt_druh,HES-000574,401
+geologická/přirozená vrstva,natural/geological layer,amcr,HES-000455,https://api.aiscr.cz/id/HES-000455,objekt_druh,HES-000574,402
+násep,bank,amcr,HES-000456,https://api.aiscr.cz/id/HES-000456,objekt_druh,HES-000574,403
+navážka,backfill,amcr,HES-000457,https://api.aiscr.cz/id/HES-000457,objekt_druh,HES-000574,404
+odpadní vrstva/souvrství,waste layer/sequence,amcr,HES-000458,https://api.aiscr.cz/id/HES-000458,objekt_druh,HES-000574,405
+podlaha (vrstva/souvrství),floor layer/sequence,amcr,HES-000459,https://api.aiscr.cz/id/HES-000459,objekt_druh,HES-000574,406
+sídlištní vrstva/souvrství,settlement layer/sequence,amcr,HES-000460,https://api.aiscr.cz/id/HES-000460,objekt_druh,HES-000574,407
+splach/naplavenina,colluvial/alluvial layer,amcr,HES-000461,https://api.aiscr.cz/id/HES-000461,objekt_druh,HES-000574,408
+výplň/zásyp,fill/deposit,amcr,HES-000462,https://api.aiscr.cz/id/HES-000462,objekt_druh,HES-000574,409
+žároviště,burned layer,amcr,HES-000463,https://api.aiscr.cz/id/HES-000463,objekt_druh,HES-000574,410
+kanalizace,sewer,amcr,HES-000464,https://api.aiscr.cz/id/HES-000464,objekt_druh,HES-000575,501
+kostel,church,amcr,HES-000465,https://api.aiscr.cz/id/HES-000465,objekt_druh,HES-000577,702
+zemědělský objekt,agricultural structure,amcr,HES-000466,https://api.aiscr.cz/id/HES-000466,objekt_druh,HES-000578,806
+stopy orby,plough marks,amcr,HES-000467,https://api.aiscr.cz/id/HES-000467,objekt_druh,HES-000578,810
+bastion/reduta,bastion/redoubt,amcr,HES-000468,https://api.aiscr.cz/id/HES-000468,objekt_druh,HES-000579,901
+stéla,stela,amcr,HES-000469,https://api.aiscr.cz/id/HES-000469,objekt_druh,HES-000581,1112
+přírodní útvar,natural landform,amcr,HES-000470,https://api.aiscr.cz/id/HES-000470,objekt_druh,HES-000582,1200
+erozní rýha,gully/ravine,amcr,HES-000471,https://api.aiscr.cz/id/HES-000471,objekt_druh,HES-000582,1201
+jeskyně/skalní prostor,cave/abri,amcr,HES-000472,https://api.aiscr.cz/id/HES-000472,objekt_druh,HES-000582,1202
+pramen,spring,amcr,HES-000473,https://api.aiscr.cz/id/HES-000473,objekt_druh,HES-000582,1203
+vodoteč,riverine water bodies,amcr,HES-000474,https://api.aiscr.cz/id/HES-000474,objekt_druh,HES-000582,1204
+vývrat,windthrow,amcr,HES-000475,https://api.aiscr.cz/id/HES-000475,objekt_druh,HES-000582,1205
+pyrotechnologické zařízení,pyrotechnological device,amcr,HES-000476,https://api.aiscr.cz/id/HES-000476,objekt_druh,HES-000583,1300
+pec,kiln,amcr,HES-000477,https://api.aiscr.cz/id/HES-000477,objekt_druh,HES-000583,1302
+haltýř,spring house,amcr,HES-000478,https://api.aiscr.cz/id/HES-000478,objekt_druh,HES-000571,104
+kašna,fountain,amcr,HES-000479,https://api.aiscr.cz/id/HES-000479,objekt_druh,HES-000571,105
+mlýn,mill,amcr,HES-000480,https://api.aiscr.cz/id/HES-000480,objekt_druh,HES-000571,106
+palác,palace,amcr,HES-000481,https://api.aiscr.cz/id/HES-000481,objekt_druh,HES-000571,107
+stáj/chlév,stable/cowshed,amcr,HES-000482,https://api.aiscr.cz/id/HES-000482,objekt_druh,HES-000571,108
+stodola,barn,amcr,HES-000483,https://api.aiscr.cz/id/HES-000483,objekt_druh,HES-000571,109
+sýpka/špýchar,granary/storehouse,amcr,HES-000484,https://api.aiscr.cz/id/HES-000484,objekt_druh,HES-000571,110
+zvonice,bell tower,amcr,HES-000485,https://api.aiscr.cz/id/HES-000485,objekt_druh,HES-000571,112
+zahloubený objekt,sunken feature,amcr,HES-000486,https://api.aiscr.cz/id/HES-000486,objekt_druh,HES-000572,200
+loch,larder (cellar),amcr,HES-000487,https://api.aiscr.cz/id/HES-000487,objekt_druh,HES-000572,208
+sklep,cellar,amcr,HES-000488,https://api.aiscr.cz/id/HES-000488,objekt_druh,HES-000572,210
+výkop,cut,amcr,HES-000489,https://api.aiscr.cz/id/HES-000489,objekt_druh,HES-000572,212
+žlab,ditch,amcr,HES-000490,https://api.aiscr.cz/id/HES-000490,objekt_druh,HES-000572,213
+konstrukční prvek,architectural element,amcr,HES-000491,https://api.aiscr.cz/id/HES-000491,objekt_druh,HES-000573,300
+dláždění,pavement,amcr,HES-000492,https://api.aiscr.cz/id/HES-000492,objekt_druh,HES-000573,301
+hráz,embankment/dam,amcr,HES-000493,https://api.aiscr.cz/id/HES-000493,objekt_druh,HES-000573,302
+chodba,corridor,amcr,HES-000494,https://api.aiscr.cz/id/HES-000494,objekt_druh,HES-000573,303
+klenba,vaults,amcr,HES-000495,https://api.aiscr.cz/id/HES-000495,objekt_druh,HES-000573,304
+kaple,chapel,amcr,HES-000496,https://api.aiscr.cz/id/HES-000496,objekt_druh,HES-000577,701
+(polo)zemnice,pit house,amcr,HES-000497,https://api.aiscr.cz/id/HES-000497,objekt_druh,HES-000571,103
+základy,foundations,amcr,HES-000498,https://api.aiscr.cz/id/HES-000498,objekt_druh,HES-000573,311
+křtitelnice,baptismal font,amcr,HES-000499,https://api.aiscr.cz/id/HES-000499,objekt_druh,HES-000577,703
+menhir,menhir,amcr,HES-000500,https://api.aiscr.cz/id/HES-000500,objekt_druh,HES-000577,705
+oltář,altar,amcr,HES-000501,https://api.aiscr.cz/id/HES-000501,objekt_druh,HES-000577,706
+smírčí kříž,wayside cross,amcr,HES-000502,https://api.aiscr.cz/id/HES-000502,objekt_druh,HES-000577,708
+mezní pás,field boundary,amcr,HES-000503,https://api.aiscr.cz/id/HES-000503,objekt_druh,HES-000578,807
+plužina,field system,amcr,HES-000504,https://api.aiscr.cz/id/HES-000504,objekt_druh,HES-000578,808
+rybník/nádrž,pond/water tank,amcr,HES-000505,https://api.aiscr.cz/id/HES-000505,objekt_druh,HES-000578,809
+palebné postavení,gun emplacement,amcr,HES-000506,https://api.aiscr.cz/id/HES-000506,objekt_druh,HES-000579,907
+palisáda,palisade,amcr,HES-000507,https://api.aiscr.cz/id/HES-000507,objekt_druh,HES-000579,908
+příkop,moat,amcr,HES-000508,https://api.aiscr.cz/id/HES-000508,objekt_druh,HES-000579,910
+věž,tower,amcr,HES-000509,https://api.aiscr.cz/id/HES-000509,objekt_druh,HES-000579,912
+věžice,half tower,amcr,HES-000510,https://api.aiscr.cz/id/HES-000510,objekt_druh,HES-000579,913
+šibenice,gallows,amcr,HES-000511,https://api.aiscr.cz/id/HES-000511,objekt_druh,HES-000571,111
+hliník,clay pit,amcr,HES-000512,https://api.aiscr.cz/id/HES-000512,objekt_druh,HES-000572,207
+náhon,millrace,amcr,HES-000513,https://api.aiscr.cz/id/HES-000513,objekt_druh,HES-000572,209
+studna,water well,amcr,HES-000514,https://api.aiscr.cz/id/HES-000514,objekt_druh,HES-000572,211
+inženýrské sítě,utilities,amcr,HES-000515,https://api.aiscr.cz/id/HES-000515,objekt_druh,HES-000575,500
+kolektor,collector,amcr,HES-000516,https://api.aiscr.cz/id/HES-000516,objekt_druh,HES-000575,502
+trativod,drainage,amcr,HES-000517,https://api.aiscr.cz/id/HES-000517,objekt_druh,HES-000575,503
+vodovod,water supply pipe,amcr,HES-000518,https://api.aiscr.cz/id/HES-000518,objekt_druh,HES-000575,504
+součást komunikace,transportation structure,amcr,HES-000519,https://api.aiscr.cz/id/HES-000519,objekt_druh,HES-000576,600
+cesta,path/road,amcr,HES-000520,https://api.aiscr.cz/id/HES-000520,objekt_druh,HES-000576,601
+hať,corduroy road,amcr,HES-000521,https://api.aiscr.cz/id/HES-000521,objekt_druh,HES-000576,602
+mezník/patník,milestone/boundary stone,amcr,HES-000522,https://api.aiscr.cz/id/HES-000522,objekt_druh,HES-000576,603
+most,bridge,amcr,HES-000523,https://api.aiscr.cz/id/HES-000523,objekt_druh,HES-000576,604
+úvoz,hollow way,amcr,HES-000524,https://api.aiscr.cz/id/HES-000524,objekt_druh,HES-000576,605
+kultovní/sakrální objekt,ritual/sacral feature,amcr,HES-000525,https://api.aiscr.cz/id/HES-000525,objekt_druh,HES-000577,700
+zahrada,garden,amcr,HES-000526,https://api.aiscr.cz/id/HES-000526,objekt_druh,HES-000578,811
+ohrazení/fortifikace,enclosure/fortification,amcr,HES-000527,https://api.aiscr.cz/id/HES-000527,objekt_druh,HES-000579,900
+bašta,wall tower,amcr,HES-000528,https://api.aiscr.cz/id/HES-000528,objekt_druh,HES-000579,902
+brána,gate,amcr,HES-000529,https://api.aiscr.cz/id/HES-000529,objekt_druh,HES-000579,903
+hradba,defensive wall,amcr,HES-000530,https://api.aiscr.cz/id/HES-000530,objekt_druh,HES-000579,904
+motte,motte,amcr,HES-000531,https://api.aiscr.cz/id/HES-000531,objekt_druh,HES-000579,905
+ohradní zeď/plot,wall/fence,amcr,HES-000532,https://api.aiscr.cz/id/HES-000532,objekt_druh,HES-000579,906
+parkánová hradba,zwinger wall,amcr,HES-000533,https://api.aiscr.cz/id/HES-000533,objekt_druh,HES-000579,909
+val,rampart,amcr,HES-000534,https://api.aiscr.cz/id/HES-000534,objekt_druh,HES-000579,911
+zákop,trench,amcr,HES-000535,https://api.aiscr.cz/id/HES-000535,objekt_druh,HES-000579,914
+převýšená plocha,mound,amcr,HES-000536,https://api.aiscr.cz/id/HES-000536,objekt_druh,HES-000585,1601
+zahloubená plocha,depression,amcr,HES-000537,https://api.aiscr.cz/id/HES-000537,objekt_druh,HES-000585,1602
+lineární převýšený útvar,linear mound,amcr,HES-000538,https://api.aiscr.cz/id/HES-000538,objekt_druh,HES-000585,1603
+lineární zahloubený útvar,linear depression,amcr,HES-000539,https://api.aiscr.cz/id/HES-000539,objekt_druh,HES-000585,1604
+malba/freska,painting/fresco,amcr,HES-000540,https://api.aiscr.cz/id/HES-000540,objekt_druh,HES-000577,704
+skalní rytina,rock carving,amcr,HES-000541,https://api.aiscr.cz/id/HES-000541,objekt_druh,HES-000577,707
+výrobní objekt,production feature,amcr,HES-000542,https://api.aiscr.cz/id/HES-000542,objekt_druh,HES-000578,800
+místo zpracování,processing place,amcr,HES-000543,https://api.aiscr.cz/id/HES-000543,objekt_druh,HES-000578,801
+místo výroby,production place,amcr,HES-000544,https://api.aiscr.cz/id/HES-000544,objekt_druh,HES-000578,802
+hamr,hammer mill,amcr,HES-000545,https://api.aiscr.cz/id/HES-000545,objekt_druh,HES-000578,803
+kovárna,blacksmith,amcr,HES-000546,https://api.aiscr.cz/id/HES-000546,objekt_druh,HES-000578,804
+vápenická jáma,lime pit,amcr,HES-000547,https://api.aiscr.cz/id/HES-000547,objekt_druh,HES-000578,805
+pec cihlářská,brick oven,amcr,HES-000548,https://api.aiscr.cz/id/HES-000548,objekt_druh,HES-000583,1303
+pec dehtářská,tar pit,amcr,HES-000549,https://api.aiscr.cz/id/HES-000549,objekt_druh,HES-000583,1304
+pec hrnčířská,pottery kiln,amcr,HES-000550,https://api.aiscr.cz/id/HES-000550,objekt_druh,HES-000583,1305
+pec hutnická,iron-smelting furnace,amcr,HES-000551,https://api.aiscr.cz/id/HES-000551,objekt_druh,HES-000583,1306
+pec chlebová,bake oven,amcr,HES-000552,https://api.aiscr.cz/id/HES-000552,objekt_druh,HES-000583,1307
+pec kovolitecká,foundry,amcr,HES-000553,https://api.aiscr.cz/id/HES-000553,objekt_druh,HES-000583,1308
+milíř,charcoal kiln,amcr,HES-000554,https://api.aiscr.cz/id/HES-000554,objekt_druh,HES-000583,1301
+pec sklářská,glass furnace,amcr,HES-000555,https://api.aiscr.cz/id/HES-000555,objekt_druh,HES-000583,1309
+pec vápenická,lime kiln,amcr,HES-000556,https://api.aiscr.cz/id/HES-000556,objekt_druh,HES-000583,1310
+kovářská výheň,forge,amcr,HES-000557,https://api.aiscr.cz/id/HES-000557,objekt_druh,HES-000583,1311
+těžební objekt,mining feature,amcr,HES-000558,https://api.aiscr.cz/id/HES-000558,objekt_druh,HES-000584,1400
+místo těžby,extracting place,amcr,HES-000559,https://api.aiscr.cz/id/HES-000559,objekt_druh,HES-000584,1401
+lom,quarry,amcr,HES-000560,https://api.aiscr.cz/id/HES-000560,objekt_druh,HES-000584,1402
+obval,spoil bank,amcr,HES-000561,https://api.aiscr.cz/id/HES-000561,objekt_druh,HES-000584,1403
+pinka,binge,amcr,HES-000562,https://api.aiscr.cz/id/HES-000562,objekt_druh,HES-000584,1404
+sejp/halda,spoil heap,amcr,HES-000563,https://api.aiscr.cz/id/HES-000563,objekt_druh,HES-000584,1405
+šachta,shaft,amcr,HES-000564,https://api.aiscr.cz/id/HES-000564,objekt_druh,HES-000584,1406
+štola,adit,amcr,HES-000565,https://api.aiscr.cz/id/HES-000565,objekt_druh,HES-000584,1407
+těžební jáma,mining pit,amcr,HES-000566,https://api.aiscr.cz/id/HES-000566,objekt_druh,HES-000584,1408
+nespecifikovaný reliéfní útvar,unspecified terrain feature,amcr,HES-000567,https://api.aiscr.cz/id/HES-000567,objekt_druh,HES-000585,1600
+neklidný terén,uneven surface,amcr,HES-000568,https://api.aiscr.cz/id/HES-000568,objekt_druh,HES-000585,1605
+plošina,platform,amcr,HES-000569,https://api.aiscr.cz/id/HES-000569,objekt_druh,HES-000585,1606
+terénní hrana,terrain edge,amcr,HES-000570,https://api.aiscr.cz/id/HES-000570,objekt_druh,HES-000585,1607
+budova/stavba,building/structure,amcr,HES-000571,https://api.aiscr.cz/id/HES-000571,objekt_druh_kat,,100
+zahloubený objekt,sunken feature,amcr,HES-000572,https://api.aiscr.cz/id/HES-000572,objekt_druh_kat,,200
+konstrukční prvek,architectural element,amcr,HES-000573,https://api.aiscr.cz/id/HES-000573,objekt_druh_kat,,300
+vrstva/souvrství,layer/layer sequence,amcr,HES-000574,https://api.aiscr.cz/id/HES-000574,objekt_druh_kat,,400
+inženýrské sítě,utilities,amcr,HES-000575,https://api.aiscr.cz/id/HES-000575,objekt_druh_kat,,500
+komunikace,transportation structure,amcr,HES-000576,https://api.aiscr.cz/id/HES-000576,objekt_druh_kat,,600
+kultovní/sakrální objekt,ritual/sacral feature,amcr,HES-000577,https://api.aiscr.cz/id/HES-000577,objekt_druh_kat,,700
+objekt/stopa výroby,production feature/trace,amcr,HES-000578,https://api.aiscr.cz/id/HES-000578,objekt_druh_kat,,800
+ohrazení/fortifikace,enclosure/fortification,amcr,HES-000579,https://api.aiscr.cz/id/HES-000579,objekt_druh_kat,,900
+otopné zařízení,heating equipment,amcr,HES-000580,https://api.aiscr.cz/id/HES-000580,objekt_druh_kat,,1000
+pohřební objekt,funerary structure,amcr,HES-000581,https://api.aiscr.cz/id/HES-000581,objekt_druh_kat,,1100
+přírodní útvar,natural landform,amcr,HES-000582,https://api.aiscr.cz/id/HES-000582,objekt_druh_kat,,1200
+pyrotechnologické zařízení,pyrotechnological device,amcr,HES-000583,https://api.aiscr.cz/id/HES-000583,objekt_druh_kat,,1300
+těžební objekt,mining feature,amcr,HES-000584,https://api.aiscr.cz/id/HES-000584,objekt_druh_kat,,1400
+nespecifikovaný reliéfní útvar,unspecified terrain feature,amcr,HES-000585,https://api.aiscr.cz/id/HES-000585,objekt_druh_kat,,1600
+neznámé počasí,unknown weather,amcr,HES-000586,https://api.aiscr.cz/id/HES-000586,pocasi,,1
+deštivo,rainy,amcr,HES-000587,https://api.aiscr.cz/id/HES-000587,pocasi,,2
+oblačno,cloudy,amcr,HES-000588,https://api.aiscr.cz/id/HES-000588,pocasi,,3
+"oblačno, zataženo","cloudy, overcast",amcr,HES-000589,https://api.aiscr.cz/id/HES-000589,pocasi,,4
+slunečno,sunny,amcr,HES-000590,https://api.aiscr.cz/id/HES-000590,pocasi,,5
+"slunečno, oblačno","sunny, cloudy",amcr,HES-000591,https://api.aiscr.cz/id/HES-000591,pocasi,,6
+"slunečno, oblačno, zataženo","sunny, cloudy, overcast",amcr,HES-000592,https://api.aiscr.cz/id/HES-000592,pocasi,,7
+zataženo,overcast,amcr,HES-000593,https://api.aiscr.cz/id/HES-000593,pocasi,,8
+odborný záměr,expert project,amcr,HES-000594,https://api.aiscr.cz/id/HES-000594,adb_podnet,,1
+badatelský záměr,research project,amcr,HES-000595,https://api.aiscr.cz/id/HES-000595,adb_podnet,,2
+inženýrsko-geologický průzkum,engineering-geological survey,amcr,HES-000596,https://api.aiscr.cz/id/HES-000596,adb_podnet,,3
+havárie/stavební narušení,accident/building disruption,amcr,HES-000597,https://api.aiscr.cz/id/HES-000597,adb_podnet,,4
+inženýrské sítě,engineering networks,amcr,HES-000598,https://api.aiscr.cz/id/HES-000598,adb_podnet,,5
+jiný podnět,other motivation,amcr,HES-000599,https://api.aiscr.cz/id/HES-000599,adb_podnet,,6
+liniová stavba,line construction,amcr,HES-000600,https://api.aiscr.cz/id/HES-000600,adb_podnet,,7
+neznámý,unknown,amcr,HES-000601,https://api.aiscr.cz/id/HES-000601,adb_podnet,,8
+obdělávání půdy,farming,amcr,HES-000602,https://api.aiscr.cz/id/HES-000602,adb_podnet,,9
+stavba,construction,amcr,HES-000603,https://api.aiscr.cz/id/HES-000603,adb_podnet,,10
+antrakologie/xylotomie,anthracology/xylotomy,amcr,HES-000604,https://api.aiscr.cz/id/HES-000604,posudek_typ,HES-001491,6
+biologická antropologie,biological anthropology,amcr,HES-000605,https://api.aiscr.cz/id/HES-000605,posudek_typ,HES-001491,12
+archeogenetika,archaeogenetics,amcr,HES-000606,https://api.aiscr.cz/id/HES-000606,posudek_typ,HES-001491,8
+archeozoologie,archaeozoology,amcr,HES-000607,https://api.aiscr.cz/id/HES-000607,posudek_typ,HES-001491,11
+radiouhlíkové datování,radiocarbon dating,amcr,HES-000608,https://api.aiscr.cz/id/HES-000608,posudek_typ,HES-001492,3
+dendrochronologie,dendrochronology,amcr,HES-000609,https://api.aiscr.cz/id/HES-000609,posudek_typ,HES-001492,2
+diatomární analýza,diatomic analysis,amcr,HES-000610,https://api.aiscr.cz/id/HES-000610,posudek_typ,HES-001491,13
+fytolitová analýza,phytological analysis,amcr,HES-000612,https://api.aiscr.cz/id/HES-000612,posudek_typ,HES-001491,14
+geoarcheologie,geoarchaeology,amcr,HES-000613,https://api.aiscr.cz/id/HES-000613,posudek_typ,HES-001493,19
+geofyzika,geophysics,amcr,HES-000614,https://api.aiscr.cz/id/HES-000614,posudek_typ,HES-001493,20
+geochemie,geochemistry,amcr,HES-000615,https://api.aiscr.cz/id/HES-000615,posudek_typ,HES-001493,21
+chemická analýza,chemical analysis,amcr,HES-000617,https://api.aiscr.cz/id/HES-000617,posudek_typ,HES-001494,29
+analýza stabilních izotopů,stable isotope analysis,amcr,HES-000618,https://api.aiscr.cz/id/HES-000618,posudek_typ,HES-001491,5
+expertní analýza,expert analysis,amcr,HES-000619,https://api.aiscr.cz/id/HES-000619,posudek_typ,HES-001495,33
+makrozbytková analýza,macroremains analysis,amcr,HES-000620,https://api.aiscr.cz/id/HES-000620,posudek_typ,HES-001491,15
+archeomalakologie,archeomalacology,amcr,HES-000621,https://api.aiscr.cz/id/HES-000621,posudek_typ,HES-001491,9
+numismatika,numismatics,amcr,HES-000623,https://api.aiscr.cz/id/HES-000623,posudek_typ,HES-001494,32
+archeoentomologie,archeoentomology,amcr,HES-000624,https://api.aiscr.cz/id/HES-000624,posudek_typ,HES-001491,7
+palynologie,palynology,amcr,HES-000625,https://api.aiscr.cz/id/HES-000625,posudek_typ,HES-001491,17
+archeoparazitologie,archeoparasitology,amcr,HES-000626,https://api.aiscr.cz/id/HES-000626,posudek_typ,HES-001491,10
+pedologie,pedology,amcr,HES-000627,https://api.aiscr.cz/id/HES-000627,posudek_typ,HES-001493,26
+petrografie/mineralogie,petrography,amcr,HES-000628,https://api.aiscr.cz/id/HES-000628,posudek_typ,HES-001493,27
+konzervace a restaurování,conservation and restoration,amcr,HES-000629,https://api.aiscr.cz/id/HES-000629,posudek_typ,HES-001495,35
+metalografie,metallography,amcr,HES-000630,https://api.aiscr.cz/id/HES-000630,posudek_typ,HES-001494,31
+prvková analýza,elemental analysis,amcr,HES-000631,https://api.aiscr.cz/id/HES-000631,posudek_typ,HES-001494,30
+stavebně-historický průzkum,building-historical survey,amcr,HES-000632,https://api.aiscr.cz/id/HES-000632,posudek_typ,HES-001495,36
+materiálová analýza,material analysis,amcr,HES-000633,https://api.aiscr.cz/id/HES-000633,posudek_typ,HES-001494,28
+absolutní datování,absolute dating,amcr,HES-000634,https://api.aiscr.cz/id/HES-000634,posudek_typ,HES-001492,1
+dýmka,pipe,amcr,HES-000635,https://api.aiscr.cz/id/HES-000635,predmet_druh,HES-000849,804
+džbán,jug,amcr,HES-000636,https://api.aiscr.cz/id/HES-000636,predmet_druh,HES-000849,806
+zápona,clasp,amcr,HES-000637,https://api.aiscr.cz/id/HES-000637,predmet_druh,HES-000857,1609
+zavazadlo,luggage,amcr,HES-000638,https://api.aiscr.cz/id/HES-000638,predmet_druh,HES-000857,1610
+zlomek kosti,bone fragment,amcr,HES-000639,https://api.aiscr.cz/id/HES-000639,predmet_druh,HES-000842,104
+kamenná industrie,lithics,amcr,HES-000640,https://api.aiscr.cz/id/HES-000640,predmet_druh,HES-000842,105
+doklad umění/kultu,artistic/ritual object,amcr,HES-000641,https://api.aiscr.cz/id/HES-000641,predmet_druh,HES-000844,300
+kostra,skeleton,amcr,HES-000642,https://api.aiscr.cz/id/HES-000642,predmet_druh,HES-000845,403
+přechovávaná přírodnina,natural object,amcr,HES-000643,https://api.aiscr.cz/id/HES-000643,predmet_druh,HES-000845,408
+rostlinné makrozbytky,plant macro-remain,amcr,HES-000644,https://api.aiscr.cz/id/HES-000644,predmet_druh,HES-000845,409
+struska,slag,amcr,HES-000645,https://api.aiscr.cz/id/HES-000645,predmet_druh,HES-000845,411
+vejce,eggshell,amcr,HES-000646,https://api.aiscr.cz/id/HES-000646,predmet_druh,HES-000845,413
+zub,tooth,amcr,HES-000647,https://api.aiscr.cz/id/HES-000647,predmet_druh,HES-000845,414
+součást zbroje,armor component,amcr,HES-000648,https://api.aiscr.cz/id/HES-000648,predmet_druh,HES-000847,612
+zbraň palná,firearm,amcr,HES-000649,https://api.aiscr.cz/id/HES-000649,predmet_druh,HES-000847,617
+bankovka,paper money,amcr,HES-000650,https://api.aiscr.cz/id/HES-000650,predmet_druh,HES-000848,701
+akvamanile,aquamanile,amcr,HES-000651,https://api.aiscr.cz/id/HES-000651,predmet_druh,HES-000849,801
+amfora,amphorae,amcr,HES-000652,https://api.aiscr.cz/id/HES-000652,predmet_druh,HES-000849,802
+nástroj hrubý,utensil,amcr,HES-000653,https://api.aiscr.cz/id/HES-000653,predmet_druh,HES-000850,900
+kovadlina,anvil,amcr,HES-000654,https://api.aiscr.cz/id/HES-000654,predmet_druh,HES-000850,908
+lopata/rýč,shovel/spade,amcr,HES-000655,https://api.aiscr.cz/id/HES-000655,predmet_druh,HES-000850,909
+otloukač,hammerstone,amcr,HES-000656,https://api.aiscr.cz/id/HES-000656,predmet_druh,HES-000850,911
+pila,saw,amcr,HES-000657,https://api.aiscr.cz/id/HES-000657,predmet_druh,HES-000850,912
+součást pluhu,plow component,amcr,HES-000658,https://api.aiscr.cz/id/HES-000658,predmet_druh,HES-000850,916
+srp,sickle,amcr,HES-000659,https://api.aiscr.cz/id/HES-000659,predmet_druh,HES-000850,917
+škrabadlo,endscraper,amcr,HES-000660,https://api.aiscr.cz/id/HES-000660,predmet_druh,HES-000850,918
+břitva,razor,amcr,HES-000661,https://api.aiscr.cz/id/HES-000661,predmet_druh,HES-000851,1002
+čepel/čepelka,blade/small blade,amcr,HES-000662,https://api.aiscr.cz/id/HES-000662,predmet_druh,HES-000851,1003
+korálek,bead,amcr,HES-000663,https://api.aiscr.cz/id/HES-000663,predmet_druh,HES-000853,1205
+křížek,cross,amcr,HES-000664,https://api.aiscr.cz/id/HES-000664,predmet_druh,HES-000853,1206
+nákrčník,neck ring,amcr,HES-000665,https://api.aiscr.cz/id/HES-000665,predmet_druh,HES-000853,1208
+náramek,bracelet,amcr,HES-000666,https://api.aiscr.cz/id/HES-000666,predmet_druh,HES-000853,1211
+náušnice,earring,amcr,HES-000667,https://api.aiscr.cz/id/HES-000667,predmet_druh,HES-000853,1212
+nákončí,mordant,amcr,HES-000668,https://api.aiscr.cz/id/HES-000668,predmet_druh,HES-000853,1213
+prsten,finger ring,amcr,HES-000669,https://api.aiscr.cz/id/HES-000669,predmet_druh,HES-000853,1214
+listina,deed,amcr,HES-000670,https://api.aiscr.cz/id/HES-000670,predmet_druh,HES-000854,1302
+třmen,stirrup,amcr,HES-000671,https://api.aiscr.cz/id/HES-000671,predmet_druh,HES-000855,1407
+udidlo,bridle bit,amcr,HES-000672,https://api.aiscr.cz/id/HES-000672,predmet_druh,HES-000855,1408
+součást hrobu,grave component,amcr,HES-000673,https://api.aiscr.cz/id/HES-000673,predmet_druh,HES-000856,1500
+součást oděvu,costume component,amcr,HES-000674,https://api.aiscr.cz/id/HES-000674,predmet_druh,HES-000857,1600
+knoflík,button,amcr,HES-000675,https://api.aiscr.cz/id/HES-000675,predmet_druh,HES-000857,1601
+opasek,belt,amcr,HES-000676,https://api.aiscr.cz/id/HES-000676,predmet_druh,HES-000857,1604
+pochva/pouzdro,sheath,amcr,HES-000677,https://api.aiscr.cz/id/HES-000677,predmet_druh,HES-000857,1605
+dlaždice,floor tile,amcr,HES-000678,https://api.aiscr.cz/id/HES-000678,predmet_druh,HES-000858,1702
+hřeb/hřebík/nýt,nail/rivet,amcr,HES-000679,https://api.aiscr.cz/id/HES-000679,predmet_druh,HES-000858,1703
+plech,metal sheet,amcr,HES-000680,https://api.aiscr.cz/id/HES-000680,predmet_druh,HES-000846,506
+herní předmět,game equipment,amcr,HES-000681,https://api.aiscr.cz/id/HES-000681,predmet_druh,HES-000859,1800
+cedník,colander,amcr,HES-000682,https://api.aiscr.cz/id/HES-000682,predmet_druh,HES-000849,803
+průvlečka,clothing buckle,amcr,HES-000683,https://api.aiscr.cz/id/HES-000683,predmet_druh,HES-000857,1606
+hrací kámen,game piece,amcr,HES-000684,https://api.aiscr.cz/id/HES-000684,predmet_druh,HES-000859,1801
+vzorek geologický,geological sample,amcr,HES-000685,https://api.aiscr.cz/id/HES-000685,predmet_druh,HES-000860,1903
+vzorek malakologický,malacological sample,amcr,HES-000686,https://api.aiscr.cz/id/HES-000686,predmet_druh,HES-000860,1904
+prkno/fošna,board/plank,amcr,HES-000687,https://api.aiscr.cz/id/HES-000687,predmet_druh,HES-000858,1712
+stéla,stela,amcr,HES-000688,https://api.aiscr.cz/id/HES-000688,predmet_druh,HES-000856,1502
+dyzna,nozzle,amcr,HES-000689,https://api.aiscr.cz/id/HES-000689,predmet_druh,HES-000849,805
+konvice,pitcher,amcr,HES-000690,https://api.aiscr.cz/id/HES-000690,predmet_druh,HES-000849,809
+lahev,bottle,amcr,HES-000691,https://api.aiscr.cz/id/HES-000691,predmet_druh,HES-000849,811
+vzorek palynologický,palynological sample,amcr,HES-000692,https://api.aiscr.cz/id/HES-000692,predmet_druh,HES-000860,1906
+gombík,spherical button,amcr,HES-000693,https://api.aiscr.cz/id/HES-000693,predmet_druh,HES-000853,1202
+kování,mount,amcr,HES-000694,https://api.aiscr.cz/id/HES-000694,predmet_druh,HES-000846,503
+lampa/kahan,lamp/burner,amcr,HES-000695,https://api.aiscr.cz/id/HES-000695,predmet_druh,HES-000849,812
+hrací kostka,dice,amcr,HES-000696,https://api.aiscr.cz/id/HES-000696,predmet_druh,HES-000859,1802
+vzorek pedologický,pedological sample,amcr,HES-000697,https://api.aiscr.cz/id/HES-000697,predmet_druh,HES-000860,1907
+vzorek paleobotanický,palaeobotanical sample,amcr,HES-000698,https://api.aiscr.cz/id/HES-000698,predmet_druh,HES-000860,1905
+jehlice,clothing pin,amcr,HES-000699,https://api.aiscr.cz/id/HES-000699,predmet_druh,HES-000853,1203
+kaptorga,kaptorga (metal pendant case),amcr,HES-000700,https://api.aiscr.cz/id/HES-000700,predmet_druh,HES-000853,1204
+rolnička,jingle bell,amcr,HES-000701,https://api.aiscr.cz/id/HES-000701,predmet_druh,HES-000853,1216
+růženec/medailon,rosary/medallion,amcr,HES-000702,https://api.aiscr.cz/id/HES-000702,predmet_druh,HES-000853,1217
+součást vozu,cargo vehicle component,amcr,HES-000703,https://api.aiscr.cz/id/HES-000703,predmet_druh,HES-000855,1406
+rakev,coffin,amcr,HES-000704,https://api.aiscr.cz/id/HES-000704,predmet_druh,HES-000856,1501
+zlomek keramiky,potsherd,amcr,HES-000705,https://api.aiscr.cz/id/HES-000705,predmet_druh,HES-000842,100
+zlomek mazanice,daub fragment,amcr,HES-000706,https://api.aiscr.cz/id/HES-000706,predmet_druh,HES-000842,103
+amorfní zlomek/předmět,amorphous fragment/object,amcr,HES-000707,https://api.aiscr.cz/id/HES-000707,predmet_druh,HES-000842,106
+atypický předmět,exceptional object,amcr,HES-000708,https://api.aiscr.cz/id/HES-000708,predmet_druh,HES-000842,107
+architektonický článek,architectural element,amcr,HES-000709,https://api.aiscr.cz/id/HES-000709,predmet_druh,HES-000843,200
+ostění,jamb,amcr,HES-000710,https://api.aiscr.cz/id/HES-000710,predmet_druh,HES-000843,201
+portál,portal,amcr,HES-000711,https://api.aiscr.cz/id/HES-000711,predmet_druh,HES-000843,202
+deska,board,amcr,HES-000712,https://api.aiscr.cz/id/HES-000712,predmet_druh,HES-000846,500
+zbraň chladná,cold weapon,amcr,HES-000713,https://api.aiscr.cz/id/HES-000713,predmet_druh,HES-000847,616
+nádoba,vessel,amcr,HES-000714,https://api.aiscr.cz/id/HES-000714,predmet_druh,HES-000849,800
+drasadlo,side scraper,amcr,HES-000715,https://api.aiscr.cz/id/HES-000715,predmet_druh,HES-000850,901
+kadlub,mold,amcr,HES-000716,https://api.aiscr.cz/id/HES-000716,predmet_druh,HES-000850,903
+klín,wedge,amcr,HES-000717,https://api.aiscr.cz/id/HES-000717,predmet_druh,HES-000850,906
+závaží,weight,amcr,HES-000718,https://api.aiscr.cz/id/HES-000718,predmet_druh,HES-000850,919
+mísa,bowl,amcr,HES-000719,https://api.aiscr.cz/id/HES-000719,predmet_druh,HES-000849,813
+pánev,pan,amcr,HES-000720,https://api.aiscr.cz/id/HES-000720,predmet_druh,HES-000849,814
+závaží rybářské,net weight,amcr,HES-000721,https://api.aiscr.cz/id/HES-000721,predmet_druh,HES-000850,920
+pohár/číše,beaker/goblet,amcr,HES-000722,https://api.aiscr.cz/id/HES-000722,predmet_druh,HES-000849,816
+závaží tkalcovské,loom weight,amcr,HES-000723,https://api.aiscr.cz/id/HES-000723,predmet_druh,HES-000850,921
+poklička,lid,amcr,HES-000724,https://api.aiscr.cz/id/HES-000724,predmet_druh,HES-000849,817
+žernov/mlýnský kámen,quern,amcr,HES-000725,https://api.aiscr.cz/id/HES-000725,predmet_druh,HES-000850,922
+popelnice,urn,amcr,HES-000726,https://api.aiscr.cz/id/HES-000726,predmet_druh,HES-000849,818
+nástroj jemný,instrument,amcr,HES-000727,https://api.aiscr.cz/id/HES-000727,predmet_druh,HES-000851,1000
+klíč,key,amcr,HES-000728,https://api.aiscr.cz/id/HES-000728,predmet_druh,HES-000851,1008
+křesadlo/ocílka,firesteel,amcr,HES-000729,https://api.aiscr.cz/id/HES-000729,predmet_druh,HES-000851,1009
+lžíce,spoon,amcr,HES-000730,https://api.aiscr.cz/id/HES-000730,predmet_druh,HES-000851,1010
+gemma,gem,amcr,HES-000731,https://api.aiscr.cz/id/HES-000731,predmet_druh,HES-000853,1201
+přezka,buckle,amcr,HES-000732,https://api.aiscr.cz/id/HES-000732,predmet_druh,HES-000857,1607
+spona,fibula,amcr,HES-000733,https://api.aiscr.cz/id/HES-000733,predmet_druh,HES-000857,1608
+nátepní destička,wrist guard,amcr,HES-000734,https://api.aiscr.cz/id/HES-000734,predmet_druh,HES-000857,1602
+obuv,footwear,amcr,HES-000735,https://api.aiscr.cz/id/HES-000735,predmet_druh,HES-000857,1603
+kachel,stove tile,amcr,HES-000736,https://api.aiscr.cz/id/HES-000736,predmet_druh,HES-000858,1704
+kůl,pole,amcr,HES-000737,https://api.aiscr.cz/id/HES-000737,predmet_druh,HES-000858,1706
+okenní výplň,window panes,amcr,HES-000738,https://api.aiscr.cz/id/HES-000738,predmet_druh,HES-000858,1707
+omítka,plaster,amcr,HES-000739,https://api.aiscr.cz/id/HES-000739,predmet_druh,HES-000858,1708
+pojivo,binder,amcr,HES-000740,https://api.aiscr.cz/id/HES-000740,predmet_druh,HES-000858,1709
+potrubí,plumbing pipe,amcr,HES-000741,https://api.aiscr.cz/id/HES-000741,predmet_druh,HES-000858,1710
+postroj/doprava,harness/transportation,amcr,HES-000742,https://api.aiscr.cz/id/HES-000742,predmet_druh,HES-000855,1400
+brusle,ice skate,amcr,HES-000743,https://api.aiscr.cz/id/HES-000743,predmet_druh,HES-000855,1401
+člun,boat,amcr,HES-000744,https://api.aiscr.cz/id/HES-000744,predmet_druh,HES-000855,1402
+faléra,phalera,amcr,HES-000745,https://api.aiscr.cz/id/HES-000745,predmet_druh,HES-000855,1403
+podkova,horseshoe,amcr,HES-000746,https://api.aiscr.cz/id/HES-000746,predmet_druh,HES-000855,1404
+součást postroje,harness component,amcr,HES-000747,https://api.aiscr.cz/id/HES-000747,predmet_druh,HES-000855,1405
+stavební keramika,construction ceramics,amcr,HES-000748,https://api.aiscr.cz/id/HES-000748,predmet_druh,HES-000842,101
+hudební nástroj,musical instrument,amcr,HES-000749,https://api.aiscr.cz/id/HES-000749,predmet_druh,HES-000844,301
+plastika/soška,sculpture/statue,amcr,HES-000750,https://api.aiscr.cz/id/HES-000750,predmet_druh,HES-000844,302
+plastika/soška antropomorfní,anthropomorphic sculpture/statue,amcr,HES-000751,https://api.aiscr.cz/id/HES-000751,predmet_druh,HES-000844,303
+plastika/soška zoomorfní,zoomorphic sculpture/statue,amcr,HES-000752,https://api.aiscr.cz/id/HES-000752,predmet_druh,HES-000844,304
+kost,single bone,amcr,HES-000753,https://api.aiscr.cz/id/HES-000753,predmet_druh,HES-000845,402
+skořápka plodu,fruit shell/nutshell,amcr,HES-000754,https://api.aiscr.cz/id/HES-000754,predmet_druh,HES-000845,410
+projektil/kule/munice,projectile/bullet/ammunition,amcr,HES-000755,https://api.aiscr.cz/id/HES-000755,predmet_druh,HES-000847,609
+řetízek,chain necklace,amcr,HES-000756,https://api.aiscr.cz/id/HES-000756,predmet_druh,HES-000853,1218
+stavební/spojovací prvek,structural element component,amcr,HES-000757,https://api.aiscr.cz/id/HES-000757,predmet_druh,HES-000858,1700
+vzorek dendrochronologický,dendrochronological sample,amcr,HES-000758,https://api.aiscr.cz/id/HES-000758,predmet_druh,HES-000860,1902
+vzorek pro radiokarbonové datování,radiocarbon dating sample,amcr,HES-000759,https://api.aiscr.cz/id/HES-000759,predmet_druh,HES-000860,1908
+kulička/koule,ball/sphere,amcr,HES-000760,https://api.aiscr.cz/id/HES-000760,predmet_druh,HES-000846,505
+pekáč,baking pan,amcr,HES-000761,https://api.aiscr.cz/id/HES-000761,predmet_druh,HES-000849,815
+žeton,token,amcr,HES-000762,https://api.aiscr.cz/id/HES-000762,predmet_druh,HES-000859,1803
+vzorek antrakologický,anthracological sample,amcr,HES-000763,https://api.aiscr.cz/id/HES-000763,predmet_druh,HES-000860,1901
+kroužek/kruh,circle/ring,amcr,HES-000764,https://api.aiscr.cz/id/HES-000764,predmet_druh,HES-000846,504
+tyčinka/váleček,rod/log,amcr,HES-000765,https://api.aiscr.cz/id/HES-000765,predmet_druh,HES-000846,507
+talíř,plate,amcr,HES-000766,https://api.aiscr.cz/id/HES-000766,predmet_druh,HES-000849,820
+zásobnice,storage vessel,amcr,HES-000767,https://api.aiscr.cz/id/HES-000767,predmet_druh,HES-000849,824
+hrnec,pot,amcr,HES-000768,https://api.aiscr.cz/id/HES-000768,predmet_druh,HES-000849,807
+koflík,cup,amcr,HES-000769,https://api.aiscr.cz/id/HES-000769,predmet_druh,HES-000849,808
+kotel/kotlík,kettle,amcr,HES-000770,https://api.aiscr.cz/id/HES-000770,predmet_druh,HES-000849,810
+pražnice,frying pan,amcr,HES-000771,https://api.aiscr.cz/id/HES-000771,predmet_druh,HES-000849,819
+tyglík,crucible,amcr,HES-000772,https://api.aiscr.cz/id/HES-000772,predmet_druh,HES-000849,821
+prejz,pantile,amcr,HES-000773,https://api.aiscr.cz/id/HES-000773,predmet_druh,HES-000858,1711
+technická keramika,technical ceramics,amcr,HES-000774,https://api.aiscr.cz/id/HES-000774,predmet_druh,HES-000842,102
+ekofakt,ecofact,amcr,HES-000775,https://api.aiscr.cz/id/HES-000775,predmet_druh,HES-000845,400
+kamenné jádro,stone core,amcr,HES-000776,https://api.aiscr.cz/id/HES-000776,predmet_druh,HES-000845,401
+malakofauna,mollusca,amcr,HES-000777,https://api.aiscr.cz/id/HES-000777,predmet_druh,HES-000845,404
+odpad,waste,amcr,HES-000778,https://api.aiscr.cz/id/HES-000778,predmet_druh,HES-000845,405
+odpad stavební,construction waste,amcr,HES-000779,https://api.aiscr.cz/id/HES-000779,predmet_druh,HES-000845,406
+odpad výrobní,production waste,amcr,HES-000780,https://api.aiscr.cz/id/HES-000780,predmet_druh,HES-000845,407
+uhlíky/popel,charcoal/ash,amcr,HES-000781,https://api.aiscr.cz/id/HES-000781,predmet_druh,HES-000845,412
+drát,wire,amcr,HES-000782,https://api.aiscr.cz/id/HES-000782,predmet_druh,HES-000846,501
+hrot/hák,spike/hook,amcr,HES-000783,https://api.aiscr.cz/id/HES-000783,predmet_druh,HES-000846,502
+militaria,weapons and armour,amcr,HES-000784,https://api.aiscr.cz/id/HES-000784,predmet_druh,HES-000847,600
+bulava,club,amcr,HES-000785,https://api.aiscr.cz/id/HES-000785,predmet_druh,HES-000847,601
+meč,sword,amcr,HES-000786,https://api.aiscr.cz/id/HES-000786,predmet_druh,HES-000847,606
+ostruha,spur,amcr,HES-000787,https://api.aiscr.cz/id/HES-000787,predmet_druh,HES-000847,607
+oštěp/hrot oštěpu,javelin/javelin head,amcr,HES-000788,https://api.aiscr.cz/id/HES-000788,predmet_druh,HES-000847,608
+sekeromlat/mlat,hammer axe,amcr,HES-000789,https://api.aiscr.cz/id/HES-000789,predmet_druh,HES-000847,610
+součást štítu,shield part,amcr,HES-000790,https://api.aiscr.cz/id/HES-000790,predmet_druh,HES-000847,611
+šavle,sabre,amcr,HES-000791,https://api.aiscr.cz/id/HES-000791,predmet_druh,HES-000847,613
+šíp/šipka/hrot šípu/šipky,arrow/arrowhead,amcr,HES-000792,https://api.aiscr.cz/id/HES-000792,predmet_druh,HES-000847,614
+tesák,dussack,amcr,HES-000793,https://api.aiscr.cz/id/HES-000793,predmet_druh,HES-000847,615
+mince,coin,amcr,HES-000794,https://api.aiscr.cz/id/HES-000794,predmet_druh,HES-000848,700
+drtidlo/zrnotěrka,handstone/saddle quern,amcr,HES-000795,https://api.aiscr.cz/id/HES-000795,predmet_druh,HES-000850,902
+kladivo/palice,hammer/sledgehammer,amcr,HES-000796,https://api.aiscr.cz/id/HES-000796,predmet_druh,HES-000850,904
+kleště,pliers,amcr,HES-000797,https://api.aiscr.cz/id/HES-000797,predmet_druh,HES-000850,905
+kosa,scythe,amcr,HES-000798,https://api.aiscr.cz/id/HES-000798,predmet_druh,HES-000850,907
+motyka/krumpáč,mattock/pickaxe,amcr,HES-000799,https://api.aiscr.cz/id/HES-000799,predmet_druh,HES-000850,910
+pilník,file,amcr,HES-000800,https://api.aiscr.cz/id/HES-000800,predmet_druh,HES-000850,913
+sekáč,chopper,amcr,HES-000801,https://api.aiscr.cz/id/HES-000801,predmet_druh,HES-000850,914
+sekera,axe,amcr,HES-000802,https://api.aiscr.cz/id/HES-000802,predmet_druh,HES-000850,915
+brousek,whetstone,amcr,HES-000803,https://api.aiscr.cz/id/HES-000803,predmet_druh,HES-000851,1001
+jehla/špendlík,needle/pin,amcr,HES-000804,https://api.aiscr.cz/id/HES-000804,predmet_druh,HES-000851,1007
+náprstek,thimble,amcr,HES-000805,https://api.aiscr.cz/id/HES-000805,predmet_druh,HES-000851,1011
+nůž,knife,amcr,HES-000806,https://api.aiscr.cz/id/HES-000806,predmet_druh,HES-000851,1012
+nůžky,scissors,amcr,HES-000807,https://api.aiscr.cz/id/HES-000807,predmet_druh,HES-000851,1013
+pinzeta,tweezers,amcr,HES-000808,https://api.aiscr.cz/id/HES-000808,predmet_druh,HES-000851,1014
+přeslen,spindle whorl,amcr,HES-000809,https://api.aiscr.cz/id/HES-000809,predmet_druh,HES-000851,1015
+rydlo,graver,amcr,HES-000810,https://api.aiscr.cz/id/HES-000810,predmet_druh,HES-000851,1016
+stilus,stylus,amcr,HES-000811,https://api.aiscr.cz/id/HES-000811,predmet_druh,HES-000851,1017
+nápažník,armlet,amcr,HES-000812,https://api.aiscr.cz/id/HES-000812,predmet_druh,HES-000853,1210
+cihla,brick,amcr,HES-000813,https://api.aiscr.cz/id/HES-000813,predmet_druh,HES-000858,1701
+řetěz,chain,amcr,HES-000814,https://api.aiscr.cz/id/HES-000814,predmet_druh,HES-000858,1713
+střešní krytina,roofing tile,amcr,HES-000815,https://api.aiscr.cz/id/HES-000815,predmet_druh,HES-000858,1714
+trám,beam,amcr,HES-000816,https://api.aiscr.cz/id/HES-000816,predmet_druh,HES-000858,1715
+zámek,lock,amcr,HES-000817,https://api.aiscr.cz/id/HES-000817,predmet_druh,HES-000858,1716
+vzorek,sample,amcr,HES-000818,https://api.aiscr.cz/id/HES-000818,predmet_druh,HES-000860,1900
+vědro/situla,bucket/situla,amcr,HES-000819,https://api.aiscr.cz/id/HES-000819,predmet_druh,HES-000849,823
+dýka,dagger,amcr,HES-000820,https://api.aiscr.cz/id/HES-000820,predmet_druh,HES-000847,602
+kopí/hrot kopí,spear/spearhead,amcr,HES-000821,https://api.aiscr.cz/id/HES-000821,predmet_druh,HES-000847,603
+kuše,crossbow,amcr,HES-000822,https://api.aiscr.cz/id/HES-000822,predmet_druh,HES-000847,604
+luk,bow,amcr,HES-000823,https://api.aiscr.cz/id/HES-000823,predmet_druh,HES-000847,605
+dláto,chisel,amcr,HES-000824,https://api.aiscr.cz/id/HES-000824,predmet_druh,HES-000851,1004
+hladítko,smoother,amcr,HES-000825,https://api.aiscr.cz/id/HES-000825,predmet_druh,HES-000851,1005
+hřeben,comb,amcr,HES-000826,https://api.aiscr.cz/id/HES-000826,predmet_druh,HES-000851,1006
+šídlo,awl,amcr,HES-000827,https://api.aiscr.cz/id/HES-000827,predmet_druh,HES-000851,1018
+nehotový výrobek/polotovar,semiproduct/blank,amcr,HES-000828,https://api.aiscr.cz/id/HES-000828,predmet_druh,HES-000852,1100
+hřivna,ingot,amcr,HES-000829,https://api.aiscr.cz/id/HES-000829,predmet_druh,HES-000852,1101
+ruda,ore,amcr,HES-000830,https://api.aiscr.cz/id/HES-000830,predmet_druh,HES-000852,1102
+slitek,bloom,amcr,HES-000831,https://api.aiscr.cz/id/HES-000831,predmet_druh,HES-000852,1103
+surovina,raw material,amcr,HES-000832,https://api.aiscr.cz/id/HES-000832,predmet_druh,HES-000852,1104
+valoun,pebble,amcr,HES-000833,https://api.aiscr.cz/id/HES-000833,predmet_druh,HES-000852,1105
+ozdoba,adornment,amcr,HES-000834,https://api.aiscr.cz/id/HES-000834,predmet_druh,HES-000853,1200
+náhrdelník,necklace,amcr,HES-000835,https://api.aiscr.cz/id/HES-000835,predmet_druh,HES-000853,1207
+nánožník,anklet,amcr,HES-000836,https://api.aiscr.cz/id/HES-000836,predmet_druh,HES-000853,1209
+přívěsek/závěsek,pendant,amcr,HES-000837,https://api.aiscr.cz/id/HES-000837,predmet_druh,HES-000853,1215
+záušnice,temple ring,amcr,HES-000838,https://api.aiscr.cz/id/HES-000838,predmet_druh,HES-000853,1219
+písemnost,written document,amcr,HES-000839,https://api.aiscr.cz/id/HES-000839,predmet_druh,HES-000854,1300
+kniha,book,amcr,HES-000840,https://api.aiscr.cz/id/HES-000840,predmet_druh,HES-000854,1301
+váza,vase,amcr,HES-000841,https://api.aiscr.cz/id/HES-000841,predmet_druh,HES-000849,822
+běžný nález,common find,amcr,HES-000842,https://api.aiscr.cz/id/HES-000842,predmet_druh_kat,,100
+architektonický článek,architectural element,amcr,HES-000843,https://api.aiscr.cz/id/HES-000843,predmet_druh_kat,,200
+doklad umění/kultu,artistic/ritual object,amcr,HES-000844,https://api.aiscr.cz/id/HES-000844,predmet_druh_kat,,300
+ekofakt,ecofact,amcr,HES-000845,https://api.aiscr.cz/id/HES-000845,predmet_druh_kat,,400
+funkčně neurčený předmět,object of unspecified function,amcr,HES-000846,https://api.aiscr.cz/id/HES-000846,predmet_druh_kat,,500
+militaria,weapons and armour,amcr,HES-000847,https://api.aiscr.cz/id/HES-000847,predmet_druh_kat,,600
+platidlo,currency,amcr,HES-000848,https://api.aiscr.cz/id/HES-000848,predmet_druh_kat,,700
+nádoba,vessel,amcr,HES-000849,https://api.aiscr.cz/id/HES-000849,predmet_druh_kat,,800
+nástroj hrubý,utensil,amcr,HES-000850,https://api.aiscr.cz/id/HES-000850,predmet_druh_kat,,900
+nástroj jemný,instrument,amcr,HES-000851,https://api.aiscr.cz/id/HES-000851,predmet_druh_kat,,1000
+nehotový výrobek/polotovar,semiproduct/blank,amcr,HES-000852,https://api.aiscr.cz/id/HES-000852,predmet_druh_kat,,1100
+ozdoba,adornment,amcr,HES-000853,https://api.aiscr.cz/id/HES-000853,predmet_druh_kat,,1200
+písemnost,written document,amcr,HES-000854,https://api.aiscr.cz/id/HES-000854,predmet_druh_kat,,1300
+postroj/doprava,harness/transportation,amcr,HES-000855,https://api.aiscr.cz/id/HES-000855,predmet_druh_kat,,1400
+součást hrobu,grave component,amcr,HES-000856,https://api.aiscr.cz/id/HES-000856,predmet_druh_kat,,1500
+součást oděvu,costume component,amcr,HES-000857,https://api.aiscr.cz/id/HES-000857,predmet_druh_kat,,1600
+stavební/spojovací prvek,structural element component,amcr,HES-000858,https://api.aiscr.cz/id/HES-000858,predmet_druh_kat,,1700
+herní předmět,game equipment,amcr,HES-000859,https://api.aiscr.cz/id/HES-000859,predmet_druh_kat,,1800
+vzorek,sample,amcr,HES-000860,https://api.aiscr.cz/id/HES-000860,predmet_druh_kat,,1900
+odchylka jednotky metrů,deviation in meters,amcr,HES-000861,https://api.aiscr.cz/id/HES-000861,pian_presnost,,1
+odchylka desítky metrů,deviation in tens of meters,amcr,HES-000862,https://api.aiscr.cz/id/HES-000862,pian_presnost,,2
+odchylka stovky metrů,deviation in hundreds of meters,amcr,HES-000863,https://api.aiscr.cz/id/HES-000863,pian_presnost,,3
+poloha podle katastru,location by cadastral area,amcr,HES-000864,https://api.aiscr.cz/id/HES-000864,pian_presnost,,4
+anonym,anonymous,amcr,HES-000865,https://api.aiscr.cz/id/HES-000865,pristupnost,,1
+badatel,researcher,amcr,HES-000866,https://api.aiscr.cz/id/HES-000866,pristupnost,,2
+archeolog,archaeologist,amcr,HES-000867,https://api.aiscr.cz/id/HES-000867,pristupnost,,3
+archivář,archivist,amcr,HES-000868,https://api.aiscr.cz/id/HES-000868,pristupnost,,4
+data 3d,data 3D,amcr,HES-000870,https://api.aiscr.cz/id/HES-000870,dokument_rada,,3
+data,data,amcr,HES-000871,https://api.aiscr.cz/id/HES-000871,dokument_rada,,2
+fotografie letecké (digitální),aerial photographs (digital),amcr,HES-000872,https://api.aiscr.cz/id/HES-000872,dokument_rada,,6
+fotografie předmětů (digitální),photographs of objects (digital),amcr,HES-000873,https://api.aiscr.cz/id/HES-000873,dokument_rada,,9
+fotografie terénu (digitální),photographs of fieldwork (digital),amcr,HES-000874,https://api.aiscr.cz/id/HES-000874,dokument_rada,,11
+plány (digitální),plans (digital),amcr,HES-000875,https://api.aiscr.cz/id/HES-000875,dokument_rada,,14
+fotografie diapozitivy,photoslides,amcr,HES-000876,https://api.aiscr.cz/id/HES-000876,dokument_rada,,4
+fotografie jiné/osobní,other/personal photographs,amcr,HES-000877,https://api.aiscr.cz/id/HES-000877,dokument_rada,,12
+fotografie předmětů,photographs of objects,amcr,HES-000878,https://api.aiscr.cz/id/HES-000878,dokument_rada,,8
+fotografie terénu,photographs of fieldwork,amcr,HES-000879,https://api.aiscr.cz/id/HES-000879,dokument_rada,,10
+fotografie letecké (diapozitivy),aerial photoslides,amcr,HES-000880,https://api.aiscr.cz/id/HES-000880,dokument_rada,,5
+plány,plans,amcr,HES-000881,https://api.aiscr.cz/id/HES-000881,dokument_rada,,13
+fotografie letecké (negativy),aerial photographs (negatives),amcr,HES-000882,https://api.aiscr.cz/id/HES-000882,dokument_rada,,7
+zprávy a hlášení,reports,amcr,HES-000883,https://api.aiscr.cz/id/HES-000883,dokument_rada,,1
+přesně v letech,exact years,amcr,HES-000886,https://api.aiscr.cz/id/HES-000886,datum_specifikace,,2
+přesné datum,exact date,amcr,HES-000887,https://api.aiscr.cz/id/HES-000887,datum_specifikace,,1
+někdy v letech,approximate years,amcr,HES-000889,https://api.aiscr.cz/id/HES-000889,datum_specifikace,,3
+konstrukce zděná,masonry construction,amcr,HES-000893,https://api.aiscr.cz/id/HES-000893,objekt_specifikace,HES-000963,100
+konstrukce cihlová,brick structure,amcr,HES-000894,https://api.aiscr.cz/id/HES-000894,objekt_specifikace,HES-000963,101
+konstrukce dlaždicová,tiled structure,amcr,HES-000895,https://api.aiscr.cz/id/HES-000895,objekt_specifikace,HES-000963,102
+konstrukce kamenná,stonework,amcr,HES-000896,https://api.aiscr.cz/id/HES-000896,objekt_specifikace,HES-000963,103
+konstrukce dřevěná,wooden structure,amcr,HES-000897,https://api.aiscr.cz/id/HES-000897,objekt_specifikace,HES-000963,104
+konstrukce kůlová/sloupová,post-and-beam structure,amcr,HES-000898,https://api.aiscr.cz/id/HES-000898,objekt_specifikace,HES-000963,105
+konstrukce roubená,log construction,amcr,HES-000899,https://api.aiscr.cz/id/HES-000899,objekt_specifikace,HES-000963,106
+konstrukce hrázděná,half-timber construction,amcr,HES-000900,https://api.aiscr.cz/id/HES-000900,objekt_specifikace,HES-000963,107
+konstrukce sypaná/vršená,earth construction,amcr,HES-000901,https://api.aiscr.cz/id/HES-000901,objekt_specifikace,HES-000963,109
+konstrukce zahloubená,sunken structure,amcr,HES-000902,https://api.aiscr.cz/id/HES-000902,objekt_specifikace,HES-000963,110
+barvivo,colourant,amcr,HES-000903,https://api.aiscr.cz/id/HES-000903,objekt_specifikace,HES-000964,400
+bronz,bronze,amcr,HES-000904,https://api.aiscr.cz/id/HES-000904,objekt_specifikace,HES-000964,401
+kost lidská,human bone,amcr,HES-000905,https://api.aiscr.cz/id/HES-000905,objekt_specifikace,HES-000964,421
+kost zvířecí,animal bone,amcr,HES-000906,https://api.aiscr.cz/id/HES-000906,objekt_specifikace,HES-000964,422
+kov,metal,amcr,HES-000907,https://api.aiscr.cz/id/HES-000907,objekt_specifikace,HES-000964,423
+kov barevný,nonferrous metal,amcr,HES-000908,https://api.aiscr.cz/id/HES-000908,objekt_specifikace,HES-000964,424
+kůže,leather,amcr,HES-000909,https://api.aiscr.cz/id/HES-000909,objekt_specifikace,HES-000964,426
+malta,mortar,amcr,HES-000910,https://api.aiscr.cz/id/HES-000910,objekt_specifikace,HES-000964,427
+mazanice,daub,amcr,HES-000911,https://api.aiscr.cz/id/HES-000911,objekt_specifikace,HES-000964,428
+měď,copper,amcr,HES-000912,https://api.aiscr.cz/id/HES-000912,objekt_specifikace,HES-000964,429
+mosaz,brass,amcr,HES-000913,https://api.aiscr.cz/id/HES-000913,objekt_specifikace,HES-000964,430
+obilky/semena,caryopses/seeds,amcr,HES-000914,https://api.aiscr.cz/id/HES-000914,objekt_specifikace,HES-000964,431
+olovo,lead,amcr,HES-000915,https://api.aiscr.cz/id/HES-000915,objekt_specifikace,HES-000964,432
+omítka,plaster,amcr,HES-000916,https://api.aiscr.cz/id/HES-000916,objekt_specifikace,HES-000964,433
+papír,paper,amcr,HES-000917,https://api.aiscr.cz/id/HES-000917,objekt_specifikace,HES-000964,434
+paroh,antler,amcr,HES-000918,https://api.aiscr.cz/id/HES-000918,objekt_specifikace,HES-000964,435
+pecka,fruit stone,amcr,HES-000919,https://api.aiscr.cz/id/HES-000919,objekt_specifikace,HES-000964,436
+perla,pearl,amcr,HES-000920,https://api.aiscr.cz/id/HES-000920,objekt_specifikace,HES-000964,437
+cín,tin,amcr,HES-000921,https://api.aiscr.cz/id/HES-000921,objekt_specifikace,HES-000964,402
+dehet,tar,amcr,HES-000922,https://api.aiscr.cz/id/HES-000922,objekt_specifikace,HES-000964,403
+dřevo,wood,amcr,HES-000923,https://api.aiscr.cz/id/HES-000923,objekt_specifikace,HES-000964,404
+grafit,graphite,amcr,HES-000924,https://api.aiscr.cz/id/HES-000924,objekt_specifikace,HES-000964,405
+hlína,clay,amcr,HES-000925,https://api.aiscr.cz/id/HES-000925,objekt_specifikace,HES-000964,406
+jantar,amber,amcr,HES-000926,https://api.aiscr.cz/id/HES-000926,objekt_specifikace,HES-000964,407
+kámen,stone,amcr,HES-000927,https://api.aiscr.cz/id/HES-000927,objekt_specifikace,HES-000964,408
+kámen broušený,polished stone,amcr,HES-000928,https://api.aiscr.cz/id/HES-000928,objekt_specifikace,HES-000964,409
+kámen drahý,gemstone,amcr,HES-000929,https://api.aiscr.cz/id/HES-000929,objekt_specifikace,HES-000964,410
+kámen drtidlo/žernov,grinding stone,amcr,HES-000930,https://api.aiscr.cz/id/HES-000930,objekt_specifikace,HES-000964,411
+kámen stavební,building stone,amcr,HES-000931,https://api.aiscr.cz/id/HES-000931,objekt_specifikace,HES-000964,412
+kámen štípaný,lithics,amcr,HES-000932,https://api.aiscr.cz/id/HES-000932,objekt_specifikace,HES-000964,413
+keramika,ceramic,amcr,HES-000933,https://api.aiscr.cz/id/HES-000933,objekt_specifikace,HES-000964,414
+keramika fajáns/majolika,faience/maiolica,amcr,HES-000934,https://api.aiscr.cz/id/HES-000934,objekt_specifikace,HES-000964,415
+keramika kamenina,stoneware,amcr,HES-000935,https://api.aiscr.cz/id/HES-000935,objekt_specifikace,HES-000964,416
+keramika porcelán,porcelain,amcr,HES-000936,https://api.aiscr.cz/id/HES-000936,objekt_specifikace,HES-000964,417
+keramika terra sigillata,terra sigillata ware,amcr,HES-000937,https://api.aiscr.cz/id/HES-000937,objekt_specifikace,HES-000964,418
+korál,coral,amcr,HES-000938,https://api.aiscr.cz/id/HES-000938,objekt_specifikace,HES-000964,419
+kost,bone,amcr,HES-000939,https://api.aiscr.cz/id/HES-000939,objekt_specifikace,HES-000964,420
+kůra,bark,amcr,HES-000940,https://api.aiscr.cz/id/HES-000940,objekt_specifikace,HES-000964,425
+perleť/mušle,nacre/shell,amcr,HES-000941,https://api.aiscr.cz/id/HES-000941,objekt_specifikace,HES-000964,438
+plast,plastic,amcr,HES-000942,https://api.aiscr.cz/id/HES-000942,objekt_specifikace,HES-000964,439
+proutí,wattle,amcr,HES-000943,https://api.aiscr.cz/id/HES-000943,objekt_specifikace,HES-000964,440
+pryskyřice,resin,amcr,HES-000944,https://api.aiscr.cz/id/HES-000944,objekt_specifikace,HES-000964,441
+roh,horn,amcr,HES-000945,https://api.aiscr.cz/id/HES-000945,objekt_specifikace,HES-000964,442
+schránky měkkýšů,mollusc shell,amcr,HES-000946,https://api.aiscr.cz/id/HES-000946,objekt_specifikace,HES-000964,443
+sklo,glass,amcr,HES-000947,https://api.aiscr.cz/id/HES-000947,objekt_specifikace,HES-000964,444
+slonovina/mamutovina,ivory,amcr,HES-000948,https://api.aiscr.cz/id/HES-000948,objekt_specifikace,HES-000964,445
+spondylus,spondylus,amcr,HES-000949,https://api.aiscr.cz/id/HES-000949,objekt_specifikace,HES-000964,446
+stříbro,silver,amcr,HES-000950,https://api.aiscr.cz/id/HES-000950,objekt_specifikace,HES-000964,447
+švartna,sapropel,amcr,HES-000951,https://api.aiscr.cz/id/HES-000951,objekt_specifikace,HES-000964,448
+textil,textile,amcr,HES-000952,https://api.aiscr.cz/id/HES-000952,objekt_specifikace,HES-000964,449
+uhlí,coal,amcr,HES-000953,https://api.aiscr.cz/id/HES-000953,objekt_specifikace,HES-000964,450
+uhlí dřevěné,charcoal,amcr,HES-000954,https://api.aiscr.cz/id/HES-000954,objekt_specifikace,HES-000964,451
+vápno,quicklime,amcr,HES-000955,https://api.aiscr.cz/id/HES-000955,objekt_specifikace,HES-000964,452
+vejce,egg,amcr,HES-000956,https://api.aiscr.cz/id/HES-000956,objekt_specifikace,HES-000964,453
+vosk,wax,amcr,HES-000957,https://api.aiscr.cz/id/HES-000957,objekt_specifikace,HES-000964,454
+zlato,gold,amcr,HES-000958,https://api.aiscr.cz/id/HES-000958,objekt_specifikace,HES-000964,455
+zub,tooth,amcr,HES-000959,https://api.aiscr.cz/id/HES-000959,objekt_specifikace,HES-000964,456
+zub lidský,human tooth,amcr,HES-000960,https://api.aiscr.cz/id/HES-000960,objekt_specifikace,HES-000964,457
+zub zvířecí,animal tooth,amcr,HES-000961,https://api.aiscr.cz/id/HES-000961,objekt_specifikace,HES-000964,458
+železo,iron,amcr,HES-000962,https://api.aiscr.cz/id/HES-000962,objekt_specifikace,HES-000964,459
+způsob provedení,construction type,amcr,HES-000963,https://api.aiscr.cz/id/HES-000963,objekt_specifikace_kat,,100
+těžený/zpracovávaný materiál,extracted/processed material,amcr,HES-000964,https://api.aiscr.cz/id/HES-000964,objekt_specifikace_kat,,400
+barvivo,colourant,amcr,HES-000965,https://api.aiscr.cz/id/HES-000965,predmet_specifikace,,1
+bronz,bronze,amcr,HES-000966,https://api.aiscr.cz/id/HES-000966,predmet_specifikace,,2
+cín,tin,amcr,HES-000967,https://api.aiscr.cz/id/HES-000967,predmet_specifikace,,3
+dehet,tar,amcr,HES-000968,https://api.aiscr.cz/id/HES-000968,predmet_specifikace,,4
+dřevo,wood,amcr,HES-000969,https://api.aiscr.cz/id/HES-000969,predmet_specifikace,HES-000823 HES-000737 HES-000781 HES-000687 HES-000758 HES-000763 HES-000816,5
+grafit,graphite,amcr,HES-000970,https://api.aiscr.cz/id/HES-000970,predmet_specifikace,,6
+hlína,clay,amcr,HES-000971,https://api.aiscr.cz/id/HES-000971,predmet_specifikace,HES-000697,7
+jantar,amber,amcr,HES-000972,https://api.aiscr.cz/id/HES-000972,predmet_specifikace,,8
+kámen,stone,amcr,HES-000973,https://api.aiscr.cz/id/HES-000973,predmet_specifikace,HES-000656 HES-000685 HES-000833,9
+kámen broušený,polished stone,amcr,HES-000974,https://api.aiscr.cz/id/HES-000974,predmet_specifikace,HES-000727,10
+kámen drahý,gemstone,amcr,HES-000975,https://api.aiscr.cz/id/HES-000975,predmet_specifikace,HES-000731,11
+kámen drtidlo/žernov,grinding stone,amcr,HES-000976,https://api.aiscr.cz/id/HES-000976,predmet_specifikace,HES-000725 HES-000795,12
+kámen stavební,building stone,amcr,HES-000977,https://api.aiscr.cz/id/HES-000977,predmet_specifikace,HES-000709 HES-000710 HES-000711,13
+kámen štípaný,lithics,amcr,HES-000978,https://api.aiscr.cz/id/HES-000978,predmet_specifikace,HES-000776,14
+keramika,ceramic,amcr,HES-000979,https://api.aiscr.cz/id/HES-000979,predmet_specifikace,HES-000705 HES-000736 HES-000748 HES-000773 HES-000774 HES-000813,15
+keramika fajáns/majolika,faience/maiolica,amcr,HES-000980,https://api.aiscr.cz/id/HES-000980,predmet_specifikace,,16
+keramika kamenina,stoneware,amcr,HES-000981,https://api.aiscr.cz/id/HES-000981,predmet_specifikace,,17
+keramika porcelán,porcelain,amcr,HES-000982,https://api.aiscr.cz/id/HES-000982,predmet_specifikace,,18
+keramika terra sigillata,terra sigillata ware,amcr,HES-000983,https://api.aiscr.cz/id/HES-000983,predmet_specifikace,,19
+korál,coral,amcr,HES-000984,https://api.aiscr.cz/id/HES-000984,predmet_specifikace,,20
+kost,bone,amcr,HES-000985,https://api.aiscr.cz/id/HES-000985,predmet_specifikace,HES-000639,21
+kost lidská,human bone,amcr,HES-000986,https://api.aiscr.cz/id/HES-000986,predmet_specifikace,,22
+kost zvířecí,animal bone,amcr,HES-000987,https://api.aiscr.cz/id/HES-000987,predmet_specifikace,,23
+kov,metal,amcr,HES-000988,https://api.aiscr.cz/id/HES-000988,predmet_specifikace,,24
+kov barevný,nonferrous metal,amcr,HES-000989,https://api.aiscr.cz/id/HES-000989,predmet_specifikace,,25
+kůra,bark,amcr,HES-000990,https://api.aiscr.cz/id/HES-000990,predmet_specifikace,,26
+kůže,leather,amcr,HES-000991,https://api.aiscr.cz/id/HES-000991,predmet_specifikace,HES-000735,27
+malta,mortar,amcr,HES-000992,https://api.aiscr.cz/id/HES-000992,predmet_specifikace,,28
+mazanice,daub,amcr,HES-000993,https://api.aiscr.cz/id/HES-000993,predmet_specifikace,HES-000706,29
+měď,copper,amcr,HES-000994,https://api.aiscr.cz/id/HES-000994,predmet_specifikace,,30
+mosaz,brass,amcr,HES-000995,https://api.aiscr.cz/id/HES-000995,predmet_specifikace,,31
+obilky/semena,caryopses/seeds,amcr,HES-000996,https://api.aiscr.cz/id/HES-000996,predmet_specifikace,,32
+olovo,lead,amcr,HES-000997,https://api.aiscr.cz/id/HES-000997,predmet_specifikace,,33
+omítka,plaster,amcr,HES-000998,https://api.aiscr.cz/id/HES-000998,predmet_specifikace,HES-000739,34
+papír,paper,amcr,HES-000999,https://api.aiscr.cz/id/HES-000999,predmet_specifikace,HES-000650 HES-000670 HES-000840,35
+paroh,antler,amcr,HES-001000,https://api.aiscr.cz/id/HES-001000,predmet_specifikace,,36
+pecka,fruit stone,amcr,HES-001001,https://api.aiscr.cz/id/HES-001001,predmet_specifikace,,37
+perla,pearl,amcr,HES-001002,https://api.aiscr.cz/id/HES-001002,predmet_specifikace,,38
+perleť/mušle,nacre/shell,amcr,HES-001003,https://api.aiscr.cz/id/HES-001003,predmet_specifikace,,39
+plast,plastic,amcr,HES-001004,https://api.aiscr.cz/id/HES-001004,predmet_specifikace,,40
+proutí,wattle,amcr,HES-001005,https://api.aiscr.cz/id/HES-001005,predmet_specifikace,,41
+pryskyřice,resin,amcr,HES-001006,https://api.aiscr.cz/id/HES-001006,predmet_specifikace,,42
+pyl,polen,amcr,HES-001007,https://api.aiscr.cz/id/HES-001007,predmet_specifikace,HES-000692,43
+roh,horn,amcr,HES-001008,https://api.aiscr.cz/id/HES-001008,predmet_specifikace,,44
+rostlinné makrozbytky,plant macro-remains,amcr,HES-001009,https://api.aiscr.cz/id/HES-001009,predmet_specifikace,HES-000644 HES-000698,45
+schránky měkkýšů,mollusc shell,amcr,HES-001010,https://api.aiscr.cz/id/HES-001010,predmet_specifikace,HES-000777 HES-000686,46
+sklo,glass,amcr,HES-001011,https://api.aiscr.cz/id/HES-001011,predmet_specifikace,HES-000738,47
+slonovina/mamutovina,ivory,amcr,HES-001012,https://api.aiscr.cz/id/HES-001012,predmet_specifikace,,48
+spondylus,spondylus,amcr,HES-001013,https://api.aiscr.cz/id/HES-001013,predmet_specifikace,,49
+stříbro,silver,amcr,HES-001014,https://api.aiscr.cz/id/HES-001014,predmet_specifikace,,50
+švartna,sapropel,amcr,HES-001015,https://api.aiscr.cz/id/HES-001015,predmet_specifikace,,51
+textil,textile,amcr,HES-001016,https://api.aiscr.cz/id/HES-001016,predmet_specifikace,,52
+uhlí,coal,amcr,HES-001017,https://api.aiscr.cz/id/HES-001017,predmet_specifikace,,53
+uhlí dřevěné,charcoal,amcr,HES-001018,https://api.aiscr.cz/id/HES-001018,predmet_specifikace,,54
+vápno,quicklime,amcr,HES-001019,https://api.aiscr.cz/id/HES-001019,predmet_specifikace,,55
+vejce,egg,amcr,HES-001020,https://api.aiscr.cz/id/HES-001020,predmet_specifikace,HES-000646,56
+vosk,wax,amcr,HES-001021,https://api.aiscr.cz/id/HES-001021,predmet_specifikace,,57
+zlato,gold,amcr,HES-001022,https://api.aiscr.cz/id/HES-001022,predmet_specifikace,,58
+zub,tooth,amcr,HES-001023,https://api.aiscr.cz/id/HES-001023,predmet_specifikace,,59
+zub lidský,human tooth,amcr,HES-001024,https://api.aiscr.cz/id/HES-001024,predmet_specifikace,,60
+zub zvířecí,animal tooth,amcr,HES-001025,https://api.aiscr.cz/id/HES-001025,predmet_specifikace,,61
+železo,iron,amcr,HES-001026,https://api.aiscr.cz/id/HES-001026,predmet_specifikace,HES-000746,62
+jiný materiál,other material,amcr,HES-001027,https://api.aiscr.cz/id/HES-001027,predmet_specifikace,,63
+bodový objekt,point feature,amcr,HES-001028,https://api.aiscr.cz/id/HES-001028,letfoto_tvar,,1
+shluk bodových objektů,group of point features,amcr,HES-001029,https://api.aiscr.cz/id/HES-001029,letfoto_tvar,,2
+bodové objekty uspořádané,organized point features,amcr,HES-001030,https://api.aiscr.cz/id/HES-001030,letfoto_tvar,,3
+plošný objekt,polygonal feature,amcr,HES-001031,https://api.aiscr.cz/id/HES-001031,letfoto_tvar,,4
+linie,linear feature,amcr,HES-001032,https://api.aiscr.cz/id/HES-001032,letfoto_tvar,,5
+linie ohrazující,delimiting line,amcr,HES-001033,https://api.aiscr.cz/id/HES-001033,letfoto_tvar,,6
+lineární systém,system of linear features,amcr,HES-001034,https://api.aiscr.cz/id/HES-001034,letfoto_tvar,,7
+ohrazení kruhové malé,circular enclosure (small),amcr,HES-001035,https://api.aiscr.cz/id/HES-001035,letfoto_tvar,,8
+ohrazení kruhové střední,circular enclosure (medium),amcr,HES-001036,https://api.aiscr.cz/id/HES-001036,letfoto_tvar,,9
+ohrazení kruhové velké,circular enclosure (large),amcr,HES-001037,https://api.aiscr.cz/id/HES-001037,letfoto_tvar,,10
+ohrazení pravoúhlé malé,rectangular enclosure (small),amcr,HES-001038,https://api.aiscr.cz/id/HES-001038,letfoto_tvar,,11
+ohrazení pravoúhlé střední,rectangular enclosure (medium),amcr,HES-001039,https://api.aiscr.cz/id/HES-001039,letfoto_tvar,,12
+ohrazení pravoúhlé velké,rectangular enclosure (large),amcr,HES-001040,https://api.aiscr.cz/id/HES-001040,letfoto_tvar,,13
+ohrazení polygonální malé,polygonal enclosure (small),amcr,HES-001041,https://api.aiscr.cz/id/HES-001041,letfoto_tvar,,14
+ohrazení polygonální střední,polygonal enclosure (medium),amcr,HES-001042,https://api.aiscr.cz/id/HES-001042,letfoto_tvar,,15
+ohrazení polygonální velké,polygonal enclosure (large),amcr,HES-001043,https://api.aiscr.cz/id/HES-001043,letfoto_tvar,,16
+vizuální/geodetický průzkum,visual/geodetic survey,amcr,HES-001044,https://api.aiscr.cz/id/HES-001044,akce_typ,HES-001063,11
+letecký průzkum,aerial survey,amcr,HES-001045,https://api.aiscr.cz/id/HES-001045,akce_typ,HES-001063,12
+geofyzikální průzkum,geophysical survey,amcr,HES-001046,https://api.aiscr.cz/id/HES-001046,akce_typ,HES-001063,14
+geochemický průzkum,geochemical survey,amcr,HES-001047,https://api.aiscr.cz/id/HES-001047,akce_typ,HES-001063,16
+stavebně-historický průzkum,architectural survey,amcr,HES-001048,https://api.aiscr.cz/id/HES-001048,akce_typ,HES-001063,18
+povrchový nález,surface find,amcr,HES-001049,https://api.aiscr.cz/id/HES-001049,akce_typ,HES-001064,22
+povrchový sběr,surface collection survey,amcr,HES-001050,https://api.aiscr.cz/id/HES-001050,akce_typ,HES-001064,24
+mikrosondáž/vzorkovací sondáž,shovel tests/test pitting,amcr,HES-001051,https://api.aiscr.cz/id/HES-001051,akce_typ,HES-001064,26
+průzkum detektorem kovu,metal detector survey,amcr,HES-001052,https://api.aiscr.cz/id/HES-001052,akce_typ,HES-001064,28
+náhodný zásah/nález,chance find,amcr,HES-001053,https://api.aiscr.cz/id/HES-001053,akce_typ,HES-001065,32
+nedokumentovaná akce,undocumented fieldwork,amcr,HES-001054,https://api.aiscr.cz/id/HES-001054,akce_typ,HES-001065,34
+orientační zjištění,brief evidence,amcr,HES-001055,https://api.aiscr.cz/id/HES-001055,akce_typ,HES-001065,36
+vertikální řez,linear trench,amcr,HES-001056,https://api.aiscr.cz/id/HES-001056,akce_typ,HES-001065,38
+sonda,pit trench,amcr,HES-001057,https://api.aiscr.cz/id/HES-001057,akce_typ,HES-001066,42
+skupina/síť sond,group of pit trenches,amcr,HES-001058,https://api.aiscr.cz/id/HES-001058,akce_typ,HES-001066,43
+plošný odkryv,total excavation,amcr,HES-001059,https://api.aiscr.cz/id/HES-001059,akce_typ,HES-001066,45
+environmentální vzorek,environmental sampling,amcr,HES-001060,https://api.aiscr.cz/id/HES-001060,akce_typ,HES-001067,50
+jiná evidence,other evidence,amcr,HES-001061,https://api.aiscr.cz/id/HES-001061,akce_typ,HES-001068,60
+bez okolností,unknown context,amcr,HES-001062,https://api.aiscr.cz/id/HES-001062,akce_typ,HES-001069,70
+nedestruktivní průzkum,non-destructive survey,amcr,HES-001063,https://api.aiscr.cz/id/HES-001063,akce_typ_kat,,10
+výzkum povrchové vrstvy,topsoil sampling,amcr,HES-001064,https://api.aiscr.cz/id/HES-001064,akce_typ_kat,,20
+terénní zásah,field intervention,amcr,HES-001065,https://api.aiscr.cz/id/HES-001065,akce_typ_kat,,30
+terénní odkryv,field excavation,amcr,HES-001066,https://api.aiscr.cz/id/HES-001066,akce_typ_kat,,40
+environmentální vzorek,environmental sampling,amcr,HES-001067,https://api.aiscr.cz/id/HES-001067,akce_typ_kat,,50
+jiná evidence,other evidence,amcr,HES-001068,https://api.aiscr.cz/id/HES-001068,akce_typ_kat,,60
+bez okolností,unknown context,amcr,HES-001069,https://api.aiscr.cz/id/HES-001069,akce_typ_kat,,70
+celek akce,fieldwork extent,amcr,HES-001070,https://api.aiscr.cz/id/HES-001070,dok_jednotka_typ,,1
+část akce,fieldwork segment,amcr,HES-001071,https://api.aiscr.cz/id/HES-001071,dok_jednotka_typ,,2
+sonda,trench,amcr,HES-001072,https://api.aiscr.cz/id/HES-001072,dok_jednotka_typ,,3
+katastrální území,cadastral area,amcr,HES-001073,https://api.aiscr.cz/id/HES-001073,dok_jednotka_typ,,4
+lokalita,site,amcr,HES-001074,https://api.aiscr.cz/id/HES-001074,dok_jednotka_typ,,5
+nálezová zpráva,fieldwork report,amcr,HES-001075,https://api.aiscr.cz/id/HES-001075,dokument_typ,HES-000230 HES-000217 HES-000213,1
+příloha zprávy/hlášení,report annex,amcr,HES-001076,https://api.aiscr.cz/id/HES-001076,dokument_typ,HES-000230 HES-000217 HES-000213,2
+expertní posudek,expert report,amcr,HES-001077,https://api.aiscr.cz/id/HES-001077,dokument_typ,HES-000230 HES-000217 HES-000213,3
+investorská zpráva,client report,amcr,HES-001079,https://api.aiscr.cz/id/HES-001079,dokument_typ,HES-000230 HES-000217 HES-000213,5
+hlášení,brief report,amcr,HES-001080,https://api.aiscr.cz/id/HES-001080,dokument_typ,HES-000230 HES-000217 HES-000213,6
+jiný text,other text,amcr,HES-001081,https://api.aiscr.cz/id/HES-001081,dokument_typ,HES-000230 HES-000217 HES-000213,7
+data analýzy ekofaktů,ecofact analysis data,amcr,HES-001082,https://api.aiscr.cz/id/HES-001082,dokument_typ,HES-000217,8
+data geodetická,geodetic data,amcr,HES-001083,https://api.aiscr.cz/id/HES-001083,dokument_typ,HES-000217,9
+data geofyzikální,geophysical data,amcr,HES-001084,https://api.aiscr.cz/id/HES-001084,dokument_typ,HES-000217,10
+data gnss,GNSS data,amcr,HES-001085,https://api.aiscr.cz/id/HES-001085,dokument_typ,HES-000217,11
+data terénního výzkumu,fieldwork data,amcr,HES-001086,https://api.aiscr.cz/id/HES-001086,dokument_typ,HES-000217,12
+data vektorového plánu,vector plan data,amcr,HES-001087,https://api.aiscr.cz/id/HES-001087,dokument_typ,HES-000217,13
+fotografie krajiny,photograph of landscape,amcr,HES-001088,https://api.aiscr.cz/id/HES-001088,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,15
+fotografie lokality,photograph of site,amcr,HES-001089,https://api.aiscr.cz/id/HES-001089,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,16
+fotografie výzkumu/sondy,photograph of excavation/trench,amcr,HES-001090,https://api.aiscr.cz/id/HES-001090,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,22
+fotografie osobní,photograph of person,amcr,HES-001091,https://api.aiscr.cz/id/HES-001091,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,18
+fotografie události,photograph of event,amcr,HES-001092,https://api.aiscr.cz/id/HES-001092,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,21
+fotografie pracovní,photograph of fieldwork,amcr,HES-001093,https://api.aiscr.cz/id/HES-001093,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,19
+fotografie objektu,photograph of feature,amcr,HES-001094,https://api.aiscr.cz/id/HES-001094,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,17
+fotografie předmětu,photograph of object,amcr,HES-001095,https://api.aiscr.cz/id/HES-001095,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,20
+mikrofotografie,microphotograph,amcr,HES-001096,https://api.aiscr.cz/id/HES-001096,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,31
+fotografie konzervace,photograph of conservation,amcr,HES-001097,https://api.aiscr.cz/id/HES-001097,dokument_typ,HES-000232 HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,14
+letecká fotografie krajiny,aerial photograph of landscape,amcr,HES-001098,https://api.aiscr.cz/id/HES-001098,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,23
+letecká fotografie lokality,aerial photograph of site,amcr,HES-001099,https://api.aiscr.cz/id/HES-001099,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,24
+letecká fotografie výzkumu,aerial photograph of fieldwork,amcr,HES-001100,https://api.aiscr.cz/id/HES-001100,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,26
+plán regionu,plan of region,amcr,HES-001101,https://api.aiscr.cz/id/HES-001101,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,32
+letecká fotografie vegetačních příznaků,aerial photograph of vegetation marks,amcr,HES-001102,https://api.aiscr.cz/id/HES-001102,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,30
+letecká fotografie půdních příznaků,aerial photograph of soil marks,amcr,HES-001103,https://api.aiscr.cz/id/HES-001103,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,27
+letecká fotografie sněžných příznaků,aerial photograph of snow marks,amcr,HES-001104,https://api.aiscr.cz/id/HES-001104,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,28
+letecká fotografie stínových příznaků,aerial photograph of shadow marks,amcr,HES-001105,https://api.aiscr.cz/id/HES-001105,dokument_typ,HES-000229 HES-000228 HES-000227 HES-000225 HES-000223 HES-000222 HES-000221 HES-000220 HES-000217,29
+plán lokality,plan of site,amcr,HES-001106,https://api.aiscr.cz/id/HES-001106,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,33
+plán výzkumu,plan of fieldwork,amcr,HES-001107,https://api.aiscr.cz/id/HES-001107,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,34
+plán sondy,plan of trench,amcr,HES-001108,https://api.aiscr.cz/id/HES-001108,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,35
+plán objektu,plan of feature,amcr,HES-001109,https://api.aiscr.cz/id/HES-001109,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,36
+kresba předmětu,object drawing,amcr,HES-001110,https://api.aiscr.cz/id/HES-001110,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,37
+mapa,map,amcr,HES-001111,https://api.aiscr.cz/id/HES-001111,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,38
+neurčený dokument,unspecified document,amcr,HES-001112,https://api.aiscr.cz/id/HES-001112,dokument_typ,HES-000236 HES-000235 HES-000234 HES-000233 HES-000231 HES-000224 HES-000219 HES-000226 HES-000218 HES-000216 HES-000215 HES-000214 HES-000212 HES-000230 HES-000213 HES-000232 HES-000225 HES-000223 HES-000217,42
+3d rekonstrukce,3D reconstruction,amcr,HES-001113,https://api.aiscr.cz/id/HES-001113,dokument_typ,HES-000217,39
+3d dokumentace,3D documentation,amcr,HES-001114,https://api.aiscr.cz/id/HES-001114,dokument_typ,HES-000217,40
+3d textura,3D texture,amcr,HES-001115,https://api.aiscr.cz/id/HES-001115,dokument_typ,HES-000217,41
+letecká fotografie metody,aerial photograph of method,amcr,HES-001116,https://api.aiscr.cz/id/HES-001116,dokument_typ,,25
+kniha,book,amcr,HES-001117,https://api.aiscr.cz/id/HES-001117,ext_zdroj_typ,,4
+část knihy,book chapter,amcr,HES-001118,https://api.aiscr.cz/id/HES-001118,ext_zdroj_typ,,1
+článek v časopise,journal paper,amcr,HES-001119,https://api.aiscr.cz/id/HES-001119,ext_zdroj_typ,,2
+článek v novinách,newspaper article,amcr,HES-001120,https://api.aiscr.cz/id/HES-001120,ext_zdroj_typ,,3
+jiný zdroj,other source,amcr,HES-001121,https://api.aiscr.cz/id/HES-001121,ext_zdroj_typ,,5
+nemovitá památka,heritage site,amcr,HES-001122,https://api.aiscr.cz/id/HES-001122,lokalita_typ,,1
+polygon průzkumu,survey polygon,amcr,HES-001123,https://api.aiscr.cz/id/HES-001123,lokalita_typ,,2
+krajina,landscape,amcr,HES-001124,https://api.aiscr.cz/id/HES-001124,lokalita_typ,,3
+objekt,feature,amcr,HES-001125,https://api.aiscr.cz/id/HES-001125,nalez_typ,,1
+předmět,object,amcr,HES-001126,https://api.aiscr.cz/id/HES-001126,nalez_typ,,2
+muzeum,museum,amcr,HES-001127,https://api.aiscr.cz/id/HES-001127,organizace_typ,,1
+jiná organizace,other organisation,amcr,HES-001128,https://api.aiscr.cz/id/HES-001128,organizace_typ,,2
+terénní pracoviště,fieldwork unit,amcr,HES-001129,https://api.aiscr.cz/id/HES-001129,organizace_typ,,3
+ústav památkové péče,heritage organisation,amcr,HES-001130,https://api.aiscr.cz/id/HES-001130,organizace_typ,,5
+výzkumná instituce,research organisation,amcr,HES-001131,https://api.aiscr.cz/id/HES-001131,organizace_typ,,6
+univerzita,university,amcr,HES-001132,https://api.aiscr.cz/id/HES-001132,organizace_typ,,4
+bod,point,amcr,HES-001133,https://api.aiscr.cz/id/HES-001133,pian_typ,,1
+linie,line,amcr,HES-001134,https://api.aiscr.cz/id/HES-001134,pian_typ,,2
+polygon,polygon,amcr,HES-001135,https://api.aiscr.cz/id/HES-001135,pian_typ,,3
+záchranný,rescue,amcr,HES-001136,https://api.aiscr.cz/id/HES-001136,projekt_typ,,1
+badatelský,research,amcr,HES-001137,https://api.aiscr.cz/id/HES-001137,projekt_typ,,2
+průzkum,survey,amcr,HES-001138,https://api.aiscr.cz/id/HES-001138,projekt_typ,,3
+náhodný/povrchový nález,chance find,amcr,HES-001139,https://api.aiscr.cz/id/HES-001139,adb_typ,,1
+neodborné narušení,non-professional intervention,amcr,HES-001140,https://api.aiscr.cz/id/HES-001140,adb_typ,,2
+geodetický průzkum,geodetic survey,amcr,HES-001141,https://api.aiscr.cz/id/HES-001141,adb_typ,,3
+geofyzikální průzkum,geophysical survey,amcr,HES-001142,https://api.aiscr.cz/id/HES-001142,adb_typ,,4
+stavebně-historický průzkum,building-history survey,amcr,HES-001143,https://api.aiscr.cz/id/HES-001143,adb_typ,,5
+geologický vrt,geological core sample,amcr,HES-001144,https://api.aiscr.cz/id/HES-001144,adb_typ,,6
+geologická sonda,geological trench,amcr,HES-001145,https://api.aiscr.cz/id/HES-001145,adb_typ,,7
+vrt,sediment core sample,amcr,HES-001146,https://api.aiscr.cz/id/HES-001146,adb_typ,,8
+skupina vrtů,group of sediment core samples,amcr,HES-001147,https://api.aiscr.cz/id/HES-001147,adb_typ,,9
+řez,linear trench,amcr,HES-001148,https://api.aiscr.cz/id/HES-001148,adb_typ,,10
+skupina řezů,group of linear trenches,amcr,HES-001149,https://api.aiscr.cz/id/HES-001149,adb_typ,,11
+sonda,pit trench,amcr,HES-001150,https://api.aiscr.cz/id/HES-001150,adb_typ,,12
+skupina sond,group of pit trenches,amcr,HES-001151,https://api.aiscr.cz/id/HES-001151,adb_typ,,13
+konference,conference,amcr,HES-001152,https://api.aiscr.cz/id/HES-001152,udalost_typ,,1
+zahraniční cesta,travel abroad,amcr,HES-001153,https://api.aiscr.cz/id/HES-001153,udalost_typ,,2
+zahraniční výzkum,fieldwork abroad,amcr,HES-001154,https://api.aiscr.cz/id/HES-001154,udalost_typ,,3
+společenská akce,social event,amcr,HES-001155,https://api.aiscr.cz/id/HES-001155,udalost_typ,,4
+jiná událost,other event,amcr,HES-001156,https://api.aiscr.cz/id/HES-001156,udalost_typ,,5
+povrch sondy,trench surface,amcr,HES-001157,https://api.aiscr.cz/id/HES-001157,vyskovy_bod_typ,,1
+dno sondy,trench bottom,amcr,HES-001158,https://api.aiscr.cz/id/HES-001158,vyskovy_bod_typ,,2
+podloží,subsoil,amcr,HES-001159,https://api.aiscr.cz/id/HES-001159,vyskovy_bod_typ,,3
+snížené podloží,levelled subsoil,amcr,HES-001160,https://api.aiscr.cz/id/HES-001160,vyskovy_bod_typ,,4
+pravěk,Prehistory,amcr,HES-001161,https://api.aiscr.cz/id/HES-001161,vyskovy_bod_typ,,5
+raný středověk,Early Medieval,amcr,HES-001162,https://api.aiscr.cz/id/HES-001162,vyskovy_bod_typ,,6
+středověk,Medieval,amcr,HES-001163,https://api.aiscr.cz/id/HES-001163,vyskovy_bod_typ,,7
+novověk,Modern,amcr,HES-001164,https://api.aiscr.cz/id/HES-001164,vyskovy_bod_typ,,8
+industriál,Industrial,amcr,HES-001165,https://api.aiscr.cz/id/HES-001165,vyskovy_bod_typ,,9
+primárně digitální dokument,born digital document,amcr,HES-001166,https://api.aiscr.cz/id/HES-001166,dokument_ulozeni,,1
+archiv arúb,IAB archive,amcr,HES-001167,https://api.aiscr.cz/id/HES-001167,dokument_ulozeni,,2
+archiv arú,IAP archive,amcr,HES-001168,https://api.aiscr.cz/id/HES-001168,dokument_ulozeni,,3
+archiv jiné organizace,other institutional archive,amcr,HES-001169,https://api.aiscr.cz/id/HES-001169,dokument_ulozeni,,4
+archiv autora,author's archive,amcr,HES-001170,https://api.aiscr.cz/id/HES-001170,dokument_ulozeni,,5
+originál ztracen/zničen,original lost/destroyed,amcr,HES-001171,https://api.aiscr.cz/id/HES-001171,dokument_ulozeni,,6
+neznámé uložení,unknown deposition,amcr,HES-001172,https://api.aiscr.cz/id/HES-001172,dokument_ulozeni,,7
+zachováno 80–100 %,80–100% preserved,amcr,HES-001173,https://api.aiscr.cz/id/HES-001173,dokument_zachovalost,,1
+zachováno 30–80 %,30–80% preserved,amcr,HES-001174,https://api.aiscr.cz/id/HES-001174,dokument_zachovalost,,2
+zachováno 0–30 %,0–30% preserved,amcr,HES-001175,https://api.aiscr.cz/id/HES-001175,dokument_zachovalost,,3
+ztraceno/skartováno,lost/discarded,amcr,HES-001176,https://api.aiscr.cz/id/HES-001176,dokument_zachovalost,,4
+duplicita,duplicate,amcr,HES-001177,https://api.aiscr.cz/id/HES-001177,dokument_zachovalost,,5
+nízká výpovědní hodnota,low relevancy,amcr,HES-001178,https://api.aiscr.cz/id/HES-001178,dokument_zachovalost,,6
+afghánistán,Afghanistan,amcr,HES-001179,https://api.aiscr.cz/id/HES-001179,zeme,,2
+alandy,Åland Islands,amcr,HES-001180,https://api.aiscr.cz/id/HES-001180,zeme,,3
+albánie,Albania,amcr,HES-001181,https://api.aiscr.cz/id/HES-001181,zeme,,4
+alžírsko,Algeria,amcr,HES-001182,https://api.aiscr.cz/id/HES-001182,zeme,,5
+americká samoa,American Samoa,amcr,HES-001183,https://api.aiscr.cz/id/HES-001183,zeme,,6
+americké panenské ostrovy,Virgin Islands (U.S.),amcr,HES-001184,https://api.aiscr.cz/id/HES-001184,zeme,,7
+andorra,Andorra,amcr,HES-001185,https://api.aiscr.cz/id/HES-001185,zeme,,8
+angola,Angola,amcr,HES-001186,https://api.aiscr.cz/id/HES-001186,zeme,,9
+anguilla,Anguilla,amcr,HES-001187,https://api.aiscr.cz/id/HES-001187,zeme,,10
+antarktida,Antarctica,amcr,HES-001188,https://api.aiscr.cz/id/HES-001188,zeme,,11
+antigua a barbuda,Antigua and Barbuda,amcr,HES-001189,https://api.aiscr.cz/id/HES-001189,zeme,,12
+argentina,Argentina,amcr,HES-001190,https://api.aiscr.cz/id/HES-001190,zeme,,13
+arménie,Armenia,amcr,HES-001191,https://api.aiscr.cz/id/HES-001191,zeme,,14
+aruba,Aruba,amcr,HES-001192,https://api.aiscr.cz/id/HES-001192,zeme,,15
+austrálie,Australia,amcr,HES-001193,https://api.aiscr.cz/id/HES-001193,zeme,,16
+ázerbájdžán,Azerbaijan,amcr,HES-001194,https://api.aiscr.cz/id/HES-001194,zeme,,17
+bahamy,Bahamas (the),amcr,HES-001195,https://api.aiscr.cz/id/HES-001195,zeme,,18
+bahrajn,Bahrain,amcr,HES-001196,https://api.aiscr.cz/id/HES-001196,zeme,,19
+bangladéš,Bangladesh,amcr,HES-001197,https://api.aiscr.cz/id/HES-001197,zeme,,20
+česko,Czechia,amcr,HES-001198,https://api.aiscr.cz/id/HES-001198,zeme,,1
+indonésie,Indonesia,amcr,HES-001199,https://api.aiscr.cz/id/HES-001199,zeme,,85
+kosovo,Kosovo,amcr,HES-001200,https://api.aiscr.cz/id/HES-001200,zeme,,115
+kuvajt,Kuwait,amcr,HES-001201,https://api.aiscr.cz/id/HES-001201,zeme,,118
+belgie,Belgium,amcr,HES-001202,https://api.aiscr.cz/id/HES-001202,zeme,,22
+guadeloupe,Guadeloupe,amcr,HES-001203,https://api.aiscr.cz/id/HES-001203,zeme,,71
+nepál,Nepal,amcr,HES-001204,https://api.aiscr.cz/id/HES-001204,zeme,,158
+mali,Mali,amcr,HES-001205,https://api.aiscr.cz/id/HES-001205,zeme,,137
+man,Isle of Man,amcr,HES-001206,https://api.aiscr.cz/id/HES-001206,zeme,,139
+benin,Benin,amcr,HES-001207,https://api.aiscr.cz/id/HES-001207,zeme,,25
+maroko,Morocco,amcr,HES-001208,https://api.aiscr.cz/id/HES-001208,zeme,,140
+nový zéland,New Zealand,amcr,HES-001209,https://api.aiscr.cz/id/HES-001209,zeme,,167
+mexiko,Mexico,amcr,HES-001210,https://api.aiscr.cz/id/HES-001210,zeme,,147
+mikronésie,Micronesia (Federated States of),amcr,HES-001211,https://api.aiscr.cz/id/HES-001211,zeme,,148
+svatý tomáš a princův ostrov,Sao Tome and Principe,amcr,HES-001212,https://api.aiscr.cz/id/HES-001212,zeme,,213
+namibie,Namibia,amcr,HES-001213,https://api.aiscr.cz/id/HES-001213,zeme,,155
+haiti,Haiti,amcr,HES-001214,https://api.aiscr.cz/id/HES-001214,zeme,,78
+senegal,Senegal,amcr,HES-001215,https://api.aiscr.cz/id/HES-001215,zeme,,193
+severní mariany,Northern Mariana Islands (the),amcr,HES-001216,https://api.aiscr.cz/id/HES-001216,zeme,,194
+guam,Guam,amcr,HES-001217,https://api.aiscr.cz/id/HES-001217,zeme,,72
+guatemala,Guatemala,amcr,HES-001218,https://api.aiscr.cz/id/HES-001218,zeme,,73
+guinea,Guinea,amcr,HES-001219,https://api.aiscr.cz/id/HES-001219,zeme,,75
+polsko,Poland,amcr,HES-001220,https://api.aiscr.cz/id/HES-001220,zeme,,178
+portoriko,Puerto Rico,amcr,HES-001221,https://api.aiscr.cz/id/HES-001221,zeme,,179
+portugalsko,Portugal,amcr,HES-001222,https://api.aiscr.cz/id/HES-001222,zeme,,180
+omán,Oman,amcr,HES-001223,https://api.aiscr.cz/id/HES-001223,zeme,,168
+pákistán,Pakistan,amcr,HES-001224,https://api.aiscr.cz/id/HES-001224,zeme,,169
+korejská republika,Korea (the Republic of),amcr,HES-001225,https://api.aiscr.cz/id/HES-001225,zeme,,114
+pobřeží slonoviny,Côte d'Ivoire,amcr,HES-001226,https://api.aiscr.cz/id/HES-001226,zeme,,177
+falklandy (malvíny),Falkland Islands (the) (Malvinas),amcr,HES-001227,https://api.aiscr.cz/id/HES-001227,zeme,,56
+francouzská jižní a antarktická území,French Southern Territories (the),amcr,HES-001228,https://api.aiscr.cz/id/HES-001228,zeme,,62
+nikaragua,Nicaragua,amcr,HES-001229,https://api.aiscr.cz/id/HES-001229,zeme,,161
+nizozemsko,Netherlands (the),amcr,HES-001230,https://api.aiscr.cz/id/HES-001230,zeme,,163
+norfolk,Norfolk Island,amcr,HES-001231,https://api.aiscr.cz/id/HES-001231,zeme,,164
+estonsko,Estonia,amcr,HES-001232,https://api.aiscr.cz/id/HES-001232,zeme,,53
+kiribati,Kiribati,amcr,HES-001233,https://api.aiscr.cz/id/HES-001233,zeme,,108
+kuba,Cuba,amcr,HES-001234,https://api.aiscr.cz/id/HES-001234,zeme,,117
+rovníková guinea,Equatorial Guinea,amcr,HES-001235,https://api.aiscr.cz/id/HES-001235,zeme,,183
+rumunsko,Romania,amcr,HES-001236,https://api.aiscr.cz/id/HES-001236,zeme,,184
+kypr,Cyprus,amcr,HES-001237,https://api.aiscr.cz/id/HES-001237,zeme,,119
+mauricius,Mauritius,amcr,HES-001238,https://api.aiscr.cz/id/HES-001238,zeme,,143
+libanon,Lebanon,amcr,HES-001239,https://api.aiscr.cz/id/HES-001239,zeme,,123
+mongolsko,Mongolia,amcr,HES-001240,https://api.aiscr.cz/id/HES-001240,zeme,,151
+montserrat,Montserrat,amcr,HES-001241,https://api.aiscr.cz/id/HES-001241,zeme,,152
+ghana,Ghana,amcr,HES-001242,https://api.aiscr.cz/id/HES-001242,zeme,,66
+curaçao,Curaçao,amcr,HES-001243,https://api.aiscr.cz/id/HES-001243,zeme,,41
+tanzanie,"Tanzania, United Republic of",amcr,HES-001244,https://api.aiscr.cz/id/HES-001244,zeme,,224
+jamajka,Jamaica,amcr,HES-001245,https://api.aiscr.cz/id/HES-001245,zeme,,92
+egypt,Egypt,amcr,HES-001246,https://api.aiscr.cz/id/HES-001246,zeme,,50
+menší odlehlé ostrovy usa,United States Minor Outlying Islands (the),amcr,HES-001247,https://api.aiscr.cz/id/HES-001247,zeme,,146
+černá hora,Montenegro,amcr,HES-001248,https://api.aiscr.cz/id/HES-001248,zeme,,43
+čína,China,amcr,HES-001249,https://api.aiscr.cz/id/HES-001249,zeme,,44
+dánsko,Denmark,amcr,HES-001250,https://api.aiscr.cz/id/HES-001250,zeme,,45
+konžská demokratická republika,Congo (the Democratic Republic of the),amcr,HES-001251,https://api.aiscr.cz/id/HES-001251,zeme,,46
+brazílie,Brazil,amcr,HES-001252,https://api.aiscr.cz/id/HES-001252,zeme,,33
+špicberky a jan mayen,Svalbard and Jan Mayen,amcr,HES-001253,https://api.aiscr.cz/id/HES-001253,zeme,,219
+šrí lanka,Sri Lanka,amcr,HES-001254,https://api.aiscr.cz/id/HES-001254,zeme,,220
+singapur,Singapore,amcr,HES-001255,https://api.aiscr.cz/id/HES-001255,zeme,,197
+gambie,Gambia (the),amcr,HES-001256,https://api.aiscr.cz/id/HES-001256,zeme,,65
+sierra leone,Sierra Leone,amcr,HES-001257,https://api.aiscr.cz/id/HES-001257,zeme,,196
+svatá helena,"Saint Helena, Ascension and Tristan da Cunha",amcr,HES-001258,https://api.aiscr.cz/id/HES-001258,zeme,,207
+kokosové (keelingovy) ostrovy,Cocos (Keeling) Islands (the),amcr,HES-001259,https://api.aiscr.cz/id/HES-001259,zeme,,109
+irák,Iraq,amcr,HES-001260,https://api.aiscr.cz/id/HES-001260,zeme,,86
+filipíny,Philippines (the),amcr,HES-001261,https://api.aiscr.cz/id/HES-001261,zeme,,58
+finsko,Finland,amcr,HES-001262,https://api.aiscr.cz/id/HES-001262,zeme,,59
+nová kaledonie,New Caledonia,amcr,HES-001263,https://api.aiscr.cz/id/HES-001263,zeme,,166
+gibraltar,Gibraltar,amcr,HES-001264,https://api.aiscr.cz/id/HES-001264,zeme,,67
+grenada,Grenada,amcr,HES-001265,https://api.aiscr.cz/id/HES-001265,zeme,,68
+grónsko,Greenland,amcr,HES-001266,https://api.aiscr.cz/id/HES-001266,zeme,,69
+marshallovy ostrovy,Marshall Islands (the),amcr,HES-001267,https://api.aiscr.cz/id/HES-001267,zeme,,141
+svatý martin (fr),Saint Martin (French part),amcr,HES-001268,https://api.aiscr.cz/id/HES-001268,zeme,,211
+moldavsko,Moldova (the Republic of),amcr,HES-001269,https://api.aiscr.cz/id/HES-001269,zeme,,149
+monako,Monaco,amcr,HES-001270,https://api.aiscr.cz/id/HES-001270,zeme,,150
+kostarika,Costa Rica,amcr,HES-001271,https://api.aiscr.cz/id/HES-001271,zeme,,116
+súdán,Sudan (the),amcr,HES-001272,https://api.aiscr.cz/id/HES-001272,zeme,,205
+niger,Niger (the),amcr,HES-001273,https://api.aiscr.cz/id/HES-001273,zeme,,159
+nigérie,Nigeria,amcr,HES-001274,https://api.aiscr.cz/id/HES-001274,zeme,,160
+heardův ostrov a macdonaldovy ostrovy,Heard Island and McDonald Islands,amcr,HES-001275,https://api.aiscr.cz/id/HES-001275,zeme,,79
+honduras,Honduras,amcr,HES-001276,https://api.aiscr.cz/id/HES-001276,zeme,,80
+hongkong,Hong Kong,amcr,HES-001277,https://api.aiscr.cz/id/HES-001277,zeme,,81
+island,Iceland,amcr,HES-001278,https://api.aiscr.cz/id/HES-001278,zeme,,89
+niue,Niue,amcr,HES-001279,https://api.aiscr.cz/id/HES-001279,zeme,,162
+saint pierre a miquelon,Saint Pierre and Miquelon,amcr,HES-001280,https://api.aiscr.cz/id/HES-001280,zeme,,188
+salvador,El Salvador,amcr,HES-001281,https://api.aiscr.cz/id/HES-001281,zeme,,189
+bosna a hercegovina,Bosnia and Herzegovina,amcr,HES-001282,https://api.aiscr.cz/id/HES-001282,zeme,,30
+cookovy ostrovy,Cook Islands (the),amcr,HES-001283,https://api.aiscr.cz/id/HES-001283,zeme,,40
+kolumbie,Colombia,amcr,HES-001284,https://api.aiscr.cz/id/HES-001284,zeme,,110
+britské indickooceánské území,British Indian Ocean Territory (the),amcr,HES-001285,https://api.aiscr.cz/id/HES-001285,zeme,,34
+katar,Qatar,amcr,HES-001286,https://api.aiscr.cz/id/HES-001286,zeme,,105
+pitcairn,Pitcairn,amcr,HES-001287,https://api.aiscr.cz/id/HES-001287,zeme,,176
+lotyšsko,Latvia,amcr,HES-001288,https://api.aiscr.cz/id/HES-001288,zeme,,128
+lucembursko,Luxembourg,amcr,HES-001289,https://api.aiscr.cz/id/HES-001289,zeme,,129
+norsko,Norway,amcr,HES-001290,https://api.aiscr.cz/id/HES-001290,zeme,,165
+kambodža,Cambodia,amcr,HES-001291,https://api.aiscr.cz/id/HES-001291,zeme,,101
+kamerun,Cameroon,amcr,HES-001292,https://api.aiscr.cz/id/HES-001292,zeme,,102
+kanada,Canada,amcr,HES-001293,https://api.aiscr.cz/id/HES-001293,zeme,,103
+mosambik,Mozambique,amcr,HES-001294,https://api.aiscr.cz/id/HES-001294,zeme,,153
+rakousko,Austria,amcr,HES-001295,https://api.aiscr.cz/id/HES-001295,zeme,,181
+peru,Peru,amcr,HES-001296,https://api.aiscr.cz/id/HES-001296,zeme,,175
+kyrgyzstán,Kyrgyzstan,amcr,HES-001297,https://api.aiscr.cz/id/HES-001297,zeme,,120
+laos,Lao People's Democratic Republic (the),amcr,HES-001298,https://api.aiscr.cz/id/HES-001298,zeme,,121
+lesotho,Lesotho,amcr,HES-001299,https://api.aiscr.cz/id/HES-001299,zeme,,122
+španělsko,Spain,amcr,HES-001300,https://api.aiscr.cz/id/HES-001300,zeme,,218
+guernsey,Guernsey,amcr,HES-001301,https://api.aiscr.cz/id/HES-001301,zeme,,74
+guinea-bissau,Guinea-Bissau,amcr,HES-001302,https://api.aiscr.cz/id/HES-001302,zeme,,76
+réunion,Réunion,amcr,HES-001303,https://api.aiscr.cz/id/HES-001303,zeme,,182
+řecko,Greece,amcr,HES-001304,https://api.aiscr.cz/id/HES-001304,zeme,,187
+svatý kryštof a nevis,Saint Kitts and Nevis,amcr,HES-001305,https://api.aiscr.cz/id/HES-001305,zeme,,210
+tchaj-wan,Taiwan (Province of China),amcr,HES-001306,https://api.aiscr.cz/id/HES-001306,zeme,,226
+seychely,Seychelles,amcr,HES-001307,https://api.aiscr.cz/id/HES-001307,zeme,,195
+libye,Libya,amcr,HES-001308,https://api.aiscr.cz/id/HES-001308,zeme,,125
+dominika,Dominica,amcr,HES-001309,https://api.aiscr.cz/id/HES-001309,zeme,,47
+malawi,Malawi,amcr,HES-001310,https://api.aiscr.cz/id/HES-001310,zeme,,135
+šalomounovy ostrovy,Solomon Islands,amcr,HES-001311,https://api.aiscr.cz/id/HES-001311,zeme,,217
+slovinsko,Slovenia,amcr,HES-001312,https://api.aiscr.cz/id/HES-001312,zeme,,199
+jemen,Yemen,amcr,HES-001313,https://api.aiscr.cz/id/HES-001313,zeme,,94
+libérie,Liberia,amcr,HES-001314,https://api.aiscr.cz/id/HES-001314,zeme,,124
+svatý martin (nl),Sint Maarten (Dutch part),amcr,HES-001315,https://api.aiscr.cz/id/HES-001315,zeme,,212
+kazachstán,Kazakhstan,amcr,HES-001316,https://api.aiscr.cz/id/HES-001316,zeme,,106
+džibutsko,Djibouti,amcr,HES-001317,https://api.aiscr.cz/id/HES-001317,zeme,,49
+jižní súdán,South Sudan,amcr,HES-001318,https://api.aiscr.cz/id/HES-001318,zeme,,98
+itálie,Italy,amcr,HES-001319,https://api.aiscr.cz/id/HES-001319,zeme,,90
+izrael,Israel,amcr,HES-001320,https://api.aiscr.cz/id/HES-001320,zeme,,91
+samoa,Samoa,amcr,HES-001321,https://api.aiscr.cz/id/HES-001321,zeme,,190
+spojené arabské emiráty,United Arab Emirates (the),amcr,HES-001322,https://api.aiscr.cz/id/HES-001322,zeme,,201
+spojené státy,United States of America (the),amcr,HES-001323,https://api.aiscr.cz/id/HES-001323,zeme,,202
+írán,Iran (Islamic Republic of),amcr,HES-001324,https://api.aiscr.cz/id/HES-001324,zeme,,87
+mauritánie,Mauritania,amcr,HES-001325,https://api.aiscr.cz/id/HES-001325,zeme,,144
+somálsko,Somalia,amcr,HES-001326,https://api.aiscr.cz/id/HES-001326,zeme,,200
+malajsie,Malaysia,amcr,HES-001327,https://api.aiscr.cz/id/HES-001327,zeme,,134
+"bonaire, svatý eustach a saba","Bonaire, Sint Eustatius and Saba",amcr,HES-001328,https://api.aiscr.cz/id/HES-001328,zeme,,29
+bělorusko,Belarus,amcr,HES-001329,https://api.aiscr.cz/id/HES-001329,zeme,,24
+bermudy,Bermuda,amcr,HES-001330,https://api.aiscr.cz/id/HES-001330,zeme,,26
+švédsko,Sweden,amcr,HES-001331,https://api.aiscr.cz/id/HES-001331,zeme,,221
+svatá lucie,Saint Lucia,amcr,HES-001332,https://api.aiscr.cz/id/HES-001332,zeme,,208
+britské panenské ostrovy,Virgin Islands (British),amcr,HES-001333,https://api.aiscr.cz/id/HES-001333,zeme,,35
+belize,Belize,amcr,HES-001334,https://api.aiscr.cz/id/HES-001334,zeme,,23
+etiopie,Ethiopia,amcr,HES-001335,https://api.aiscr.cz/id/HES-001335,zeme,,54
+faerské ostrovy,Faroe Islands (the),amcr,HES-001336,https://api.aiscr.cz/id/HES-001336,zeme,,55
+fidži,Fiji,amcr,HES-001337,https://api.aiscr.cz/id/HES-001337,zeme,,57
+chile,Chile,amcr,HES-001338,https://api.aiscr.cz/id/HES-001338,zeme,,82
+chorvatsko,Croatia,amcr,HES-001339,https://api.aiscr.cz/id/HES-001339,zeme,,83
+indie,India,amcr,HES-001340,https://api.aiscr.cz/id/HES-001340,zeme,,84
+thajsko,Thailand,amcr,HES-001341,https://api.aiscr.cz/id/HES-001341,zeme,,225
+togo,Togo,amcr,HES-001342,https://api.aiscr.cz/id/HES-001342,zeme,,227
+kapverdy,Cape Verde,amcr,HES-001343,https://api.aiscr.cz/id/HES-001343,zeme,,104
+irsko,Ireland,amcr,HES-001344,https://api.aiscr.cz/id/HES-001344,zeme,,88
+kajmanské ostrovy,Cayman Islands (the),amcr,HES-001345,https://api.aiscr.cz/id/HES-001345,zeme,,100
+nauru,Nauru,amcr,HES-001346,https://api.aiscr.cz/id/HES-001346,zeme,,156
+bouvetův ostrov,Bouvet Island,amcr,HES-001347,https://api.aiscr.cz/id/HES-001347,zeme,,32
+surinam,Suriname,amcr,HES-001348,https://api.aiscr.cz/id/HES-001348,zeme,,206
+francie,France,amcr,HES-001349,https://api.aiscr.cz/id/HES-001349,zeme,,60
+dominikánská republika,Dominican Republic (the),amcr,HES-001350,https://api.aiscr.cz/id/HES-001350,zeme,,48
+macao,Macao,amcr,HES-001351,https://api.aiscr.cz/id/HES-001351,zeme,,130
+madagaskar,Madagascar,amcr,HES-001352,https://api.aiscr.cz/id/HES-001352,zeme,,131
+japonsko,Japan,amcr,HES-001353,https://api.aiscr.cz/id/HES-001353,zeme,,93
+ekvádor,Ecuador,amcr,HES-001354,https://api.aiscr.cz/id/HES-001354,zeme,,51
+svatý bartoloměj,Saint Barthélemy,amcr,HES-001355,https://api.aiscr.cz/id/HES-001355,zeme,,209
+myanmar,Myanmar,amcr,HES-001356,https://api.aiscr.cz/id/HES-001356,zeme,,154
+srbsko,Serbia,amcr,HES-001357,https://api.aiscr.cz/id/HES-001357,zeme,,203
+německo,Germany,amcr,HES-001358,https://api.aiscr.cz/id/HES-001358,zeme,,157
+brunej,Brunei Darussalam,amcr,HES-001359,https://api.aiscr.cz/id/HES-001359,zeme,,36
+bulharsko,Bulgaria,amcr,HES-001360,https://api.aiscr.cz/id/HES-001360,zeme,,37
+burkina faso,Burkina Faso,amcr,HES-001361,https://api.aiscr.cz/id/HES-001361,zeme,,38
+burundi,Burundi,amcr,HES-001362,https://api.aiscr.cz/id/HES-001362,zeme,,39
+paraguay,Paraguay,amcr,HES-001363,https://api.aiscr.cz/id/HES-001363,zeme,,174
+jersey,Jersey,amcr,HES-001364,https://api.aiscr.cz/id/HES-001364,zeme,,95
+švýcarsko,Switzerland,amcr,HES-001365,https://api.aiscr.cz/id/HES-001365,zeme,,222
+malta,Malta,amcr,HES-001366,https://api.aiscr.cz/id/HES-001366,zeme,,138
+slovensko,Slovakia,amcr,HES-001367,https://api.aiscr.cz/id/HES-001367,zeme,,198
+palestina,"Palestine, State of",amcr,HES-001368,https://api.aiscr.cz/id/HES-001368,zeme,,171
+panama,Panama,amcr,HES-001369,https://api.aiscr.cz/id/HES-001369,zeme,,172
+papua nová guinea,Papua New Guinea,amcr,HES-001370,https://api.aiscr.cz/id/HES-001370,zeme,,173
+lichtenštejnsko,Liechtenstein,amcr,HES-001371,https://api.aiscr.cz/id/HES-001371,zeme,,126
+litva,Lithuania,amcr,HES-001372,https://api.aiscr.cz/id/HES-001372,zeme,,127
+korejská lidově demokratická republika,Korea (the Democratic People's Republic of),amcr,HES-001373,https://api.aiscr.cz/id/HES-001373,zeme,,113
+maďarsko,Hungary,amcr,HES-001374,https://api.aiscr.cz/id/HES-001374,zeme,,132
+severní makedonie,North Macedonia,amcr,HES-001375,https://api.aiscr.cz/id/HES-001375,zeme,,133
+san marino,San Marino,amcr,HES-001376,https://api.aiscr.cz/id/HES-001376,zeme,,191
+botswana,Botswana,amcr,HES-001377,https://api.aiscr.cz/id/HES-001377,zeme,,31
+svatý vincenc a grenadiny,Saint Vincent and the Grenadines,amcr,HES-001378,https://api.aiscr.cz/id/HES-001378,zeme,,214
+sýrie,Syrian Arab Republic,amcr,HES-001379,https://api.aiscr.cz/id/HES-001379,zeme,,216
+saúdská arábie,Saudi Arabia,amcr,HES-001380,https://api.aiscr.cz/id/HES-001380,zeme,,192
+jižní afrika,South Africa,amcr,HES-001381,https://api.aiscr.cz/id/HES-001381,zeme,,96
+jižní georgie a jižní sandwichovy ostrovy,South Georgia and the South Sandwich Islands,amcr,HES-001382,https://api.aiscr.cz/id/HES-001382,zeme,,97
+jordánsko,Jordan,amcr,HES-001383,https://api.aiscr.cz/id/HES-001383,zeme,,99
+komory,Comoros (the),amcr,HES-001384,https://api.aiscr.cz/id/HES-001384,zeme,,111
+konžská republika,Congo (the),amcr,HES-001385,https://api.aiscr.cz/id/HES-001385,zeme,,112
+středoafrická republika,Central African Republic (the),amcr,HES-001386,https://api.aiscr.cz/id/HES-001386,zeme,,204
+palau,Palau,amcr,HES-001387,https://api.aiscr.cz/id/HES-001387,zeme,,170
+svazijsko,Eswatini,amcr,HES-001388,https://api.aiscr.cz/id/HES-001388,zeme,,215
+mayotte,Mayotte,amcr,HES-001389,https://api.aiscr.cz/id/HES-001389,zeme,,145
+tádžikistán,Tajikistan,amcr,HES-001390,https://api.aiscr.cz/id/HES-001390,zeme,,223
+gruzie,Georgia,amcr,HES-001391,https://api.aiscr.cz/id/HES-001391,zeme,,70
+rusko,Russian Federation (the),amcr,HES-001392,https://api.aiscr.cz/id/HES-001392,zeme,,185
+rwanda,Rwanda,amcr,HES-001393,https://api.aiscr.cz/id/HES-001393,zeme,,186
+eritrea,Eritrea,amcr,HES-001394,https://api.aiscr.cz/id/HES-001394,zeme,,52
+bhútán,Bhutan,amcr,HES-001395,https://api.aiscr.cz/id/HES-001395,zeme,,27
+bolívie,Bolivia (Plurinational State of),amcr,HES-001396,https://api.aiscr.cz/id/HES-001396,zeme,,28
+maledivy,Maldives,amcr,HES-001397,https://api.aiscr.cz/id/HES-001397,zeme,,136
+keňa,Kenya,amcr,HES-001398,https://api.aiscr.cz/id/HES-001398,zeme,,107
+francouzská polynésie,French Polynesia,amcr,HES-001399,https://api.aiscr.cz/id/HES-001399,zeme,,63
+gabon,Gabon,amcr,HES-001400,https://api.aiscr.cz/id/HES-001400,zeme,,64
+guyana,Guyana,amcr,HES-001401,https://api.aiscr.cz/id/HES-001401,zeme,,77
+barbados,Barbados,amcr,HES-001402,https://api.aiscr.cz/id/HES-001402,zeme,,21
+martinik,Martinique,amcr,HES-001403,https://api.aiscr.cz/id/HES-001403,zeme,,142
+francouzská guyana,French Guiana,amcr,HES-001404,https://api.aiscr.cz/id/HES-001404,zeme,,61
+čad,Chad,amcr,HES-001405,https://api.aiscr.cz/id/HES-001405,zeme,,42
+tokelau,Tokelau,amcr,HES-001406,https://api.aiscr.cz/id/HES-001406,zeme,,228
+tonga,Tonga,amcr,HES-001407,https://api.aiscr.cz/id/HES-001407,zeme,,229
+trinidad a tobago,Trinidad and Tobago,amcr,HES-001408,https://api.aiscr.cz/id/HES-001408,zeme,,230
+tunisko,Tunisia,amcr,HES-001409,https://api.aiscr.cz/id/HES-001409,zeme,,231
+turecko,Turkey,amcr,HES-001410,https://api.aiscr.cz/id/HES-001410,zeme,,232
+turkmenistán,Turkmenistan,amcr,HES-001411,https://api.aiscr.cz/id/HES-001411,zeme,,233
+turks a caicos,Turks and Caicos Islands (the),amcr,HES-001412,https://api.aiscr.cz/id/HES-001412,zeme,,234
+tuvalu,Tuvalu,amcr,HES-001413,https://api.aiscr.cz/id/HES-001413,zeme,,235
+uganda,Uganda,amcr,HES-001414,https://api.aiscr.cz/id/HES-001414,zeme,,236
+ukrajina,Ukraine,amcr,HES-001415,https://api.aiscr.cz/id/HES-001415,zeme,,237
+uruguay,Uruguay,amcr,HES-001416,https://api.aiscr.cz/id/HES-001416,zeme,,238
+uzbekistán,Uzbekistan,amcr,HES-001417,https://api.aiscr.cz/id/HES-001417,zeme,,239
+vánoční ostrov,Christmas Island,amcr,HES-001418,https://api.aiscr.cz/id/HES-001418,zeme,,240
+vanuatu,Vanuatu,amcr,HES-001419,https://api.aiscr.cz/id/HES-001419,zeme,,241
+vatikán,Holy See (the),amcr,HES-001420,https://api.aiscr.cz/id/HES-001420,zeme,,242
+velká británie,United Kingdom of Great Britain and Northern Ireland (the),amcr,HES-001421,https://api.aiscr.cz/id/HES-001421,zeme,,243
+venezuela,Venezuela (Bolivarian Republic of),amcr,HES-001422,https://api.aiscr.cz/id/HES-001422,zeme,,244
+vietnam,Viet Nam,amcr,HES-001423,https://api.aiscr.cz/id/HES-001423,zeme,,245
+východní timor,Timor-Leste,amcr,HES-001424,https://api.aiscr.cz/id/HES-001424,zeme,,246
+wallis a futuna,Wallis and Futuna,amcr,HES-001425,https://api.aiscr.cz/id/HES-001425,zeme,,247
+zambie,Zambia,amcr,HES-001426,https://api.aiscr.cz/id/HES-001426,zeme,,248
+západní sahara,Western Sahara,amcr,HES-001427,https://api.aiscr.cz/id/HES-001427,zeme,,249
+zimbabwe,Zimbabwe,amcr,HES-001428,https://api.aiscr.cz/id/HES-001428,zeme,,250
+pozůstatek komunikace,remains of transportation structure,amcr,HES-001429,https://api.aiscr.cz/id/HES-001429,lokalita_druh,HES-000134,30
+pozůstatek mohylníku,remains of burial mounds,amcr,HES-001430,https://api.aiscr.cz/id/HES-001430,lokalita_druh,HES-000134,32
+pozůstatek ohrazení,remains of enclosure,amcr,HES-001431,https://api.aiscr.cz/id/HES-001431,lokalita_druh,HES-000134,33
+pozůstatek represe,remains of repression site,amcr,HES-001432,https://api.aiscr.cz/id/HES-001432,lokalita_druh,HES-000134,34
+pozůstatek kultu,remains of ritual site,amcr,HES-001433,https://api.aiscr.cz/id/HES-001433,lokalita_druh,HES-000134,31
+pozůstatek sídla elity,remains of manorial site,amcr,HES-001434,https://api.aiscr.cz/id/HES-001434,lokalita_druh,HES-000134,35
+pozůstatek sídliště,remains of settlement,amcr,HES-001435,https://api.aiscr.cz/id/HES-001435,lokalita_druh,HES-000134,36
+pozůstatek těžby,remains of extraction site,amcr,HES-001436,https://api.aiscr.cz/id/HES-001436,lokalita_druh,HES-000134,37
+pozůstatek vojenství,remains of military site,amcr,HES-001437,https://api.aiscr.cz/id/HES-001437,lokalita_druh,HES-000134,38
+pozůstatek výroby,remains of production site,amcr,HES-001438,https://api.aiscr.cz/id/HES-001438,lokalita_druh,HES-000134,39
+bioarcheologie,bioarchaeology,amcr,HES-001439,https://api.aiscr.cz/id/HES-001439,posudek_typ,HES-001491,4
+osteozoologie,osteozoology,amcr,HES-001440,https://api.aiscr.cz/id/HES-001440,posudek_typ,HES-001491,16
+tafonomie,taphonomy,amcr,HES-001441,https://api.aiscr.cz/id/HES-001441,posudek_typ,HES-001491,18
+geochronologie,geochronology,amcr,HES-001442,https://api.aiscr.cz/id/HES-001442,posudek_typ,HES-001493,22
+geomorfologie,geomorphology,amcr,HES-001443,https://api.aiscr.cz/id/HES-001443,posudek_typ,HES-001493,23
+mikrostratigrafie,microstratigraphy,amcr,HES-001444,https://api.aiscr.cz/id/HES-001444,posudek_typ,HES-001493,24
+paleoklimatologie,paleoclimatology,amcr,HES-001445,https://api.aiscr.cz/id/HES-001445,posudek_typ,HES-001493,25
+experimentální archeologie,experimental archaeology,amcr,HES-001446,https://api.aiscr.cz/id/HES-001446,posudek_typ,HES-001495,34
+střední/mladší doba laténská (ltc1–2),Middle/Late La Tène Period (LtC1–2),amcr,HES-001447,https://api.aiscr.cz/id/HES-001447,obdobi,HES-001460,1025
+italština,Italian,amcr,HES-001448,https://api.aiscr.cz/id/HES-001448,jazyk,,5
+jisté (> 95 %),certain (> 95%),amcr,HES-001449,https://api.aiscr.cz/id/HES-001449,jistota_urceni,,1
+nejisté (50–95 %),uncertain (50–95%),amcr,HES-001450,https://api.aiscr.cz/id/HES-001450,jistota_urceni,,2
+domnělé (5–50 %),alleged (5–50%),amcr,HES-001451,https://api.aiscr.cz/id/HES-001451,jistota_urceni,,3
+pseudolokalita (< 5 %),pseudo-site (< 5%),amcr,HES-001452,https://api.aiscr.cz/id/HES-001452,jistota_urceni,,4
+zaniklá lokalita,buried site,amcr,HES-001453,https://api.aiscr.cz/id/HES-001453,stav_dochovani,,1
+lokalita pod zástavbou,site in built environment,amcr,HES-001454,https://api.aiscr.cz/id/HES-001454,stav_dochovani,,2
+nadzemní relikty,aboveground remains,amcr,HES-001455,https://api.aiscr.cz/id/HES-001455,stav_dochovani,,3
+ruina,ruin,amcr,HES-001456,https://api.aiscr.cz/id/HES-001456,stav_dochovani,,4
+historická budova/komplex,historical building/complex,amcr,HES-001457,https://api.aiscr.cz/id/HES-001457,stav_dochovani,,5
+časná doba laténská (lta),Early La Tène Period (LtA),amcr,HES-001458,https://api.aiscr.cz/id/HES-001458,obdobi_kat,,1010
+střední doba laténská (ltb–c1),Middle La Tène Period (LtB–C1),amcr,HES-001459,https://api.aiscr.cz/id/HES-001459,obdobi_kat,,1020
+střední/mladší doba laténská (ltc1–2),Middle/Late La Tène Period (LtC1–2),amcr,HES-001460,https://api.aiscr.cz/id/HES-001460,obdobi_kat,,1025
+mladší–pozdní doba laténská (ltc2–d),Late–Final La Tène Period (LtC2–D),amcr,HES-001461,https://api.aiscr.cz/id/HES-001461,obdobi_kat,,1030
+pozdní doba laténská (ltd),Final La Tène Period (LtD),amcr,HES-001462,https://api.aiscr.cz/id/HES-001462,obdobi_kat,,1040
+starší paleolit,Lower Palaeolithic,amcr,HES-001463,https://api.aiscr.cz/id/HES-001463,obdobi_kat,,110
+střední paleolit,Middle Palaeolithic,amcr,HES-001464,https://api.aiscr.cz/id/HES-001464,obdobi_kat,,120
+starší doba římská,Early Roman Period,amcr,HES-001465,https://api.aiscr.cz/id/HES-001465,obdobi_kat,,1210
+mladší doba římská,Late Roman Period,amcr,HES-001466,https://api.aiscr.cz/id/HES-001466,obdobi_kat,,1220
+mladší paleolit,Upper Palaeolithic,amcr,HES-001467,https://api.aiscr.cz/id/HES-001467,obdobi_kat,,130
+pozdní paleolit,Epipalaeolithic,amcr,HES-001468,https://api.aiscr.cz/id/HES-001468,obdobi_kat,,140
+starší doba stěhování národů,Early Migration Period,amcr,HES-001469,https://api.aiscr.cz/id/HES-001469,obdobi_kat,,1410
+mladší doba stěhování národů,Late Migration Period,amcr,HES-001470,https://api.aiscr.cz/id/HES-001470,obdobi_kat,,1420
+raný středověk 3,Early Middle Ages 3,amcr,HES-001471,https://api.aiscr.cz/id/HES-001471,obdobi_kat,,1840
+raný středověk 4,Early Middle Ages 4,amcr,HES-001472,https://api.aiscr.cz/id/HES-001472,obdobi_kat,,1850
+starší neolit,Early Neolithic,amcr,HES-001473,https://api.aiscr.cz/id/HES-001473,obdobi_kat,,410
+střední–mladší neolit,Middle–Late Neolithic,amcr,HES-001474,https://api.aiscr.cz/id/HES-001474,obdobi_kat,,420
+časný eneolit,Proto-Eneolithic,amcr,HES-001475,https://api.aiscr.cz/id/HES-001475,obdobi_kat,,510
+starší eneolit,Early Eneolithic,amcr,HES-001476,https://api.aiscr.cz/id/HES-001476,obdobi_kat,,520
+střední eneolit,Middle Eneolithic,amcr,HES-001477,https://api.aiscr.cz/id/HES-001477,obdobi_kat,,530
+mladší eneolit,Late Eneolithic,amcr,HES-001478,https://api.aiscr.cz/id/HES-001478,obdobi_kat,,540
+mladší–pozdní eneolit,Late–Final Eneolithic,amcr,HES-001479,https://api.aiscr.cz/id/HES-001479,obdobi_kat,,550
+starší doba bronzová,Early Bronze Age,amcr,HES-001480,https://api.aiscr.cz/id/HES-001480,obdobi_kat,,710
+střední doba bronzová,Middle Bronze Age,amcr,HES-001481,https://api.aiscr.cz/id/HES-001481,obdobi_kat,,720
+období popelnicových polí,Urnfield Period,amcr,HES-001482,https://api.aiscr.cz/id/HES-001482,obdobi_kat,,730
+mladší doba bronzová,Late Bronze Age,amcr,HES-001483,https://api.aiscr.cz/id/HES-001483,obdobi_kat,,740
+pozdní doba bronzová,Final Bronze Age,amcr,HES-001484,https://api.aiscr.cz/id/HES-001484,obdobi_kat,,750
+starší doba halštatská (hac–d1),Early Hallstatt Period (HaC–D1),amcr,HES-001485,https://api.aiscr.cz/id/HES-001485,obdobi_kat,,810
+had–lta,HaD–LtA,amcr,HES-001486,https://api.aiscr.cz/id/HES-001486,obdobi_kat,,820
+mladší doba halštatská (had2–3),Late Hallstatt Period (HaD2–3),amcr,HES-001487,https://api.aiscr.cz/id/HES-001487,obdobi_kat,,830
+creative commons uveďte původ-neužívejte komerčně 4.0 mezinárodní,Creative Commons Attribution-NonCommercial 4.0 International,amcr,HES-001489,https://api.aiscr.cz/id/HES-001489,dokument_licence,,1
+neznámá,unknown,amcr,HES-001490,https://api.aiscr.cz/id/HES-001490,dokument_licence,,7
+bioarcheologie,bioarchaeology,amcr,HES-001491,https://api.aiscr.cz/id/HES-001491,posudek_typ_kat,,2
+absolutní datování,absolute dating,amcr,HES-001492,https://api.aiscr.cz/id/HES-001492,posudek_typ_kat,,1
+geoarcheologie,geoarchaeology,amcr,HES-001493,https://api.aiscr.cz/id/HES-001493,posudek_typ_kat,,3
+materiálové analýzy,material analysis,amcr,HES-001494,https://api.aiscr.cz/id/HES-001494,posudek_typ_kat,,4
+jiné expertní zpracování,other expert analysis,amcr,HES-001495,https://api.aiscr.cz/id/HES-001495,posudek_typ_kat,,5
+creative commons uveďte původ 4.0 mezinárodní,Creative Commons Attribution 4.0 International,amcr,HES-001496,https://api.aiscr.cz/id/HES-001496,dokument_licence,,2
+creative commons uveďte původ-zachovejte licenci 4.0 mezinárodní,Creative Commons Attribution-ShareAlike 4.0 International,amcr,HES-001497,https://api.aiscr.cz/id/HES-001497,dokument_licence,,3
+creative commons uveďte původ-nezpracovávejte 4.0 mezinárodní,Creative Commons Attribution-NoDerivatives 4.0 International,amcr,HES-001498,https://api.aiscr.cz/id/HES-001498,dokument_licence,,4
+creative commons uveďte původ-neužívejte komerčně-zachovejte licenci 4.0 mezinárodní,Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International,amcr,HES-001499,https://api.aiscr.cz/id/HES-001499,dokument_licence,,5
+creative commons uveďte původ-neužívejte komerčně-nezpracovávejte 4.0 mezinárodní,Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International,amcr,HES-001500,https://api.aiscr.cz/id/HES-001500,dokument_licence,,6

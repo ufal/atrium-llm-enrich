@@ -34,6 +34,22 @@ pdfplumber  = MIT ; conditional ; digital-born PDF geometry (char/word/line bbox
 python-docx = MIT ; conditional ; DOCX paragraph/run/table/style structure
 docx2python = MIT ; conditional ; DOCX fallback for headers/footers/core-properties
 #
+# ── controlled vocabularies (issue nlp-enrich#6) ─────────────────────────────
+# The AMCR heslar and the TEATER thesaurus are both CC BY-NC 4.0 (AMCR's OAI
+# Identify response carries a rightsReference to by-nc/4.0; TEATER declares the
+# same on its home page). Names and licences match atrium-nlp-enrich's and
+# atrium-translator's para_config.txt so all three repos resolve the same
+# licence for the same data.
+#
+# "conditional", not "always": the digital-born conversion path never loads a
+# vocabulary, and marking these "always" would push CC BY-NC 4.0 onto every
+# digital-convert record — the opposite of what the pdfplumber-over-PyMuPDF
+# argument below exists to secure. Every LLM enrichment run does inject the
+# vocabulary, so that path is where log_component() belongs when the TODO
+# below is worked through.
+amcr_vocab  = CC BY-NC 4.0 ; conditional ; AMCR heslar controlled vocabulary (vocab_sources.harvest_amcr)
+teater_data = CC BY-NC 4.0 ; conditional ; TEATER thesaurus data (vocab_sources.harvest_teater)
+#
 # PyMuPDF is intentionally NOT listed. It is AGPL-3.0, and rule 5's
 # most-restrictive union would put AGPL-3.0 into provenance.license for every
 # digital-born document. See requirements_digital.txt before adding it.

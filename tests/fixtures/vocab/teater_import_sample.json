@@ -1,0 +1,115 @@
+[
+  {
+    "id": "1050",
+    "name": {
+      "cz": "5) Chronologie",
+      "en": "5) Chronology",
+      "de": "5) Chronologie (e)"
+    },
+    "date_range": {
+      "from": null,
+      "to": null
+    },
+    "date_accurate": null,
+    "description": null,
+    "subcategories": [
+      {
+        "id": "1090",
+        "name": {
+          "cz": "magdalénien",
+          "en": "magdalenian",
+          "de": "Magdalenien"
+        },
+        "date_range": {
+          "from": "-17000",
+          "to": "-12000"
+        },
+        "date_accurate": null,
+        "description": [
+          {
+            "title": {
+              "text": "cz_eq_title"
+            },
+            "content": [
+              {
+                "text": "magdalénien",
+                "quotes": []
+              },
+              {
+                "text": "magdalenien",
+                "quotes": []
+              }
+            ]
+          },
+          {
+            "title": {
+              "text": "en_eq_title"
+            },
+            "content": [
+              {
+                "text": "magdalenian",
+                "quotes": [
+                  {
+                    "id": "Onl_0007",
+                    "title_page": "AAT",
+                    "date": "",
+                    "location": {
+                      "page": "",
+                      "url": "http://vocab.getty.edu/aat/1"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": {
+              "text": "comment_title"
+            },
+            "content": [
+              {
+                "text": {
+                  "cz": "kulturní celek paleolitu",
+                  "en": "a palaeolithic culture",
+                  "de": "eine Kultur"
+                }
+              }
+            ]
+          }
+        ],
+        "subcategories": []
+      }
+    ]
+  },
+  {
+    "id": "3549",
+    "name": {
+      "cz": "12) Společnost",
+      "en": "12) Society",
+      "de": "12) Gesellschaft (e)"
+    },
+    "date_range": {
+      "from": null,
+      "to": null
+    },
+    "date_accurate": null,
+    "description": null,
+    "subcategories": [
+      {
+        "id": "3552",
+        "name": {
+          "cz": "komunita",
+          "en": "community",
+          "de": "Gemeinschaft (e)"
+        },
+        "date_range": {
+          "from": null,
+          "to": null
+        },
+        "date_accurate": null,
+        "description": null,
+        "subcategories": []
+      }
+    ]
+  }
+]

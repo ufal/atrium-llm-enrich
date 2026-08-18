@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <ListRecords>
+    <record>
+      <header><identifier>https://api.aiscr.cz/id/HES-001065</identifier></header>
+      <metadata>
+        <heslo xmlns="https://api.aiscr.cz/schema/amcr/2.2/">
+          <ident_cely>HES-001065</ident_cely>
+          <nazev_heslare xml:lang="cs">akce_typ_kat</nazev_heslare>
+          <heslo xml:lang="cs">terénní zásah</heslo>
+          <heslo_en xml:lang="en">field intervention</heslo_en>
+          <popis xml:lang="cs">zásah v terénu</popis>
+          <popis_en xml:lang="en">intervention in the field</popis_en>
+          <zkratka xml:lang="cs">tz</zkratka>
+          <razeni>30</razeni>
+          <hierarchie_vyse>
+            <id>hier-1</id>
+            <heslo_nadrazene xml:lang="cs" id="HES-000001">akce</heslo_nadrazene>
+            <typ xml:lang="cs">kategorie</typ>
+          </hierarchie_vyse>
+          <odkaz>
+            <id>hodk-1</id>
+            <zdroj>AAT</zdroj>
+            <nazev_kodu>aat</nazev_kodu>
+            <kod>300077463</kod>
+            <uri>http://vocab.getty.edu/aat/300077463</uri>
+            <skos_mapping_relation>skos:exactMatch</skos_mapping_relation>
+          </odkaz>
+          <odkaz>
+            <id>hodk-2</id>
+            <zdroj>AAT</zdroj>
+            <nazev_kodu>aat</nazev_kodu>
+            <kod>300000000</kod>
+            <uri>http://vocab.getty.edu/aat/300000000</uri>
+            <skos_mapping_relation>skos:broadMatch</skos_mapping_relation>
+          </odkaz>
+        </heslo>
+      </metadata>
+    </record>
+    <record>
+      <header><identifier>https://api.aiscr.cz/id/HES-002000</identifier></header>
+      <metadata>
+        <heslo xmlns="https://api.aiscr.cz/schema/amcr/2.2/">
+          <ident_cely>HES-002000</ident_cely>
+          <nazev_heslare xml:lang="cs">zeme</nazev_heslare>
+          <heslo xml:lang="cs">Zimbabwe</heslo>
+          <heslo_en xml:lang="en">Zimbabwe</heslo_en>
+        </heslo>
+      </metadata>
+    </record>
+    <record>
+      <header><identifier>https://api.aiscr.cz/id/HES-003000</identifier></header>
+      <metadata>
+        <heslo xmlns="https://api.aiscr.cz/schema/amcr/2.2/">
+          <ident_cely>HES-003000</ident_cely>
+          <nazev_heslare xml:lang="cs">predmet_druh</nazev_heslare>
+          <heslo xml:lang="cs">bezejmenný předmět</heslo>
+        </heslo>
+      </metadata>
+    </record>
+    <resumptionToken>tok&amp;1</resumptionToken>
+  </ListRecords>
+</OAI-PMH>

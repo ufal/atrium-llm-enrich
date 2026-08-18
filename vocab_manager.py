@@ -15,12 +15,55 @@ Handles:
 
 import json
 import time
+import unicodedata
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 import requests
+
+# Administrative words that should sort to the back of their theme, so that prompt
+# truncation drops boilerplate before it drops archaeological vocabulary. Module level
+# because build_nested() is now a pure function of (taxonomy, terms) and must not depend
+# on state built inside the sync path.
+ADMIN_STOP_WORDS = frozenset(
+    {
+        "zpráva",
+        "projekt",
+        "číslo",
+        "datum",
+        "rok",
+        "strana",
+        "tabulka",
+        "příloha",
+        "text",
+        "obsah",
+    }
+)
+
+# Reserved taxonomy_config.json keys. Anything starting with "_" is file-level settings
+# (heslar_map, teater_branch_map, tie_break), never a theme.
+SETTINGS_KEY = "_settings"
+EXCLUDE_THEME = "__exclude__"
+OTHER_THEME = "Other"
+
+
+def _norm(value: Optional[str]) -> str:
+    """Fold a Czech label for cross-source matching (NFC, casefold, NBSP, whitespace)."""
+    if not value:
+        return ""
+    text = unicodedata.normalize("NFC", value).replace("\xa0", " ")
+    return " ".join(text.casefold().split())
+
+
+def _term_sort_key(item: Tuple[str, Dict[str, Any]]) -> Tuple[int, int, str]:
+    """Order terms inside a theme: content before boilerplate, then the curators' own
+    ``razeni`` where AMCR supplied one, then the label."""
+    cs_key, pair = item
+    is_admin = 1 if any(aw in cs_key.lower() for aw in ADMIN_STOP_WORDS) else 0
+    sort = pair.get("sort") if isinstance(pair, dict) else None
+    return (is_admin, sort if isinstance(sort, int) else 10**9, cs_key)
 
 
 class VocabularyManager:
@@ -257,21 +300,78 @@ class VocabularyManager:
         print(f"[AMCR] Harvest complete. {len(term_mapping)} terms collected.")
         return term_mapping
 
-    def _assign_theme(self, term_pair: Dict[str, str]) -> str:
-        best_theme = "Other"
-        best_priority = -1
+    # ── taxonomy accessors ──────────────────────────────────────────────────
+    @property
+    def settings(self) -> Dict[str, Any]:
+        """File-level settings from taxonomy_config.json's "_settings" block."""
+        value = self.taxonomy.get(SETTINGS_KEY)
+        return value if isinstance(value, dict) else {}
 
-        for theme, config in self.taxonomy.items():
-            priority = config.get("priority", 0)
-            if priority <= best_priority:
-                continue
+    def themes(self) -> Dict[str, Any]:
+        """The theme definitions, excluding "_"-prefixed settings keys."""
+        return {k: v for k, v in self.taxonomy.items() if not k.startswith("_")}
+
+    def _theme_order(self) -> List[str]:
+        """Themes in the order they are emitted and matched: priority descending.
+
+        An explicit "tie_break" list in "_settings" resolves equal priorities; without
+        it, equal priorities fall back to theme name so the result never depends on JSON
+        key order.
+        """
+        tie_break = self.settings.get("tie_break") or []
+        themes = self.themes()
+
+        def rank(name: str) -> Tuple[int, int, str]:
+            priority = themes[name].get("priority", 0)
+            explicit = tie_break.index(name) if name in tie_break else len(tie_break)
+            return (-priority, explicit, name)
+
+        return sorted(themes, key=rank)
+
+    def assign_theme(self, term_pair: Dict[str, Any]) -> Tuple[str, str]:
+        """Place one term, returning ``(theme, rule)``.
+
+        Rules are tried in precedence order and the winning one is reported, so every
+        placement in the built vocabulary can be traced back to the reason for it —
+        which is what makes the result reviewable by a domain expert rather than
+        something an LLM produced and nobody can audit.
+
+          heslar   the AMCR controlled list the term came from (nazev_heslare)
+          teater   the term's TEATER top-level branch
+          keyword  the legacy substring match against taxonomy_config keywords
+          other    nothing matched
+        """
+        scheme = str(term_pair.get("scheme") or "")
+        source = str(term_pair.get("source") or "")
+
+        if scheme and source == "amcr":
+            mapped = (self.settings.get("heslar_map") or {}).get(scheme)
+            if mapped:
+                return mapped, f"heslar:{scheme}"
+
+        if source == "teater":
+            branches = self.settings.get("teater_branch_map") or {}
+            chain = list(term_pair.get("broader") or ())
+            root = chain[0] if chain else str(term_pair.get("source_id") or "")
+            mapped = branches.get(root)
+            if mapped:
+                return mapped, f"teater:{root}"
+
+        for theme in self._theme_order():
+            config = self.taxonomy[theme]
             for lang, keywords in config.get("keywords", {}).items():
-                term_value = term_pair.get(lang, "").lower()
-                if any(kw.lower() in term_value for kw in keywords):
-                    best_priority = priority
-                    best_theme = theme
-                    break
-        return best_theme
+                term_value = str(term_pair.get(lang, "") or "").lower()
+                if not term_value:
+                    continue
+                for kw in keywords:
+                    if kw.lower() in term_value:
+                        return theme, f"keyword:{lang}:{kw}"
+
+        return OTHER_THEME, "other"
+
+    def _assign_theme(self, term_pair: Dict[str, str]) -> str:
+        """Back-compat wrapper — the theme name only."""
+        return self.assign_theme(term_pair)[0]
 
     def classify_with_llm(self, term_pair: Dict[str, str]) -> Optional[str]:
         if not self.llm_predictor:
@@ -292,57 +392,83 @@ class VocabularyManager:
             print(f"  [LLM] Classification error during taxonomy sync: {exc}")
         return None
 
+    def build_nested(
+        self,
+        raw_terms: Dict[str, Dict[str, Any]],
+        use_llm_fallback: bool = False,
+        keep: Optional[Sequence[str]] = ("cs", "en"),
+        audit: Optional[List[Dict[str, Any]]] = None,
+        rescue: Optional[Dict[str, str]] = None,
+    ) -> Dict[str, Dict[str, Any]]:
+        """Group flat terms into the nested taxonomy. Pure: no network, no disk.
+
+        ``keep`` limits which keys survive into each entry — the default ``("cs", "en")``
+        reproduces the on-disk entry shape every downstream consumer expects. ``audit``,
+        when given, receives one row per term recording the rule that placed it.
+        ``rescue`` maps a normalised Czech label to a theme, used to place AMCR terms
+        that only a cross-source TEATER match can explain.
+
+        Theme order is priority-descending (never alphabetical): ``build_system_prompt``
+        iterates this dict in insertion order and truncates a *prefix* of the resulting
+        term list, so key order decides which themes survive a tight context budget.
+        """
+        themed: Dict[str, Dict[str, Any]] = {theme: {} for theme in self._theme_order()}
+        themed.setdefault(OTHER_THEME, {})
+
+        for cs_key, pair in raw_terms.items():
+            theme, rule = self.assign_theme(pair)
+
+            if theme == OTHER_THEME and rescue:
+                mapped = rescue.get(_norm(cs_key))
+                if mapped:
+                    theme, rule = mapped, "rescue:teater"
+
+            if theme == OTHER_THEME and use_llm_fallback and self.llm_predictor:
+                llm_theme = self.classify_with_llm(pair)
+                if llm_theme and llm_theme in themed:
+                    theme, rule = llm_theme, "llm"
+                    print(f"  [LLM] Re-classified '{cs_key}' → {theme}")
+
+            if audit is not None:
+                audit.append(
+                    {
+                        "cs": cs_key,
+                        "en": pair.get("en", ""),
+                        "source": pair.get("source", ""),
+                        "source_id": pair.get("source_id", ""),
+                        "scheme": pair.get("scheme", ""),
+                        "theme": theme,
+                        "placed_by": rule,
+                    }
+                )
+
+            if theme == EXCLUDE_THEME:
+                continue
+
+            entry = dict(pair) if keep is None else {k: pair[k] for k in keep if k in pair}
+            themed.setdefault(theme, {})[cs_key] = entry
+
+        for theme in list(themed.keys()):
+            themed[theme] = dict(sorted(themed[theme].items(), key=_term_sort_key))
+
+        return themed
+
     def sync_and_build_nested_taxonomy(self, use_llm_fallback: bool = False) -> None:
         print("[vocab] Syncing remote vocabularies…")
         raw_terms = self.fetch_amcr_vocab()
-
-        sorted_themes = sorted(
-            self.taxonomy.keys(), key=lambda t: self.taxonomy[t].get("priority", 0), reverse=True
-        )
-        themed: Dict[str, Dict] = {theme: {} for theme in sorted_themes}
-        themed["Other"] = {}
-
-        ADMIN_STOP_WORDS = {
-            "zpráva",
-            "projekt",
-            "číslo",
-            "datum",
-            "rok",
-            "strana",
-            "tabulka",
-            "příloha",
-            "text",
-            "obsah",
-        }
-
-        for cs_key, pair in raw_terms.items():
-            theme = self._assign_theme(pair)
-
-            if theme == "Other" and use_llm_fallback and self.llm_predictor:
-                llm_theme = self.classify_with_llm(pair)
-                if llm_theme and llm_theme in themed:
-                    theme = llm_theme
-                    print(f"  [LLM] Re-classified '{cs_key}' → {theme}")
-
-            themed.setdefault(theme, {})[cs_key] = pair
-
-        for theme in list(themed.keys()):
-            themed[theme] = dict(
-                sorted(
-                    themed[theme].items(),
-                    key=lambda item: (
-                        1 if any(aw in item[0].lower() for aw in ADMIN_STOP_WORDS) else 0,
-                        item[0],
-                    ),
-                )
-            )
-
-        self.vocab_data = themed
+        self.vocab_data = self.build_nested(raw_terms, use_llm_fallback=use_llm_fallback)
         self._invalidate_cache()
         self.save()
 
-    def load(self) -> Dict[str, Any]:
+    def load(self, auto_sync: bool = True) -> Dict[str, Any]:
         if not self.vocab_path.exists():
+            if not auto_sync:
+                raise FileNotFoundError(
+                    f"Vocabulary {self.vocab_path} not found. Build it with "
+                    "`python3 vocab_build.py` on a machine with network access, or point "
+                    "VOCAB_PATH at an existing artifact. Refusing to start a multi-minute "
+                    "OAI-PMH harvest in the middle of a pipeline run."
+                )
             print(f"[vocab] {self.vocab_path} not found — triggering auto-sync.")
             self.sync_and_build_nested_taxonomy()
             return self.vocab_data
@@ -381,6 +507,7 @@ class VocabularyManager:
         return {
             theme: len(terms) if isinstance(terms, dict) else 0
             for theme, terms in self.vocab_data.items()
+            if not theme.startswith("_")
         }
 
     def get_prompt_string(self) -> str:

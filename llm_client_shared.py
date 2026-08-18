@@ -27,7 +27,7 @@ import enum
 import json
 import sys
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -358,13 +358,62 @@ def build_schema(term_names: List[str]) -> type:
     return ConstrainedEnrichment
 
 
-def _collect_vocab_terms(vocab_data: dict) -> List[dict]:
+def excluded_prompt_themes(vocab_mgr: Any) -> Set[str]:
+    """Themes to withhold from the model, derived from taxonomy_config.json.
+
+    A theme is withheld when its ``in_prompt`` flag is false; absent the flag the
+    default is the historical one — everything except "Other" reaches the model.
+
+    The trailing guard is not redundant. VocabularyManager falls back to a
+    BUILT-IN taxonomy when data_samples/taxonomy_config.json is missing, and that
+    fallback declares no "Other" theme at all — so a bare comprehension would
+    produce an empty exclusion set and silently start injecting the ~779-term
+    Other bucket into every prompt. A config that is simply silent about Other
+    must mean "unchanged", never "enable it"; enabling it takes an explicit
+    ``"Other": {"in_prompt": true}``.
+
+    Accepts any object exposing ``themes()`` (i.e. a VocabularyManager); typed
+    loosely so this module keeps its no-heavy-imports property.
+    """
+    try:
+        themes = vocab_mgr.themes()
+    except AttributeError:  # pragma: no cover — a manager predating themes()
+        return {"other"}
+    excluded = {
+        name.lower()
+        for name, cfg in themes.items()
+        if isinstance(cfg, dict) and not cfg.get("in_prompt", name.lower() != "other")
+    }
+    if "other" not in {name.lower() for name in themes}:
+        excluded.add("other")
+    return excluded
+
+
+def _collect_vocab_terms(
+    vocab_data: dict, excluded_themes: Optional[Set[str]] = None
+) -> List[dict]:
     """Flatten ``vocab_data`` into a list of ``{theme, cs, en}`` term dicts,
     with the fixed 'Nerelevantní (meta-text)' administrative term prepended.
 
     Shared by build_system_prompt() and build_document_system_prompt() —
     the two callers differ only in header/footer text, not in how
-    vocabulary terms are gathered from the nested theme/keyword structure."""
+    vocabulary terms are gathered from the nested theme/keyword structure.
+
+    ``excluded_themes`` names the themes to withhold from the model,
+    lower-cased. It defaults to ``{"other"}`` — the behaviour this function
+    hard-coded before — but the callers derive it from each theme's
+    ``in_prompt`` flag in taxonomy_config.json via
+    :func:`excluded_prompt_themes`, so which terms the model can reach is a
+    reviewable configuration decision rather than a literal in the prompt
+    builder. This matters: a term absent from the prompt is unreachable by
+    construction, so withholding one makes "the model was wrong" and "the
+    label was withheld" score identically.
+
+    Keys starting with "_" are skipped unconditionally. Nothing writes such a
+    key into a nested vocabulary today (provenance lives in a sidecar
+    ``*.meta.json`` precisely so it cannot), but a stray one would otherwise
+    be rendered to the model as a phantom theme."""
+    skip = {"other"} if excluded_themes is None else {t.lower() for t in excluded_themes}
     raw_terms: List[dict] = [
         {
             "theme": "Administrative / Meta",
@@ -373,7 +422,7 @@ def _collect_vocab_terms(vocab_data: dict) -> List[dict]:
         }
     ]
     for theme, data in vocab_data.items():
-        if theme.lower() == "other":
+        if theme.startswith("_") or theme.lower() in skip:
             continue
         if isinstance(data, dict):
             if "keywords" in data and isinstance(data["keywords"], dict):
@@ -389,30 +438,27 @@ def _collect_vocab_terms(vocab_data: dict) -> List[dict]:
     return raw_terms
 
 
-def _render_vocab_prompt(
-    header: str, term_list: List[dict], other_cap: int = 15, footer: str = ""
-) -> str:
-    """Render ``term_list`` under ``header``, grouped by theme, with an
-    'Other (Misc)' tail capped at ``other_cap`` terms, then ``footer``.
+def _render_vocab_prompt(header: str, term_list: List[dict], footer: str = "") -> str:
+    """Render ``term_list`` under ``header``, grouped by theme, then ``footer``.
 
     The prompt-rendering half shared by build_system_prompt() and
     build_document_system_prompt() (single-line uses ``_EXAMPLES_FOOTER``,
-    whole-document uses no footer — see their thin wrappers below)."""
+    whole-document uses no footer — see their thin wrappers below).
+
+    There is no separate 'Other (Misc)' tail: _collect_vocab_terms() never
+    emitted an excluded theme, so the capped tail this function used to append
+    was unreachable — it read as a policy ("show 15 of the Other terms") that
+    had not run since the exclusion was introduced. Whether Other reaches the
+    model is now decided in one place, by ``in_prompt`` in taxonomy_config.json;
+    when it is enabled the terms render as a normal theme, uncapped."""
     themes: Dict[str, List[str]] = {}
-    other_terms: List[dict] = []
     for t in term_list:
-        if t["theme"] == "Other":
-            other_terms.append(t)
-        else:
-            themes.setdefault(t["theme"], []).append(f"{t['cs']} ({t['en']})")
+        themes.setdefault(t["theme"], []).append(f"{t['cs']} ({t['en']})")
 
     prompt = header
     for theme_name, lines in themes.items():
         prompt += f"\n--- {theme_name} ---\n"
         prompt += "\n".join(f"- {line}" for line in lines) + "\n"
-    if other_terms:
-        prompt += "\n--- Other (Misc) ---\n"
-        prompt += "\n".join(f"- {t['cs']} ({t['en']})" for t in other_terms[:other_cap]) + "\n"
     prompt += footer
     return prompt
 
@@ -482,11 +528,15 @@ def build_system_prompt(
     vocab_data: dict,
     max_tokens: int,
     skip_truncation: bool = False,
+    excluded_themes: Optional[Set[str]] = None,
 ) -> Tuple[str, List[str]]:
     """Same vocabulary-truncation strategy as llm_run.build_system_prompt, but
     driven by approx_token_count() instead of a tokenizer — no HF/torch
-    dependency, at the cost of an approximate (not exact) token budget."""
-    raw_terms = _collect_vocab_terms(vocab_data)
+    dependency, at the cost of an approximate (not exact) token budget.
+
+    ``excluded_themes`` is forwarded to _collect_vocab_terms(); omitting it
+    keeps the historical behaviour of withholding only "Other"."""
+    raw_terms = _collect_vocab_terms(vocab_data, excluded_themes)
     return _fit_vocab_prompt(
         _SYSTEM_HEADER,
         raw_terms,
@@ -569,10 +619,11 @@ def build_document_system_prompt(
     vocab_data: dict,
     max_tokens: int,
     skip_truncation: bool = False,
+    excluded_themes: Optional[Set[str]] = None,
 ) -> Tuple[str, List[str]]:
     """Same vocabulary-injection/truncation as build_system_prompt(), with the
     whole-document instruction header instead of the single-line one."""
-    raw_terms = _collect_vocab_terms(vocab_data)
+    raw_terms = _collect_vocab_terms(vocab_data, excluded_themes)
     return _fit_vocab_prompt(
         _DOC_SYSTEM_HEADER, raw_terms, max_tokens, skip_truncation, verbose=False
     )

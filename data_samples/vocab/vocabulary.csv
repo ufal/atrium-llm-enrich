@@ -1,0 +1,4953 @@
+source_lemma,target_translation
+obývání,residential activity
+pohřbívání,burial activity
+výroba,production activity
+těžba,mining activity
+kult,ritual activity
+deponování,deposition activity
+boj,fighting activity
+jiná aktivita,other activity
+intruze,intrusion
+rondel/rondeloid,roundel/rondeloid
+dvorec/dvůr,curia/manorial farm
+hrad,castle
+městský palác,town palace
+tvrz/hrádek,fortified manor
+zámek/zámeček/vila,chateau/villa
+kříž/boží muka,cross/calvary
+kultovní místo,ritual place
+synagoga,synagogue
+izolovaný pohřeb,isolated grave
+pohřebiště/hřbitov,cemetery/graveyard
+milířiště,charcoal kiln
+sklárna,glassworks
+železářský areál,iron production site
+důl,mine
+rýžoviště,panning site
+obora,game park
+pole,cropland
+zahrada/sad,garden
+bojiště,battlefield
+pevnost,fortress
+polní opevnění,field fortification
+strážnice/předsunutá bašta,outpost/watchtower
+vojenský tábor,military camp
+most/brod,bridge/ford
+železnice,railway
+jez,weir
+kanál/náhon,channel/millrace
+přehrada,dam
+rybník,pond
+místo sběru,collection site
+popraviště,execution site
+park,park
+nález v druhotné poloze,find in secondary context
+ojedinělý nález,single find
+zničený prostor,destroyed site
+hrazené sídliště,enclosed settlement
+stanice/tábořiště,camp
+samostatná usedlost,individual homestead
+vesnice/městečko,village/town
+výšinné sídliště,hill settlement
+sídliště specializované komunity,special-community settlement
+hrazený areál,enclosure
+hradiště,hillfort
+klášter,monastery
+město,city
+protourbánní aglomerace,proto-urban agglomeration
+předměstí,suburb
+pohřebiště v sakrální stavbě,burials in sacral building
+dehtárna,tar kiln
+pivovar,brewery
+sídliště,settlement
+nadkomunitní areál,supracommunity site
+sídlo elity,elite settlement
+kultovní areál,ritual site
+pohřební areál,burial site
+areál nezemědělské výroby,production site
+areál těžby,extracting site
+areál zemědělské výroby,agricultural production site
+areál vojenských aktivit,military site
+depot,hoard
+vodní dílo,hydraulic structure
+areál jiné aktivity,other site
+neurčený areál,unspecified site
+<10 km,<10 km
+10–20 km,10–20 km
+20–30 km,20–30 km
+30–40 km,30–40 km
+40–50 km,40–50 km
+50–60 km,50–60 km
+60–70 km,60–70 km
+70–80 km,70–80 km
+80–90 km,80–90 km
+90–100 km,90–100 km
+>100 km,>100 km
+polygon leteckého průzkumu,aerial survey polygon
+osídlený skalní prostor,cave settlement
+krajina,landscape
+pomník/památník,memorial
+muzeum/skanzen,museum/open-air museum
+polygon archeologického průzkumu,archaeological survey polygon
+přírodní útvar s lidskou aktivitou,inhabited natural landform
+zaniklý/historický areál,deserted/historical site
+kinofilm (24 x 36 mm),cine film (24 x 36 mm)
+6 x 6 cm,6 x 6 cm
+6 x 9 cm,6 x 9 cm
+9 x 12 cm,9 x 12 cm
+a5 (15 x 21 cm),A5 (15 x 21 cm)
+a4 (21 x 30 cm),A4 (21 x 30 cm)
+a3 (30 x 42 cm),A3 (30 x 42 cm)
+a2 (42 x 59 cm),A2 (42 x 59 cm)
+a1 (59 x 84 cm),A1 (59 x 84 cm)
+a0 (84 x 119 cm),A0 (84 x 119 cm)
+>a0,>A0
+3d – autocad (*.dwg),3D – Autocad (*.dwg)
+3d – autodesk exchange (*.fbx),3D – Autodesk Exchange (*.fbx)
+3d – blender (*.blend),3D – Blender (*.blend)
+3d – collada (*.dae),3D – Collada (*.dae)
+"3d – leica (*.pts, *.ptx)","3D – Leica (*.pts, *.ptx)"
+3d – obj (*.obj),3D – OBJ (*.obj)
+3d – 3d printing (*.3mf),3D – 3D Printing (*.3mf)
+3d – revit (*.rvt),3D – Revit (*.rvt)
+3d – sketchup (*.skp),3D – Sketchup (*.skp)
+3d – stanford ply (*.ply),3D – Stanford PLY (*.ply)
+3d – universal (*.u3d),3D – Universal (*.u3d)
+3d – stereo litography (*.stl),3D – Stereo Litography (*.stl)
+"3d – 3d studio max (*.max, *.3ds)","3D – 3D Studio Max (*.max, *.3ds)"
+3d – vrml (*.wrl),3D – VRML (*.wrl)
+3d – jiný,3D – other
+čeština,Czech
+němčina,German
+angličtina,English
+francouzština,French
+slovenština,Slovak
+latina,Latin
+ruština,Russian
+nerelevantní,irrelevant
+bez ochrany,unprotected
+kulturní památka,listed monument
+národní kulturní památka,listed national monument
+památková zóna,heritage zone
+památková rezervace,heritage reserve
+brno-černovice,Brno-Černovice
+brno-tuřany,Brno-Tuřany
+czestochowa,Czestochowa
+czestochowa-rudniky,Czestochowa-Rudniky
+české budějovice-hosín,České Budějovice-Hosín
+choceň,Choceň
+chomutov,Chomutov
+chomutov-pesvice,Chomutov-Pesvice
+jaroměř,Jaroměř
+jičín,Jičín
+benešov-nesvačily,Benešov-Nesvačily
+znojmo,Znojmo
+jihlava-henčov,Jihlava-Henčov
+karlovy vary,Karlovy Vary
+kladno,Kladno
+kolín,Kolín
+krakow,Krakow
+krakow-balice,Krakow-Balice
+leszno,Leszno
+mělník-hořín,Mělník-Hořín
+mnichovo hradiště,Mnichovo Hradiště
+plasy,Plasy
+praha-kbely,Praha-Kbely
+praha-letňany,Praha-Letňany
+sazená,Sazená
+strunkovice,Strunkovice
+velká dobrá,Velká Dobrá
+vlašim,Vlašim
+vrchlabí,Vrchlabí
+papír milimetrový,graph paper
+papír s fotografiemi,paper with photographs
+papír sešit,booklet
+papír vázaný,bounded paper
+pauzák,tracing paper
+digitální soubor,digital file
+astralon,astralon (transparent foil)
+bromkopie,hectograph copy
+diapozitiv barevný,colour photoslide
+diapozitiv černobílý (film),black-and-white photoslide (film)
+diapozitiv černobílý (sklo),black-and-white photoslide (glass)
+fotografie černobílá,black-and-white photograph
+fotoplán,photogrammetric plan
+fotografie barevná,colour photograph
+karton,cardboard
+negativ barevný,colour negative
+negativ černobílý (film),black-and-white negative (film)
+negativ černobílý (sklo),black-and-white negative (glass)
+papír,paper
+papír kladívkový,drawing paper
+neurčený materiál,unspecified material
+tisk,print
+tisková fólie,printing foil
+xerokopie barevná,colour xerographic copy
+xerokopie černobílá,black-and-white xerographic copy
+tisková kvalita,print quality
+použitelný,useable
+nízká kvalita,poor quality
+"není, nezjištěno",unavailable/unknown
+mikroštítek,microfiche
+povrch,surface
+ornice,arable topsoil
+pastvina/louka,pasture topsoil
+lesní hrabanka,woodland topsoil
+přirozený půdní horizont,natural topsoil
+kulturní vrstva/objekt,cultural layer/feature
+podorničí/podloží,subsoil
+vodní plocha/tok,water body/stream
+budova,building
+jiný kontext,other context
+novověk,Modern Period
+paleolit,Palaeolithic
+doba laténská,La Tène Period
+mladší–pozdní doba laténská (ltc2–d),Late–Final La Tène Period (LtC2–D)
+kultura púchovská,Púchov Culture
+kultura przeworská,Przeworsk Culture
+pozdní doba laténská (ltd),Final La Tène Period (LtD)
+kobylská skupina,Kobyly Group
+szeletien,Szeletian
+bohunicien,Bohunician
+aurignacien,Aurignacian
+epigravettien,Epigravettian
+pozdní paleolit,Epipalaeolithic
+epimagdalénien,Epimagdalenian
+ostroměřská skupina,Ostroměř Group
+neolit,Neolithic
+starší neolit,Early Neolithic
+kultura s lineární keramikou,Linear Pottery Culture
+přechod raný/vrcholný středověk,Early/High Middle Ages Transition
+pozdní středověk,Late Middle Ages
+přechod pozdní středověk/novověk,Late Middle Ages/Modern Transition
+vrcholný středověk–novověk,High Middle Ages–Modern Period
+střední paleolit,Middle Palaeolithic
+mezolit,Mesolithic
+raný středověk 2–4,Early Middle Ages 2–4
+rané středohradištní období,Early Middle Hillfort Period
+pozdní středohradištní období,Final Middle Hillfort Period
+kultura kulovitých amfor,Globular Amphora Culture
+mladší eneolit,Late Eneolithic
+období popelnicových polí,Urnfield Period
+miškovický typ,Míškovice Type
+magdalénien,Magdalenian
+paleolit–mezolit,Palaeolithic–Mesolithic
+eneolit,Eneolithic
+časný eneolit,Proto-Eneolithic
+jordanovská kultura,Jordanów Culture
+doba laténská–římská,La Tène–Roman Period
+pravěk,prehistory
+mladší doba bronzová,Late Bronze Age
+starší paleolit,Lower Palaeolithic
+micoquien,Micoquien
+knovízská kultura,Knovíz Culture
+chebská kultura,Cheb Culture
+slezskoplatěnická kultura,Silesian-Platěnice Culture
+slezskoplatěnická kultura (hab),Silesian-Platěnice Culture (HaB)
+štítarská kultura,Štítary Culture
+slezská kultura,Silesian Culture
+nynická kultura,Nynice Culture
+platěnická kultura,Platěnice Culture
+raný středověk 2,Early Middle Ages 2
+vyspělé středohradištní období,Advanced Middle Hillfort Period
+vyspělé mladohradištní období,Advanced Late Hillfort Period
+zemědělský pravěk,farming prehistory
+oberlauterbašská skupina,Oberlauterbach Group
+lengyelská kultura,Lengyel Culture
+horákovská kultura,Horákov Culture
+turnovský typ,Turnov type
+had–lta,HaD–LtA
+mladší doba halštatská (had2–3),Late Hallstatt Period (HaD2–3)
+gravettien,Gravettian
+moustérien,Mousterian
+taubachien,Taubachian
+krumlovien,Krumlovian
+mladší paleolit,Upper Palaeolithic
+badenská kultura,Baden Culture
+kultura zvoncovitých pohárů,Bell Beaker Culture
+starší doba bronzová,Early Bronze Age
+hatvanská kultura,Hatvan Culture
+věteřovská kultura,Věteřov Culture
+střední doba bronzová,Middle Bronze Age
+středodunajská mohylová kultura,Middle-Danubian Tumulus Culture
+českofalcká mohylová kultura,Bohemian-Palatinate Tumulus Culture
+raný středověk 4,Early Middle Ages 4
+pozdněhradištní období,Final Hillfort Period
+vrcholný–pozdní středověk,High–Late Middle Ages
+vrcholný středověk,High Middle Ages
+podmokelská skupina,Podmokly Group
+billendorfská kultura,Billendorf Culture
+bylanská kultura,Bylany Culture
+halštatská mohylová kultura,Hallstatt Tumulus Culture
+střední doba laténská (ltb–c1),Middle La Tène Period (LtB–C1)
+doba halštatská–laténská,Hallstatt–La Tène Period
+doba římská,Roman Period
+starší doba římská,Early Roman Period
+lužická kultura,Lusatian Culture
+velatická kultura,Velatice Culture
+milavečská kultura,Milavče Culture
+želiezovská skupina,Želizovce Group
+mladší doba římská,Late Roman Period
+doba stěhování národů,Migration Period
+starší doba stěhování národů,Early Migration Period
+dobrodzieńská skupina,Dobrodzień Group
+mladší doba stěhování národů,Late Migration Period
+doba římská–stěhování národů,Roman–Migration Period
+industriální období,Industrial Period
+industriální období 1,Industrial Period 1
+industriální období 2,Industrial Period 2
+novověk–industriální období,Modern–Industrial Period
+kultura kosihy-čaka,Kosihy-Čaka Culture
+kultura chlopice-veselé,Chlopice-Veselé Culture
+podolská kultura,Podolí Culture
+doba halštatská,Hallstatt Period
+časná doba laténská (lta),Early La Tène Period (LtA)
+rané mladohradištní období,Early Late Hillfort Period
+bošácká skupina,Bošáca Group
+únětická kultura,Únětice Culture
+nitranská kultura,Nitra Culture
+střední–mladší neolit,Middle–Late Neolithic
+kultura s vypíchanou keramikou,Stroke Pottery Culture
+kultura s moravskou malovanou keramikou 1,Moravian Painted Ware Culture 1
+kultura s moravskou malovanou keramikou 2,Moravian Painted Ware Culture 2
+schusseriedská kultura,Schussenried Culture
+michelsberská kultura,Michelsberg Culture
+starší eneolit,Early Eneolithic
+kultura retz-bajč-křepice,Retz-Bajč-Křepice (Furchenstich) Culture
+kultura nálevkovitých pohárů,Funnel Beaker Culture
+ohrozimský typ,Ohrozim Type
+střední eneolit,Middle Eneolithic
+chamská kultura,Cham Culture
+řivnáčská kultura,Řivnáč Culture
+jevišovická kultura,Jevišovice Culture
+mladší/pozdní eneolit,Late/Final Eneolithic
+kultura se šňůrovou keramikou,Corded Ware Culture
+starší doba halštatská (hac–d1),Early Hallstatt Period (HaC–D1)
+billendorfská kultura (hac),Billendorf Culture (HaC)
+slezskoplatěnická kultura (hac–d),Silesian–Platěnice Culture (HaC–D)
+raný středověk 3,Early Middle Ages 3
+středověk,Middle Ages
+novověk 1,Modern Period 1
+novověk 2,Modern Period 2
+pozdní doba bronzová,Final Bronze Age
+doba bronzová–halštatská,Bronze Age–Hallstatt Period
+raný středověk,Early Middle Ages
+raný středověk 1,Early Middle Ages 1
+neolit–eneolit,Neolithic–Eneolithic
+saská lužická kultura,Saxonian-Lusatian Culture
+kultura münchshöfenská,Münchshofen Culture
+doba bronzová,Bronze Age
+protoúnětická kultura,Proto-Únětice Culture
+středověk–novověk,Middle Ages–Modern Period
+plaňanský typ,Plaňany Type
+šárecký typ,Šárka Type
+datace neurčena,unspecified dating
+kamna,stove
+ohniště,fireplace
+otopná pec,oven
+topný kanál,heating channel
+hrob,grave
+hrob komorový,chamber grave
+hrob skříňkový,cist grave
+hrobka,tomb
+mohyla,burial mound
+kostnice,ossuary
+náhrobek/náhrobní kámen,gravestone
+pohřeb kostrový,inhumation burial
+pohřeb žárový,cremation burial
+pohřeb zvířete,animal burial
+pohřeb v sídlištním objektu,burial in settlement context
+budova obytná,residential building
+budova hospodářská,non-residential building
+jáma,pit
+jáma kůlová/sloupová,stakehole/posthole
+jáma stavební,construction pit
+jáma zásobní,storage pit
+cisterna,cistern
+jáma odpadní/jímka,waste pit/cesspit
+kůl/sloup,stake/post
+nika,niche
+pilíř,pillar
+pilota,pier
+podlaha (konstrukce),floor (construction)
+schodiště,staircase
+destrukční vrstva/souvrství,destruction layer/sequence
+geologická/přirozená vrstva,natural/geological layer
+násep,bank
+navážka,backfill
+odpadní vrstva/souvrství,waste layer/sequence
+podlaha (vrstva/souvrství),floor layer/sequence
+sídlištní vrstva/souvrství,settlement layer/sequence
+splach/naplavenina,colluvial/alluvial layer
+výplň/zásyp,fill/deposit
+žároviště,burned layer
+kanalizace,sewer
+kostel,church
+zemědělský objekt,agricultural structure
+stopy orby,plough marks
+bastion/reduta,bastion/redoubt
+erozní rýha,gully/ravine
+jeskyně/skalní prostor,cave/abri
+pramen,spring
+vodoteč,riverine water bodies
+vývrat,windthrow
+pyrotechnologické zařízení,pyrotechnological device
+pec,kiln
+haltýř,spring house
+kašna,fountain
+mlýn,mill
+palác,palace
+stáj/chlév,stable/cowshed
+stodola,barn
+sýpka/špýchar,granary/storehouse
+zvonice,bell tower
+loch,larder (cellar)
+sklep,cellar
+výkop,cut
+žlab,ditch
+dláždění,pavement
+hráz,embankment/dam
+chodba,corridor
+klenba,vaults
+kaple,chapel
+(polo)zemnice,pit house
+základy,foundations
+křtitelnice,baptismal font
+menhir,menhir
+oltář,altar
+smírčí kříž,wayside cross
+mezní pás,field boundary
+plužina,field system
+rybník/nádrž,pond/water tank
+palebné postavení,gun emplacement
+palisáda,palisade
+příkop,moat
+věž,tower
+věžice,half tower
+šibenice,gallows
+hliník,clay pit
+náhon,millrace
+studna,water well
+kolektor,collector
+trativod,drainage
+vodovod,water supply pipe
+součást komunikace,transportation structure
+cesta,path/road
+hať,corduroy road
+mezník/patník,milestone/boundary stone
+most,bridge
+úvoz,hollow way
+zahrada,garden
+bašta,wall tower
+brána,gate
+hradba,defensive wall
+motte,motte
+ohradní zeď/plot,wall/fence
+parkánová hradba,zwinger wall
+val,rampart
+zákop,trench
+převýšená plocha,mound
+zahloubená plocha,depression
+lineární převýšený útvar,linear mound
+lineární zahloubený útvar,linear depression
+malba/freska,painting/fresco
+skalní rytina,rock carving
+výrobní objekt,production feature
+místo zpracování,processing place
+místo výroby,production place
+hamr,hammer mill
+kovárna,blacksmith
+vápenická jáma,lime pit
+pec cihlářská,brick oven
+pec dehtářská,tar pit
+pec hrnčířská,pottery kiln
+pec hutnická,iron-smelting furnace
+pec chlebová,bake oven
+pec kovolitecká,foundry
+milíř,charcoal kiln
+pec sklářská,glass furnace
+pec vápenická,lime kiln
+kovářská výheň,forge
+místo těžby,extracting place
+lom,quarry
+obval,spoil bank
+pinka,binge
+sejp/halda,spoil heap
+šachta,shaft
+štola,adit
+těžební jáma,mining pit
+neklidný terén,uneven surface
+plošina,platform
+terénní hrana,terrain edge
+budova/stavba,building/structure
+zahloubený objekt,sunken feature
+konstrukční prvek,architectural element
+vrstva/souvrství,layer/layer sequence
+inženýrské sítě,utilities
+komunikace,transportation structure
+kultovní/sakrální objekt,ritual/sacral feature
+objekt/stopa výroby,production feature/trace
+ohrazení/fortifikace,enclosure/fortification
+otopné zařízení,heating equipment
+pohřební objekt,funerary structure
+přírodní útvar,natural landform
+těžební objekt,mining feature
+nespecifikovaný reliéfní útvar,unspecified terrain feature
+neznámé počasí,unknown weather
+deštivo,rainy
+oblačno,cloudy
+"oblačno, zataženo","cloudy, overcast"
+slunečno,sunny
+"slunečno, oblačno","sunny, cloudy"
+"slunečno, oblačno, zataženo","sunny, cloudy, overcast"
+zataženo,overcast
+odborný záměr,expert project
+badatelský záměr,research project
+inženýrsko-geologický průzkum,engineering-geological survey
+havárie/stavební narušení,accident/building disruption
+jiný podnět,other motivation
+liniová stavba,line construction
+neznámý,unknown
+obdělávání půdy,farming
+stavba,construction
+antrakologie/xylotomie,anthracology/xylotomy
+biologická antropologie,biological anthropology
+archeogenetika,archaeogenetics
+archeozoologie,archaeozoology
+radiouhlíkové datování,radiocarbon dating
+dendrochronologie,dendrochronology
+diatomární analýza,diatomic analysis
+fytolitová analýza,phytological analysis
+geofyzika,geophysics
+geochemie,geochemistry
+chemická analýza,chemical analysis
+analýza stabilních izotopů,stable isotope analysis
+expertní analýza,expert analysis
+makrozbytková analýza,macroremains analysis
+archeomalakologie,archeomalacology
+numismatika,numismatics
+archeoentomologie,archeoentomology
+palynologie,palynology
+archeoparazitologie,archeoparasitology
+pedologie,pedology
+petrografie/mineralogie,petrography
+konzervace a restaurování,conservation and restoration
+metalografie,metallography
+prvková analýza,elemental analysis
+materiálová analýza,material analysis
+dýmka,pipe
+džbán,jug
+zápona,clasp
+zavazadlo,luggage
+zlomek kosti,bone fragment
+kamenná industrie,lithics
+doklad umění/kultu,artistic/ritual object
+kostra,skeleton
+přechovávaná přírodnina,natural object
+rostlinné makrozbytky,plant macro-remain
+struska,slag
+vejce,eggshell
+zub,tooth
+součást zbroje,armor component
+zbraň palná,firearm
+bankovka,paper money
+akvamanile,aquamanile
+amfora,amphorae
+kovadlina,anvil
+lopata/rýč,shovel/spade
+otloukač,hammerstone
+pila,saw
+součást pluhu,plow component
+srp,sickle
+škrabadlo,endscraper
+břitva,razor
+čepel/čepelka,blade/small blade
+korálek,bead
+křížek,cross
+nákrčník,neck ring
+náramek,bracelet
+náušnice,earring
+nákončí,mordant
+prsten,finger ring
+listina,deed
+třmen,stirrup
+udidlo,bridle bit
+knoflík,button
+opasek,belt
+pochva/pouzdro,sheath
+dlaždice,floor tile
+hřeb/hřebík/nýt,nail/rivet
+plech,metal sheet
+cedník,colander
+průvlečka,clothing buckle
+hrací kámen,game piece
+vzorek geologický,geological sample
+vzorek malakologický,malacological sample
+prkno/fošna,board/plank
+stéla,stela
+dyzna,nozzle
+konvice,pitcher
+lahev,bottle
+vzorek palynologický,palynological sample
+gombík,spherical button
+kování,mount
+lampa/kahan,lamp/burner
+hrací kostka,dice
+vzorek pedologický,pedological sample
+vzorek paleobotanický,palaeobotanical sample
+jehlice,clothing pin
+kaptorga,kaptorga (metal pendant case)
+rolnička,jingle bell
+růženec/medailon,rosary/medallion
+součást vozu,cargo vehicle component
+rakev,coffin
+zlomek keramiky,potsherd
+zlomek mazanice,daub fragment
+amorfní zlomek/předmět,amorphous fragment/object
+atypický předmět,exceptional object
+ostění,jamb
+portál,portal
+deska,board
+zbraň chladná,cold weapon
+drasadlo,side scraper
+kadlub,mold
+klín,wedge
+závaží,weight
+mísa,bowl
+pánev,pan
+závaží rybářské,net weight
+pohár/číše,beaker/goblet
+závaží tkalcovské,loom weight
+poklička,lid
+žernov/mlýnský kámen,quern
+popelnice,urn
+klíč,key
+křesadlo/ocílka,firesteel
+lžíce,spoon
+gemma,gem
+přezka,buckle
+spona,fibula
+nátepní destička,wrist guard
+obuv,footwear
+kachel,stove tile
+kůl,pole
+okenní výplň,window panes
+pojivo,binder
+potrubí,plumbing pipe
+brusle,ice skate
+člun,boat
+faléra,phalera
+podkova,horseshoe
+součást postroje,harness component
+stavební keramika,construction ceramics
+hudební nástroj,musical instrument
+plastika/soška,sculpture/statue
+plastika/soška antropomorfní,anthropomorphic sculpture/statue
+plastika/soška zoomorfní,zoomorphic sculpture/statue
+kost,single bone
+skořápka plodu,fruit shell/nutshell
+projektil/kule/munice,projectile/bullet/ammunition
+řetízek,chain necklace
+vzorek dendrochronologický,dendrochronological sample
+vzorek pro radiokarbonové datování,radiocarbon dating sample
+kulička/koule,ball/sphere
+pekáč,baking pan
+žeton,token
+vzorek antrakologický,anthracological sample
+kroužek/kruh,circle/ring
+tyčinka/váleček,rod/log
+talíř,plate
+zásobnice,storage vessel
+hrnec,pot
+koflík,cup
+kotel/kotlík,kettle
+pražnice,frying pan
+tyglík,crucible
+prejz,pantile
+technická keramika,technical ceramics
+kamenné jádro,stone core
+malakofauna,mollusca
+odpad,waste
+odpad stavební,construction waste
+odpad výrobní,production waste
+uhlíky/popel,charcoal/ash
+drát,wire
+hrot/hák,spike/hook
+bulava,club
+meč,sword
+ostruha,spur
+oštěp/hrot oštěpu,javelin/javelin head
+sekeromlat/mlat,hammer axe
+součást štítu,shield part
+šavle,sabre
+šíp/šipka/hrot šípu/šipky,arrow/arrowhead
+tesák,dussack
+mince,coin
+drtidlo/zrnotěrka,handstone/saddle quern
+kladivo/palice,hammer/sledgehammer
+kleště,pliers
+kosa,scythe
+motyka/krumpáč,mattock/pickaxe
+pilník,file
+sekáč,chopper
+sekera,axe
+brousek,whetstone
+jehla/špendlík,needle/pin
+náprstek,thimble
+nůž,knife
+nůžky,scissors
+pinzeta,tweezers
+přeslen,spindle whorl
+rydlo,graver
+stilus,stylus
+nápažník,armlet
+cihla,brick
+řetěz,chain
+střešní krytina,roofing tile
+trám,beam
+zámek,lock
+vědro/situla,bucket/situla
+dýka,dagger
+kopí/hrot kopí,spear/spearhead
+kuše,crossbow
+luk,bow
+dláto,chisel
+hladítko,smoother
+hřeben,comb
+šídlo,awl
+hřivna,ingot
+ruda,ore
+slitek,bloom
+surovina,raw material
+valoun,pebble
+náhrdelník,necklace
+nánožník,anklet
+přívěsek/závěsek,pendant
+záušnice,temple ring
+kniha,book
+váza,vase
+běžný nález,common find
+architektonický článek,architectural element
+ekofakt,ecofact
+funkčně neurčený předmět,object of unspecified function
+militaria,weapons and armour
+platidlo,currency
+nádoba,vessel
+nástroj hrubý,utensil
+nástroj jemný,instrument
+nehotový výrobek/polotovar,semiproduct/blank
+ozdoba,adornment
+písemnost,written document
+postroj/doprava,harness/transportation
+součást hrobu,grave component
+součást oděvu,costume component
+stavební/spojovací prvek,structural element component
+herní předmět,game equipment
+vzorek,sample
+odchylka jednotky metrů,deviation in meters
+odchylka desítky metrů,deviation in tens of meters
+odchylka stovky metrů,deviation in hundreds of meters
+poloha podle katastru,location by cadastral area
+anonym,anonymous
+badatel,researcher
+archeolog,archaeologist
+archivář,archivist
+data 3d,data 3D
+data,data
+fotografie letecké (digitální),aerial photographs (digital)
+fotografie předmětů (digitální),photographs of objects (digital)
+fotografie terénu (digitální),photographs of fieldwork (digital)
+plány (digitální),plans (digital)
+fotografie diapozitivy,photoslides
+fotografie jiné/osobní,other/personal photographs
+fotografie předmětů,photographs of objects
+fotografie terénu,photographs of fieldwork
+fotografie letecké (diapozitivy),aerial photoslides
+plány,plans
+fotografie letecké (negativy),aerial photographs (negatives)
+zprávy a hlášení,reports
+přesně v letech,exact years
+přesné datum,exact date
+někdy v letech,approximate years
+konstrukce zděná,masonry construction
+konstrukce cihlová,brick structure
+konstrukce dlaždicová,tiled structure
+konstrukce kamenná,stonework
+konstrukce dřevěná,wooden structure
+konstrukce kůlová/sloupová,post-and-beam structure
+konstrukce roubená,log construction
+konstrukce hrázděná,half-timber construction
+konstrukce sypaná/vršená,earth construction
+konstrukce zahloubená,sunken structure
+perleť/mušle,nacre/shell
+způsob provedení,construction type
+těžený/zpracovávaný materiál,extracted/processed material
+barvivo,colourant
+bronz,bronze
+cín,tin
+dehet,tar
+dřevo,wood
+grafit,graphite
+hlína,clay
+jantar,amber
+kámen,stone
+kámen broušený,polished stone
+kámen drahý,gemstone
+kámen drtidlo/žernov,grinding stone
+kámen stavební,building stone
+kámen štípaný,lithics
+keramika,ceramic
+keramika fajáns/majolika,faience/maiolica
+keramika kamenina,stoneware
+keramika porcelán,porcelain
+keramika terra sigillata,terra sigillata ware
+korál,coral
+kost lidská,human bone
+kost zvířecí,animal bone
+kov,metal
+kov barevný,nonferrous metal
+kůra,bark
+kůže,leather
+malta,mortar
+mazanice,daub
+měď,copper
+mosaz,brass
+obilky/semena,caryopses/seeds
+olovo,lead
+omítka,plaster
+paroh,antler
+pecka,fruit stone
+perla,pearl
+plast,plastic
+proutí,wattle
+pryskyřice,resin
+pyl,polen
+roh,horn
+schránky měkkýšů,mollusc shell
+sklo,glass
+slonovina/mamutovina,ivory
+spondylus,spondylus
+stříbro,silver
+švartna,sapropel
+textil,textile
+uhlí,coal
+uhlí dřevěné,charcoal
+vápno,quicklime
+vosk,wax
+zlato,gold
+zub lidský,human tooth
+zub zvířecí,animal tooth
+železo,iron
+jiný materiál,other material
+bodový objekt,point feature
+shluk bodových objektů,group of point features
+bodové objekty uspořádané,organized point features
+plošný objekt,polygonal feature
+linie ohrazující,delimiting line
+lineární systém,system of linear features
+ohrazení kruhové malé,circular enclosure (small)
+ohrazení kruhové střední,circular enclosure (medium)
+ohrazení kruhové velké,circular enclosure (large)
+ohrazení pravoúhlé malé,rectangular enclosure (small)
+ohrazení pravoúhlé střední,rectangular enclosure (medium)
+ohrazení pravoúhlé velké,rectangular enclosure (large)
+ohrazení polygonální malé,polygonal enclosure (small)
+ohrazení polygonální střední,polygonal enclosure (medium)
+ohrazení polygonální velké,polygonal enclosure (large)
+vizuální/geodetický průzkum,visual/geodetic survey
+letecký průzkum,aerial survey
+geochemický průzkum,geochemical survey
+povrchový nález,surface find
+povrchový sběr,surface collection survey
+mikrosondáž/vzorkovací sondáž,shovel tests/test pitting
+průzkum detektorem kovu,metal detector survey
+náhodný zásah/nález,chance find
+nedokumentovaná akce,undocumented fieldwork
+orientační zjištění,brief evidence
+vertikální řez,linear trench
+skupina/síť sond,group of pit trenches
+plošný odkryv,total excavation
+nedestruktivní průzkum,non-destructive survey
+výzkum povrchové vrstvy,topsoil sampling
+terénní zásah,field intervention
+terénní odkryv,field excavation
+environmentální vzorek,environmental sampling
+jiná evidence,other evidence
+bez okolností,unknown context
+celek akce,fieldwork extent
+část akce,fieldwork segment
+katastrální území,cadastral area
+lokalita,site
+nálezová zpráva,fieldwork report
+příloha zprávy/hlášení,report annex
+expertní posudek,expert report
+investorská zpráva,client report
+hlášení,brief report
+jiný text,other text
+data analýzy ekofaktů,ecofact analysis data
+data geodetická,geodetic data
+data geofyzikální,geophysical data
+data gnss,GNSS data
+data terénního výzkumu,fieldwork data
+data vektorového plánu,vector plan data
+fotografie krajiny,photograph of landscape
+fotografie lokality,photograph of site
+fotografie výzkumu/sondy,photograph of excavation/trench
+fotografie osobní,photograph of person
+fotografie události,photograph of event
+fotografie pracovní,photograph of fieldwork
+fotografie objektu,photograph of feature
+fotografie předmětu,photograph of object
+mikrofotografie,microphotograph
+fotografie konzervace,photograph of conservation
+letecká fotografie krajiny,aerial photograph of landscape
+letecká fotografie lokality,aerial photograph of site
+letecká fotografie výzkumu,aerial photograph of fieldwork
+plán regionu,plan of region
+letecká fotografie vegetačních příznaků,aerial photograph of vegetation marks
+letecká fotografie půdních příznaků,aerial photograph of soil marks
+letecká fotografie sněžných příznaků,aerial photograph of snow marks
+letecká fotografie stínových příznaků,aerial photograph of shadow marks
+plán lokality,plan of site
+plán výzkumu,plan of fieldwork
+plán sondy,plan of trench
+plán objektu,plan of feature
+kresba předmětu,object drawing
+mapa,map
+neurčený dokument,unspecified document
+3d rekonstrukce,3D reconstruction
+3d dokumentace,3D documentation
+3d textura,3D texture
+letecká fotografie metody,aerial photograph of method
+část knihy,book chapter
+článek v časopise,journal paper
+článek v novinách,newspaper article
+jiný zdroj,other source
+nemovitá památka,heritage site
+polygon průzkumu,survey polygon
+objekt,feature
+předmět,object
+muzeum,museum
+jiná organizace,other organisation
+terénní pracoviště,fieldwork unit
+ústav památkové péče,heritage organisation
+výzkumná instituce,research organisation
+univerzita,university
+bod,point
+linie,line
+polygon,polygon
+záchranný,rescue
+badatelský,research
+průzkum,survey
+náhodný/povrchový nález,chance find
+neodborné narušení,non-professional intervention
+geodetický průzkum,geodetic survey
+geofyzikální průzkum,geophysical survey
+stavebně-historický průzkum,building-history survey
+geologický vrt,geological core sample
+geologická sonda,geological trench
+vrt,sediment core sample
+skupina vrtů,group of sediment core samples
+řez,linear trench
+skupina řezů,group of linear trenches
+sonda,pit trench
+skupina sond,group of pit trenches
+konference,conference
+zahraniční cesta,travel abroad
+zahraniční výzkum,fieldwork abroad
+společenská akce,social event
+jiná událost,other event
+povrch sondy,trench surface
+dno sondy,trench bottom
+podloží,subsoil
+snížené podloží,levelled subsoil
+industriál,Industrial
+primárně digitální dokument,born digital document
+archiv arúb,IAB archive
+archiv arú,IAP archive
+archiv jiné organizace,other institutional archive
+archiv autora,author's archive
+originál ztracen/zničen,original lost/destroyed
+neznámé uložení,unknown deposition
+zachováno 80–100 %,80–100% preserved
+zachováno 30–80 %,30–80% preserved
+zachováno 0–30 %,0–30% preserved
+ztraceno/skartováno,lost/discarded
+duplicita,duplicate
+nízká výpovědní hodnota,low relevancy
+afghánistán,Afghanistan
+alandy,Åland Islands
+albánie,Albania
+alžírsko,Algeria
+americká samoa,American Samoa
+americké panenské ostrovy,Virgin Islands (U.S.)
+andorra,Andorra
+angola,Angola
+anguilla,Anguilla
+antarktida,Antarctica
+antigua a barbuda,Antigua and Barbuda
+argentina,Argentina
+arménie,Armenia
+aruba,Aruba
+austrálie,Australia
+ázerbájdžán,Azerbaijan
+bahamy,Bahamas (the)
+bahrajn,Bahrain
+bangladéš,Bangladesh
+česko,Czechia
+indonésie,Indonesia
+kosovo,Kosovo
+kuvajt,Kuwait
+belgie,Belgium
+guadeloupe,Guadeloupe
+nepál,Nepal
+mali,Mali
+man,Isle of Man
+benin,Benin
+maroko,Morocco
+nový zéland,New Zealand
+mexiko,Mexico
+mikronésie,Micronesia (Federated States of)
+svatý tomáš a princův ostrov,Sao Tome and Principe
+namibie,Namibia
+haiti,Haiti
+senegal,Senegal
+severní mariany,Northern Mariana Islands (the)
+guam,Guam
+guatemala,Guatemala
+guinea,Guinea
+polsko,Poland
+portoriko,Puerto Rico
+portugalsko,Portugal
+omán,Oman
+pákistán,Pakistan
+korejská republika,Korea (the Republic of)
+pobřeží slonoviny,Côte d'Ivoire
+falklandy (malvíny),Falkland Islands (the) (Malvinas)
+francouzská jižní a antarktická území,French Southern Territories (the)
+nikaragua,Nicaragua
+nizozemsko,Netherlands (the)
+norfolk,Norfolk Island
+estonsko,Estonia
+kiribati,Kiribati
+kuba,Cuba
+rovníková guinea,Equatorial Guinea
+rumunsko,Romania
+kypr,Cyprus
+mauricius,Mauritius
+libanon,Lebanon
+mongolsko,Mongolia
+montserrat,Montserrat
+ghana,Ghana
+curaçao,Curaçao
+tanzanie,"Tanzania, United Republic of"
+jamajka,Jamaica
+egypt,Egypt
+menší odlehlé ostrovy usa,United States Minor Outlying Islands (the)
+černá hora,Montenegro
+čína,China
+dánsko,Denmark
+konžská demokratická republika,Congo (the Democratic Republic of the)
+brazílie,Brazil
+špicberky a jan mayen,Svalbard and Jan Mayen
+šrí lanka,Sri Lanka
+singapur,Singapore
+gambie,Gambia (the)
+sierra leone,Sierra Leone
+svatá helena,"Saint Helena, Ascension and Tristan da Cunha"
+kokosové (keelingovy) ostrovy,Cocos (Keeling) Islands (the)
+irák,Iraq
+filipíny,Philippines (the)
+finsko,Finland
+nová kaledonie,New Caledonia
+gibraltar,Gibraltar
+grenada,Grenada
+grónsko,Greenland
+marshallovy ostrovy,Marshall Islands (the)
+svatý martin (fr),Saint Martin (French part)
+moldavsko,Moldova (the Republic of)
+monako,Monaco
+kostarika,Costa Rica
+súdán,Sudan (the)
+niger,Niger (the)
+nigérie,Nigeria
+heardův ostrov a macdonaldovy ostrovy,Heard Island and McDonald Islands
+honduras,Honduras
+hongkong,Hong Kong
+island,Iceland
+niue,Niue
+saint pierre a miquelon,Saint Pierre and Miquelon
+salvador,El Salvador
+bosna a hercegovina,Bosnia and Herzegovina
+cookovy ostrovy,Cook Islands (the)
+kolumbie,Colombia
+britské indickooceánské území,British Indian Ocean Territory (the)
+katar,Qatar
+pitcairn,Pitcairn
+lotyšsko,Latvia
+lucembursko,Luxembourg
+norsko,Norway
+kambodža,Cambodia
+kamerun,Cameroon
+kanada,Canada
+mosambik,Mozambique
+rakousko,Austria
+peru,Peru
+kyrgyzstán,Kyrgyzstan
+laos,Lao People's Democratic Republic (the)
+lesotho,Lesotho
+španělsko,Spain
+guernsey,Guernsey
+guinea-bissau,Guinea-Bissau
+réunion,Réunion
+řecko,Greece
+svatý kryštof a nevis,Saint Kitts and Nevis
+tchaj-wan,Taiwan (Province of China)
+seychely,Seychelles
+libye,Libya
+dominika,Dominica
+malawi,Malawi
+šalomounovy ostrovy,Solomon Islands
+slovinsko,Slovenia
+jemen,Yemen
+libérie,Liberia
+svatý martin (nl),Sint Maarten (Dutch part)
+kazachstán,Kazakhstan
+džibutsko,Djibouti
+jižní súdán,South Sudan
+itálie,Italy
+izrael,Israel
+samoa,Samoa
+spojené arabské emiráty,United Arab Emirates (the)
+spojené státy,United States of America (the)
+írán,Iran (Islamic Republic of)
+mauritánie,Mauritania
+somálsko,Somalia
+malajsie,Malaysia
+"bonaire, svatý eustach a saba","Bonaire, Sint Eustatius and Saba"
+bělorusko,Belarus
+bermudy,Bermuda
+švédsko,Sweden
+svatá lucie,Saint Lucia
+britské panenské ostrovy,Virgin Islands (British)
+belize,Belize
+etiopie,Ethiopia
+faerské ostrovy,Faroe Islands (the)
+fidži,Fiji
+chile,Chile
+chorvatsko,Croatia
+indie,India
+thajsko,Thailand
+togo,Togo
+kapverdy,Cape Verde
+irsko,Ireland
+kajmanské ostrovy,Cayman Islands (the)
+nauru,Nauru
+bouvetův ostrov,Bouvet Island
+surinam,Suriname
+francie,France
+dominikánská republika,Dominican Republic (the)
+macao,Macao
+madagaskar,Madagascar
+japonsko,Japan
+ekvádor,Ecuador
+svatý bartoloměj,Saint Barthélemy
+myanmar,Myanmar
+srbsko,Serbia
+německo,Germany
+brunej,Brunei Darussalam
+bulharsko,Bulgaria
+burkina faso,Burkina Faso
+burundi,Burundi
+paraguay,Paraguay
+jersey,Jersey
+švýcarsko,Switzerland
+slovensko,Slovakia
+palestina,"Palestine, State of"
+panama,Panama
+papua nová guinea,Papua New Guinea
+lichtenštejnsko,Liechtenstein
+litva,Lithuania
+korejská lidově demokratická republika,Korea (the Democratic People's Republic of)
+maďarsko,Hungary
+severní makedonie,North Macedonia
+san marino,San Marino
+botswana,Botswana
+svatý vincenc a grenadiny,Saint Vincent and the Grenadines
+sýrie,Syrian Arab Republic
+saúdská arábie,Saudi Arabia
+jižní afrika,South Africa
+jižní georgie a jižní sandwichovy ostrovy,South Georgia and the South Sandwich Islands
+jordánsko,Jordan
+komory,Comoros (the)
+konžská republika,Congo (the)
+středoafrická republika,Central African Republic (the)
+palau,Palau
+svazijsko,Eswatini
+mayotte,Mayotte
+tádžikistán,Tajikistan
+gruzie,Georgia
+rusko,Russian Federation (the)
+rwanda,Rwanda
+eritrea,Eritrea
+bhútán,Bhutan
+bolívie,Bolivia (Plurinational State of)
+maledivy,Maldives
+keňa,Kenya
+francouzská polynésie,French Polynesia
+gabon,Gabon
+guyana,Guyana
+barbados,Barbados
+martinik,Martinique
+francouzská guyana,French Guiana
+čad,Chad
+tokelau,Tokelau
+tonga,Tonga
+trinidad a tobago,Trinidad and Tobago
+tunisko,Tunisia
+turecko,Turkey
+turkmenistán,Turkmenistan
+turks a caicos,Turks and Caicos Islands (the)
+tuvalu,Tuvalu
+uganda,Uganda
+ukrajina,Ukraine
+uruguay,Uruguay
+uzbekistán,Uzbekistan
+vánoční ostrov,Christmas Island
+vanuatu,Vanuatu
+vatikán,Holy See (the)
+velká británie,United Kingdom of Great Britain and Northern Ireland (the)
+venezuela,Venezuela (Bolivarian Republic of)
+vietnam,Viet Nam
+východní timor,Timor-Leste
+wallis a futuna,Wallis and Futuna
+zambie,Zambia
+západní sahara,Western Sahara
+zimbabwe,Zimbabwe
+pozůstatek komunikace,remains of transportation structure
+pozůstatek mohylníku,remains of burial mounds
+pozůstatek ohrazení,remains of enclosure
+pozůstatek represe,remains of repression site
+pozůstatek kultu,remains of ritual site
+pozůstatek sídla elity,remains of manorial site
+pozůstatek sídliště,remains of settlement
+pozůstatek těžby,remains of extraction site
+pozůstatek vojenství,remains of military site
+pozůstatek výroby,remains of production site
+osteozoologie,osteozoology
+tafonomie,taphonomy
+geochronologie,geochronology
+geomorfologie,geomorphology
+mikrostratigrafie,microstratigraphy
+paleoklimatologie,paleoclimatology
+experimentální archeologie,experimental archaeology
+střední/mladší doba laténská (ltc1–2),Middle/Late La Tène Period (LtC1–2)
+italština,Italian
+jisté (> 95 %),certain (> 95%)
+nejisté (50–95 %),uncertain (50–95%)
+domnělé (5–50 %),alleged (5–50%)
+pseudolokalita (< 5 %),pseudo-site (< 5%)
+zaniklá lokalita,buried site
+lokalita pod zástavbou,site in built environment
+nadzemní relikty,aboveground remains
+ruina,ruin
+historická budova/komplex,historical building/complex
+mladší–pozdní eneolit,Late–Final Eneolithic
+creative commons uveďte původ-neužívejte komerčně 4.0 mezinárodní,Creative Commons Attribution-NonCommercial 4.0 International
+neznámá,unknown
+bioarcheologie,bioarchaeology
+absolutní datování,absolute dating
+geoarcheologie,geoarchaeology
+materiálové analýzy,material analysis
+jiné expertní zpracování,other expert analysis
+creative commons uveďte původ 4.0 mezinárodní,Creative Commons Attribution 4.0 International
+creative commons uveďte původ-zachovejte licenci 4.0 mezinárodní,Creative Commons Attribution-ShareAlike 4.0 International
+creative commons uveďte původ-nezpracovávejte 4.0 mezinárodní,Creative Commons Attribution-NoDerivatives 4.0 International
+creative commons uveďte původ-neužívejte komerčně-zachovejte licenci 4.0 mezinárodní,Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+creative commons uveďte původ-neužívejte komerčně-nezpracovávejte 4.0 mezinárodní,Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+1) teorie a přístupy,1) Theory and approaches
+archeologie,archaeology
+dějiny archeologie,history of archaeology
+archeoložka,women archaeologist
+evolucionistická archeologie,evolutionary archaeology
+kulturně historická archeologie,cultural-historical archeology
+postprocesuální archeologie,post-processual archaeology
+procesuální archeologie,processual archaeology
+romantická archeologie,romantic archeology
+předmět bádání (archeologie),research subject
+společnost,society
+duchovní život,spiritual life
+hospodářské poměry,economic conditions
+společenské poměry,social conditions
+sociální struktura,social structure
+přístupy (archeologie),approaches
+subobory průřezové (tematické) (archeologie),cross-sectional subfields (thematic) (archeology)
+amatérska archeologie,amateur archaeology
+archeologie skalních převisů,rockshelter archaeology
+archeometrie,archaeometry
+cirkevní archeologie,Christian archaeology
+environmentální archeologie,environmental archaeology
+kastelologie,castellology
+kognitivní archeologie,cognitive archaeology
+krajinná archeologie,landscape archaeology
+letecká archeologie,aerial archaeology
+montánní archeologie,mining archaeology
+nedestruktivní archeologie,non-destructive archaeology
+podmořská archeologie,maritime archaeology
+podvodní archeologie,underwater archaeology
+prostorová archeologie,spatial archaeology
+průmyslová archeologie,industrial archaeology
+říční archeologie,river archaeology
+sídelní archeologie,settlement archaeology
+speleoarcheologie,speleoarchaeology
+trasologie,traceology
+"subobory systémové (chronologické, historické) (archeologie)","system subfields (chronological, historical) (archeology)"
+archeologie starověku,ancient archeology
+archeologie středověku,medieval archaeology
+biblická archeologie,biblical archaeology
+germánská archeologie,Germanic archeology
+historická archeologie,historical archaeology
+klasická archeologie,classical archaeology
+prehistorická archeologie,prehistoric archaeology
+římská archeologie,Roman archaeology
+slovanská archeologie,Slavic archaeology
+teorie - terminologie (archeologie),theory - terminology (archaeology)
+abraze,abrasion
+archeologická data,archaeological data
+archeologická kultura,archaeological culture
+archeologická lokalita,archaeological site
+archeologický nález,archaeological find
+archeologický pramen,archaeological source
+artefakt,artefact
+falzifikát,forgery
+přírodní fakt,biofact
+archeologická transformace,archaeological transformation
+kvantitativní transformace,quantitative transformation
+fragmentarizace (archeologická transformace),fragmentarization (archaeological transformation)
+redukce (archeologická transformace),reduction (archaeological transformation)
+postdepoziční transformace,post-depositional transformation
+predepoziční transformace,pre-depositional transformation
+archeologický kontext,archaeological context
+horizont (archeologie),horizon (archaeology)
+import,import
+industrie,industry
+věda - obecná hesla,science - general entries
+databáze,database
+asep (databáze),ASEP (database)
+diskurzivní analýza,discourse analysis
+názorný model,visual model
+paradigma vědy,paradigma of science
+popularizace vědy,popularization of science
+poststrukturalismus,post-structuralism
+strukturalismus,structuralism
+struktura,structure
+symbol,symbol
+sympozium,symposium
+terminologie,terminology
+oborová terminologie,terminology (professional)
+vědecká metodologie,scientific methodology
+analýza,analysis
+kontextuální analýza,contextual analysis
+heuristika,heuristic
+kritika (vědecká metodologie),critics (scientific methodology)
+syntéza (vědecká metodologie),synthesis (scientific methodology)
+vědecká teorie,scientific theory
+vědecký časopis,scientific journal
+vědecká informace,scientific information
+vědecké instituce a organizace,scientific institutions and organizations
+vědecký omyl,scientific error
+vědecký podvod,scientific falsification
+vědecký program,scientific program
+vědecká publikace,scientific publication
+vědní politika,scientific policy
+2) terénní metody,2) Field methods
+archeologické výzkumy,archaeological research
+destruktivní metoda výzkumu,destructive method
+předstihový archeologický výzkum,development-led excavation
+revizní výzkum,revision excavation
+zjišťovací archeologický výzkum,evaluation excavation
+záchranný výzkum (archeologie),rescue excavation
+málo destruktivní metoda,less destructive method
+detekce kovů,metal detection
+mikrosondáž,shovel test
+náhodný nález,chance find
+nedestruktivní metoda výzkumu,non-destructive method
+dálkový průzkum země,remote sensing
+družicová geodezie,satellite geodesy
+letecká fotogrammetrie,aerial photogrammetry
+letecké laserové skenování,irborne laser scanning survey
+digitální model terénu,digital elevation model
+ortofotomapa,orthophotomap
+letecké snímkování,aerial photography
+termografie,thermography
+satelitní navigační systém,satellite navigation system
+galileo (navigační systém),Galileo (navigation system)
+gps (navigační systém),global positioning system
+satelitní snímek,satellite imaging
+geoelektrický průzkum,electric prospecting
+gravimetrie,gravimetry
+magnetometrie,magnetometry
+magnetometr,magnetometer
+termometrie,thermometry
+geochemická metoda,geochemical prospecting method
+topografické mapování,topographical mapping
+3) metody zpracování,3) Processing methods
+"analýzy, posudky (metody spracování)","analyses, reviews (processing methods)"
+antrakologická analýza,anthracological analysis
+antropologický výzkum,anthropological research
+archeogenetická analýza,archaeogenetic analysis
+dendrochronologická analýza,tree-ring analysis
+elektronová mikroskopie,electron microscopy
+skenovací elektronová mikroskopie,scanning electron microscopy
+environmentální skenovací elektronová mikroskopie,environmental scanning electron microscopy
+transmisní elektronová mikroskopie,transmission electron microscopy
+fosfátová analýza,phosphate analysis
+geoarcheologická analýza,geoarchaeological analysis
+geologický výzkum,geological research
+chromatografická analýza,chromatographic analysis
+izotopový výzkum,isotopic analysis
+malakozoologická analýza,malacozoological analysis
+metalografická analýza,metallographic analysis
+metalurgická analýza,metallurgical analysis
+mineralogická analýza,mineralogical analysis
+neurónová aktivační analýza,neutron activation analysis
+numismatická analýza,numismatic analysis
+osteologická analýza,osteological analysis
+paleoentomologická analýza,palaeoentomology
+parazitologická diagnostika,parasitological diagnostics
+pedologický výzkum,pedological research
+petrografická analýza,petrological analysis
+počítačová tomografie,computed tomography
+pylová analýza,pollen analysis
+radiokarbonové datování,radiocarbon dating
+rentgenová fluorescenční analýza,X-ray fluorescence analysis
+restaurátorský průzkum,restoration research
+spektrální analýza,spectrum analysis
+spektrografická analýza,spectrograph analysis
+spektrometrie,spectrometry
+atomová absorbční spektrometrie,atomic absorption spectroscopy
+atomová emisní spektrometrie,atomic emission spectroscopy
+hmotnostní spektrometrie,mass spectrometry
+hmotnostní spektrometrie s indukčně vázaným plazmatem,inductively coupled plasma mass spectrometry
+hmotnostní spektrometrie s indukčně vázaným plazmatem a laserovou ablací,inductively coupled plasma mass spectrometry with laser ablation
+infračervená spektroskopie,infrared spectroscopy
+ramanova spektrometrie,Raman spectroscopy
+spektrometrie s indukčně vázaným plazmatem,inductively coupled plasma spectrometry
+technologický proces,chaine operatoire
+termoluminiscenční datování,thermoluminiscence dating
+archeologické datování,archaeological dating
+absolutní chronologie,absolute chronology
+relativní chronologie,relative chronology
+stratigrafie,stratigraphy
+horizontální stratigrafie,horizontal stratigraphy
+vertikální stratigrafie,vertical stratigraphy
+dokumentace,documentation
+fotografická dokumentace,photodocumentation
+geografické informační systémy,geographic information systems
+archeologická mapa,archaeological map
+kresebná dokumentace,drawn documentation
+odlitek,casting
+terénní archeologická dokumentace,field archaeological documentation
+trojrozměrné modelování,three-dimensional modelling
+videozáznam,video recording
+kategorizace a klasifikace,categorization and classification
+archeologická klasifikace,archaeological classification
+komparativní výzkum,comparative research
+analogie,analogy
+srovnávací metoda,comparative methods
+konzervátorsko-restaurátorské metody,conservation-restoration methods
+konzervace,conservation
+konzervování muzejních exponátů,conservation of museum exhibits
+konzervování památek,antiquities conservation
+kopie,facsimile
+replika,replica
+sádrový odlitek,gypsum casting
+koroze,corrosion
+restaurování,restoration
+restaurování muzejních exponátů,restoration of museum exhibits
+restaurování památek,antiquities restoration
+činnosti muzeí,activities of museums
+muzejní sbírky,museum collection
+archeologická sbírka,archaeological collection
+botanická sbírka,plant collection
+etnografická sbírka,ethnological collection
+geologická sbírka,geological collection
+kurátorství sbírek,collection curatorship
+mineralogická sbírka,mineral collection
+muzejní dokumentace,museum documentation
+numismatická sbírka,numismatic collection
+paleontologická sbírka,paleontological collection
+přírodovědná sbírka,natural history collection
+sbírkotvorná činnost,collection of specimens
+doplňování muzejních sbírek,museum collections acquisition
+evidence sbírkových předmětů,regisry of collection objects
+sbírkový předmět,collection’s objects
+umělecká sbírka,art collection
+zoologická sbírka,zoological collection
+muzejní výstava,museum exhibitions
+stálá expozice,permanent exhibitions
+kurátorství výstav,exhibition curatorship
+druhy muzeí,types of museums
+archeologické muzeum,archaeological museum
+etnografické muzeum,ethnological museum
+historické muzeum,historical museum
+hornické muzeum,mining museum
+regionální muzeum,regional museum
+skanzen,open-air museum
+uměleckoprůmyslové muzeum,museums of decorative arts
+muzejní společnost,museum society
+muzejní spolek,museum association
+nálezová správa,site report
+památková péče,historic preservation
+archeoskanzen,archaeological open-air museum
+objekty (památková péče),objects (historic preservation)
+archeologické dědicství,archaeological heritage
+mezinárodní smlouva,international treaty
+stavební právo,building law
+archeologická památka,archaeological monument
+městské historické centrum,historical town centre
+městská památková rezervace,urban monument reserve
+památkový objekt,listed monument
+památkově chráněné území,historically preserved area
+umělecká památka,artistic monument
+památkář,preservationist
+památkářka,woman preservationist
+památkový ústav,heritage institute
+předmět (památková péče),object (historic preservation)
+obnova a rekonstrukce památek,renewal and reconstruction of monuments
+ochrana památek,protection of monuments
+rekonstrukce staveb,reconstruction of buildings
+prostorová analýza,spatial analysis
+statistická analýza,statistical analysis
+analýza hlavních komponent,principal components analysis
+analýza rozptylu,analysis of variance
+diskriminační analýza,discriminant analysis
+faktorová analýza,factor analysis
+korespondeční analýza,correspondence analysis
+pravděpodobnostní metoda,probabilistic methods
+predikční model,predictive model
+prostorová statistika,spatial statistics
+shluková analýza,cluster analysis
+statistické vzorkování,statistical sampling
+teorie systémů,system theory
+typologie,typology
+4) hraniční obory a přidružené obory,4) Cross-border and related disciplines
+hraniční obory,cross-bordering disciplines
+archeoastronomie,archaeoastronomy
+archeobiologie,archaeobiology
+archeobotanika,archaeobotany
+"metody, analýzy (archeobotanika)","methods, analyses (archaeobotany)"
+letokruh,tree ring
+objekt (archeobotanika),object (archaeobotany)
+fytolit,phytolith
+předmět (archeobotanika),subject (archaeobotany)
+rostlina,plant
+domácí zvíře,domestic animal
+domestifikace živočichů,animal domestication
+chov hospodářských zvířat,livestock keeping
+malé hospodářské zvíře,small livestock
+porážka zvířat,slaughter
+velké hospodářské zvíře,big livestock
+lovná zvěř,game
+malakologie,malacology
+konchologie,conchology
+sexuální dimorfismus,sexual dimorphism
+archeometalurgie,archaeometallurgy
+dějiny metalurgie,history of metallurgy
+metalurgie,metallurgy
+etnoarcheologie,ethnoarchaeology
+paleontologie,paleontology
+objekt (paleontologie),object (palaeontology)
+fosilie,fossil
+subobor (paleontologie),subfield (palaentology)
+paleoantropologie,paleoanthropology
+paleodermatoglyfika,paleodermatoglyphics
+paleobiogeografie,paleobiogeography
+paleobiologie,paleobiology
+evoluční paleobiologie,evolutionary paleobiology
+paleobotanika,paleobotany
+fosilní pyl,fossil pollen
+subobor (paleobotanika),subfield (palaeobotany)
+obecná paleobotanika,general paleobotany
+systematická paleobotanika,systematic paleobotany
+paleozoologie,zoopaleontology
+fosilní živočich,fossil animal
+fosilní červ,fossil worm
+fosilní hmyz,fossil insect
+fosilní savec,fossil mammal
+fosilní spóra,fossil spore
+mikrofosilie,microfossil
+subobor (paleozoologie),subfield (paleozoology)
+obecná paleozoologie,general paleozoology
+paleozoogeografie,paleozoogeography
+systematická paleozoologie,systematic zoopaleontology
+paleodemografie,palaeodemography
+paleoekologie,paleoecology
+paleogeografie,paleogeography
+paleopatologie,paleopathology
+paleopedologie,palaeopedology
+paleopůda,paleosol
+petroarcheologie,petroarchaeology
+příbuzné obory,Related disciplines
+antropologie,anthropology
+"metody, analýzy (antropologie)","methods, analysis (anthropology)"
+antropometrie,anthropometry
+kraniometrie,craniometry
+rekonstrukce podoby podle lebky,forensic facial reconstruction
+srovnávací anatomie,comparative anatomy
+objekt (antropologie),object (anthropology)
+člověk,human
+anatomie člověka,human anatomy
+antropogeneze,anthropogenesis
+fosilní člověk,fossil man
+australopithecus,australopithecus
+homo neanderthalensis,Homo neanderthalensis
+homo erectus,Homo erectus
+homo habilis,Homo habilis
+homo heidelbergensis,Homo heidelbergensis
+homo naledi,Homo naledi
+homo sapiens,Homo sapiens
+lidská rasa,human race
+morfologie člověka,human morphology
+kultura,culture
+kulturní identita,cultural identity
+kulturní systém,cultural system
+kulturní tradice,cultural tradition
+přechodový rituál,rite of passage
+korunovace,coronation
+křest,baptism
+křest dětí,Infant baptism
+pohřeb,burial
+pohřební obřad,funeral ceremony
+porod,childbirth
+svatba,wedding
+svatební zvyk,wedding custom
+biřmování,confirmation
+svěcení kněží,ordination
+těhotenství,pregnancy
+zásnuby,betrothal
+subobor (antropologie),subfield (anthropology)
+antropologie krajiny,landscape anthropology
+ekonomická antropologie,economic anthropology
+fyzická antropologie,physical anthropology
+historická antropologie,historical antropology
+kulturní antropologie,cultural anthropology
+sociální antropologie,social anthropology
+strukturální antropologie,structural anthropology
+demografie,demography
+"metody, analýzy (demografie)","methods, analyses (demography)"
+demografický výzkum,population research
+objekt (demografie),object (demography)
+demografické chování,demographic behavior
+demografický vývoj,demographic transition
+věk obyvatelstva,age of population
+populační růst,population growth
+přelidnění,overpopulation
+populační hustota,population density
+porodnost,natality
+úmrtnost,mortality
+dětská úmrtnost,children mortality
+kojenecká úmrtnost,infant mortality
+úmrtnostní tabulka,bill of mortality
+evidence obyvatelstva,civil registration
+migrace obyvatelstva,migration
+asimilace (sociologie),assimilation
+kolonizace,colonization
+vnitřní migrace,internal migration
+migrace do měst,cityward migration
+migrace na venkov,countryward migration
+sčítání obyvatelstva,population census
+předmět (demografie),subject (demography)
+obyvatelstvo,population
+subobor (demografie),subfield (demography)
+historická demografie,historical demography
+dějiny umění,art history
+dějiny architektury,architectural history
+antická architektura,classical architecture
+raně křesťanská architektura,early christian architecture
+barokní architektura,baroque architecture
+renesanční architektura,renaissance architecture
+středověká architektura,medieval architecture
+gotická architektura,gothic architecture
+románská architektura,romanesque architecture
+dějiny fotografie,history of photography
+dějiny malířství,history of painting
+barokní malířství,baroque painting
+renesanční malířství,renaissance painting
+středověké malířství,medieval painting
+gotické malířství,gothic painting
+románské malířství,romanesque painting
+dějiny sochařství,history of sculpture
+antické sochařství,ancient sculpture
+řecké antické sochařství,ancient Greek sculpture
+římské antické sochařství,ancient Roman sculpture
+barokní sochařství,baroque sculpture
+gotické sochařství,gothic sculpture
+renesanční sochařství,renaissance sculpture
+románské sochařství,romanesque sculpture
+"metody, analýzy (dějiny umění)","methods, analyses (art history)"
+ikonografie,iconography
+ikonologie,iconology
+interpretace uměleckého díla,art interpretation
+objekt (dějiny umění),object (art history)
+umění,art
+akční umění,action art
+architektura,architecture
+fotografie,photography
+grafická technika,printmaking techniques
+happening (umění),happening (art)
+kresba,drawing
+malířství,painting
+sochařství,sculpture
+umělecké dílo,art work
+datování uměleckého díla,dating of art works
+forma (estetika,form (aesthetics)
+kompozice (umění),composition (art)
+konvence (umění),convention (art)
+obsah (estetika),content (aesthetics)
+provenience uměleckého díla,provenance of art works
+umělecký padělek,art forgeries
+umělecký styl,artistic style
+význam (umění),significance (art)
+užité umění,applied art
+předmět (dějiny umění),subject (art history)
+galerijní pedagogika,gallery education
+historiografie umění,art historiography
+umělecká kritika,art criticism
+sociální kontext (dějiny umění),social context (art history)
+mecenáš,maecenas
+mecenáška,maecenas (female)
+patronace,patronage
+publikum,audience
+umělec,artist
+grafik,printmaker
+malíř,painter
+sochař,sculptor
+umělkyně,artist (female)
+grafička,printmaker (female)
+malířka,painter (female)
+sochařka,sculptor (female)
+umělecký sloh,art styles
+antické umění,classical art
+barokní umění,baroque
+gotické umění,gothic art
+pravěké umění,prehistoric art
+renesance,renaissance
+románské umění,romanesque art
+biedermeier,biedermeier
+dadaismus (umění),dadaism (art)
+eklekticismus (umění),eclecticism
+expresionismus (umění),expressionism (art)
+fauvismus (umění),fauvism
+futurismus (umění),futurism (art)
+klasicismus,classicism
+kubismus (umění),cubism
+manýrismus,mannerism
+naturalismus (umění),naturalism (art)
+nazarénismus (umění),nazarene movement
+nová věcnost (umění),Neue Sachlichkeit
+orfismus (umění),orphism (art)
+pointilismus (umění),pointilism (art)
+postimpresionismus,post-impressionism
+secesní umění,art nouveau
+surrealismus (umění),surrealism (art)
+etnologie,ethnology
+etnicita,ethnicity
+etnická hranice,ethnic boundary
+etnický konflikt,ethnic conflict
+etnická skupina,ethnic group
+etnogeneze,ethnogenesis
+etnografie,ethnography
+etnografický aspekt,ethnographical aspect
+etnografický výzkum,ethnographical research
+folklor,folklore
+městský folklor,urban folklore
+slavnost,festival
+dožínky,harvest festival
+folklorní slavnost,folklore festivity
+historická slavnost,historical celebration
+hody (etnografie),feast
+karneval,carnival
+náboženská slavnost,religious festival
+posvícení,kermesse
+slavnostní průvod,festive procession
+slavnostní vjezd,festive entry
+studentská slavnost,student celebration
+střelecká slavnost,shooting festival
+školní slavnost,school festival
+univerzitní slavnost,university ceremony
+vinobraní,vintage
+vzpomínková slavnost,commemorative celebration
+lidová kultura,folk culture
+lidová tradice,folk tradition
+lidové umění,folk art
+pověra,superstition
+komunita (sociologie),community
+kmenové společenství,tribal society
+kanibalismus,cannibalism
+kanibal,cannibal
+kmen (etnografie),tribe
+přírodní národy,indigenous people
+tribalismus,tribalism
+regionální identita,regional identity
+venkov,rural area
+kulturní vliv,cultural influence
+subkultura,subculture
+genetika,genetics
+členění dle objektu výzkumu (genetika),classification according to research theme
+cytogenetika,cytogenetics
+genetika člověka,human genetics
+genetika rostlin,plant genetics
+genetika živočichů,animal genetics
+klasické členění (genetika),classical classification
+evoluční genetika,evolutionary genetics
+molekulární genetika,molecular genetics
+obecná genetika,general genetics
+historiografie,historiography
+metody (historiografie),methods (historiography)
+interpretace textů,interpretation of texts
+prosopografie,prosopography
+objekt/subobor (historiografie),object/subfield (historiography)
+dějiny,history
+církevní dějiny,church history
+hospodářské dějiny,economic history
+kulturní dějiny,cultural history
+politické dějiny,political history
+právní dějiny,history of law
+regionální dějiny,regional history
+sociální dějiny,social history
+vojenské dějiny,military history
+pramen (historiografie),source (historiography)
+historický pramen,historical source
+písemný pramen,written source
+hospodářská písemnost,business document
+soukromá písemnost,private letter
+úřední písemnost,official document
+chemie,chemistry
+látky (chemie),substances (chemistry)
+olej,oil
+pokrmové tuky,food lipids
+subobor (chemie),subfield (chemistry)
+analytická chemie,analytical chemistry
+chromatografie,chromatography
+organická chemie,organic chemistry
+lingvistika,linguistics
+etymologie,etymology
+onomastika,onomastics
+vlastní jméno,proper name
+toponomastika,toponymy
+geografické jméno,geographical name
+historická lingvistika,historical linguistics
+vývoj jazyka,language evolution
+vznik jazyka,origin of language
+komparativní lingvistika,comparative linguistics
+glottochronologie,glottochronology
+sémiotika,semiotics
+jazykový znak,language sign
+pomocné vědy historické,auxiliary sciences of history
+archeografie,archaeography
+archivnictví,keeping archives
+archiválie,records
+archivní výzkum,archival research
+autograf,autograph
+dějiny archivnictví,history of keeping archives
+faksimile,facsimile
+diplomatika,diplomacy
+monogram,monogram
+emblematika,emblematics
+emblém,emblem
+epigrafika,epigraphy
+chronogram,chronogram
+nápis,inscription
+faleristika,faleristics
+genealogie,genealogy
+rodokmen,genealogical table
+heraldika,heraldry
+rodový znak,family coat of arms
+chronologie,chronology
+den v týdnu,day of the week
+historická chronologie,historical chronology
+gregoriánský kalendář,Gregorian calendar
+juliánský kalendář,Julian calendar
+kalendář,calendar
+kalendářní měsíc,month
+nový rok,New Year
+týden,week
+kodikologie,codicology
+kožená knižní vazba,leather binding
+prvotisk,incunabula
+rukopis,manuscript
+fragmenty rukopisů,manuscript fragments
+iluminace rukopisu,illumination of manuscript
+kodex,codex
+marginálie,marginalia
+pergamenový rukopis,parchment manuscript
+pergamenový svitek,parchment scroll
+pergamenový papír,greaseproof paper
+rukopisná iniciála,initial
+stránkování,pagination
+středověký rukopis,medieval manuscript
+dějiny peněz,history of money
+měna,currency
+paleografie,paleography
+filigrán (papír),watermark
+psací potřeba,writer’s tool
+papyrologie,papyrology
+papyrový rukopis,papyrus manuscript
+papyrový svitek,papyrus scroll
+sfragistika,sphragistics
+pečeť,seal
+pečetidlo,sealing-stick
+religionistika,religious science
+objekt (religionistika),object (religious science)
+náboženský kult,cultic act
+náboženství,religion
+nejstarší náboženské systémy,oldest religious systems
+animismus,animism
+démonismus,demonism
+dynamismus,dynamism
+kult předků,ancestor cult
+šamanismus,shamanism
+totemismus,totemism
+teismus,theism
+monoteismus,monotheism
+křesťanství,Christianity
+členění (křesťanství),classification (Christianity)
+hereze,heresy
+adamité,Adamites
+antitrinitarismus,antitrinitarism
+arianismus,Arianism
+beghardi,Beghards
+bekyně (křesťanské hnutí),Beguines
+bogomilové,Bogomil
+čeští bratři,Bohemian Brethren
+donatismus,Donatism
+heretik,heretic
+husitství,Hussitism
+chlystové (sekta),Khlysty
+ikonoklasmus,iconoclasm
+jansenismus,Jansenism
+karaismus,Karaism
+kataři,Cathari
+kvietismus,quietism
+lollardi,Lollards
+manicheismus,Manichaeism
+markionismus,Marcionism
+monofyzitismus,Monophysitism
+montanismus,Montanism
+nestoriánství,Nestorian
+nestoriánská církev,Nestorian church
+pataréni,Patarines
+paulikiánství,Paulician
+pelagianismus,Pelagianism
+skopci,Skoptsy
+spirituální františkáni,Franciscan Spirituals
+staroobřadnictví,Old Belief
+strigolnici,strigolniki
+valdenští,Waldenses
+židovstvujuščije,Judaizers
+rané křesťanství,early Christianity
+východní křesťanství,Eastern Christianity
+křesťanská civilizace východní,Eastern Christian civilization
+pravoslaví,Orthodox Eastern
+pravoslavné církve,Orthodox Eastern churches
+západní křesťanství,Western Christianity
+konfese (vyznání),religious confession
+anabaptisté,Anabaptism
+augsburská konfese,Augsburg Confession
+helvetská konfese,Helvetic Confession
+konfesionalizace,confessionalisation
+křesťanská civilizace západní,Western Christian civilization
+evangelium,gospel
+exkomunikace,excommunication
+křesťanská teologie,Christian theology
+bůh (křesťanství),God (Christianity)
+bůh (teologie),God (theology)
+trojice,Trinity
+bůh otec,God the Father
+bůh syn,God the Son
+duch svatý,Holy Spirit
+křesťanská misie,Christian mission
+evangelizace,evangelization
+christianizace,Christianization
+křesťanský světec,Christian saint
+atribut světce,attribute of saint
+kanonizace,canonization
+ostatky svatých,relics of saints
+liturgie,liturgy
+členění (liturgie),classification (liturgy)
+ekumenická liturgie,ecumenical liturgy
+husitská liturgie,Hussite liturgy
+katolická liturgie,Catholic liturgy
+křesťanská liturgie,Christian liturgy
+pravoslavná liturgie,Orthodox liturgy
+protestantská liturgie,Protestant liturgy
+řeckokatolická liturgie,Greek Catholic liturgy
+slovanská liturgie,Slavic liturgy
+utrakvistická liturgie,Utraquist liturgy
+východní křesťanská liturgie,Eastern Christian liturgy
+západní křesťanská liturgie,Western Christian liturgy
+liturgická symbolika,liturgical symbolism
+liturgické jazyky,liturgical languages
+liturgický obřad,liturgical ceremony
+liturgický úkon,liturgical act
+liturgický prostor,liturgical space
+náboženská symbolika,religious symbolism
+správní aspekty (křesťanství),administrative aspects (Christianity)
+arcidiecéze,archdiocese
+arcibiskupský úřad,archbishops' office
+diecéze,diocese
+biskupský úřad,bishops' office
+farnost,parish
+koncil,council
+ekumenický koncil,ecumenical council
+obročí,benefice
+papežství,papacy
+avignonské zajetí (1309-1378),Avignon Papacy
+konkláve,conclave
+schizma,Schism
+synoda,synod
+vikariát,vicariate
+stát a církev,church and state
+konkordát,concordat
+zbožnost,devotion
+křížová výprava,crusade
+mnišství,monasticism
+křesťanské mnišství,Christian monachism
+mnišský život,monkish life
+mše,Holy Mass
+náboženská pouť,religious pilgrimage
+poustevnictví,hermitage
+spiritualita,spirituality
+dějiny spirituality,history of spirituality
+křesťanská spiritualita,Christian spirituality
+kněžská spiritualita,priest’s spirituality
+mužská spiritualita,men’s spirituality
+řeholní spiritualita,regular spirituality
+augustiniánská spiritualita,Augustinian spirituality
+benediktinská spiritualita,Benedictine spirituality
+cisterciácká spiritualita,Cistercian spirituality
+dominikánská spiritualita,Dominican spirituality
+františkánská spiritualita,Franciscan spirituality
+ignaciánská spiritualita,Ignatian spirituality
+jezuitská spiritualita,Jezuit spirituality
+karmelitánská spiritualita,Carmelite spirituality
+kartuziánská spiritualita,Carthusian spirituality
+premonstrátská spiritualita,Premonstratensian spirituality
+salesiánská spiritualita,Salesian spirituality
+trapistická spiritualita,Trappist spirituality
+východní křesťanská spiritualita,Eastern Christian spirituality
+západní křesťanská spiritualita,Western Christian spirituality
+ženská spiritualita,women’s spirituality
+záduší,Fabrica ecclesiae
+polyteismus,polytheism
+hinduismus,Hinduism
+východní náboženství,Oriental religion
+pohanství,paganism
+pohan,pagan
+religiozita,religiosity
+modlářství,idolatry
+rituály a obřady,rites and ceremonies
+oběť,sacrifice
+krvavá oběť,blood sacrifice
+lidská oběť,human sacrifice
+zvířecí oběť,animal offering
+rituální vražda,ritual murder
+teologie,theology
+předmět (religionistika),subject (religious science)
+náboženství a společnost,religion and society
+statistika,statistics
+aplikovaná statistika,applied statistics
+ekonomická statistika,economic statistics
+popisná statistika,descriptive statistics
+statistická klasifikace,statistical classification
+statistické šetření,statistical inquiry
+statistická databáze,statistical database
+statistická metoda,statistical methods
+statistický model,statistical model
+statistický výběr,statistical sampling
+vědy o zemi,Earth sciences
+geografie,geography
+geografie krajiny,landscape geography
+les,forest
+jehličnatý les,coniferous forest
+listnatý les,leaf forest
+lužní les,floodplain forest
+prales,primeval forest
+smíšený les,mixed forest
+mokřad,wetland
+rašeliniště,peat bog
+slatina,fen
+step,steppe
+obecná hesla (geografie),general entries (geography)
+geografická data,geographical data
+geografická databáze,geographical database
+geografické informace,geographical information
+geografický prostor,geographical space
+objekt (geografie),object (geography)
+kulturní krajina,cultural landscape
+městská krajina,urban landscape
+subobor (geografie),subfield (geography)
+aplikovaná geografie,applied geography
+behaviorální geografie,behavioral geography
+biogeografie,biogeography
+biogeografické členění,biogeographical classification
+fylogeografie,phylogeography
+zoogeografie,zoogeography
+enviromentální geografie,environmental geography
+fyzická geografie,physical geography
+hydrogeografie,hydrogeography
+orografie,orography
+pedogeografie,pedogeography
+geografická kartografie,geographical cartography
+historická geografie,historical geography
+historický místopis,historical topography
+mytické území,mythical place
+matematická geografie,mathematical geography
+regionální geografie,regional geography
+sociogeografická regionalizace,human regionalization
+socioekonomická geografie,socioeconomic geography
+ekonomická geografie,economic geography
+geografie náboženství,geography of religion
+geografie obchodu,trade geography
+geografie obyvatelstva,population geography
+kulturní geografie,cultural geography
+sídelní geografie,urban geography
+osídlování,land settlement
+sociologie lidských sídel,sociology of settlements
+struktura osídlení,settlement patterns
+sociální geografie,human geography
+topografie,topography
+topografická kartografie,topographical cartography
+vojenská topografie,military topography
+zemědělská geografie,rural geography
+geologie,geology
+metody (geologie),methods (geology)
+geologická kartografie,geological cartography
+geologické mapování,geological mapping
+geologická mapa,geological map
+geologický průzkum,geological survey
+strukturní geologie,structural geology
+obecné termíny (geologie),general terms (geology)
+geologické těleso,geologic body
+geologické informace,geological information
+geologická katastrofa,geological disaster
+geosféra,geosphere
+litosféra,lithosphere
+zemská kůra,earth crust
+zemské jádro,earth core
+zemský plášť,earth mantle
+příbuzné disciplíny (geologie),related disciplines (geology)
+environmentální geologie,environmental geology
+geodezie,geodesy
+geodetické měření,geodetic measurement
+geodetický přístroj,geodetical instrument
+geofyzikální informace,geophysical information
+geomagnetismus,geomagnetism
+magnetická susceptibilita,magnetic susceptibility
+georadar,ground-penetrating radar
+seizmologie,seismology
+seizmicita,seismicity
+tektonika,tectonics
+vulkanologie,volcanology
+biogeochemie,biogeochemistry
+geologický vývoj země,geological history of the Earth
+chronostratigrafie,chronostratigraphy
+geomikrobiologie,geomicrobiology
+antropogenní geomorfologie,anthropogenic geomorphology
+eroze (geologie),erosion
+geomorfologický útvar,geomorphological feature
+kras,karst
+krasová oblast,karst area
+krasový útvar,karst form
+lavina,avalanche
+ledovec,glacier
+pohoří,mountain range
+sesuv půdy,landslide
+údolí,valley
+glaciologie,glaciology
+historická geologie,historical geology
+hornická geologie,mining geology
+hydrogeologie,hydrogeology
+ložisková geologie,economic geology
+meteorologie,meteorology
+mineralogie,mineralogy
+minerální ložisko,mineral deposit
+objekt (mineralogie),object (mineralogy)
+minerál,mineral
+horninotvorný minerál,rock-forming mineral
+jílový minerál,clay mineral
+organický minerál,organic mineral
+optické vlastnosti minerálu,optical properties of mineral
+subobor (mineralogie),subfield (mineralogy)
+systematická mineralogie,systematic mineralogy
+oceánografie,oceanography
+kyselost půdy,soil acidity
+metody (pedologie),methods (mineralogy)
+půdní rozbor,soil testing
+objekt (pedologie),object (pedology)
+půda,soil
+nadloží,overburden
+půdní profil,soil profile
+typologie zemědělských půd,typology of agricultural land
+petrologie,petrography
+objekt (petrologie),object (petrography)
+hornina,rock
+metamorfovaná hornina,metamorphic rock
+uhlíkatá hornina,carbon rock
+vyvřelá hornina,igneous rock
+regionální geologie,regional geology
+sedimentologie,sedimentology
+metody (sedimentologie),methods (sedimentology)
+sedimentologický výzkum,sedimentological research
+objekt (sedimentologie),object (sedimentology)
+sediment,sediment
+fluviální sediment,fluviatile sediment
+glaciální sedimentace,glacial deposition
+ledovcový sediment,glacial deposit
+sedimentární hornina,sedimentary rock
+spraš,loess
+speleologie,speleology
+hydrologie,hydrology
+obecná hesla (hydrologie),general entries (hydrology)
+hydrologická mapa,hydrological map
+hydrologický model,hydrological model
+objekt (hydrologie),object (hydrology)
+hydrosféra,hydrosphere
+jezero,lake
+vodní nádrž,reservoir
+vodní tok,water stream
+prameniště,spring area
+řeka,river
+říční koryto,river channel
+soutok,confluence
+vodní pramen,spring
+vodopád,waterfall
+subobory (hydrologie),subfield (hydrology)
+fluviální geomorfologie,fluvial geomorphology
+historická hydrologie,historical hydrology
+hydrometrie,hydrometry
+kartografie,cartography
+historická kartografie,historical cartography
+dějepisná mapa,history map
+stará mapa,old maps
+katastr nemovitostí,cadastre
+katastrální mapa,cadastral maps
+mapový archiv,map archive
+mapová sbírka,map collection
+klimatologie,climatology
+klima,climate
+klimatické pásmo,climatic zone
+klimatické podmínky,climatic conditions
+klimatická změna,climate change
+vlastivěda,national history and geography
+vlastivědná mapa,national history map
+vlastivědná společnost,national history and geography society
+vlastivědná stezka,regional education trail
+vlastivědné muzeum,national history and geography museum
+vlastivědný spolek,national history and geography association
+5) chronologie,5) Chronology
+geologická doba,geological era
+prahory,Archean
+prvohory,palaeozoic
+druhohory,mesozoic
+kenozoikum,cenozoic
+třetihory,tertiary
+paleogén,palaeogene
+neogén,neogene
+čtvrtohory,Quaternary
+pleistocén,pleistocene
+doba ledová,glacial epoch
+doba meziledová,interglacial period
+holocén,holocene
+preboreál (paleoklimatologie),Preboreal (paleoclimatology)
+boreál (paleoklimatologie),Boreal (paleoclimatology)
+atlantik (paleoklimatologie),Atlantic (paleoclimatology)
+epiatlantik (paleoklimatologie),Epi-atlantic (paleoclimatology)
+**suborál (paleoklimatologie),Subboreal (paleoclimatology)
+subatlantik (paleoklimatologie),Subatlantic (paleoclimatology)
+periodizace dějin,periodization in history
+archeologická periodizace,archaeological periodization
+paleolit-mezolit,Palaeolithic-Mesolithic
+zemědelský pravěk,farming prehistory
+doba kamenná,stone age
+acheuléen,Acheulian
+oldovan,Oldowan
+mladý paleolit,Upper Palaeolithic
+pavlovien,pavlovian
+solutréen,solutrean
+tišnovien,tišnovien
+epimagdalenien,epimagdalenian
+skupina federmesser,Federmesser group
+neolit-eneolit,neolithic-eneolithic
+kultura oberlauterbašská,Oberlauterbach culture
+kultura starčevo-kriš,Starčevo–Körös–Criș culture
+trypilská kultura,Trypilian culture
+vinčanská kultura,Vinca culture
+želiezovský typ,Želizovce group
+střední / mladší neolit,middle / late neolithic
+bukovohorská kultura,Bükk culture
+butmirská kultura,Butmir culture
+kultura s kardiovou keramikou,Cardial culture
+kultura s moravskou malovanou keramikou,Moravian painted ware culture
+kultura potiská,Tisza culture
+doba měděná,Chalcolithic
+majkopská kultura,Maikop culture
+jámová kultura,Yamnaya culture
+kultura s kanelovanou keramikou,cannelated ware culture
+katakombní kultura,Catacomb culture
+vučedolská kultura,Vučedol culture
+mladší / pozdní eneolit,late / final eneolithic
+kultura chłopice-veselé,Chlopice-Veselé culture
+doba bronzová - halštatská,bronze age-hallstatt
+andronovská kultura,Andronovo culture
+egejská kultura,Aegean culture
+helladská kultura,Helladic period
+mykénská kultura,Mycenaean civilization
+kykladská kultura,Cycladic culture
+minojská kultura,Minoan culture
+kargopolská kultura,Kargopol culture
+kobanská kultura,Koban culture
+maďarovská kultura,Maďarovce culture
+nitrianska kultura,Nitra culture
+nuragská kultura,Nuragic civilization
+otomanská kultura,Ottomany culture
+věterovská kultura,Věteřov culture
+kultura sabatynivka,Sabatinovka culture
+mohylové kultury,Tumulus culture
+karpatská mohylová kultura,Carpathian Tumuli culture
+piliňská kultura,Piliny culture
+sejmský kulturní okruh,Seima-Turbino phenomenon
+trzciniecko-komarivský komplex,Trzciniec-Komariv culture
+kultury popelnicových polí,Urnfield culture
+hornodunajská popelnicová pole,Upper Danube Urnfield culture
+karpatská popelnicová pole,Carpathian Urnfield culture
+čakanská kultura,Čakan culture
+gávská kultura,Gáva culture
+středodunajská popelnicová pole,Middle Danube Urnfield culture
+kultura dřevených srubů,Srubnaya culture
+billendorfská kultúra,Billendorf culture
+kultura nuova,Noua culture
+kyjatická kultura,Kyjatice culture
+tagarská kultura,Tagar culture
+d. halštatská - laténska nesp.,Hallstatt-La Tène period
+doba železná,Iron age
+starší doba halštatská (hac-d1),early Hallstatt period (HaC-D1)
+kultura billendorfská hac,Billendorf Culture (HaC)
+slezskoplatěnická kultura hac-d,Silesian-Platěnice culture (HaC-D)
+mladší doba halštatská (had2-3),late Hallstatt period (HaD2-3)
+halštatská kultura,Hallstatt culture
+jastorfská kultura,Jastorf culture
+kalenderberská kultura,Kalenderberg culture
+kultura pomořanská,Pomeranian culture
+villanovská kultura,Villanovan culture
+doba laténska - římska,La Tène - Roman period
+doba laténska,La Tène period
+časná doba laténska (lta),early La Tène period
+podmokelská kultura,Podmokly group
+střední doba laténská (ltb-c1),middle La Tène period (LtB-C1)
+mladší/pozdní doba laténská (ltc2-d),late/final La Tène period (LtC2-D)
+przeworská kultura,Przeworsk culture
+púchovská kultura,Púchov culture
+laténska kultura,La Tène culture
+doba římská - stěhování národů,roman - migration period
+stěhování národů,Migration period
+vinařická skupina,Vinařice group
+středověk - novověk,Middle ages - modern period
+doba hradištní,hillfort period
+starší doba hradištní,early hillfort period
+střední doba hradištní,middle hillfort period
+mladší doba hradištní,late hillfort period
+kultura pražského typu,Prague-type pottery group
+čerňjachovská kultura,Chernyakhov culture
+kultura praha-korčak,Prague-Korchak culture
+zarubiněcká kultura,Zarubintsy culture
+vrcholný - pozdní středověk,High - late middle ages
+novověk - industriální období,Modern - industrial period
+historiografická periodizace,historiographic periodization
+starověk,ancient history
+antika,classical antiquity
+středověk (historiografie),Middle Ages (historiography)
+raný středověk (historiografie),Early Middle Ages (historiography)
+vrcholný středověk (historiografie),High - late middle ages (historiography)
+pozdní středověk (historiografie),Late Middle Ages (historiography)
+raný novověk,early modern period
+moderní dějiny,late modern period
+soudobé dějiny,contemporary history
+6) areál aktivity,6) Activity area
+lázně,spa
+thermy,thermae
+okrasný sad,ornamental orchard
+sklářská huť,glassworks (sklářská huť)
+stavební huť,construction smelter
+velkostatek,estate
+městské opevnění,town fortification
+pobřežní opevnění,coastal fortification
+stálé opevnění,permanent fortification
+castellum,castellum
+obora (myslivost),game park
+pastvina,pasture
+sad,orchard
+majetnický a votivní depot,votive deposit
+poklad,treasure
+mincovní poklad,coin treasure
+antický chrám,ancient temple
+amfiprostylos,amphiprostyle
+artemísion,Artemisium
+asklépieion,Asclepeion
+dipteros,dipteros
+hekatompedon,hekatompedon temple
+héróon,heroon
+in antis,distyle in antis
+kabeirion,cabeirion
+métróon,Metroon
+monopteros,monopteros
+peribolos,peribolos
+peripteros,peripteros
+prostylos,prostylos
+telestérion,telesterion
+temenos,temenos
+tholos,tholos
+věštírna,oracle
+církevní architektura,church architecture
+boží muka a křížky,wayside shrines and crosses
+kalvárie,calvary
+kamenný kříž,stone cross
+kačkar,khachkar
+kapitula,chapter house
+dřevěná kaple,wooden chapel
+hřbitovní kaple,cemetery chapel
+loretánská kaple,Loreto chapel
+skalní kaple,rock chapel
+bazilika,basilica
+dřevěný kostel,wooden church
+katedrála,cathedral
+konfesní rozdělení,confessional division
+evangelický kostel,Evangelical temple
+katolický kostel,Catholic church
+pravoslavný kostel,Orthodox church
+rotunda,rotunda
+křížová cesta,ways of the Cross
+islámská architektura,Islamic architecture
+mešita,mosque
+kromlech,cromlech
+megalitická památka,megalith
+obětiště,sacrifice site
+poutní místo,pilgrimage place
+židovská architektura,Jewish architecture
+colonia,colonia
+keltské oppidum,Celtic oppidum
+křesťanský klášter,Christian monastery
+dvojitý klášter,double monastery
+katolický klášter,Catholic monastery
+augustiniánský klášter,Augustinian monastery
+benediktinský klášter,Benedictine monastery
+cisterciácký klášter,Cistercian monastery
+dominikánský klášter,Dominican monastery
+františkánský klášter,Franciscan monastery
+kapucínský klášter,Capuchin monastery
+karmelitánský klášter,Carmelite monastery
+kartuziánský klášter,Carthusian monastery
+klášter benediktinek,Benedictine nunnery
+klášter brigitinek,Bridgettine nunnery
+klášter cisterciaček,Cistercian nunnery
+klášter dominikánek,Dominican nunnery
+klášter kamaldulů,Camaldolese monastery
+klášter klaristek,monastery of Clares
+klášter křížovníků,monastery of Knights of the Cross
+klášter mariánů,monastery of Marian Fathers
+klášter servitů,Servite monastery
+klášter voršilek,monastery of Ursulines
+minoritský klášter,Minorite monastery
+paulánský klášter,Minim monastery
+piaristický klášter,Piarist monastery
+premonstrátský klášter,Premonstratensian monastery
+trapistický klášter,Trappist monastery
+monastýr,monastery (Eastern Orthodox Church)
+baziliánský klášter,Basilian monastery
+skalní klášter,rock monastery
+funkce (města),function (town)
+hlavní město,capital city
+horní město,mining town
+metropole,metropolis
+průmyslové město,industrial town
+přístavní město,seaport
+sídelní město,residential town
+chronologie (města),chronology (cities)
+antické město,ancient city
+municipium,municipium
+středověké město,medieval town
+vlastnictví (města),ownership (town)
+královské město,royal town
+poddanské město,tributary town
+věnné město,dowry town
+protourbánní osídlení,proto-urban settlement
+příkopové ohrazení,ditch enclosure
+rondel,roundel
+hřbitov,cemetery
+mohylník,barrow cemetery
+pohřebiště,burrial ground
+pohřebiště v sakralní stavbě,burials in sacral building
+pozemní komunikace (areály),land communication (areas)
+akvadukt,aqueduct
+silnice,road
+horská silnice,mountain road
+silniční síť,road network
+stezka,trail
+viadukt,viaduct
+sedm divů světa,Wonders of the World
+akropole,acropolis
+dvorec,manorial farm
+dvůr,court
+poplužní dvůr,Meierhof
+hrádek,fortified manor
+hradní architektura,castle architecture
+jeskynní hrad,cave castle
+městský hrad,town palace
+skalní hrad,rock castle
+vodní hrad,wasserburg
+šlechtické sídlo,residence of nobility
+tvrz,fortified house
+vila,villa
+lovecký zámek,hunting chateaux
+apoikia,apoikia
+démos (sídliště),Demos (settlement)
+městečko,small town
+podhradí,extramural settlement
+hornické sídliště,mineworkers´ settlement
+kasárna,barracks
+komenda,commandery
+stanice,camp
+tábořiště,camp site
+tržní osada,market village
+usedlost,farmstead
+vesnice,village
+tell,tell
+zemědělská usedlost,farmhouse
+těžební areál,mining area
+hlubinný důl,underground mine
+povrchový důl,opencast mine
+solný důl,salt mine
+kamenolom,stone quarry
+pískovna,sandpit
+veřejné prostranství,public area
+agora,agora
+fórum,forum
+náměstí,square
+vodní komunikace,navigable waterway
+loděnice,dockyard
+přístav,port
+vodní stavba,hydraulic structure
+plavební kanál,canal
+7) objekt,7) Feature
+amfiteátr,amphitheatre
+bronteion,bronteion
+diazóma,diazoma
+ekkykléma,ekkyklema
+orchéstra,orchestra
+proskénion,proscenium
+archivní budova,archive
+armamentarium,armamentaria
+bazilika (antika),basilica (antiquity)
+cirkus,circus
+divadlo,theatre
+skéné,skene
+dům,house
+bytové vybavení,furnishing
+dlouhý dům,longhouse
+insula,insula
+lesché,lesche
+megaron,megaron
+součást domu,component of the house
+andrón,andron
+atrium,atrium
+aula,aule
+exedra,exedra
+impluvium,impluvium
+krb,fireplace
+maenianum,maenianum
+tablinum,tablinum
+triclinium,triclinium
+záchod,toilet
+ekklésiastérion,Ekklesiasterion
+fara,rectory
+gymnasion,gymnasium
+hipodrom,hippodrome
+hospodářská budova,farm building
+hostinec,inn
+chata,hut
+chlév,animal shed
+ianus quadrifrons,Arch of Janus
+jatka,slaughterhouse
+knihovna,library
+veřejná knihovna,public library
+konírna,horse barn
+krám,shop
+lázeňský dům,spa house
+lyceum,lyceum
+maják,lighthouse
+větrný mlýn,windmill
+vodní mlýn,watermill
+múseion,Museion
+mýtní domek,toll house
+nemocnice,hospital
+nevěstinec,brothel
+obytné budovy,residential building
+ódeion,odeon
+arcibiskupská rezidence,archbishops palace
+biskupská rezidence,bishops palace
+císařský palác,imperial palace
+královská falc,palatinate
+královský palác,royal palace
+papežská rezidence,residence of pope
+palaistra,palaestra
+pekárna,bakery
+pinakothéka,pinacotheca
+praetorium,praetorium
+pranýř,pillory
+radnice,town hall
+búleutérion,bouleuterion
+curia (radnice),curia
+prytaneion,prytaneion
+regia,regia
+seník,hayloft
+stadion,stadion
+stáj,stable
+sýpka,granary (sýpka/Getreidespeiche)
+špýchar,granary (špýchar/Speicher)
+theokoleion,theocoleon
+věznice,prison
+žalář,jailhouse
+carcer,carcer
+tropaeum,tropaion
+vítězný oblouk,triumphal arch
+inženýrská síť,infrastructure network
+ulice,street
+dromos (ulice),dromos (street)
+domovní kanalizace,house drains
+dlažba,pavement
+empora,matroneum
+chrámová podezdívka,krepis
+krov,truss
+kryptoportikus,cryptoporticus
+meta,meta
+opěrný pilíř,abutment
+parodos,parodos
+peristyl,peristyle
+pilotové základy,piled foundations
+podlaha,floor
+barokní portál,baroque doorway
+gotický portál,gothic doorway
+renesanční portál,renaissance doorway
+románský portál,Romanesque doorway
+sloup,column
+entasis,entasis
+kanelura,fluting
+strop,ceiling
+kazetový strop,coffered ceiling
+základová konstrukce,foundation
+objekt na veřejném prostranství,feature on public area
+fontána,fountain
+rostra,rostra
+sloupořadí,colonnade
+stoá,stoa
+objekt zemědělské výroby,agricultural feature
+orba,plowing
+piscina,piscina
+okrasný objekt,decorative object
+nymfeum,nymphaeum
+opevnění,fortification
+bastion,bastion
+bergfrit,keep
+městská brána,town gateway
+burgus,burgus
+městská hradba,city walls
+dřevohlinitá hradba,wood earth rampart
+obvodový plášť,curtain wall
+lehký obvodový plášť,light curtain wall
+parkán,zwinger
+plot,fence
+předhradí,bailey
+zeď,wall
+vytápění,heating
+cippus (náhrobek),cippus (gravestone)
+dolmen,dolmen
+dromos (hrobka),dromos (tomb)
+elogium,elogium
+knížecí hrob,princely grave
+komorový hrob,chamber tomb
+kostrový hrob,skeleton grave
+skříňkový hrob,cist grave
+žárový hrob,burnt grave
+kolumbárium,columbarium
+krypta,crypt
+kurhan,kurgan
+mauzoleum,mausoleum
+náhrobek,gravestone
+pyramida,pyramid
+stéla (objekt),stele (feature)
+pozemní komunikace (objekty),land communication (objects)
+dřevěná hať,timber trackway
+mezník,boundary stone
+cippus (mezník),cippus (boundary stone)
+terminus,terminus
+telegrafie,telegraphy
+jeskyně,cave
+grotta,grotto
+meander,meander
+pyrotechnické zařízení,pyrotechnic device
+cihlářská pec,brick kiln
+dehtářská pec,tar kiln (objekt)
+dýmačka,fuming blast-furnace
+hrnčířská pec,pottery kiln
+hutnická pec,iron-smelting furnace
+kovolitecká pec,foundry
+pec na chléb,bake oven
+sklářská pec,glass furnace
+vápenická pec,lime kiln
+výheň,furnace
+železářská pec,iron furnace
+reliéfní útvar,relief feature
+konkávní plocha,concave surface
+konvexní plocha,convex surface
+lineární konkávní útvar,linear concave feature
+lineární konvexní útvar,linear convex feature
+sakrální architektura,sacred architecture
+adyton,adyton
+apsida,apse
+cella,cella
+chrámové okno,temple window
+chrámové dveře,temple door
+kostelní věž,church tower
+kružba,tracery
+minaret,minaret
+morový sloup,plague column
+narthex,narthex
+barokní oltář,baroque altar
+gotický oltář,gothic altar
+renesanční oltář,renaissance altar
+retábl,retable
+opisthodomos,opisthodomos
+poustevna,hermitage
+presbytář,presbytery
+pronáos,pronaos
+propylaje,propylaea
+puteál,puteal
+pylón,pylon
+smírčí kamen,reconciliation stone
+thésauros,thesauros
+vitráž,stained glass
+odval,spoil tip
+podzemní štola,drift
+sejp,spoil heap
+těžební místo,mining site
+vrstva (objekt),layer
+destrukční horizont,destruction horizon
+geologická vrstva,geological layer
+horizont osídlení,settlement layer
+kulturní vrstva,cultural layer
+násyp,bank
+odpadní vrstva,refuse layer
+podlaha (vrstva),floor layer
+splach,solifluction
+výplň zahloubeného objektu,filling
+dílna,workshop
+ergastérion,ergasterion
+ergastulum,ergastulum
+mincovna,mint
+skriptorium,scriptorium
+katakomby,catacombs
+kůlová jamka,stake hole
+nádrž,reservoir
+obilnice,granary
+odpadní jáma,rubbish pit
+stavební jáma,construction pit
+zásobní jáma,storage pit
+zemnice,pithouse
+8) předmět,8) Object
+abacus (architektura),abacus (architecture)
+akanthos,acanthus
+akrótérion,acroterion
+ant,anta
+antefix,antefix
+architráv,architrave
+dipylská váza,dipylon jar
+echínos,echinus
+guttae,guttae
+chrlič,gargoyle
+kurvatura,curvature
+maskaron,mascaron
+metopa,metope
+plinthos,plinth
+římsa,geison
+sima,sima
+stylobat,stylobate
+torus,torus
+triglyf,triglyph
+tympanon (architektura),tympanum (architecture)
+vlys,frieze
+voluta (ionský sloup),volute
+doklady umění,evidence of art
+dřevořezba,woodcarving
+xoanon,xoanon
+figurální plastika,statue
+antropomorfní plastika,anthropomorphic sculpture
+idól,idol
+koroplastika,greek terracotta figurine
+kovová plastika,metal sculpture
+totem,totem
+zoomorfní plastika,zoomorphic sculpture
+freska,frescoe
+graffito,graffiti
+aulos,aulos
+barbiton,barbiton
+cornu,cornu
+cymbál,cymbal
+forminx,phorminx
+harfa,harp
+keras,keras
+kithara,kithara
+klapačka (nožní),scabellum
+klapačka (ruční),crotalum
+lituus,lituus
+lyra,lyre
+monochord,monochord
+panova flétna,pan flute
+píšťala,pipe
+ruční bubínek,tympanum
+salpinx,salpinx
+signální nástroj,signaling tool
+sistrum,sistrum
+trsátko,plectrum
+tuba,tuba
+tympanon (hudební nástroj),tympanum (musical instrument)
+varhany,organ
+malba,painting
+desková malba,panel painting
+gotická desková malba,gothic panel painting
+devoční obraz,devotional image
+enkaustika,encaustic painting
+ikona,icon
+jeskynní malba,cave painting
+lidová malba,folk painting
+lidová malba na skle,folk painting on glass
+malba na keramice,pottery painting
+malba na mědi,painting on copper
+malba na porcelánu,porcelain painting
+malba na skle,glass painting
+malba na textilu,textile painting
+malba na hedvábí,silk painting
+nástěnná malba,mural painting
+barokní nástěnná malba,baroque mural painting
+gotická nástěnná malba,gothic mural painting
+groteska (malba),grotesque (painting)
+renesanční nástěnná malba,renaissance mural painting
+románská nástěnná malba,romanesque mural painting
+pinax,pinax
+stropní malba,ceiling painting
+veraikon,Veronica image
+maska,mask
+mozaika,mosaic
+ornamentika,ornamentation
+ornament,ornament
+palmeta,palmette
+vzor (motiv),pattern
+zvířecí symbolika,animal symbolism
+reliéf (sochařství),relief sculpture
+iliacae tabulae,Tabula Iliaca
+rytina,engraving
+řezba v kameni,stone carving
+řezba v nefritu,jade carving
+řezba v rohovině,horn carving
+řezba ve slonovině,ivory carving
+socha,statue
+devoční socha,devotional statue
+hermovka,herma
+koré,kore
+kúros,kouros
+palladium,palladium
+pasquino,pasquino
+doprava,transportation
+monoxyl,logboat
+koňský postroj,horse trappings
+sedlo,saddle
+uzda,bridle
+loď,ship
+obchodní loď,merchant vessel
+nákladní loď,cargo ship
+vojenská loď,warship
+triéra,trireme
+výletní loď,cruise ship
+saně,sleds
+vůz,cart
+essedum,essedum
+biga,biga
+trigae,triga
+quadrigae,quadriga
+kosterní pozůstatky člověka,human remains
+kosterní pozůstatky živočichů,animal remains
+krev,blood
+mumie,mummy
+obilniny,cereals
+ječmen,barley
+obilí (zrno),corn
+oves,oats
+proso,millet
+pšenice dvouzrnka,emmer wheat
+pšenice jednozrnka,einkorn wheat
+pšenice špalda,spelt
+žito,rye
+stavební odpad,building waste
+těžební odpad,mining waste
+hlušina,gangue
+výrobní odpad,manufacturing debris
+železný odpad,scrap iron
+plevel,weed
+pleva,husk
+popel,ash
+skořápka,egg shell
+sláma,straw
+uhlík,charcoal
+živočišné makrozbytky,animal remains
+funkčně nespecifikovaný předmět,unassigned
+hák,hook
+hrot,point
+kroužek,ring (kroužek/Ring)
+kulička,marble
+tyčinka,rod
+hrací kamen,gaming piece
+hračka,toy
+šachy,chess
+šachová figurka,chessmen
+šachovnice,chessboard
+pochva,scabbard
+štít,shield
+štítová puklice,shield boss
+vojenská technika,military engineering
+obléhací stroj,siege engine
+balista,ballista
+karroballista,carroballista
+katapult (zbraně),catapult
+obléhací beran,battering ram
+obléhací podloubí,siegecraft
+obléhací šípomet,scorpion
+obléhací věž,siege tower
+onager,onager
+zbraň,weapon
+harpuna,harpoon
+hrot kopí,spearhead
+hrot oštěpu,spearhead
+hrot šipky,crossbow bolt
+hrot šípu,arrowhead
+chladná zbraň,cold weapon
+bodná zbraň,stabbing weapon
+sečná zbraň,cutting arm
+kopí,spear
+reflexní luk,reflex bow
+oštěp,javelin
+palcát,mace (palcát)
+palná zbraň,firearm
+prak,sling
+projektil,projectile
+sekeromlat,hammer-axe
+střelná zbraň,ranged weapon
+šipka,dart
+toulec,quiver
+vrhací zbraň,throwing weapon
+zbroj,armor
+náholenice,greave
+náprsník,breastplate
+pancíř,cuirass
+přilba,helmet
+technika zhotovení,manufacturing method
+kroužková zbroj,mail armour
+lamelová zbroj,segmented armour
+plátová zbroj,plate armour
+šupinová zbroj,scale armour
+nábytek,furniture
+klíné,kline
+koberec,carpet
+skříň,wardrobe
+alabastron,alabastron
+aryballos,aryballos
+askos,askos
+cadus (nádoba),kados (vessel)
+cista,cista
+čerpák,kyathos
+fialé,phiale
+hydria,hydria
+chytra,khytra
+kalich,goblet
+kanopa,canopic jars
+kantharos,kantharos
+kotel,cauldron (kotel/Kessel)
+kotlík,cauldron (kotlík/Becken)
+kotylé,kotyle
+krátér,krater
+kuchyňské nádobí,cookware
+kyathos,kyathos
+kylix,kylix
+láhev,bottle
+lampa,lamp
+lebés,lebes
+lékythos,lekythos
+lútroforos,loutrophoros
+oinochoé,oenochoe
+peliké,pelike
+picí roh,drinking horn
+pithos,pithos
+pohár,beaker
+poklice,lid
+psyktér,psykter
+putna,large pitcher
+pyxid,pyxis
+relikviář,reliquary
+rhyton,rhyton
+situla,situla
+skyfos,skyphos
+stolní nádobí,tableware
+terina,terrine
+tvar nádoby,shape of the vessel
+antropomorfní nádoba,anthropomorphic vessel
+zoomorfní nádoba,zoomorphic vessel
+vědro,bucket
+nástroj,tool
+abacus (nástroj),abacus (tool)
+budík,alarm clock
+čepel,blade
+čepelka,bladelet
+drtidlo,grindstone
+geranos,mechane
+groma,groma
+hodiny,clock
+hodina,hour
+hodometr,hodometron
+hrnčířský kruh,potters wheel
+jehelník,pincushion
+jehla,needle
+broušená industrie,polished industry
+štípaná industrie,chipped industry
+valounová industrie,cobble industry
+kladivo,hammer
+krumpáč,pickaxe
+křesadlo,strike a light
+lékařský nástroj,medical device
+lopata,shovel
+mensa,mensa
+mlýnský kámen,millstone
+nářadí,hand tool
+ocílka,firesteel
+odlévací forma,casting mould
+osvětlování,light source
+palice,club
+pěstní klín,handaxe
+rýč,spade
+stilo,stylus
+špendlík,pin
+špičák,pick
+teslice,adze
+tkalcovský stav,loom
+toaletní potřeba,toiletry
+trojnožka,tripod
+ubrousek,napkin
+váha,scale
+mincovní váha,coin scale
+vrták,borer
+rybářské závaží,sinker
+tkalcovské závaží,loomweight
+zemědělské nářadí,agricultural implement
+motyka,hoe
+pluh,plow
+oradlo,ard
+radlice,ploughshare
+žací nůž,reaping knife
+zrnotěrka,grinding slab
+žernov,quern
+zrcadlo,mirror
+zvonek,bell
+oděv,clothing
+exómis,exomis
+himation,himation
+chitón,chiton
+chlaina,chlaina
+chlamys,chlamys
+klobouk,hat
+palla,palla
+paludamentum,paludamentum
+peplos,peplos
+petasos,petasos
+pileus,pileus
+pokrývky hlavy,cap
+sagum,sagum
+akta,acta
+apokryf,apocryphus
+biblický apokryf,Biblical apocryphal book
+novozákonní apokryf,Apocryphal books (New Testament)
+starozákonní apokryf,Apocryphal books (Old Testament)
+apologie,apologetic
+biografie,biography
+cestopis,travelogue
+commentarius,commentarii
+corpus,text corpus
+efémeris,ephemeris
+epanagoge,epanagoge
+exegeze,exegesis
+glosář,glossary
+itinerář,itinerarium
+katalog (starověké řecko),katalogos (Greek antiquity)
+kompendium,compendium
+korespondence,correspondence
+dopis,letter
+kronika,chronicle
+farní kronika,parochial chronicle
+klášterní kronika,monastic chronicle
+městská kronika,town chronicle
+obecní kronika,municipal chronicle
+rodová kronika,family chronicle
+kuchařský recept,recipe
+leták,leaflet
+letopisy,annals
+liber,libellus
+list (diplomatika),letter (Diplomatics)
+náboženská literatura,religious literature
+starý zákon,Old Testament
+křesťanská literatura,christian literature
+antifonář,antiphonary
+bible,bible
+dějiny bible,History Bible
+itala,itala
+vetus latina,Vetus Latina
+breviář,breviary
+diatessaron,diatessaron
+didaché,didache
+evangeliář,evangeliary
+graduál,gradual
+hagiografie,hagiography
+hodinky (modlitební knihy),books of hours
+kancionál,hymnal
+kázání,sermon
+křesťanská legenda,christian legend
+misál,missal
+modlitební kniha,prayer book
+pasionál,passional
+žaltář,psalter
+nekrologium,necrology
+noviny,newspaper
+papežský dokument,papal documents
+parský mramor,parian chronicle
+regest,regest
+rescriptum,rescriptum
+scholion,scholia
+školní sešit,exercise book
+tabulka,tablet
+klínopisná tabulka,cuneiform tablet
+psací tabulka,writing tablet
+diptychon,diptych
+polyptychon,polyptych
+triptychon,triptych
+vosková tabulka,wax tablet
+album,album
+berní kniha,tax book
+berní rula,Roll of Assesment
+dekret,decree
+dvorské desky,tabulae curiae
+formulářová sbírka,formulary
+josefínský katastr,Josephine Cadastre
+kopiář,copybook
+erbovní listina,heraldic document
+nobilitační listina,nobility document
+privilegium,privilege
+matrika,birth register
+městská kniha,town book
+pozemková kniha,land register
+soupis lidu,census
+soupis obyvatelstva podle víry,register of subjects according to their faith
+stabilní katastr,stable cadastre
+urbář,urbarium
+úřední kniha,official book
+závěť,will
+zemské desky,reliquiae tabularum terrae
+as,as
+aureus,aureus
+brakteát,bracteate
+československá koruna,czechoslovak koruna
+dáreikos,dareikos
+denár,denarius
+drachma,drachma
+dukát,ducat
+florén,florin
+grešle,groschen
+krejcar,kreuzer
+nummus,Nummus
+obolos,Obolos
+parva,parvus
+pražský groš,prague groschen
+sestertius,sestertius
+solidus,solidus
+statér,stater
+talent,talent
+tetradrachmon,tetradrachmon
+tolar,taler
+zlatka,gulden
+sekerovitá hřivna,axe-ingot
+střížek,planchet
+tessera,tessera
+polotovar,semifinished artefact
+ingot,ingot
+železná ruda,iron ore
+úštěp,flake
+arca,arca
+epitaf,epitaph
+kenotaf,cenotaph
+sarkofág,sarcophagus
+stéla (předmět),stela (object)
+mitra,mitra
+calceus,calceus
+caliga,caliga
+sandály,sandals
+pouzdro,case
+puklice,spangle
+stola,stola
+tribón,tribon
+tunika,tunic
+věnec,wreath
+pásová zápona,belt fitting
+stavební prvek,architectural element
+hřebík,nail
+hřeb,spike
+nýt,rivet
+nepálená cihla,mud-brick
+poutko,loop
+prkno,board
+střešní taška,roof tile
+symbolický předmět,symbolic object
+cena za vítězství,áthlon
+corona,corona
+medaile,medal
+panathénajské amfory,panathenaic amphorae
+insignie,insignia
+fasces,fasces
+sella curulis,sella curulis
+devocionálie,devotional object
+dona militaria,dona militaria
+hlasatelská berla,caduceus
+lapis manalis,manalis lapis
+řád a vyznamenání,decorations of honor
+thyrsos,thyrsos
+vojenské řády a vyznamenání,military decoration
+šperk,jewel
+amulet,amulet
+apotropaion,apotropaic magic
+brož,brooch
+bulla,bulla
+čelenka,head ornament
+gem,gemstone
+kamej,cameo
+korunovační insignie,coronations insignia
+medailon,medallion
+přívěsek,pendant
+růženec,rosary
+sportovní nářadí,sports equipment
+činka,dumbbell
+disk (sportovní nářadí),disk
+stroj,machine
+zboží,trade good
+cukr,sugar
+garum,garum
+chléb,bread
+jídlo,food
+kasie,casia
+koření,spice
+kuchyňská sůl,table salt
+léčiva,medication
+léky,medicine
+libum,libum
+med,honey
+medovina,mead
+mola salsa,mola salsa
+moretum,moretum
+mulsum,mulsum
+nápoj,drink
+olivy,olive
+pivo,beer
+polenta,polenta
+vavřín,laurel
+víno,wine
+9) materiálové specifikace,9) Material specifications
+materiál objektu/předmětu,feature/object material
+okr,ochre
+bavlna,cotton
+borka,bark
+drahý kámen,precious stone
+český granát,Czech garnet
+diamant,diamond
+jadeit,jadeite
+dřevěné uhlí,charcoal
+dřevěné výrobky,wood products
+cypřiš,Cupressus
+hedvábí,silk
+chalcedon,chalcedony
+jaspis,jasper
+keramický materiál,ceramic material
+fajáns,faience
+habánská fajáns,Haban faience
+jíl,loam
+kamenina,stoneware
+chronologické členění (keramika),chronological classification (ceramics)
+historická keramika,historical pottery
+lidová keramika,folk pottery
+pravěká keramika,prehistoric pottery
+renesanční keramika,renaissance pottery
+slovanská keramika,Slavic pottery
+starověká keramika,ancient pottery
+bucchero,bucchero
+černofigurová keramika,black-figure ware
+červenofigurová keramika,red-figure ware
+středověká keramika,medieval pottery
+umělecká keramika,art pottery
+užitková keramika,utiliarian ceramics
+majolika,maiolica
+porcelán,porcelain
+terakota,terracotta
+terra sigillata,terra sigillata
+elektron,electrum
+neželezný kov,nonferrous metal
+nikl,nickel
+zinek,zinc
+kožešina,fur
+křemen,quartz
+křemenec,quartzite
+křišťál,quartz crystal
+useň,hides and skins
+lastura,shell
+len,linen
+makrozbytky,macroremains
+mamutovina,mammoth ivory
+měkkýš,Mollusca
+fosilní měkkýš,fossil mollusks
+suchozemský měkkýš,terrestrial mollusc
+vodní měkkýš,aquatic mollusc
+mořský měkkýš,sea mollusc
+sladkovodní měkkýš,freshwater mollusc
+mramor,marble
+obsidián,obsidian
+opál,opal
+pazourek,flint
+pískovec,sandstone
+proutěné výrobky,basketry
+předmět z bronzu,bronze object
+předmět z kamene,stone object
+předmět z kosti,bone object
+předmět z kovu,metal object
+předmět z mědi,copper object
+předmět ze stříbra,silver object
+předmět ze zlata,gold object
+předmět ze železa,iron object
+psací materiál,writing material
+papyrus,papyrus
+pergamen,parchment
+hliněná destička,clay tablet
+rohovec,chert
+sapropelit,sapropel
+semeno,seed
+skleněný výrobek,glassware
+slonovina,elephant ivory
+spilit,spilite
+stavební kámen,building stone
+sukno,cloth
+uhličitan draselný,potash
+vlna,wool
+ovčí vlna,sheep wool
+vltavín,moldavite
+způsob provedení (objekty),method of implementation (features)
+cihelné zdivo,brick masonry
+dřevěná konstrukce,wooden structure
+hrázděná stavba,half-timbered building
+10) pomocně-historická hesla,10) Auxiliary-historical headings
+bitvy,battles
+bitva v teutoburském lese,Battle of the Teutoburg Forest
+etnika,ethnic groups
+avaři,Avars
+avarsko-slovanská kultura,Avar-Slavic culture
+avarština,Avaric language
+baltové,Balts
+baltistika,Baltic studies
+baltská filologie,Baltic philology
+baltská mytologie,Baltic mythology
+baltské náboženství,Baltic religion
+baltské jazyky,Baltic languages
+litevština,Lithuanian
+lotyština,Latvian
+pruština,Old Prussian
+baltská literatura,Baltic literature
+litevci,Lithuanians
+lotyši,Latvians
+prusové,Old Prussians
+baskové,Basques
+baskická literatura,Basque literature
+baskická poezie,Basque poetry
+baskická próza,Basque prose literature
+baskická povídka,Basque short story
+baskický román,Basque fiction
+baskické drama,Basque drama
+baskičtí spisovatelé,Basque authors
+baskičtina,Basque
+hovorová baskičtina,colloquial Basque
+dákové,Dacians
+etruskové,Etruscans
+etruská mytologie,Etruscan mythology
+etruské náboženství,Etruscan religion
+etruské nápisy,Etruscan inscriptions
+etruské památky,Etruscan monuments
+etruské umění,Etruscan art
+etruština,Etruscan
+germáni,Germanic people
+germánské kmeny,Germanic tribes
+alemani,Alamanni
+anglosasové,Anglo-Saxons
+burgundi,Burgundians
+durynkové,Thuringii
+frankové,Franks
+frísové,Frisians
+gepidové,Gepids
+gótové,Goths
+ostrogóti,Ostrogoths
+vizigóti,Visigoths
+herulové,Heruli
+jutové,Jutes
+kvádové,Quadi
+markomani,Marcomanni
+langobardi,Langobards
+rugiové,Rugii
+sasové,Saxons
+svébové,Suebi
+vandalové,Vandals
+germánské jazyky,Germanic languages
+fríština,Frisian language
+stará fríština,old Frisian language
+gótština,Gothic language
+stará dolní němčina,old saxon language
+stará severština,Old Norse
+střední dolní němčina,Middle Low German
+germánská kultura,Germanic culture
+anglosaská mytologie,Anglo-Saxon mythology
+germánská magie,Germanic magic
+germánská mytologie,Germanic mythology
+germánské náboženství,Germanic religion
+vizigótské nápisy,Visigodas inscriptions
+gétové,Getae
+hunové,Huns
+chazaři,Khazars
+iberové,Iberians
+iberorománština,Ibero-Romance
+iberská kultura,Iberian civilization
+iberština,Iberian
+keltiberové,Celtiberians
+ilyrové,Illyrians
+ilyrská literatura,Illyrian literatur
+ilyrština,ancient Illyrian
+indoevropané,Indo-Europeans
+indoevropské jazyky,Indo-European languages
+indo-evropská mytologie,Indo-European mythology
+indoevropština,Proto-Indo-European
+keltové,Celts
+keltská astrologie,Celtic astrology
+keltská kultura,Celtic culture
+irská mytologie,Irish mythology
+galorománská kultura,Gallo-Roman culture
+keltská mytologie,Celtic mythology
+keltské náboženství,Celtic religion
+druidismus,druidism
+keltská magie,Celtic magic
+keltské křesťanství,Celtic Christianity
+keltský ritus,Celtic rite
+keltská symbolika,Celtic symbolism
+keltský horoskop,Celtic horoscope
+keltský stromokruh,Celtic tree calendar
+keltské umění,Celtic art
+keltská hudba,Celtic music
+keltská literatura,Celtic literature
+keltská poezie,Celtic poetry
+keltská pohádka,Celtic fairy tale
+keltské pověsti,Celtic legends
+keltské jazyky,Celtic language
+bretonština,Breton
+hovorová bretonština,colloquial Breton
+gaelština,Gaelic
+irština,Irish language
+hovorová irština,colloquial Irish
+stará irština,Old Irish
+kornština,Cornish
+manština,"Gaelic, indigenous Manx"
+skotská gaelština,Scots Gaelic
+velština,Welsh
+hovorová velština,colloquial Welsh
+keltská etnika a kmeny,Celtic ethnic groups and tribes
+bójové,Boii
+galo-románi,Gallo-Romans
+galové,Gauls
+kimmerijci,Cimmerians
+kumáni,Cumans
+kipčačtina,Kipchak
+starověcí makedonci,Ancient Macedonians
+makedonské války (215-168 př. kr),Macedonian Wars (215-168 B.C.)
+druhá makedonská válka (200-197 př. kr.),Second Macedonian War
+povstání andriska (151-148 př. kr.),revolt of Andriscus (150-148 B.C.)
+první makedonská válka (215-205 př. kr.),First Macedonian War (First Macedonian War
+třetí makedonská válka (171-168 př. kr.),Third Macedonian War
+tažení alexandra velikého (334-323 př. kr.),Expansion of Alexander the Great (334-323 B.C.)
+"bitva u gaugamél (331 př. kr. : tel gomél, irák)",Battle of Gaugamela
+"bitva u graníku (334 př. kr. : biga çayi, turecko : řeka)",Battle of the Granicus
+"bitva u hydaspés (326 př. kr. : džihlam, indie a pákistán : řeka)",Battle of the Hydaspes
+bitva u issu (333 př. kr. : issos : zaniklé město),Battle of Issus
+mongolové,Mongols
+mongolská filologie,Mongolian philology
+mongolská literatura,Mongolian literature
+mongolská poezie,Mongolian poetry
+mongolský epos,Mongolian epos
+mongolská mytologie,Mongolian mythology
+mongolské jazyky,Mongolian languages
+burjatština,Buriat
+mongolština,Mongolian (Mongolian language)
+hovorová mongolština,colloquial Mongolian
+ojratština,Oirat
+mongolské písmo,Mongolian script
+mongolské umění,Mongolian art
+mongolské výtvarné umění,Mongolian visual art
+mongolské malířství,Mongolian painting
+mongolské sochařství,Mongolian sculpture
+mongolské výboje 1206-1405,Mongol invasion (1206-1405)
+mongolský vpád na moravu (1241),Mongol invasion of Moravia (1241)
+pečeněhové,Pecheneg
+piktové,Picti
+povolžští bulhaři,Volga Bulgarians
+prabulhaři,Proto-Bulgarians
+rétorománi,Romansh people
+rétorománská literatura,Raeto-Romance literature
+rétorománština,Romansch (Rhaeto-Roman)
+řekové,Greek
+řecké kmeny,Greek tribes
+achájové,Achaeans
+aiólové,Aeolians
+dórové,Dorians
+iónové,Ionians
+řecká antická civilizace,ancient Greek civilization
+biblická řečtina,Koine Greek
+helénismus,Hellenism
+helénská mytologie,Hellenistic mythology
+helénistické náboženství,Hellenistic religion
+helénští bohové,Hellenistic gods
+mykénská řečtina,Mycenaean Greek
+polis,poleis
+řecká antická filozofie,Greek philosophy (ancient)
+megarská škola,Megaric (school of philosophy)
+řecká mytologie,Greek mythology
+řecké antické lékařství,ancient Greek medicine
+řecké antické umění,ancient Greek art
+iónské umění,Ionian art
+řecká antická architektura,ancient Greek architecture
+řecká antická literatura,Greek ancient literature
+dějiny řecké antické literatury,history of Greek ancient literature
+řecká antická bajka,Greek ancient fable
+řecká antická poezie,Greek ancient poetry
+řecký antický verš,Greek ancient verse
+řecká antická próza,Greek ancient prose literature
+řecké antické autorky,Greek ancient women authors
+řecké antické drama,Greek ancient drama
+řecký antický projev,Greek ancient speech
+řecké nápisy,Greek inscriptions
+řecký antický epos,Greek ancient epos
+řecký antický román,Greek ancient novel
+řecký starověký hymnus,Greek hymn
+řečtí antičtí autoři,Greek ancient authors
+řecké náboženství,Greek religion
+řecké bohyně,Greek goddesses
+řečtí bohové,Greek gods
+stará řečtina,Ancient Greek
+řecko-perské války (500-449 př. kr),Greco-Persian Wars
+iónské povstání (499-494 př. kr.),Ionian Revolt
+bitva u ladé (494 př. kr. : ladé : zaniklý ostrov),Battle of Lade
+"bitva u marathónu (490 př. kr. : marathón, řecko)",Battle of Marathon
+bitva u platají (479 př. kr. : plataje : zaniklé město),Battle of Plataea
+"bitva u salamíny (480 př. kr. : salamís, řecko : ostrov)",Battle of Salamis
+"bitva u thermopyl (480 př. kr. : thermopyly, řecko : průsmyk)",Battle of Thermopylae
+římané,Romans
+římská antická civilizace,ancient Roman civilization
+gladiátorské hry,gladiatorial games
+gladiátor,gladiator
+biblická latina,Biblical Latin language
+církevní latina,liturgical Latin
+vulgární latina,vulgar Latin
+latinské nápisy,Latin inscriptions
+romanizace,romanization
+římská antická filozofie,Roman philosophy
+římská mytologie,Roman mythology
+římské antické umění,ancient Roman art
+latinská starověká literatura,ancient Latin literature
+latinské starověké drama,ancient Latin drama
+latinský starověký román,ancient Latin novel
+římská antická architektura,ancient Roman architecture
+římské náboženství,Roman religion
+římské bohyně,Roman goddesses
+římští bohové,Roman gods
+římsko-provinciální výrobek,Roman provincial product
+římská armáda,Roman army
+bitva u kann (216 př. kr. : cannae : zaniklé město),Battle of Cannae
+limes romanus,Roman limes
+antoniův val,Antonine Wall
+hadriánův val,Hadrian's Wall
+limes romanus (německo),Roman limes (Germany)
+limes romanus (rakousko),Roman limes (Austria)
+římská legie,Roman legion
+římské občanské války (80-33 př. kr.),Roman Civil Wars
+římská občanská válka 49-45 př. kr.,Caesar's Civil War
+římská republika,Roman Republic
+římské císařství,Roman Empire
+římská provincie,Roman province
+římský císař,Roman emperor
+sarmati,Sarmatians
+skytové,Scythians
+skytské umění,Scythian art
+skýtština,Khotan
+slované,Slavs
+geografické členění slovanů,geographical division of the Slavs
+jižní slované,Southern Slavs
+východní slované,Eastern Slavs
+západní slované,Western Slavs
+slovanská kultura,Slavic culture
+cyrilometodějská mise,Cyril and Methodius mission
+cyrilometodějská tradice,Cyril and Methodius tradition
+slovanská mytologie,Slavic mythology
+slovanské pověsti,Slavic legends
+slovanské náboženství,Slavic religion
+slovanská magie,Slavic magic
+slovanské bohyně,Slavic goddesses
+slovanští bohové,Slavic gods
+slovanské písmo,Slavic script
+slovanské písemnictví,Slavic literature
+cyrilské nápisy,Cyrillic inscriptions
+hlaholské nápisy,Glagolitic inscriptions
+slovanské jazyky,Slavic languages
+praslovanština,Proto-Slavic
+staroslověnština,"Slavonic, Old Church"
+církevní slovanština,Church Slavonic
+jazykové vlivy (církevněslovanské),language influence of Church Slavic
+překlady do církevní slovanštiny,translations into Church Slavic
+překlady z církevní slovanštiny,translations from Church Slavic
+staroslověnská literatura,Church Slavic literature
+staroslověnské legendy,Church Slavic
+tataři,Tartar
+tatarština,Tatar
+thrákové,Thracians
+thrácká mytologie,Thracian mythology
+thrácké nápisy,Thracian inscriptions
+thrácké umění,Thracian art
+thráčtina,Thracian
+turkické národy,Turkic peoples
+uralské národy,Uralic peoples
+ugrofinové,Finno-Ugrians
+národy (ugrofinové),people (Finno-Ugrians)
+estonci,Estonians
+finové,Finns
+chantové,Khanty people
+karelové,Karelians
+komi (etnická skupina),Komi peoples
+laponci,Sami people
+laponská jídla,Lappish cookery
+laponská mytologie,Lappish mythology
+laponské náboženství,Lappish religion
+livonci,Livonian people
+maďaři,Hungarians
+mansové,Mansi people
+marijci,Mari people
+mordvini,Mordvins
+vepsové,Vepsians
+ugrofinské jazyky,Finno-Ugric languages
+estonština,Estonian
+finština,Finnish
+chantyjština,Khanty
+jazyk setu,Seto dialect
+karelština,Karelian
+laponština,Sami languages
+livonština,Livonian
+mansijština,Mansi
+marijština,Mari
+mordvinština,Mordvinic languages
+permština,Permyak
+stará maďarština,old Hungarian language
+vepština,Veps
+votština,Votic
+ugrofinská literatura,Finno-Ugric literature
+karelská literatura,Karelian literature
+karelská poezie,Karelian poetry
+laponská literatura,Lappish literature
+laponské pověsti,Lappish legends
+marijská literatura,Mari literature
+marijská poezie,Mari poetry
+mordvinská literatura,Mordvin literature
+mordvinská poezie,Mordvin poetry
+permská literatura,Permic literature
+uraloaltajské jazyky,Ural-Altaic languages
+uralské jazyky,Uralic languages
+vikingové,Vikings
+normané,Normans
+runy,runes
+runová magie,runic magic
+runové nápisy,runic inscriptions
+severská mytologie,Nordic mythology
+severské náboženství,Nordic religion
+varjagové,Varegians
+vikingské pověsti,Viking legends
+vikingské umění,Viking art
+skaldská poezie,scaldic poetry
+historické oblasti a státní útvary,historical regions and state departments
+alsasko,Alsace
+andalusie,Andalusia
+anglie,England
+aragonie,Aragon
+armagnac,Armagnac
+aquitaine,Aquitaine
+asturie,Asturias
+auvergne,Auvergne
+avarský kaganát,Avar Khaganate
+baltské země,Baltic countries
+bavorsko,Bavaria
+bayreuth (německo : knížectví),Bayreuth (Germany : Fürstentum)
+benátsko,Veneto
+brabantsko,Duchy of Brabant
+braniborsko,Brandenburg
+bretaň,Brittany
+británie (provincie),Roman Britain
+brunšvicko,Duchy of Brunswick
+byzanc,Byzantine Empire
+byzantinismus,Byzantinism
+byzantologie,Byzantine studies
+byzantika,Byzantine studies (sources)
+byzantolog,byzantologist
+byzantoložka,women byzantologist
+dějiny byzantské literatury,history of Byzantine literature
+byzantská kultura,Byzantine culture
+byzantská filozofie,Byzantine philosophy
+byzantská mytologie,Byzantine mythology
+byzantské právo,Byzantine law
+byzantské umění,Byzantine art
+byzantská architektura,Byzantine architecture
+byzantská hudba,Byzantine music
+byzantská literatura,Byzantine literature
+byzantská poezie,Byzantine poetry
+byzantský epos,Byzantine epos
+byzantský hymnus,Byzantine hymns
+byzantské malířství,Byzantine painting
+byzantský ritus,Byzantine rite
+středověká řečtina,Medieval Greek
+byzantsko-slovanské vztahy,Byzantine-Slavic relations
+černigovské knížectví,Principality of Chernigov
+černá rus,Black Ruthenia
+české knížectví,Duchy of Bohemia
+dácie,Dacia (Dacian kingdom)
+dalmácie,Dalmatia
+dauphiné,Dauphiné
+dolní lotrinsko,Lower Lotharingia
+dolní rakousko,Lower Austria
+durynsko,Thuringia
+épeirský despotát,Despotate of Epirus
+epirus,Epirus
+etrurie,Etruria
+falc rýnská,Palatinate
+flandry,County of Flanders
+franky,Franconia
+franská říše,Francia
+karolinská říše,Carolingian Empire
+karolinská renesance,Carolingian Renaissance
+karolinské písmo,Caroline minuscule
+karolinské umění,Carolingian art
+merovejská kultura,Merovingian culture
+východofranská říše,East Francia
+západofranská říše,West Francia
+frísko,Friesland
+furlandsko,Friuli
+galicie,Galicia
+galie,Gaul
+gaskoňsko,Gascony
+germánie,Germania
+gorice a gradiška,Gorizia and Gradisca
+granada,Granada
+halič,Galicia
+haličsko-volyňské knížectví,Kingdom of Galicia–Volhynia
+hedvábná cesta (obchodní stezka),Silk Road
+hesensko,Hesse
+hispánie,Hispania
+holštýnsko,Holstein
+horní falc,Upper Palatinate
+horní rakousko,Upper Austria
+hunská říše,Hunnic Empire
+champagne,Champagne
+chazarská říše,Khazaria
+ilýrie,Illyria
+ilyrské provincie,Illyrian Provinces
+jantarová stezka (obchodní stezka),Amber Road
+jutský poloostrov,Jutland Peninsula
+kastilie,Castile
+katalánsko,Catalonia
+korutanské vévodství,Duchy of Carinthia
+království obojí sicílie,Kingdom of the Two Sicilies
+kraňské vévodství,Duchy of Carniola
+kraňsko,Carniola
+kujavsko,Kujawy
+kuronsko,Courland
+kyjevská rus,Kievan Rus'
+león,León
+liguríe,Liguria
+litevské velkoknížectví,Grand Duchy of Lithuania
+livonsko,Livonia
+lombardie,Lombardy
+lužice,Lusatia
+makedonie,Makedonien
+malá litva,Lithuania Minor
+malopolsko,Lesser Poland
+mazovsko,Mazovia
+míšeňsko (německo : markrabství),Margraviate of Meissen
+moesie,Moesia
+moldávie (historické území),Moldavia
+navarra,Navarra
+neapolsko (království),Kingdom of Naples
+noricum,Noricum
+normandie,Normandy
+northumbrie,Kingdom of Northumbria
+panonie,Pannonia
+papežský stát,papal states
+podolí,Podolia
+polesí,Polesia
+polocké knížectví,Principality of Polotsk
+pomořansko,Pomerania
+povolžské bulharsko,Volga Bulgaria
+provence,Provence
+prusko,Prussia
+prusy knížecí,Duchy of Prussia
+prusy královské,West Prussia
+raetie,Raetia
+rakousko (1867-1918),Cisleithania
+salcbursko,Salzburg
+saská vévodství,Saxon duchies
+sasko (německo),Duchy of Saxony
+savojsko,Savoy
+sedmihradsko,Transylvania
+skandinávie,Scandinavia
+slavonie,Slavonia
+slezsko,Silesia
+brežské knížectví,Duchy of Brzeg
+dolní slezsko,Lower Silesia
+hlučínsko,Hlučín Region
+horní slezsko,Upper Silesia
+javorské knížectví,Duchy of Jawor
+lehnické knížectví,Duchy of Legnica
+minsterberské knížectví,Duchy of Münsterberg
+niské knížectví,Duchy of Nysa
+olešnické knížectví,Duchy of Oels
+opavské knížectví,Duchy of Troppau
+opavské slezsko,Opavian Silesia
+slezská knížectví,Duchies of Silesia
+slezsko (česko),Silesia (Czechia)
+slezsko (polsko),Silesia (Poland)
+svídnické knížectví,Duchy of Jawor-Świdnica
+těšínské slezsko,Cieszyn Silesia
+volovské knížectví,Duchy of Wołów
+skotsko,Scotland
+spiš,Spiš
+spojené království nizozemské (1815-1830/1839),United Kingdom of the Netherlands
+svatá říše římská,Holy Roman Empire
+otonská architektura,Ottonian architecture
+otonské umění,Ottonian art
+šlesvicko,Duchy of Schleswig
+štýrsko,Styria
+švábsko,Swabia
+thrácké moře,Thracian Sea
+thrákie,Thrace
+tyrolsko,Tyrol
+uhersko (1867-1918),Transleithania
+valašsko,Wallachia
+velkomoravská říše,Great Moravia
+velkopolsko,Greater Poland
+vitorazsko,Weitra
+wales,Wales
+wessex,Kingdom of Wessex
+země koruny české,Lands of the Bohemian Crown
+české království,Kingdom of Bohemia
+moravské markrabství,Margraviate of Moravia
+zlatá horda,Golden Horde
+žemaitija,Samogitia
+panovnické dynastie z prostoru středovýchodní evropy,ruling dynasties from East-Central Europe
+anjouovci,Angevin
+arpádovci,Árpád dynasty
+habsburkové,House of Habsburg
+jagellonci,Jagiellonian dynasty
+karlovci,Carolingian dynasty
+liudolfovci,Ottonian dynasty
+lucemburkové,House of Luxembourg
+merovejci,Merovingian dynasty
+mojmírovci,House of Mojmír
+piastovci,Piast dynasty
+přemyslovci,Přemyslid dynasty
+slavníkovci,Slavník dynasty
+štaufové,House of Hohenstaufen
+wittelsbach,House of Wittelsbach
+války,wars
+galské války (58-51 př. kr.),Gallic War
+"markomanské války, 166-180",Marcomannic Wars
+11) povolání a pracovní činnosti,11) Professions and work activities
+arcibiskup,archbishop
+biskup,bishop
+farář,priest
+farářka,woman priest
+kanovník,canon
+kardinál,cardinal
+kněz,priest
+bráhman,Brahman
+druid,druid
+křesťanský kněz,Christian priest
+evangelický duchovní,Evangelical minister
+katolický kněz,Catholic priest
+pravoslavný kněz,Orthodox priest
+řeckokatolický kněz,Greek Catholic priest
+starokatolický kněz,Old Catholic priest
+židovský kněz,Jewish priest
+kněžka,priestess
+vestálka,vestal virgin
+křesťanská misionářka,Christian women missionary
+křesťanský misionář,Christian missionary
+legát,Legat
+mnišský řád,monkish order
+abatyše,abbess
+mnich,monk
+mniška,nun (mniška/Nonne)
+opat,abbot
+papež,pope
+patriarcha,patriarch
+poustevnice,anchoress
+poustevník,hermit
+kamaldulové,Camaldolese
+starčestvo,starchestvo
+starec,starets
+prelát,prelate
+probošt,provost
+řeholní kanovník,regular canon
+řeholní řád,monastic order
+funkce řádů,function of the orders
+nemocniční řeholní řád,hospitaler order
+rytířský řeholní řád,order of knighthood and chivalry
+žebravý řád,mendicant order
+mužský řeholní řád,male monastic order
+augustiniáni,Augustinians
+augustiniáni kanovníci,Augustinian Canons
+benediktini,Benedictines
+bosí augustiniáni,Discalced Augustinians
+bosí karmelitáni,Discalced Carmelite
+cisterciáci,Cistercians
+dominikáni,Dominicans
+františkáni,Franciscans
+gilbertini,Gilbertines
+hyberni,Irish Franciscans
+jeruzalémští bratři,Teutonic Knights
+jezuité,Jesuits
+karmelitáni,Carmelites
+křížovníci s červenou hvězdou,Knights of the Cross with the Red Star
+křížovníci s červeným křížem,Knights of the Cross with the Red Cross
+křížovníci s červeným srdcem,Knights of the Cross with the Red Heart
+lazariáni,Lazarians
+maltézští rytíři,Knights of Malta
+mečoví rytíři,Knights of the swords
+milosrdní bratři,Brothers Hospitallers
+minorité,Minoriten
+pauláni,Paulaner
+premonstráti,Premonstratensians
+servité,Servites
+templáři,Templars
+trapisté,Trappists
+řeholnice,nun (řeholnice/Ordensschwester)
+řeholník,votarist
+ženský řeholní řád,female monastic order
+alžbětinky,Sisters of Charity of St. Elizabeth
+augustiniánky,Augustinian nuns
+benediktinky,Benedictine nuns
+boromejky,St. Charles Borromeo Sisters
+brigitinky,Bridgettine nuns
+cisterciačky,Cistercian nuns
+dominikánky,Dominican nuns
+jeruzalémské sestry,Sisters of The Teutonic order
+karmelitky,Carmelite nuns
+klaristky,Clares
+klaristky kapucínky,Poor Clares
+premonstrátky,Premonstratensian nuns
+trapistky,Trappist nuns
+vizitantky,Visitation nuns
+voršilky,Ursulines
+obchod,trade
+dálkový obchod,long-distance trade
+dějiny obchodu,history of comerce
+mýtné,toll
+námořní obchod,maritime commerce
+obchodní společnost,trade association
+obchodní stezka,trade route
+obchodní vztahy,trade relations
+obchodnice,merchantwoman
+obchodník,merchant
+povozník,carter
+vodní doprava,water transport
+námořní doprava,maritime transport
+říční doprava,river transport
+"pěstování plodin, chov a lov","crop production, breeding and hunting"
+lesní hospodářství,forest management
+lovectví,hunting
+lov ptáků,bird catching
+ptáčnictví,bird catching
+ptáčník,bird catcher
+lov zvěře,animal hunting
+lovec,hunter
+myslivost,game management
+dějiny myslivosti,history of game management
+myslivec,gamekeeper
+rybolov,fishing
+sokolnictví,falconry
+pastevectví,pastoralism
+kočovník,nomad
+pastevec,herdsmen
+pastevní chov,grazing
+rostlinná výroba,crop production
+zemědělství,farming
+dějiny zemědělství,history of agriculture
+extenzivní zemědělství,extensive agriculture
+tažná zvířata,draught animals
+trojpolní systém hospodaření,open field system
+úhor,fallow land
+zemědělec,agriculturist
+zemědělská půda,agricultural land
+orná půda,arable land
+zemědělská výroba,agricultural production
+žárové zemědělství,slash and burn agriculture
+živočišná výroba,animal husbandry
+chov domácích zvířat,animal husbandry
+drůbež,poultry
+kůň,horse
+koza,goat
+ovce,sheep
+prase,pig
+skot,cattle
+řemeslná práce,craftsmanship
+cech,guild
+cechovní znak,guild coats of arms
+dějiny řemesel,history of handicrafts
+řemeslo,craft
+bednářství,coopering
+bednář,cooper
+brašnářství,bagmaking
+cihlářství,brickmaking
+cihlář,brickmaker
+cínařství,tinsmithing
+cínař,tinsmith
+cizelérství,chasing (metalworking)
+cízelér,chaser
+čalounictví,upholstery
+čalouník,upholsterer
+dlaždičské práce,pavements
+dlaždič,tile maker
+drátenictví,tinkers trade
+dráteník,tinker
+drátník,wire drawer
+draslářství,potash production
+draslář,Ash burner
+drožďařství,yeast industry
+hodinářství,watch making
+hodinář,watchmaker
+hrnčířství,potteries
+hrnčíř,potter
+hrnčířská značka,factory mark
+hrnčířský výrobek,pottery product
+inkrustace,incrustation
+keramická barva,ceramic colour
+keramická glazura,ceramic glaze
+keramická surovina,ceramic raw material
+cihlářská hlína,brick clay
+ostřivo,temper
+silikáty,silicates
+šamot,fireclay
+keramický pigment,ceramic pigment
+keramička,woman ceramist
+keramik,ceramist
+lidové hrnčířství,folk pottery
+povrchová úprava keramiky,ceramics finishing
+glazovaná keramika,glazed ceramic ware
+slámování,brushing
+tuhování,graphite painting
+tvarování keramiky,ceramics forming
+výpal keramiky,ceramics firing
+zdobení keramiky,ceramic design
+malovaná keramika,painted pottery
+ilustrace,illustration
+iluminace prvotisků,illumination of incunabula
+iluminace rukopisů,illumination of manuscripts
+iluminátor,illuminator
+iluminátorka,woman illuminator
+ilustrátor,illustrator
+ilustrátorka,woman illustrator
+knižní ilustrace,illustration of books
+miniaturista,miniaturist
+kamenictví,stonemasonry
+kamenická značka,masons' mark
+kameník,stonemason
+kamenosochařství,stone sculpture
+opracování kamene,stone-working
+kamnářství,stovemaking
+kamnář,stove maker
+knihařství,bookbinding
+knihař,bookbinder
+knižní obchod,bookstore
+knihkupec,bookseller
+knihkupkyně,woman bookseller
+knoflíkář,button making
+kolářství,wheel making
+kominíctví,chimney sweeping
+košíkářství,basketmaking
+kovářství,blacksmithing
+kovář,blacksmith
+kovářský výrobek,blacksmith’s product
+kovorytectví,metal engraving
+kovotepectví,metalworking
+kotlář,boilermaker
+měditepectví,copper beating
+mědikovec,coppersmith
+stříbrotepectví,silversmithing
+stříbrotepec,silversmith
+koželužství,tannery
+činění kožešin,tanning (činění kožešin/Pelzzurichtung)
+kožešník,furrier
+činění kůží,tanning (činění kůží/Gerberei)
+koželuh,tanner
+jirchářství,curriers
+krejčovství,tailors trade
+krejčí,tailor
+švadlena,dressmaker
+lnářství,flax industry
+hutník,smelterman
+kovolijectví,art casting
+litina,cast iron
+umělecká litina,decorative cast iron
+odlévání kovů,casting
+slitina,alloy
+metalurgie železa,iron metallurgy
+mincovnictví,minting
+mincmistr,mintmaster
+ražba (mincovnictví),stamp (coinage)
+mlynářství,miller’s trade
+mlynář,miller
+natěračství,painter’s trade
+nožířství,cutlery
+nožíř,cutler
+obuvnictví,shoemaking trade
+obuvník,shoemaker
+pasířství,girdlery
+pasíř,belt maker
+pivovarnictví,beer industry
+pivovarník,brewer
+sládek,brewmaster
+plátenictví,linen industry
+platnéřství,armour making
+platnéř,platener
+podkovářství,farriery
+podkovář,farrier
+pokrývačské práce,roofing
+pokrývač,roofer
+provaznictví,ropemaking
+puškařství,gunsmithing
+puškař,gunsmith
+rámařství,framing
+rámař,picture framer
+rukavičkářství,glove making
+sedlářství,saddlery
+sedlář,saddler
+sklářství,glassworking
+sklář,glassworker
+sklářka,woman glassworker
+sklenářství,glazing
+sladovnictví,malt industry
+sladovník,maltster
+stříbrnictví,silverwork
+šperkařství,jewelry
+email,enamel
+filigrán (šperkařství),filigree (jewelry)
+granulace,granulation
+jamkový email,champlevé
+niello,niello
+přihrádkový email,cloisonné
+šperkař,jeweler
+tiskařství,printing
+dějiny tiskařství,history of printing
+tiskař,printer
+tiskařka,woman printer
+tkalcovství,weaving
+tkadlec,weaver
+tkadlena,woman weaver
+umělecké řemeslo,arts and crafts
+mozaikářství,mosaic working
+mozaikář,mosaic craftsman
+řezbářství,woodcarving
+intarzie,intarsia
+řezbář,carver
+řezbářka,woman carver
+řezbářský výrobek,woodcarving product
+štukatérství,stuccowork
+štukatér,stuccoist
+umělecké kovářství,artistic blacksmithing
+umělecký kovář,artistic blacksmith
+vinařství,wine making
+vinař,vintner
+vlásenkářství,wig making
+výroba dřevěného uhlí,production of charcoal
+uhlíř,charcoal burner
+zámečnictví,locksmithery
+stavební zámečnictví,building locksmithery
+umělecké zámečnictví,artistic locksmithery
+umělecký zámečník,artistic locksmith
+zamečník,locksmith
+zbrojířství,bladesmithing
+zbrojíř,armorer
+zbrojířská značka,armourer sign
+zednické práce,bricklaying
+zedník,bricklayer
+zlatnictví,goldsmithing
+pozlacování,gilding
+puncovní značka,hallmark
+tauzie,damascening
+zlatník,goldsmith
+řemeslná výroba,handicraft production
+řemeslník,craftsman
+řemeslnice,craftswoman
+"správa, písemnictví","administration, literature"
+církevní správa,church administration
+církevní poplatky,church fee
+desátek,tithe
+daně,taxes
+lokátor,lokator
+městská správa,municipal government
+konšel,town councillor
+městská pečeť,city seal
+městský úřad,municipal office
+městský znak,city coat of arms
+purkmistr,burgomaster / burgermeister
+rychtář,reeve
+notářství,notary’s office
+notář,notary
+notářka,woman notary
+písemnictví,literature
+právnička,woman lawyer
+právník,lawyer
+purkrabí,burgrave
+státní správa,state administration
+úřednice,woman official
+úředník,official
+hornictví,mining
+činnost (hornictví),activity (mining)
+těžba břidlice,slate mining
+těžba cínu,tin ore mining
+těžba českého granátu,garnet mining
+těžba diamantů,diamond mining
+těžba fosfátů,phosphate mining
+těžba grafitu,graphite mining
+těžba hlíny,clay mining
+těžba chromu,chrome mining
+těžba jílu,clay minerals
+těžba kamene,stone mining
+těžba kaolinu,kaolin mining
+těžba křídy,chalk mining
+těžba manganu,manganese mining
+těžba mědi,copper mining
+těžba mramoru,marble mining
+těžba nerostných surovin,mineral mining
+těžba niklu,nickel mining
+těžba olova,lead mining
+těžba opálů,opal mining
+těžba pískovce,sandstone mining
+těžba písku,sand extraction
+těžba platiny,platinum mining
+těžba rašeliny,peat digging
+těžba rohovce,chert mining
+těžba rud,ore mining
+těžba soli,salt mining
+těžba stříbra,silver mining
+těžba uhlí,coal mining
+těžba černého uhlí,bituminous coal mining
+těžba hnědého uhlí,lignite mining
+těžba vápence,limestone mining
+těžba zlata,gold mining
+těžba železných rud,iron ore mining
+dějiny hornictví,history of mining
+horník,miner
+ložiska,deposits
+ložisko břidlice,slate deposit
+ložisko cínu,tin deposit
+ložisko fosfátů,phosphate deposit
+ložisko grafitu,graphite deposit
+ložisko jílu,clay deposit
+ložisko kamenné soli,rock salt deposit
+ložisko mědi,copper deposit
+ložisko mramoru,marble deposit
+ložisko nerostných surovin,deposit of raw materials
+ložisko niklu,nickel deposit
+ložisko pískovce,sandstone deposit
+ložisko písku,deposit of sands
+ložisko rašeliny,peat deposit
+ložisko rtuti,mercury deposit
+ložisko sirných rud,sulphur-ore deposit
+ložisko stříbra,silver deposit
+ložisko těžkých kovů,heavy metals deposit
+ložisko uhlí,coal deposit
+ložisko černého uhlí,bituminous coal deposit
+ložisko hnědého uhlí,brown coal deposit
+ložisko vápence,limestone deposit
+ložisko vltavínů,moldavite deposit
+ložisko zlata,gold deposit
+ložisko železných rud,iron ores deposit
+rudní ložisko,ore deposit
+rýžování,washing
+těžba dřeva,logging
+dřevorubec,logger
+válečnictví,art of war
+armáda,army
+bojovník,warrior
+složky armády,division of army
+dělostřelectvo,artillery
+jezdectvo,cavalry
+jízdní lučistníci,mounted archers
+pěchota,infantry
+ubytování vojska,military accomodation
+voják,soldier
+branec,conscript
+legionář,legionary
+odvedenec,recruit
+válečný veterán,war veteran
+vojenský velitel,military officer
+vojevůdce,commander
+žoldnéřské vojsko,mercenary troops
+válka,war
+anexe,annexation
+bitva,battle
+casus belli,casus belli
+filozofie války,philosophy of war
+obléhání,siege
+pohraniční konflikt,border conflict
+spravedlivá válka,just war
+územní spor,territorial dispute
+územní změna,territorial change
+válečné tažení,campaign
+vojenská porážka,military defeat
+vyhlášení války,declaration of war
+vojenství,military science
+vojenská strategie,military strategy
+vojenská taktika,military tactic
+vojenský teoretik,military theorist
+12) společnost,12) Society
+obecná hesla (společnost),general entries (society)
+dělba práce,division of labor
+sociální identita,social identity
+sociální nerovnost,social inequality
+sociální původ,social origin
+sociální strategie,social strategy
+sňatek šlechtických rodů,marriage of nobility
+sňatek panovnických rodů,marriage of royalty
+sociální mobilita,social mobility
+společenské postavení,social status
+společenské vztahy,social relations
+barter,barter
+dar,gift
+distribuční mapa,distribution map
+reciprocita,reciprocity
+zisk,profit
+písmo,script
+arabské písmo,Arabic script
+aramejské písmo,Aramaic script
+arménské písmo,Armenian script
+azbuka (písmo),Russian alphabet
+cyrilice,Cyrillic
+gruzínské písmo,Georgian script
+hebrejské písmo,Hebrew script
+hieratické písmo,hieratic script
+hieroglyfy,hieroglyphics
+hlaholice,Glagolitic alphabet
+klínové písmo,cuneiform
+krétské hieroglyfické písmo,Cretan hieroglyphic script
+latinské písmo,Latin script
+fraktura (písmo),black letter
+humanistické písmo,humanistic script
+novogotické písmo,Gothic writing
+lineární písmo a,Linear A
+lineární písmo b,Linear B
+logografické písmo,ideographic script
+obrázkové písmo,ideograms
+petroglyf,petroglyph
+piktogram,pictograph
+řecké písmo,Greek script
+právní institut,legal institute
+inkolát,inkolat
+landfrýd,Landfrieden
+léno,fief
+nástupnické právo,succession law
+primogenitura,primogeniture
+seniorát,agnatic seniority
+nevolnictví,serfdom
+nobilitace,nobilitation
+odúmrtní právo,escheat
+ordál,trial by ordeal
+otroctví,slavery
+pacht,ground rent
+poddanství,serfdom
+robota,corvée
+tribut,tribute
+právo,law
+církevní právo,canon law
+horní právo,mining law
+horní regál,Bergregal
+lenní právo,feudal law
+městské právo,city rights
+magdeburské právo,Magdeburg rights
+občanské právo,civil law
+římské právo,Roman law
+zákoník,law code
+zákon,law
+zemské právo,municipal law
+zvykové právo,common law
+sociálni stratifikace,social stratification
+společenská třída,social class
+obecné (společenské třídy),general (social class)
+elita,elite
+ekonomická elita,economic elite
+politická elita,political elite
+společenská elita,social elite
+kasta,caste
+nižší společenská třída,lower class
+střední vrstva,middle class
+vyšší společenská vrstva,upper class
+konkrétní (společenské třídy),concrete (social class)
+dělnictvo,working class
+duchovenstvo,clergy
+měšťanstvo,bourgeoisie
+buržoazie,bourgeoisie
+měšťanská kultura,bourgeois culture
+nevolník,serf
+otrok,slave
+otrokyně,slave women
+panovnice,queen
+panovník,king
+panovnický dvůr,royal court
+poddaný,retainer
+rolník,peasant
+sedlák,farmer
+stavy,Estates
+šlechta,nobility
+aristokracie,aristocracy
+kurfiřt,prince-elector
+markrabě,marquis
+nižší šlechta,gentry
+rytíř,knight
+šlechtický rod,house of nobility
+vyšší šlechta,higher nobility
+zemanstvo,squire
+sociální systém,social system
+matriarchát,matriarchy
+matrilinearita,matrilineal kinship
+patriarchát,patriarchy
+patrilinearita,patrilineal kinship
+příbuzenství,kinship
+sociální endogamie,social endogamy
+sociální exogamie,social exogamy
+vládní forma,system of government
+absolutismus,absolutism
+osvícenský absolutismus,enlightened absolutism
+císařství,empire
+demokracie,democracy
+despotismus,despotism
+diktatura,dictatorship
+diktatura proletariátu,dictatorship of the proletariat
+feudalismus,feudalism
+gerontokracie,gerontocracy
+knížectví,principality
+monarchie,monarchy
+absolutní monarchie,absolute monarchy
+konstituční monarchie,constitutional monarchy
+náčelnictví,chiefdom
+oligarchie,oligarchy
+republika,republic
+stavovský stát,State of the Estates
+teokracie,theocracy
+totalitarismus,totalitarianism
+vojenská diktatura,military dictatorship
+společnosti,societies
+dvorská společnost,courtly society
+industriální společnost,industrial society
+lovecko-sběračská společnost,hunting and gathering society
+moderní společnost,modern society
+orientální civilizace,oriental civilization
+pravěká společnost,prehistoric society
+lovci mamutů,mammoth hunters
+starověká civilizace,ancient civilization
+středověká společnost,medieval society
+západní civilizace,western civilization
+provazník,rope maker
+řemenářství,belt production
+řemenář,girdler
+tavení skla,glass melting
+soukenictví,drapery
+soukeník,clothweaver
+mečíř,swordsmith
+inlej,inlays
+kronikářství,chronicles
+kronikář,chronicler
+kronikářka,woman chronicler
+vozatajstvo,Tross
+panovnická dynastie,dynasty
+dějiny správy,Administrative History
+dějiny každodennosti,People´s History
+dějiny idejí,Intellectual History
+dějiny mentalit,History of Mentalities
+dějiny genderu,Gender History
+dějiny dějepisectví,History of Historiography
+mikrohistorie,Microhistory
+psychohistorie,Psychohistory
+biografická analýza,Biographical research
+metoda kolektivní biografie,Collective Biography
+metoda orální historie,Oral History
+metoda právní ikonografie,Legal Iconography
+metoda sondy,Probe Method
+hmotný pramen,Material Source
+obrazový pramen,Visual Source
+obrazový pramen symbolický,Symbolic Visual Source
+obrazový pramen vlastní,Primary Visual Source
+ústně předávaný pramen,Oral Tradition
+literární pramen,Literary Source
+zpovědní seznam,Confessional Registry
+soupis duší,Parish Family Book
+účetní materiál,Bookkeeping
+deník,Diary
+cestovní deník,Travel Journal
+památník,Album Amicorum
+raně křesťanské umění,early Christian art
+středověké umění,medieval art
+rokoko,rococo
+umění 19. století,art of the 19th century
+historismus,historicism
+romantický historismus,romantic historicism
+neorománský sloh,neo–Romanesque
+neogotický sloh,neo–Gothic
+neorenesanční sloh,neo–Renaissance
+neobarokní sloh,neo–Baroque
+umění 20. století,20th–century art
+dórský stavební řád,doric order
+iónský stavební řád,ionic order
+korintský stavební řád,corinthian order
+manýristická architektura,mannerist architecture
+rokoková architektura,rococo architecture
+architektura 19. století,19th-century architecture
+antické malířství,ancient painting
+řecké antické malířství,ancient greeek painting
+etruské malířství,etruscan painting
+římské antické malířství,ancient Roman painting
+raně křesťanské malířství,early Christian painting
+manýristické malířství,mannerist painting
+rokokové malířství,rococo painting
+malířství 19. století,19th century painting
+malířství klasicismu,classicism painting
+malířství romantismu,romantic painting
+malířství realismu,realism painting
+impresionismus,impressionism
+secesní malířství,Art Nouveau painting
+etruské sochařství,etruscan sculpture
+raně křesťanské sochařství,early Christian sculpture
+středověké sochařství,medieval sculpture
+sochařství 19. století,19th century sculpture
+dagerotypie,daguerreotype
+archerotypie,collodion process
+kalotypie,calotype
+ambrotypie,ambrotype
+ferrotypie,ferrotype
+pannotypie,pannotype
+analýza uměleckého díla,artwork analysis
+umělecký směr,art style
+umělecká škola,art school
+barbizonská škola,Barbizon school
+berlínská škola,Berlin school
+pařížská škola,School of Paris
+vídeňská škola dějin umění,Vienna School of Art History
+donátor,donor
+donátorka,donor (female)
+architekt,architect
+architektka,architect (female)
+šaman,shaman
+démon,demon
+démonolatrie,demonolatry
+fetišismus,Fetishism
+fetiš,fetish
+ortodoxie,orthodoxy
+heterodoxie,heterodoxy
+islám,Islam
+agnus dei,Lamb of God
+agnůstek (přívěsek),Agnus Dei (pendant)
+archa,ark
+apokalypsa,apocalypse
+apologetika,apologetics
+apoštol,Apostle
+cherub,cherub
+ekumenismus,ecumenism
+epištola,carta
+exarcha,Exarch
+genesis,Book of Genesis
+jan křtitel,John the Baptist
+ježíš kristus,Jesus
+pantokrator,Christ Pantocrator
+christogram,Christogram
+krucifix,crucifix
+habáni,Habans
+anathéma,anathema
+kult svatých,Veneration
+kříž,Christian cross
+judaismus,Judaism
+jahve,Yahweh
+židé,Jewish people
+panenteismus,panentheism
+dualismus,dualism
+mazdaismus,mazdaism
+zoroastrizmus,zoroastrianism
+zarathuštra,Zoroaster
+apotropsion,apotropaic magic
+agnosticizmus,agnosticism
+anděl,angel
+archanděl,archangel
+atribut,Attribute
+bůh,God
+chtonické božstvo,earth deity
+astrální božstvo,solar deity
+církev,church congregation
+charizma,charisma
+dogma,dogma
+duch,ghost
+duše,soul
+ďábel,devil
+eschatologie,eschatology
+esoterismus,esotericism
+alchymie,Alchemy
+astrologie,astrology
+gnosticismus,gnosticism
+gnóze,gnosis
+magie,magic
+homeopatická magie,Homeopathic magic
+kontaktní magie,contagious magic
+sympatetická magie,sympathetic magic
+náboženské bratrstvo,fraternal organization
+okultismus,occultism
+psychopomp,psychopomp
+věštba,divination
+geomancie,geomancy
+advent,Advent
+askeze,asceticism
+bakchanálie,Bacchanalia
+blahořečení,beatification
+rituál,ritual
+filozofie náboženství,philosophy of religion
+kognitivní psychologie,cognitive psychology
+komparativní religionistika,comparative religion
+posvátný háj,sacred grove
+enkolpión,engolpion
+mariánský amulet,Miraculous Medal
+dóm,duomo
+chrám,temple
+kouzelník,magician
+věštec,oracle
+bakchantky,Maenad
+psychologie náboženství,psychology of religion
+behaviorismus,behaviorism
+fenomenologie náboženství,phenomenology of religion
+kefalometrie,cephalometry
+osteometrie,osteometry
+somatometrie,somatometry
+morfometrie,morphometry
+morfoskopie,morphoscopy
+odhad dožitého věku podle kostry,age estimation of skeletal remains
+odhad výšky postavy,stature estimation
+určení pohlaví podle kostry,sex estimation
+určení populační afinity,ancestry estimation
+zúčastněné pozorování,participant observation
+homo antecessor,Homo antecessor
+homo ergaster,Homo ergaster
+kulturní vzor,pattern of culture
+bar micva,Bar Mitzvah
+obřízka,circumcision
+antropologie náboženství,anthropology of religion
+antropologie sexuality,anthropology of sexuality
+antropologie smrti,anthropology of death
+archeologická antropologie,archaeological anthropology
+dentální antropologie,dental anthropology
+difuzionistická antropologie,diffusionism
+evolucionistická antropologie,evolutionistic anthropology
+evoluční antropologie,evolutionary anthropology
+filosofická antropologie,philosophical anthropology
+forenzní antropologie,forensic anthropology
+funkcionalistická antropologie,functionalist anthropology
+integrální antropologie,integral anthropology
+kinantropologie,kinanthropology
+konfiguracionistická antropologie,configurationism
+poststrukturální antropologie,poststructuralism
+virtuální antropologie,virtual anthropology
+zhuštěný popis,thick description
+dogmatismus,Dogmatism
+církevní řád,religious order
+metody (religionistika),methods (religious science)
+panteismus,pantheism
+subobor (religionistika),subfield (religious science)
+barbaři,Barbarian
+belgové,Belgae
+karpové,Carpi
+dolopové,Dolopes
+eburonové,Eburones
+féničané,Phoenicians
+frýgové,Phrygians
+batavové,Batavi
+hermunduři,Hermunduri
+chattové,Chatti
+cheruskové,Cherusci
+kimbrové,Cimbri
+teutoni,Teutons
+treverové,Treveri
+ubiové,Ubii
+chaldejci,Chaldea
+chalybové,Chalybes
+chetité,Hittites
+ilyrské etnika a kmeny,Illyrian ethnic groups and tribes
+liburnové,Liburnians
+isaurové,Isauri
+italikové,Italic peoples
+marsové,Marsi
+kantabrové,Cantabri
+kárové,Carians
+galatové,Galatians
+haeduové,Haedui
+helvetiové,Helvetii
+insubrové,Insubres
+nerviové,Nervii
+parisiové,Parisii
+sékvanové,Sequani
+senonové,Senones
+sequanové,Sequani
+koptové,Copts
+kotinové,Cotini
+latinové,Latins
+ligurové,Ligures
+médové,Medes
+massagetové,Massagetae
+messapiové,Messapii
+mořské národy,Sea Peoples
+nabatejci,Nabataeans
+oskové,Osci
+osové,Osi
+paelignové,Paeligni
+parthové,Parthians
+pelasgové,Pelasgians
+danaové,Denyen
+sparťané,Spartiate
+lokrové,Locrians
+magnétové,Magnetes
+minyové,Minyans
+molossové,Molossi
+attičtina,Attic Greek
+quirité,Quirites
+roxolani,Roxolani
+sabellové,Sabellians
+sabinové,Sabines
+samnité,Samnites
+jazygové,Iazyges
+sikanové,Sicani
+taurové,Tauri
+thessalové,Thessali
+trójané,Trojans
+umbrové,Umbri
+venedové,Venethi
+vindelikové,Vindelici
+volskové,Volsci
+achaia,Achaea
+afrika,Africa
+aígina,Aegina
+akkad,Akkad
+alpy,Alps
+apulie,Apulia
+arabský poloostrov,Arabian Peninsula
+argolis,Argolis
+arkádie (řecko),Arcadia
+asie,Asia
+asie (římská provincie),Asia (Roman province)
+asýrie,Assyria
+atika,Attica
+atlas (pohoří),Atlas Mountains
+azovské moře (ukrajina a rusko),Sea of Azov
+babylónie,Babylonia
+baktrie,Bactria
+barbarikum,Barbaricum
+bíthýnie,Bithynia
+boiohaemum,Bohemia
+boiótie,Boeotia
+bospor (turecko : průliv),Bosporus
+bosporská říše,Bosporan Kingdom
+bruttium,Bruttium
+černé moře (oblast),Black Sea
+dardanely (turecko : průliv),Dardanelles
+délos (řecko : ostrov),Delos
+egejské moře (oblast),Aegean Sea
+starověký egypt,Ancient Egypt
+elba (itálie : ostrov),Elba
+élis (řecko),Elis
+euboia (řecko : ostrov),Euboea
+foiníkie,Phoenicia
+fókis,Phocis
+frýgie,Phrygia
+galacie,Galatia
+galské císařství,Gallic Empire
+gandhára (pákistán a afghánistán),Gandhara
+gibraltarský průliv (oblast),Strait of Gibraltar
+hellas,Hellas
+hercynský les,Hercynian Forest
+chalkidiki (řecko),Chalkidiki
+iónie (turecko),Ionia
+ionské moře,Ionian Sea
+starověká indie,India
+isthmos (řecko),Isthmus
+istrijský poloostrov (chorvatsko a slovinsko),Istria
+jazyky v itálii,Italic languages
+jaderské moře,Adriatic Sea
+jordán (řeka),Jordan River
+judea,Judaea
+kalábrie (itálie : kraj),Calabria
+kampánie (itálie : kraj),Campania
+kanaán,Canaan
+kappadokie (turecko),Cappadocia
+kárie,Caria
+kartágo (zaniklé město),Carthage
+kavkaz (pohoří : oblast),Caucasus Mountains
+kilíkie (turecko),Cilicia
+kolchida,Colchis
+korfu (řecko : ostrov),Corfu
+korsika (francie),Corsica
+kós (řecko : ostrov),Kos
+kréta (řecko : ostrov),Crete
+kyklady (řecko : souostroví),Cyclades
+kyrenaika,Cyrenaica
+kythéra,Kythira
+lago di nemi (itálie : jezero),Lake Nemi
+lakónie (řecko),Laconia
+latium,Latium
+lavrion (řecko),Laurium
+lesbos (řecko : ostrov),Lesbos
+limnos (řecko : ostrov),Lemnos
+liparské ostrovy (itálie),Lipari Islands
+lokris,Locris
+lukánie,Lucania
+lusitánie,Lusitania
+lýdie,Lydia
+lýkie,Lycia
+magnesia,Magnesia
+malá asie,Asia Minor
+mauretánie (království),Mauretania
+médie,Media
+megaris,Megara
+messénie (řecko),Messenia
+mezopotámie,Mesopotamia
+milos (řecko),Milos
+mýsie,Mysia
+nil (řeka),Nile
+numidie,Numidia
+starověký orient,Orient
+pád (itálie : řeka),Po
+paflagonie,Paphlagonia
+pamfýlie,Pamphylia
+parnas,Parnass
+parthská říše,Parthian Empire
+peloponés (řecko : poloostrov),Peloponnese
+pentelikon,Penteliko Mountain
+pergamon (zaniklé město),Pergamon
+perská říše,Persian Empire
+picenum,Picenum
+pieria (řecko),Pieria
+pontská říše,Kingdom of Pontus
+pyreneje (francie a španělsko : pohoří),Pyrenees
+starověké řecko,Ancient Greece
+rhodos (řecko : ostrov),Rhodes
+samařsko (západní břeh jordánu),Samaria
+samnium (itálie),Samnium
+sámos (řecko),Samos
+samothraké (řecko : ostrov),Samothrace
+sardinie (itálie),Sardinia
+sarmatie,Sarmatia
+seleukovská říše,Seleucid Empire
+sicílie (itálie),Sicily
+sinajský poloostrov (egypt),Sinai Peninsula
+skýros (řecko : ostrov),Skyros
+skýtie,Scythia
+sporady (řecko : souostroví),Sporades
+sumer,Sumer
+starověká sýrie,Syria
+taurus (turecko : pohoří),Taurus
+táygetos,Taygetus
+teutoburský les (německo),Teutoburg Forest
+thassos (řecko : ostrov),Thasos
+thesálie (řecko),Thessalia
+thesprótia,Thesprotia
+thíra (řecko),Thera
+thúlé,Thule
+tróas,Troad
+tyrrhénské moře,Tyrrhenian Sea
+umbrie (itálie : kraj),Umbria
+vanniovo království,Kingdom of Vannius
+velké řecko,Magna Graecia
+venetie,Venetia
+vindelicia,Vindelicia
+odlesňování,deforestration
+teplomilná doubrava,Quercetea pubescentis
+zahradní kultivace,tillage
+genius loci,genius loci
+prameny přírodní,natural source of information
+fyzickogeografické podmínky,physical-geographical conditions
+desková tektonika,plate tectonics
+glaciální relikt,glacial relict
+hlubokomořská rovina,abyssal plain
+magma,magma
+údolní niva,floodplain
+vegetační index,vegetation index
+vulkanická erupce,volcanic eruption
+zemětřesení,earthquake
+sídlo,residential area
+areál komunity,community area
+enkláva,enclave
+globalizace,globalisation
+industrializace,industrialization
+kolonie,colony
+městský systém,city system
+městská služba,city services
+preindustriální město,preindustrial city
+protoindustrializace,proto-industrialization
+sídelní areál,settlement area
+symbolické místo,symbolic place
+urbanizační proces,urbanization
+imaginativní geografie,imaginative geography
+othering,othering
+orientalismus,orientalism
+urbanismus,urbanism
+zemědělský půdní fond,agricultural soil fund
+"teorie, metody a myšlení (geografie)","theory, methods and thinking (geography)"
+metody a techniky geografického výzkumu,Methods and techniques of geographical research
+dotazník (geografie),questionnaire (geography)
+mentální mapa,mental map
+rozhovor (geografie),dialogue (geography)
+pozorování (geografie),observation (geography)
+geografické myšlení,geographic thinking
+feministická geografie,feminist geography
+humanistická geografie,human geography
+geografický realismus,realistic geography
+postmodernismus,Postmodernism
+prostorová věda,Theoretical Geography
+přírodní determinismus,(Natural) Determinism
+radikální geografie,radical geography
+teorie strukturace,Structuration theory

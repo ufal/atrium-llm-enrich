@@ -35,7 +35,7 @@ a confidence score.
 - [⚙️ Setup](#-setup)
 - [Backends at a glance](#backends-at-a-glance)
 - [Configuration (`llm_config.txt`)](#configuration-llm_configtxt)
-- [Vocabulary Harvesting (`vocab_manager.py`)](#vocabulary-harvesting-vocab_managerpy)
+- [Vocabulary Harvesting (`vocab_build.py`)](#vocabulary-harvesting-vocab_buildpy)
 - [Local Inference — `transformers` / `vLLM` (`llm_run.py`)](#local-inference--transformers--vllm-llm_runpy)
 - [Remote Inference — OpenRouter (`openrouter_client.py`)](#remote-inference--openrouter-openrouter_clientpy)
 - [Lightweight Local — Ollama (`ollama_client.py`)](#lightweight-local--ollama-ollama_clientpy)
@@ -141,19 +141,58 @@ Every knob on the remote/lightweight-local clients can also be passed as a CLI f
 precedence over `llm_config.txt` (see `--help` on either script for the full list — e.g.
 `--provider-data-collection`, `--attach-as-file`, `--context-window`, `--max-retries`).
 
-## Vocabulary Harvesting (`vocab_manager.py`)
+## Vocabulary Harvesting (`vocab_build.py`)
 
-Before running any backend, build the allowable vocabulary list. [`VocabularyManager`](vocab_manager.py) 📎 queries
-the AMCR OAI-PMH endpoint for Czech–English term pairs, groups them into a thematic taxonomy, and
-caches the result at `VOCAB_PATH` (default `data_samples/teater_nested_vocab.json`).
+The vocabulary is built in two stages, and only the first needs the internet:
+
+```
+harvest (network)   →   FLAT artifacts    →   nest (pure)    →   NESTED artifacts
+vocab_sources.py        *_flat.{json,csv}     vocab_manager      *_nested.json
+```
+
+[`vocab_sources.py`](vocab_sources.py) 📎 harvests two controlled vocabularies:
+
+| Source               | How                                                                                                                                              | What comes back                                                                                                                                                                   |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **AMCR** heslář      | OAI-PMH, `api.aiscr.cz/2.2/oai?set=heslo`                                                                                                        | Czech–English pairs **plus** `ident_cely`, `nazev_heslare` (which of the ~50 controlled lists the term belongs to), `popis`, `zkratka`, `razeni`, broader terms and SKOS mappings |
+| **TEATER** thesaurus | the 12 pinned `import_*.json` files in [`ARUP-CAS/aiscr-teater`](https://github.com/ARUP-CAS/aiscr-teater), or live `teater.aiscr.cz/api/export` | 4 134 concepts in 12 branches, trilingual labels, scope notes, and the real broader/narrower hierarchy                                                                            |
+
+[`vocab_manager.py`](vocab_manager.py) 📎 then groups the flat terms into the thematic taxonomy
+defined by [`data_samples/taxonomy_config.json`](data_samples/taxonomy_config.json) 📎. Placement
+is tried in precedence order — AMCR list membership (`heslar_map`), TEATER branch
+(`teater_branch_map`), the legacy keyword match, a cross-source rescue, an opt-in LLM fallback,
+then `Other` — and **every placement records the rule that made it** in `*_placement_audit.csv`,
+so the grouping can be reviewed rather than taken on trust.
 
 ```bash
-python3 vocab_manager.py
+# stage 1 + 2, needs network access to aiscr.cz
+python3 vocab_build.py --source both --stats
+
+# stage 2 only: re-nest from the committed flat files after editing the taxonomy.
+# Pure, offline, sub-second — this is the loop for tuning the taxonomy.
+python3 vocab_build.py --from-flat --stats
+python3 vocab_build.py --from-flat --check     # exit 1 if the artifacts would change
 ```
+
+`python3 vocab_manager.py` still works and still performs the legacy AMCR-only sync. The nested
+file this repo consumes is `VOCAB_PATH` (default `data_samples/teater_nested_vocab.json`); pass
+`--update-legacy` to write the union nesting to that path.
+
+> [!NOTE]
+> The nested files are deliberately **not** written with `sort_keys=True`. Theme order is
+> priority-descending and load-bearing: the prompt builders iterate the file in insertion order
+> and truncate a *prefix* of the resulting term list, so alphabetising the keys would silently
+> change which themes survive a tight context budget. Provenance lives in a sidecar
+> `*.meta.json`, not inline — every consumer reads the nested file as `{theme: terms}`, so an
+> inline `_meta` key would be rendered to the model as a phantom theme.
 
 All four backends inject this vocabulary into their system prompt and constrain
 `teater_category` to an enum built from it — a line/passage can only be tagged with a term that
-actually exists in the thesaurus.
+actually exists in the thesaurus. Which **themes** reach the model is a configuration decision,
+not a hard-coded one: a theme is withheld when `taxonomy_config.json` marks it
+`"in_prompt": false`, which by default is `Other` alone. Note what that means for evaluation — a
+term absent from the prompt is unreachable by construction, so withholding a theme makes "the
+model was wrong" and "the label was withheld" score identically.
 
 ## Local Inference — `transformers` / `vLLM` (`llm_run.py`)
 

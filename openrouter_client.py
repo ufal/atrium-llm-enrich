@@ -46,6 +46,7 @@ from llm_client_shared import (
     build_document_system_prompt,
     build_schema,
     build_system_prompt,
+    excluded_prompt_themes,
     load_config,
     prepare_document_input,
     run_document_level,
@@ -294,10 +295,16 @@ def main(argv: Optional[List[str]] = None) -> None:
         vocab_mgr = VocabularyManager(vocab_path=vocab_path)
         vocab_data = vocab_mgr.load()
 
+        # Which themes reach the model is a taxonomy_config decision (in_prompt),
+        # not a literal in the prompt builder — see excluded_prompt_themes().
+        excluded_themes = excluded_prompt_themes(vocab_mgr)
+
         max_input_tokens = args.context_window - CONTEXT_RESERVED
-        line_prompt, line_terms = build_system_prompt(vocab_data, max_tokens=max_input_tokens)
+        line_prompt, line_terms = build_system_prompt(
+            vocab_data, max_tokens=max_input_tokens, excluded_themes=excluded_themes
+        )
         doc_prompt, doc_terms = build_document_system_prompt(
-            vocab_data, max_tokens=max_input_tokens
+            vocab_data, max_tokens=max_input_tokens, excluded_themes=excluded_themes
         )
         LineModel = build_schema(line_terms)
         DocModel = build_document_schema(doc_terms)

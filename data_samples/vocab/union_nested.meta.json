@@ -1,0 +1,48 @@
+{
+  "counts": {
+    "by_theme": {
+      "Chronology": 276,
+      "Documentation": 840,
+      "Find Types": 876,
+      "Finds Context": 10,
+      "Location & Admin": 65,
+      "Methods": 257,
+      "Other": 0,
+      "Site Types": 665
+    },
+    "collisions": 642,
+    "total": 2989
+  },
+  "generated_utc": "2026-08-18T11:54:28Z",
+  "generator": "vocab_build.py",
+  "schema_version": 1,
+  "sources": [
+    {
+      "endpoint": "https://api.aiscr.cz/2.2/oai",
+      "license": "CC BY-NC 4.0",
+      "metadata_prefix": "oai_amcr",
+      "name": "amcr",
+      "pages": 16,
+      "records": 1460,
+      "set": "heslo",
+      "strategy": "oai-pmh",
+      "without_en": 0
+    },
+    {
+      "endpoint": "https://raw.githubusercontent.com/ARUP-CAS/aiscr-teater/2106c59103556731c56dc116573c4b02e1199466/backend/json/import_{n}.json",
+      "files": 12,
+      "license": "CC BY-NC 4.0",
+      "name": "teater",
+      "records": 4134,
+      "roots": 12,
+      "snapshot_ref": "2106c59103556731c56dc116573c4b02e1199466",
+      "strategy": "snapshot",
+      "without_en": 0
+    }
+  ],
+  "taxonomy_config": {
+    "path": "data_samples/taxonomy_config.json",
+    "sha256": "753421fa70235fbf7369f1da5bd0eff858f9c6408cd6c3dc5a87346e66ae032b"
+  },
+  "tool_version": "v0.5.2"
+}

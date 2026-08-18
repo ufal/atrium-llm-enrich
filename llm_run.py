@@ -16,7 +16,7 @@ import json  # noqa: E402
 import os  # noqa: E402
 import sys  # noqa: E402
 from pathlib import Path  # noqa: E402
-from typing import Any, Dict, List, Tuple  # noqa: E402
+from typing import Any, Dict, List, Optional, Set, Tuple  # noqa: E402
 
 import torch  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
@@ -24,7 +24,7 @@ from tqdm import tqdm  # noqa: E402
 
 import llm_utils  # noqa: E402  (side-effect: env-var guard + compat patches)
 from atrium_paradata import ParadataLogger  # noqa: E402
-from llm_client_shared import write_document_record  # noqa: E402
+from llm_client_shared import excluded_prompt_themes, write_document_record  # noqa: E402
 from llm_utils import (  # noqa: E402
     CONTEXT_RESERVED,
     _check_backend_deps,
@@ -118,7 +118,19 @@ def build_system_prompt(
     tokenizer: Any,
     max_tokens: int,
     skip_truncation: bool = False,
+    excluded_themes: Optional[Set[str]] = None,
 ) -> Tuple[str, List[str]]:
+    """Render the thematic vocabulary into a system prompt and return the term list.
+
+    ``excluded_themes`` names the themes to withhold from the model, lower-cased.
+    It defaults to ``{"other"}`` — this function's previous hard-coded behaviour —
+    but main() derives it from each theme's ``in_prompt`` flag in
+    taxonomy_config.json, so which terms the model can reach is a reviewable
+    configuration decision rather than a literal in the prompt builder. This
+    matters: a term absent from the prompt is unreachable by construction, so
+    withholding one turns "the model was wrong" and "the label was withheld" into
+    the same score.
+    """
     header = (
         "You are an expert archaeological data extractor. "
         "Analyze the MARKED LINE enclosed in <target_line> ... </target_line> "
@@ -147,6 +159,8 @@ def build_system_prompt(
         "THEMATIC VOCABULARY:\n"
     )
 
+    skip = {"other"} if excluded_themes is None else {t.lower() for t in excluded_themes}
+
     raw_terms: List[dict] = []
     raw_terms.append(
         {
@@ -157,7 +171,7 @@ def build_system_prompt(
     )
 
     for theme, data in vocab_data.items():
-        if theme.lower() == "other":
+        if theme.startswith("_") or theme.lower() in skip:
             continue
         if isinstance(data, dict):
             if "keywords" in data and isinstance(data["keywords"], dict):
@@ -173,24 +187,15 @@ def build_system_prompt(
 
     prioritised = raw_terms
 
-    def _build_candidate_prompt(term_list: List[dict], other_cap: int = 15) -> str:
+    def _build_candidate_prompt(term_list: List[dict]) -> str:
         themes: Dict[str, List[str]] = {}
-        other_terms: List[dict] = []
-
         for t in term_list:
-            if t["theme"] == "Other":
-                other_terms.append(t)
-            else:
-                themes.setdefault(t["theme"], []).append(f"{t['cs']} ({t['en']})")
+            themes.setdefault(t["theme"], []).append(f"{t['cs']} ({t['en']})")
 
         prompt = header
         for theme_name, lines in themes.items():
             prompt += f"\n--- {theme_name} ---\n"
             prompt += "\n".join(f"- {line}" for line in lines) + "\n"
-
-        if other_terms:
-            prompt += "\n--- Other (Misc) ---\n"
-            prompt += "\n".join(f"- {t['cs']} ({t['en']})" for t in other_terms[:other_cap]) + "\n"
 
         prompt += _EXAMPLES_FOOTER
         return prompt
@@ -352,6 +357,11 @@ def main(config_path: str = "llm_config.txt") -> None:
     with logger:
         vocab_mgr = VocabularyManager(vocab_path=VOCAB_PATH)
         vocab_data = vocab_mgr.load()
+
+        # Which themes reach the model is a taxonomy_config decision, not a literal
+        # in the prompt builder. Absent an explicit in_prompt flag the default is
+        # today's behaviour: everything except "Other".
+        excluded_themes = excluded_prompt_themes(vocab_mgr)
         total_terms = sum(
             len(v.get("keywords", {}).get("cs", []))
             if isinstance(v, dict) and "keywords" in v
@@ -398,6 +408,7 @@ def main(config_path: str = "llm_config.txt") -> None:
             tokenizer,
             max_tokens=max_input_tokens,
             skip_truncation=skip_trunc,
+            excluded_themes=excluded_themes,
         )
         EnrichmentModel = build_schema(surviving_terms)
 

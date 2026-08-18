@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE OAI-PMH [ <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <ListRecords>
+    <record><metadata>
+      <heslo xmlns="https://api.aiscr.cz/schema/amcr/2.2/">
+        <ident_cely>HES-999999</ident_cely>
+        <nazev_heslare xml:lang="cs">test</nazev_heslare>
+        <heslo xml:lang="cs">&xxe;</heslo>
+        <heslo_en xml:lang="en">pwned</heslo_en>
+      </heslo>
+    </metadata></record>
+  </ListRecords>
+</OAI-PMH>
