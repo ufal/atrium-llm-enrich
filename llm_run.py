@@ -165,6 +165,7 @@ def build_system_prompt(
     raw_terms.append(
         {
             "theme": "Administrative / Meta",
+            "sub": "",
             "cs": "Nerelevantní (meta-text)",
             "en": "Irrelevant / Meta-text",
         }
@@ -179,22 +180,32 @@ def build_system_prompt(
                 en_list = data["keywords"].get("en", [])
                 for i, cs_key in enumerate(cs_list):
                     en = en_list[i] if i < len(en_list) else cs_key
-                    raw_terms.append({"theme": theme, "cs": cs_key, "en": en})
+                    raw_terms.append({"theme": theme, "sub": "", "cs": cs_key, "en": en})
             else:
                 for cs_key, pair in data.items():
                     en = pair.get("en", cs_key) if isinstance(pair, dict) else cs_key
-                    raw_terms.append({"theme": theme, "cs": cs_key, "en": en})
+                    sub = pair.get("sub", "") if isinstance(pair, dict) else ""
+                    raw_terms.append({"theme": theme, "sub": sub, "cs": cs_key, "en": en})
 
     prioritised = raw_terms
 
     def _build_candidate_prompt(term_list: List[dict]) -> str:
-        themes: Dict[str, List[str]] = {}
+        """Render the vocabulary grouped by facet, then by the source's own subgroup.
+
+        Both AMCR and TEATER curate a second level — 50 heslars, and TEATER's 122
+        depth-2 groups — and flattening a 726-term facet into one undifferentiated list
+        throws that away. Two levels cost ~120 header lines and give the model the
+        structure a domain expert already built.
+        """
+        groups: Dict[Tuple[str, str], List[str]] = {}
         for t in term_list:
-            themes.setdefault(t["theme"], []).append(f"{t['cs']} ({t['en']})")
+            key = (t["theme"], t.get("sub") or "")
+            groups.setdefault(key, []).append(f"{t['cs']} ({t['en']})")
 
         prompt = header
-        for theme_name, lines in themes.items():
-            prompt += f"\n--- {theme_name} ---\n"
+        for (theme_name, sub_name), lines in groups.items():
+            title = f"{theme_name} / {sub_name}" if sub_name else theme_name
+            prompt += f"\n--- {title} ---\n"
             prompt += "\n".join(f"- {line}" for line in lines) + "\n"
 
         prompt += _EXAMPLES_FOOTER
@@ -271,7 +282,7 @@ def main(config_path: str = "llm_config.txt") -> None:
     MODEL_KEY = config.get("MODEL_KEY", "qwen-3.6-27b-it")
     HF_TOKEN = config.get("HF_TOKEN", os.environ.get("HF_TOKEN", None))
     INPUT_DIR = Path(config.get("INPUT_DIR", "data_samples/DOC_LINE_LANG_CLASS"))
-    VOCAB_PATH = config.get("VOCAB_PATH", "data_samples/teater_nested_vocab.json")
+    VOCAB_PATH = config.get("VOCAB_PATH", "data_samples/vocab/union_nested.json")
     PARADATA_DIR = config.get("PARADATA_DIR", "paradata")
     _document_json_dir_raw = config.get("DOCUMENT_JSON_DIR", "").strip()
     DOCUMENT_JSON_DIR = Path(_document_json_dir_raw) if _document_json_dir_raw else None

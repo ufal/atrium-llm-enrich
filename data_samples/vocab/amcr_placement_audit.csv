@@ -1,4 +1,313 @@
 cs,en,source,source_id,scheme,theme,placed_by
+areál jiné aktivity,other site,amcr,HES-000056,areal,Activity Area,heslar:areal
+areál nezemědělské výroby,production site,amcr,HES-000078,areal,Activity Area,heslar:areal
+areál těžby,extracting site,amcr,HES-000032,areal,Activity Area,heslar:areal
+areál vojenských aktivit,military site,amcr,HES-000041,areal,Activity Area,heslar:areal
+areál zemědělské výroby,agricultural production site,amcr,HES-000036,areal,Activity Area,heslar:areal
+boj,fighting activity,amcr,HES-000008,aktivita,Activity Area,heslar:aktivita
+bojiště,battlefield,amcr,HES-000042,areal,Activity Area,heslar:areal
+cesta,roads,amcr,HES-000048,areal,Activity Area,heslar:areal
+dehtárna,tar kiln,amcr,HES-000079,areal,Activity Area,heslar:areal
+deponování,deposition activity,amcr,HES-000007,aktivita,Activity Area,heslar:aktivita
+depot,hoard,amcr,HES-000051,areal,Activity Area,heslar:areal
+dvorec/dvůr,curia/manorial farm,amcr,HES-000014,areal,Activity Area,heslar:areal
+důl,mine,amcr,HES-000033,areal,Activity Area,heslar:areal
+hrad,castle,amcr,HES-000015,areal,Activity Area,heslar:areal
+hradiště,hillfort,amcr,HES-000072,areal,Activity Area,heslar:areal
+hrazené sídliště,enclosed settlement,amcr,HES-000064,areal,Activity Area,heslar:areal
+hrazený areál,enclosure,amcr,HES-000071,areal,Activity Area,heslar:areal
+intruze,intrusion,amcr,HES-000010,aktivita,Activity Area,heslar:aktivita
+izolovaný pohřeb,isolated grave,amcr,HES-000026,areal,Activity Area,heslar:areal
+jez,weir,amcr,HES-000052,areal,Activity Area,heslar:areal
+jiná aktivita,other activity,amcr,HES-000009,aktivita,Activity Area,heslar:aktivita
+kanál/náhon,channel/millrace,amcr,HES-000053,areal,Activity Area,heslar:areal
+kaple,chapel,amcr,HES-000020,areal,Activity Area,heslar:areal
+klášter,monastery,amcr,HES-000073,areal,Activity Area,heslar:areal
+komunikace,transportation activity,amcr,HES-000006,aktivita,Activity Area,heslar:aktivita
+kostel,church,amcr,HES-000021,areal,Activity Area,heslar:areal
+krajina,landscape,amcr,HES-000117,lokalita_druh,Activity Area,heslar:lokalita_druh
+kult,ritual activity,amcr,HES-000005,aktivita,Activity Area,heslar:aktivita
+kultovní areál,ritual site,amcr,HES-000019,areal,Activity Area,heslar:areal
+kultovní místo,ritual place,amcr,HES-000023,areal,Activity Area,heslar:areal
+kříž/boží muka,cross/calvary,amcr,HES-000022,areal,Activity Area,heslar:areal
+lom,quarry,amcr,HES-000034,areal,Activity Area,heslar:areal
+milířiště,charcoal kiln,amcr,HES-000029,areal,Activity Area,heslar:areal
+mlýn,mill,amcr,HES-000028,areal,Activity Area,heslar:areal
+most/brod,bridge/ford,amcr,HES-000049,areal,Activity Area,heslar:areal
+muzeum/skanzen,museum/open-air museum,amcr,HES-000129,lokalita_druh,Activity Area,heslar:lokalita_druh
+místo sběru,collection site,amcr,HES-000057,areal,Activity Area,heslar:areal
+město,city,amcr,HES-000074,areal,Activity Area,heslar:areal
+městský palác,town palace,amcr,HES-000016,areal,Activity Area,heslar:areal
+nadkomunitní areál,supracommunity site,amcr,HES-000011,areal,Activity Area,heslar:areal
+nemovitá památka,heritage site,amcr,HES-001122,lokalita_typ,Activity Area,heslar:lokalita_typ
+neurčený areál,unspecified site,amcr,HES-000060,areal,Activity Area,heslar:areal
+nález v druhotné poloze,find in secondary context,amcr,HES-000061,areal,Activity Area,heslar:areal
+obora,game park,amcr,HES-000037,areal,Activity Area,heslar:areal
+obývání,residential activity,amcr,HES-000001,aktivita,Activity Area,heslar:aktivita
+ojedinělý nález,single find,amcr,HES-000062,areal,Activity Area,heslar:areal
+osídlený skalní prostor,cave settlement,amcr,HES-000065,areal,Activity Area,heslar:areal
+park,park,amcr,HES-000059,areal,Activity Area,heslar:areal
+pastvina/louka,pasture/meadow,amcr,HES-000038,areal,Activity Area,heslar:areal
+pevnost,fortress,amcr,HES-000043,areal,Activity Area,heslar:areal
+pivovar,brewery,amcr,HES-000080,areal,Activity Area,heslar:areal
+pohřbívání,burial activity,amcr,HES-000002,aktivita,Activity Area,heslar:aktivita
+pohřebiště v sakrální stavbě,burials in sacral building,amcr,HES-000077,areal,Activity Area,heslar:areal
+pohřebiště/hřbitov,cemetery/graveyard,amcr,HES-000027,areal,Activity Area,heslar:areal
+pohřební areál,burial site,amcr,HES-000025,areal,Activity Area,heslar:areal
+pole,cropland,amcr,HES-000039,areal,Activity Area,heslar:areal
+polní opevnění,field fortification,amcr,HES-000044,areal,Activity Area,heslar:areal
+polygon archeologického průzkumu,archaeological survey polygon,amcr,HES-000132,lokalita_druh_kat,Activity Area,heslar:lokalita_druh_kat
+polygon leteckého průzkumu,aerial survey polygon,amcr,HES-000111,lokalita_druh,Activity Area,heslar:lokalita_druh
+polygon průzkumu,survey polygon,amcr,HES-001123,lokalita_typ,Activity Area,heslar:lokalita_typ
+pomník/památník,memorial,amcr,HES-000128,lokalita_druh,Activity Area,heslar:lokalita_druh
+popraviště,execution site,amcr,HES-000058,areal,Activity Area,heslar:areal
+pozůstatek komunikace,remains of transportation structure,amcr,HES-001429,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek kultu,remains of ritual site,amcr,HES-001433,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek mohylníku,remains of burial mounds,amcr,HES-001430,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek ohrazení,remains of enclosure,amcr,HES-001431,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek represe,remains of repression site,amcr,HES-001432,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek sídla elity,remains of manorial site,amcr,HES-001434,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek sídliště,remains of settlement,amcr,HES-001435,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek těžby,remains of extraction site,amcr,HES-001436,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek vojenství,remains of military site,amcr,HES-001437,lokalita_druh,Activity Area,heslar:lokalita_druh
+pozůstatek výroby,remains of production site,amcr,HES-001438,lokalita_druh,Activity Area,heslar:lokalita_druh
+protourbánní aglomerace,proto-urban agglomeration,amcr,HES-000075,areal,Activity Area,heslar:areal
+předměstí,suburb,amcr,HES-000076,areal,Activity Area,heslar:areal
+přehrada,dam,amcr,HES-000054,areal,Activity Area,heslar:areal
+přírodní útvar s lidskou aktivitou,inhabited natural landform,amcr,HES-000133,lokalita_druh_kat,Activity Area,heslar:lokalita_druh_kat
+rondel/rondeloid,roundel/rondeloid,amcr,HES-000012,areal,Activity Area,heslar:areal
+rybník,pond,amcr,HES-000055,areal,Activity Area,heslar:areal
+rýžoviště,panning site,amcr,HES-000035,areal,Activity Area,heslar:areal
+samostatná usedlost,individual homestead,amcr,HES-000067,areal,Activity Area,heslar:areal
+sklárna,glassworks,amcr,HES-000030,areal,Activity Area,heslar:areal
+stanice/tábořiště,camp,amcr,HES-000066,areal,Activity Area,heslar:areal
+strážnice/předsunutá bašta,outpost/watchtower,amcr,HES-000045,areal,Activity Area,heslar:areal
+synagoga,synagogue,amcr,HES-000024,areal,Activity Area,heslar:areal
+sídliště,settlement,amcr,HES-000081,areal,Activity Area,heslar:areal
+sídliště specializované komunity,special-community settlement,amcr,HES-000070,areal,Activity Area,heslar:areal
+sídlo elity,elite settlement,amcr,HES-000013,areal,Activity Area,heslar:areal
+tvrz/hrádek,fortified manor,amcr,HES-000017,areal,Activity Area,heslar:areal
+těžba,mining activity,amcr,HES-000004,aktivita,Activity Area,heslar:aktivita
+vesnice/městečko,village/town,amcr,HES-000068,areal,Activity Area,heslar:areal
+vodní dílo,hydraulic structure,amcr,HES-000082,areal,Activity Area,heslar:areal
+vojenský tábor,military camp,amcr,HES-000046,areal,Activity Area,heslar:areal
+výroba,production activity,amcr,HES-000003,aktivita,Activity Area,heslar:aktivita
+výšinné sídliště,hill settlement,amcr,HES-000069,areal,Activity Area,heslar:areal
+zahrada/sad,garden,amcr,HES-000040,areal,Activity Area,heslar:areal
+zaniklý/historický areál,deserted/historical site,amcr,HES-000134,lokalita_druh_kat,Activity Area,heslar:lokalita_druh_kat
+zničený prostor,destroyed site,amcr,HES-000063,areal,Activity Area,heslar:areal
+zámek/zámeček/vila,chateau/villa,amcr,HES-000018,areal,Activity Area,heslar:areal
+železnice,railway,amcr,HES-000050,areal,Activity Area,heslar:areal
+železářský areál,iron production site,amcr,HES-000031,areal,Activity Area,heslar:areal
+akvamanile,aquamanile,amcr,HES-000651,predmet_druh,Artefact,heslar:predmet_druh
+amfora,amphorae,amcr,HES-000652,predmet_druh,Artefact,heslar:predmet_druh
+amorfní zlomek/předmět,amorphous fragment/object,amcr,HES-000707,predmet_druh,Artefact,heslar:predmet_druh
+architektonický článek,architectural element,amcr,HES-000709,predmet_druh,Artefact,heslar:predmet_druh
+atypický předmět,exceptional object,amcr,HES-000708,predmet_druh,Artefact,heslar:predmet_druh
+bankovka,paper money,amcr,HES-000650,predmet_druh,Artefact,heslar:predmet_druh
+brousek,whetstone,amcr,HES-000803,predmet_druh,Artefact,heslar:predmet_druh
+brusle,ice skate,amcr,HES-000743,predmet_druh,Artefact,heslar:predmet_druh
+bulava,club,amcr,HES-000785,predmet_druh,Artefact,heslar:predmet_druh
+běžný nález,common find,amcr,HES-000842,predmet_druh_kat,Artefact,heslar:predmet_druh_kat
+břitva,razor,amcr,HES-000661,predmet_druh,Artefact,heslar:predmet_druh
+cedník,colander,amcr,HES-000682,predmet_druh,Artefact,heslar:predmet_druh
+cihla,brick,amcr,HES-000813,predmet_druh,Artefact,heslar:predmet_druh
+deska,board,amcr,HES-000712,predmet_druh,Artefact,heslar:predmet_druh
+dlaždice,floor tile,amcr,HES-000678,predmet_druh,Artefact,heslar:predmet_druh
+dláto,chisel,amcr,HES-000824,predmet_druh,Artefact,heslar:predmet_druh
+doklad umění/kultu,artistic/ritual object,amcr,HES-000641,predmet_druh,Artefact,heslar:predmet_druh
+drasadlo,side scraper,amcr,HES-000715,predmet_druh,Artefact,heslar:predmet_druh
+drtidlo/zrnotěrka,handstone/saddle quern,amcr,HES-000795,predmet_druh,Artefact,heslar:predmet_druh
+drát,wire,amcr,HES-000782,predmet_druh,Artefact,heslar:predmet_druh
+dyzna,nozzle,amcr,HES-000689,predmet_druh,Artefact,heslar:predmet_druh
+dýka,dagger,amcr,HES-000820,predmet_druh,Artefact,heslar:predmet_druh
+dýmka,pipe,amcr,HES-000635,predmet_druh,Artefact,heslar:predmet_druh
+džbán,jug,amcr,HES-000636,predmet_druh,Artefact,heslar:predmet_druh
+ekofakt,ecofact,amcr,HES-000775,predmet_druh,Artefact,heslar:predmet_druh
+faléra,phalera,amcr,HES-000745,predmet_druh,Artefact,heslar:predmet_druh
+funkčně neurčený předmět,object of unspecified function,amcr,HES-000846,predmet_druh_kat,Artefact,heslar:predmet_druh_kat
+gemma,gem,amcr,HES-000731,predmet_druh,Artefact,heslar:predmet_druh
+gombík,spherical button,amcr,HES-000693,predmet_druh,Artefact,heslar:predmet_druh
+herní předmět,game equipment,amcr,HES-000681,predmet_druh,Artefact,heslar:predmet_druh
+hladítko,smoother,amcr,HES-000825,predmet_druh,Artefact,heslar:predmet_druh
+hrací kostka,dice,amcr,HES-000696,predmet_druh,Artefact,heslar:predmet_druh
+hrací kámen,game piece,amcr,HES-000684,predmet_druh,Artefact,heslar:predmet_druh
+hrnec,pot,amcr,HES-000768,predmet_druh,Artefact,heslar:predmet_druh
+hrot/hák,spike/hook,amcr,HES-000783,predmet_druh,Artefact,heslar:predmet_druh
+hudební nástroj,musical instrument,amcr,HES-000749,predmet_druh,Artefact,heslar:predmet_druh
+hřeb/hřebík/nýt,nail/rivet,amcr,HES-000679,predmet_druh,Artefact,heslar:predmet_druh
+hřeben,comb,amcr,HES-000826,predmet_druh,Artefact,heslar:predmet_druh
+hřivna,ingot,amcr,HES-000829,predmet_druh,Artefact,heslar:predmet_druh
+jehla/špendlík,needle/pin,amcr,HES-000804,predmet_druh,Artefact,heslar:predmet_druh
+jehlice,clothing pin,amcr,HES-000699,predmet_druh,Artefact,heslar:predmet_druh
+kachel,stove tile,amcr,HES-000736,predmet_druh,Artefact,heslar:predmet_druh
+kadlub,mold,amcr,HES-000716,predmet_druh,Artefact,heslar:predmet_druh
+kamenná industrie,lithics,amcr,HES-000640,predmet_druh,Artefact,heslar:predmet_druh
+kamenné jádro,stone core,amcr,HES-000776,predmet_druh,Artefact,heslar:predmet_druh
+kaptorga,kaptorga (metal pendant case),amcr,HES-000700,predmet_druh,Artefact,heslar:predmet_druh
+kladivo/palice,hammer/sledgehammer,amcr,HES-000796,predmet_druh,Artefact,heslar:predmet_druh
+kleště,pliers,amcr,HES-000797,predmet_druh,Artefact,heslar:predmet_druh
+klín,wedge,amcr,HES-000717,predmet_druh,Artefact,heslar:predmet_druh
+klíč,key,amcr,HES-000728,predmet_druh,Artefact,heslar:predmet_druh
+kniha,book,amcr,HES-000840,predmet_druh,Artefact,heslar:predmet_druh
+knoflík,button,amcr,HES-000675,predmet_druh,Artefact,heslar:predmet_druh
+koflík,cup,amcr,HES-000769,predmet_druh,Artefact,heslar:predmet_druh
+konvice,pitcher,amcr,HES-000690,predmet_druh,Artefact,heslar:predmet_druh
+kopí/hrot kopí,spear/spearhead,amcr,HES-000821,predmet_druh,Artefact,heslar:predmet_druh
+korálek,bead,amcr,HES-000663,predmet_druh,Artefact,heslar:predmet_druh
+kosa,scythe,amcr,HES-000798,predmet_druh,Artefact,heslar:predmet_druh
+kost,single bone,amcr,HES-000753,predmet_druh,Artefact,heslar:predmet_druh
+kostra,skeleton,amcr,HES-000642,predmet_druh,Artefact,heslar:predmet_druh
+kotel/kotlík,kettle,amcr,HES-000770,predmet_druh,Artefact,heslar:predmet_druh
+kovadlina,anvil,amcr,HES-000654,predmet_druh,Artefact,heslar:predmet_druh
+kování,mount,amcr,HES-000694,predmet_druh,Artefact,heslar:predmet_druh
+kroužek/kruh,circle/ring,amcr,HES-000764,predmet_druh,Artefact,heslar:predmet_druh
+kulička/koule,ball/sphere,amcr,HES-000760,predmet_druh,Artefact,heslar:predmet_druh
+kuše,crossbow,amcr,HES-000822,predmet_druh,Artefact,heslar:predmet_druh
+křesadlo/ocílka,firesteel,amcr,HES-000729,predmet_druh,Artefact,heslar:predmet_druh
+křížek,cross,amcr,HES-000664,predmet_druh,Artefact,heslar:predmet_druh
+kůl,pole,amcr,HES-000737,predmet_druh,Artefact,heslar:predmet_druh
+lahev,bottle,amcr,HES-000691,predmet_druh,Artefact,heslar:predmet_druh
+lampa/kahan,lamp/burner,amcr,HES-000695,predmet_druh,Artefact,heslar:predmet_druh
+listina,deed,amcr,HES-000670,predmet_druh,Artefact,heslar:predmet_druh
+lopata/rýč,shovel/spade,amcr,HES-000655,predmet_druh,Artefact,heslar:predmet_druh
+luk,bow,amcr,HES-000823,predmet_druh,Artefact,heslar:predmet_druh
+lžíce,spoon,amcr,HES-000730,predmet_druh,Artefact,heslar:predmet_druh
+malakofauna,mollusca,amcr,HES-000777,predmet_druh,Artefact,heslar:predmet_druh
+meč,sword,amcr,HES-000786,predmet_druh,Artefact,heslar:predmet_druh
+militaria,weapons and armour,amcr,HES-000784,predmet_druh,Artefact,heslar:predmet_druh
+mince,coin,amcr,HES-000794,predmet_druh,Artefact,heslar:predmet_druh
+motyka/krumpáč,mattock/pickaxe,amcr,HES-000799,predmet_druh,Artefact,heslar:predmet_druh
+mísa,bowl,amcr,HES-000719,predmet_druh,Artefact,heslar:predmet_druh
+nehotový výrobek/polotovar,semiproduct/blank,amcr,HES-000828,predmet_druh,Artefact,heslar:predmet_druh
+nádoba,vessel,amcr,HES-000714,predmet_druh,Artefact,heslar:predmet_druh
+náhrdelník,necklace,amcr,HES-000835,predmet_druh,Artefact,heslar:predmet_druh
+nákončí,mordant,amcr,HES-000668,predmet_druh,Artefact,heslar:predmet_druh
+nákrčník,neck ring,amcr,HES-000665,predmet_druh,Artefact,heslar:predmet_druh
+nánožník,anklet,amcr,HES-000836,predmet_druh,Artefact,heslar:predmet_druh
+nápažník,armlet,amcr,HES-000812,predmet_druh,Artefact,heslar:predmet_druh
+náprstek,thimble,amcr,HES-000805,predmet_druh,Artefact,heslar:predmet_druh
+náramek,bracelet,amcr,HES-000666,predmet_druh,Artefact,heslar:predmet_druh
+nástroj hrubý,utensil,amcr,HES-000653,predmet_druh,Artefact,heslar:predmet_druh
+nástroj jemný,instrument,amcr,HES-000727,predmet_druh,Artefact,heslar:predmet_druh
+nátepní destička,wrist guard,amcr,HES-000734,predmet_druh,Artefact,heslar:predmet_druh
+náušnice,earring,amcr,HES-000667,predmet_druh,Artefact,heslar:predmet_druh
+nůž,knife,amcr,HES-000806,predmet_druh,Artefact,heslar:predmet_druh
+nůžky,scissors,amcr,HES-000807,predmet_druh,Artefact,heslar:predmet_druh
+obuv,footwear,amcr,HES-000735,predmet_druh,Artefact,heslar:predmet_druh
+odpad,waste,amcr,HES-000778,predmet_druh,Artefact,heslar:predmet_druh
+odpad stavební,construction waste,amcr,HES-000779,predmet_druh,Artefact,heslar:predmet_druh
+odpad výrobní,production waste,amcr,HES-000780,predmet_druh,Artefact,heslar:predmet_druh
+okenní výplň,window panes,amcr,HES-000738,predmet_druh,Artefact,heslar:predmet_druh
+omítka,plaster,amcr,HES-000739,predmet_druh,Artefact,heslar:predmet_druh
+opasek,belt,amcr,HES-000676,predmet_druh,Artefact,heslar:predmet_druh
+ostruha,spur,amcr,HES-000787,predmet_druh,Artefact,heslar:predmet_druh
+ostění,jamb,amcr,HES-000710,predmet_druh,Artefact,heslar:predmet_druh
+otloukač,hammerstone,amcr,HES-000656,predmet_druh,Artefact,heslar:predmet_druh
+ozdoba,adornment,amcr,HES-000834,predmet_druh,Artefact,heslar:predmet_druh
+oštěp/hrot oštěpu,javelin/javelin head,amcr,HES-000788,predmet_druh,Artefact,heslar:predmet_druh
+pekáč,baking pan,amcr,HES-000761,predmet_druh,Artefact,heslar:predmet_druh
+pila,saw,amcr,HES-000657,predmet_druh,Artefact,heslar:predmet_druh
+pilník,file,amcr,HES-000800,predmet_druh,Artefact,heslar:predmet_druh
+pinzeta,tweezers,amcr,HES-000808,predmet_druh,Artefact,heslar:predmet_druh
+plastika/soška,sculpture/statue,amcr,HES-000750,predmet_druh,Artefact,heslar:predmet_druh
+plastika/soška antropomorfní,anthropomorphic sculpture/statue,amcr,HES-000751,predmet_druh,Artefact,heslar:predmet_druh
+plastika/soška zoomorfní,zoomorphic sculpture/statue,amcr,HES-000752,predmet_druh,Artefact,heslar:predmet_druh
+platidlo,currency,amcr,HES-000848,predmet_druh_kat,Artefact,heslar:predmet_druh_kat
+plech,metal sheet,amcr,HES-000680,predmet_druh,Artefact,heslar:predmet_druh
+pochva/pouzdro,sheath,amcr,HES-000677,predmet_druh,Artefact,heslar:predmet_druh
+podkova,horseshoe,amcr,HES-000746,predmet_druh,Artefact,heslar:predmet_druh
+pohár/číše,beaker/goblet,amcr,HES-000722,predmet_druh,Artefact,heslar:predmet_druh
+pojivo,binder,amcr,HES-000740,predmet_druh,Artefact,heslar:predmet_druh
+poklička,lid,amcr,HES-000724,predmet_druh,Artefact,heslar:predmet_druh
+popelnice,urn,amcr,HES-000726,predmet_druh,Artefact,heslar:predmet_druh
+portál,portal,amcr,HES-000711,predmet_druh,Artefact,heslar:predmet_druh
+postroj/doprava,harness/transportation,amcr,HES-000742,predmet_druh,Artefact,heslar:predmet_druh
+potrubí,plumbing pipe,amcr,HES-000741,predmet_druh,Artefact,heslar:predmet_druh
+pražnice,frying pan,amcr,HES-000771,predmet_druh,Artefact,heslar:predmet_druh
+prejz,pantile,amcr,HES-000773,predmet_druh,Artefact,heslar:predmet_druh
+prkno/fošna,board/plank,amcr,HES-000687,predmet_druh,Artefact,heslar:predmet_druh
+projektil/kule/munice,projectile/bullet/ammunition,amcr,HES-000755,predmet_druh,Artefact,heslar:predmet_druh
+prsten,finger ring,amcr,HES-000669,predmet_druh,Artefact,heslar:predmet_druh
+průvlečka,clothing buckle,amcr,HES-000683,predmet_druh,Artefact,heslar:predmet_druh
+pánev,pan,amcr,HES-000720,predmet_druh,Artefact,heslar:predmet_druh
+písemnost,written document,amcr,HES-000839,predmet_druh,Artefact,heslar:predmet_druh
+přechovávaná přírodnina,natural object,amcr,HES-000643,predmet_druh,Artefact,heslar:predmet_druh
+přeslen,spindle whorl,amcr,HES-000809,predmet_druh,Artefact,heslar:predmet_druh
+přezka,buckle,amcr,HES-000732,predmet_druh,Artefact,heslar:predmet_druh
+přívěsek/závěsek,pendant,amcr,HES-000837,predmet_druh,Artefact,heslar:predmet_druh
+rakev,coffin,amcr,HES-000704,predmet_druh,Artefact,heslar:predmet_druh
+rolnička,jingle bell,amcr,HES-000701,predmet_druh,Artefact,heslar:predmet_druh
+rostlinné makrozbytky,plant macro-remain,amcr,HES-000644,predmet_druh,Artefact,heslar:predmet_druh
+ruda,ore,amcr,HES-000830,predmet_druh,Artefact,heslar:predmet_druh
+rydlo,graver,amcr,HES-000810,predmet_druh,Artefact,heslar:predmet_druh
+růženec/medailon,rosary/medallion,amcr,HES-000702,predmet_druh,Artefact,heslar:predmet_druh
+sekera,axe,amcr,HES-000802,predmet_druh,Artefact,heslar:predmet_druh
+sekeromlat/mlat,hammer axe,amcr,HES-000789,predmet_druh,Artefact,heslar:predmet_druh
+sekáč,chopper,amcr,HES-000801,predmet_druh,Artefact,heslar:predmet_druh
+skořápka plodu,fruit shell/nutshell,amcr,HES-000754,predmet_druh,Artefact,heslar:predmet_druh
+slitek,bloom,amcr,HES-000831,predmet_druh,Artefact,heslar:predmet_druh
+součást hrobu,grave component,amcr,HES-000673,predmet_druh,Artefact,heslar:predmet_druh
+součást oděvu,costume component,amcr,HES-000674,predmet_druh,Artefact,heslar:predmet_druh
+součást pluhu,plow component,amcr,HES-000658,predmet_druh,Artefact,heslar:predmet_druh
+součást postroje,harness component,amcr,HES-000747,predmet_druh,Artefact,heslar:predmet_druh
+součást vozu,cargo vehicle component,amcr,HES-000703,predmet_druh,Artefact,heslar:predmet_druh
+součást zbroje,armor component,amcr,HES-000648,predmet_druh,Artefact,heslar:predmet_druh
+součást štítu,shield part,amcr,HES-000790,predmet_druh,Artefact,heslar:predmet_druh
+spona,fibula,amcr,HES-000733,predmet_druh,Artefact,heslar:predmet_druh
+srp,sickle,amcr,HES-000659,predmet_druh,Artefact,heslar:predmet_druh
+stavební keramika,construction ceramics,amcr,HES-000748,predmet_druh,Artefact,heslar:predmet_druh
+stavební/spojovací prvek,structural element component,amcr,HES-000757,predmet_druh,Artefact,heslar:predmet_druh
+stilus,stylus,amcr,HES-000811,predmet_druh,Artefact,heslar:predmet_druh
+struska,slag,amcr,HES-000645,predmet_druh,Artefact,heslar:predmet_druh
+střešní krytina,roofing tile,amcr,HES-000815,predmet_druh,Artefact,heslar:predmet_druh
+surovina,raw material,amcr,HES-000832,predmet_druh,Artefact,heslar:predmet_druh
+talíř,plate,amcr,HES-000766,predmet_druh,Artefact,heslar:predmet_druh
+technická keramika,technical ceramics,amcr,HES-000774,predmet_druh,Artefact,heslar:predmet_druh
+tesák,dussack,amcr,HES-000793,predmet_druh,Artefact,heslar:predmet_druh
+trám,beam,amcr,HES-000816,predmet_druh,Artefact,heslar:predmet_druh
+tyglík,crucible,amcr,HES-000772,predmet_druh,Artefact,heslar:predmet_druh
+tyčinka/váleček,rod/log,amcr,HES-000765,predmet_druh,Artefact,heslar:predmet_druh
+třmen,stirrup,amcr,HES-000671,predmet_druh,Artefact,heslar:predmet_druh
+udidlo,bridle bit,amcr,HES-000672,predmet_druh,Artefact,heslar:predmet_druh
+uhlíky/popel,charcoal/ash,amcr,HES-000781,predmet_druh,Artefact,heslar:predmet_druh
+valoun,pebble,amcr,HES-000833,predmet_druh,Artefact,heslar:predmet_druh
+vejce,eggshell,amcr,HES-000646,predmet_druh,Artefact,heslar:predmet_druh
+vzorek,sample,amcr,HES-000818,predmet_druh,Artefact,heslar:predmet_druh
+vzorek antrakologický,anthracological sample,amcr,HES-000763,predmet_druh,Artefact,heslar:predmet_druh
+vzorek dendrochronologický,dendrochronological sample,amcr,HES-000758,predmet_druh,Artefact,heslar:predmet_druh
+vzorek geologický,geological sample,amcr,HES-000685,predmet_druh,Artefact,heslar:predmet_druh
+vzorek malakologický,malacological sample,amcr,HES-000686,predmet_druh,Artefact,heslar:predmet_druh
+vzorek paleobotanický,palaeobotanical sample,amcr,HES-000698,predmet_druh,Artefact,heslar:predmet_druh
+vzorek palynologický,palynological sample,amcr,HES-000692,predmet_druh,Artefact,heslar:predmet_druh
+vzorek pedologický,pedological sample,amcr,HES-000697,predmet_druh,Artefact,heslar:predmet_druh
+vzorek pro radiokarbonové datování,radiocarbon dating sample,amcr,HES-000759,predmet_druh,Artefact,heslar:predmet_druh
+váza,vase,amcr,HES-000841,predmet_druh,Artefact,heslar:predmet_druh
+vědro/situla,bucket/situla,amcr,HES-000819,predmet_druh,Artefact,heslar:predmet_druh
+zavazadlo,luggage,amcr,HES-000638,predmet_druh,Artefact,heslar:predmet_druh
+zbraň chladná,cold weapon,amcr,HES-000713,predmet_druh,Artefact,heslar:predmet_druh
+zbraň palná,firearm,amcr,HES-000649,predmet_druh,Artefact,heslar:predmet_druh
+zlomek keramiky,potsherd,amcr,HES-000705,predmet_druh,Artefact,heslar:predmet_druh
+zlomek kosti,bone fragment,amcr,HES-000639,predmet_druh,Artefact,heslar:predmet_druh
+zlomek mazanice,daub fragment,amcr,HES-000706,predmet_druh,Artefact,heslar:predmet_druh
+zub,tooth,amcr,HES-000647,predmet_druh,Artefact,heslar:predmet_druh
+zámek,lock,amcr,HES-000817,predmet_druh,Artefact,heslar:predmet_druh
+zápona,clasp,amcr,HES-000637,predmet_druh,Artefact,heslar:predmet_druh
+zásobnice,storage vessel,amcr,HES-000767,predmet_druh,Artefact,heslar:predmet_druh
+záušnice,temple ring,amcr,HES-000838,predmet_druh,Artefact,heslar:predmet_druh
+závaží,weight,amcr,HES-000718,predmet_druh,Artefact,heslar:predmet_druh
+závaží rybářské,net weight,amcr,HES-000721,predmet_druh,Artefact,heslar:predmet_druh
+závaží tkalcovské,loom weight,amcr,HES-000723,predmet_druh,Artefact,heslar:predmet_druh
+čepel/čepelka,blade/small blade,amcr,HES-000662,predmet_druh,Artefact,heslar:predmet_druh
+člun,boat,amcr,HES-000744,predmet_druh,Artefact,heslar:predmet_druh
+řetízek,chain necklace,amcr,HES-000756,predmet_druh,Artefact,heslar:predmet_druh
+řetěz,chain,amcr,HES-000814,predmet_druh,Artefact,heslar:predmet_druh
+šavle,sabre,amcr,HES-000791,predmet_druh,Artefact,heslar:predmet_druh
+škrabadlo,endscraper,amcr,HES-000660,predmet_druh,Artefact,heslar:predmet_druh
+šídlo,awl,amcr,HES-000827,predmet_druh,Artefact,heslar:predmet_druh
+šíp/šipka/hrot šípu/šipky,arrow/arrowhead,amcr,HES-000792,predmet_druh,Artefact,heslar:predmet_druh
+žernov/mlýnský kámen,quern,amcr,HES-000725,predmet_druh,Artefact,heslar:predmet_druh
+žeton,token,amcr,HES-000762,predmet_druh,Artefact,heslar:predmet_druh
 HaD–LtA,HaD–LtA,amcr,HES-000309,obdobi,Chronology,heslar:obdobi
 aurignacien,Aurignacian,amcr,HES-000262,obdobi,Chronology,heslar:obdobi
 badenská kultura,Baden Culture,amcr,HES-000317,obdobi,Chronology,heslar:obdobi
@@ -75,7 +384,6 @@ novověk 1,Modern Period 1,amcr,HES-000381,obdobi,Chronology,heslar:obdobi
 novověk 2,Modern Period 2,amcr,HES-000382,obdobi,Chronology,heslar:obdobi
 novověk–industriální období,Modern–Industrial Period,amcr,HES-000350,obdobi,Chronology,heslar:obdobi
 nynická kultura,Nynice Culture,amcr,HES-000299,obdobi,Chronology,heslar:obdobi
-někdy v letech,approximate years,amcr,HES-000889,datum_specifikace,Chronology,heslar:datum_specifikace
 období popelnicových polí,Urnfield Period,amcr,HES-000281,obdobi,Chronology,heslar:obdobi
 oberlauterbašská skupina,Oberlauterbach Group,amcr,HES-000305,obdobi,Chronology,heslar:obdobi
 ohrozimský typ,Ohrozim Type,amcr,HES-000369,obdobi,Chronology,heslar:obdobi
@@ -96,8 +404,6 @@ pravěk,prehistory,amcr,HES-000289,obdobi,Chronology,heslar:obdobi
 protoúnětická kultura,Proto-Únětice Culture,amcr,HES-000391,obdobi,Chronology,heslar:obdobi
 přechod pozdní středověk/novověk,Late Middle Ages/Modern Transition,amcr,HES-000272,obdobi,Chronology,heslar:obdobi
 přechod raný/vrcholný středověk,Early/High Middle Ages Transition,amcr,HES-000270,obdobi,Chronology,heslar:obdobi
-přesné datum,exact date,amcr,HES-000887,datum_specifikace,Chronology,heslar:datum_specifikace
-přesně v letech,exact years,amcr,HES-000886,datum_specifikace,Chronology,heslar:datum_specifikace
 rané mladohradištní období,Early Late Hillfort Period,amcr,HES-000356,obdobi,Chronology,heslar:obdobi
 rané středohradištní období,Early Middle Hillfort Period,amcr,HES-000277,obdobi,Chronology,heslar:obdobi
 raný středověk,Early Middle Ages,amcr,HES-000385,obdobi,Chronology,heslar:obdobi
@@ -254,219 +560,152 @@ ztraceno/skartováno,lost/discarded,amcr,HES-001176,dokument_zachovalost,Documen
 článek v novinách,newspaper article,amcr,HES-001120,ext_zdroj_typ,Documentation,heslar:ext_zdroj_typ
 článek v časopise,journal paper,amcr,HES-001119,ext_zdroj_typ,Documentation,heslar:ext_zdroj_typ
 část knihy,book chapter,amcr,HES-001118,ext_zdroj_typ,Documentation,heslar:ext_zdroj_typ
-akvamanile,aquamanile,amcr,HES-000651,predmet_druh,Find Types,heslar:predmet_druh
-amfora,amphorae,amcr,HES-000652,predmet_druh,Find Types,heslar:predmet_druh
-amorfní zlomek/předmět,amorphous fragment/object,amcr,HES-000707,predmet_druh,Find Types,heslar:predmet_druh
-architektonický článek,architectural element,amcr,HES-000709,predmet_druh,Find Types,heslar:predmet_druh
-atypický předmět,exceptional object,amcr,HES-000708,predmet_druh,Find Types,heslar:predmet_druh
-bankovka,paper money,amcr,HES-000650,predmet_druh,Find Types,heslar:predmet_druh
-brousek,whetstone,amcr,HES-000803,predmet_druh,Find Types,heslar:predmet_druh
-brusle,ice skate,amcr,HES-000743,predmet_druh,Find Types,heslar:predmet_druh
-bulava,club,amcr,HES-000785,predmet_druh,Find Types,heslar:predmet_druh
-běžný nález,common find,amcr,HES-000842,predmet_druh_kat,Find Types,heslar:predmet_druh_kat
-břitva,razor,amcr,HES-000661,predmet_druh,Find Types,heslar:predmet_druh
-cedník,colander,amcr,HES-000682,predmet_druh,Find Types,heslar:predmet_druh
-cihla,brick,amcr,HES-000813,predmet_druh,Find Types,heslar:predmet_druh
-deska,board,amcr,HES-000712,predmet_druh,Find Types,heslar:predmet_druh
-dlaždice,floor tile,amcr,HES-000678,predmet_druh,Find Types,heslar:predmet_druh
-dláto,chisel,amcr,HES-000824,predmet_druh,Find Types,heslar:predmet_druh
-doklad umění/kultu,artistic/ritual object,amcr,HES-000641,predmet_druh,Find Types,heslar:predmet_druh
-drasadlo,side scraper,amcr,HES-000715,predmet_druh,Find Types,heslar:predmet_druh
-drtidlo/zrnotěrka,handstone/saddle quern,amcr,HES-000795,predmet_druh,Find Types,heslar:predmet_druh
-drát,wire,amcr,HES-000782,predmet_druh,Find Types,heslar:predmet_druh
-dyzna,nozzle,amcr,HES-000689,predmet_druh,Find Types,heslar:predmet_druh
-dýka,dagger,amcr,HES-000820,predmet_druh,Find Types,heslar:predmet_druh
-dýmka,pipe,amcr,HES-000635,predmet_druh,Find Types,heslar:predmet_druh
-džbán,jug,amcr,HES-000636,predmet_druh,Find Types,heslar:predmet_druh
-ekofakt,ecofact,amcr,HES-000775,predmet_druh,Find Types,heslar:predmet_druh
-faléra,phalera,amcr,HES-000745,predmet_druh,Find Types,heslar:predmet_druh
-funkčně neurčený předmět,object of unspecified function,amcr,HES-000846,predmet_druh_kat,Find Types,heslar:predmet_druh_kat
-gemma,gem,amcr,HES-000731,predmet_druh,Find Types,heslar:predmet_druh
-gombík,spherical button,amcr,HES-000693,predmet_druh,Find Types,heslar:predmet_druh
-herní předmět,game equipment,amcr,HES-000681,predmet_druh,Find Types,heslar:predmet_druh
-hladítko,smoother,amcr,HES-000825,predmet_druh,Find Types,heslar:predmet_druh
-hrací kostka,dice,amcr,HES-000696,predmet_druh,Find Types,heslar:predmet_druh
-hrací kámen,game piece,amcr,HES-000684,predmet_druh,Find Types,heslar:predmet_druh
-hrnec,pot,amcr,HES-000768,predmet_druh,Find Types,heslar:predmet_druh
-hrot/hák,spike/hook,amcr,HES-000783,predmet_druh,Find Types,heslar:predmet_druh
-hudební nástroj,musical instrument,amcr,HES-000749,predmet_druh,Find Types,heslar:predmet_druh
-hřeb/hřebík/nýt,nail/rivet,amcr,HES-000679,predmet_druh,Find Types,heslar:predmet_druh
-hřeben,comb,amcr,HES-000826,predmet_druh,Find Types,heslar:predmet_druh
-hřivna,ingot,amcr,HES-000829,predmet_druh,Find Types,heslar:predmet_druh
-jehla/špendlík,needle/pin,amcr,HES-000804,predmet_druh,Find Types,heslar:predmet_druh
-jehlice,clothing pin,amcr,HES-000699,predmet_druh,Find Types,heslar:predmet_druh
-jiný materiál,other material,amcr,HES-001027,predmet_specifikace,Find Types,heslar:predmet_specifikace
-kachel,stove tile,amcr,HES-000736,predmet_druh,Find Types,heslar:predmet_druh
-kadlub,mold,amcr,HES-000716,predmet_druh,Find Types,heslar:predmet_druh
-kamenná industrie,lithics,amcr,HES-000640,predmet_druh,Find Types,heslar:predmet_druh
-kamenné jádro,stone core,amcr,HES-000776,predmet_druh,Find Types,heslar:predmet_druh
-kaptorga,kaptorga (metal pendant case),amcr,HES-000700,predmet_druh,Find Types,heslar:predmet_druh
-kladivo/palice,hammer/sledgehammer,amcr,HES-000796,predmet_druh,Find Types,heslar:predmet_druh
-kleště,pliers,amcr,HES-000797,predmet_druh,Find Types,heslar:predmet_druh
-klín,wedge,amcr,HES-000717,predmet_druh,Find Types,heslar:predmet_druh
-klíč,key,amcr,HES-000728,predmet_druh,Find Types,heslar:predmet_druh
-kniha,book,amcr,HES-000840,predmet_druh,Find Types,heslar:predmet_druh
-knoflík,button,amcr,HES-000675,predmet_druh,Find Types,heslar:predmet_druh
-koflík,cup,amcr,HES-000769,predmet_druh,Find Types,heslar:predmet_druh
-konvice,pitcher,amcr,HES-000690,predmet_druh,Find Types,heslar:predmet_druh
-kopí/hrot kopí,spear/spearhead,amcr,HES-000821,predmet_druh,Find Types,heslar:predmet_druh
-korálek,bead,amcr,HES-000663,predmet_druh,Find Types,heslar:predmet_druh
-kosa,scythe,amcr,HES-000798,predmet_druh,Find Types,heslar:predmet_druh
-kost,single bone,amcr,HES-000753,predmet_druh,Find Types,heslar:predmet_druh
-kostra,skeleton,amcr,HES-000642,predmet_druh,Find Types,heslar:predmet_druh
-kotel/kotlík,kettle,amcr,HES-000770,predmet_druh,Find Types,heslar:predmet_druh
-kovadlina,anvil,amcr,HES-000654,predmet_druh,Find Types,heslar:predmet_druh
-kování,mount,amcr,HES-000694,predmet_druh,Find Types,heslar:predmet_druh
-kroužek/kruh,circle/ring,amcr,HES-000764,predmet_druh,Find Types,heslar:predmet_druh
-kulička/koule,ball/sphere,amcr,HES-000760,predmet_druh,Find Types,heslar:predmet_druh
-kuše,crossbow,amcr,HES-000822,predmet_druh,Find Types,heslar:predmet_druh
-křesadlo/ocílka,firesteel,amcr,HES-000729,predmet_druh,Find Types,heslar:predmet_druh
-křížek,cross,amcr,HES-000664,predmet_druh,Find Types,heslar:predmet_druh
-kůl,pole,amcr,HES-000737,predmet_druh,Find Types,heslar:predmet_druh
-lahev,bottle,amcr,HES-000691,predmet_druh,Find Types,heslar:predmet_druh
-lampa/kahan,lamp/burner,amcr,HES-000695,predmet_druh,Find Types,heslar:predmet_druh
-listina,deed,amcr,HES-000670,predmet_druh,Find Types,heslar:predmet_druh
-lopata/rýč,shovel/spade,amcr,HES-000655,predmet_druh,Find Types,heslar:predmet_druh
-luk,bow,amcr,HES-000823,predmet_druh,Find Types,heslar:predmet_druh
-lžíce,spoon,amcr,HES-000730,predmet_druh,Find Types,heslar:predmet_druh
-malakofauna,mollusca,amcr,HES-000777,predmet_druh,Find Types,heslar:predmet_druh
-meč,sword,amcr,HES-000786,predmet_druh,Find Types,heslar:predmet_druh
-militaria,weapons and armour,amcr,HES-000784,predmet_druh,Find Types,heslar:predmet_druh
-mince,coin,amcr,HES-000794,predmet_druh,Find Types,heslar:predmet_druh
-motyka/krumpáč,mattock/pickaxe,amcr,HES-000799,predmet_druh,Find Types,heslar:predmet_druh
-mísa,bowl,amcr,HES-000719,predmet_druh,Find Types,heslar:predmet_druh
-nehotový výrobek/polotovar,semiproduct/blank,amcr,HES-000828,predmet_druh,Find Types,heslar:predmet_druh
-nádoba,vessel,amcr,HES-000714,predmet_druh,Find Types,heslar:predmet_druh
-náhrdelník,necklace,amcr,HES-000835,predmet_druh,Find Types,heslar:predmet_druh
-nákončí,mordant,amcr,HES-000668,predmet_druh,Find Types,heslar:predmet_druh
-nákrčník,neck ring,amcr,HES-000665,predmet_druh,Find Types,heslar:predmet_druh
-nánožník,anklet,amcr,HES-000836,predmet_druh,Find Types,heslar:predmet_druh
-nápažník,armlet,amcr,HES-000812,predmet_druh,Find Types,heslar:predmet_druh
-náprstek,thimble,amcr,HES-000805,predmet_druh,Find Types,heslar:predmet_druh
-náramek,bracelet,amcr,HES-000666,predmet_druh,Find Types,heslar:predmet_druh
-nástroj hrubý,utensil,amcr,HES-000653,predmet_druh,Find Types,heslar:predmet_druh
-nástroj jemný,instrument,amcr,HES-000727,predmet_druh,Find Types,heslar:predmet_druh
-nátepní destička,wrist guard,amcr,HES-000734,predmet_druh,Find Types,heslar:predmet_druh
-náušnice,earring,amcr,HES-000667,predmet_druh,Find Types,heslar:predmet_druh
-nůž,knife,amcr,HES-000806,predmet_druh,Find Types,heslar:predmet_druh
-nůžky,scissors,amcr,HES-000807,predmet_druh,Find Types,heslar:predmet_druh
-objekt,feature,amcr,HES-001125,nalez_typ,Find Types,heslar:nalez_typ
-obuv,footwear,amcr,HES-000735,predmet_druh,Find Types,heslar:predmet_druh
-odpad,waste,amcr,HES-000778,predmet_druh,Find Types,heslar:predmet_druh
-odpad stavební,construction waste,amcr,HES-000779,predmet_druh,Find Types,heslar:predmet_druh
-odpad výrobní,production waste,amcr,HES-000780,predmet_druh,Find Types,heslar:predmet_druh
-okenní výplň,window panes,amcr,HES-000738,predmet_druh,Find Types,heslar:predmet_druh
-omítka,plaster,amcr,HES-000739,predmet_druh,Find Types,heslar:predmet_druh
-opasek,belt,amcr,HES-000676,predmet_druh,Find Types,heslar:predmet_druh
-ostruha,spur,amcr,HES-000787,predmet_druh,Find Types,heslar:predmet_druh
-ostění,jamb,amcr,HES-000710,predmet_druh,Find Types,heslar:predmet_druh
-otloukač,hammerstone,amcr,HES-000656,predmet_druh,Find Types,heslar:predmet_druh
-ozdoba,adornment,amcr,HES-000834,predmet_druh,Find Types,heslar:predmet_druh
-oštěp/hrot oštěpu,javelin/javelin head,amcr,HES-000788,predmet_druh,Find Types,heslar:predmet_druh
-pekáč,baking pan,amcr,HES-000761,predmet_druh,Find Types,heslar:predmet_druh
-pila,saw,amcr,HES-000657,predmet_druh,Find Types,heslar:predmet_druh
-pilník,file,amcr,HES-000800,predmet_druh,Find Types,heslar:predmet_druh
-pinzeta,tweezers,amcr,HES-000808,predmet_druh,Find Types,heslar:predmet_druh
-plastika/soška,sculpture/statue,amcr,HES-000750,predmet_druh,Find Types,heslar:predmet_druh
-plastika/soška antropomorfní,anthropomorphic sculpture/statue,amcr,HES-000751,predmet_druh,Find Types,heslar:predmet_druh
-plastika/soška zoomorfní,zoomorphic sculpture/statue,amcr,HES-000752,predmet_druh,Find Types,heslar:predmet_druh
-platidlo,currency,amcr,HES-000848,predmet_druh_kat,Find Types,heslar:predmet_druh_kat
-plech,metal sheet,amcr,HES-000680,predmet_druh,Find Types,heslar:predmet_druh
-pochva/pouzdro,sheath,amcr,HES-000677,predmet_druh,Find Types,heslar:predmet_druh
-podkova,horseshoe,amcr,HES-000746,predmet_druh,Find Types,heslar:predmet_druh
-pohár/číše,beaker/goblet,amcr,HES-000722,predmet_druh,Find Types,heslar:predmet_druh
-pojivo,binder,amcr,HES-000740,predmet_druh,Find Types,heslar:predmet_druh
-poklička,lid,amcr,HES-000724,predmet_druh,Find Types,heslar:predmet_druh
-popelnice,urn,amcr,HES-000726,predmet_druh,Find Types,heslar:predmet_druh
-portál,portal,amcr,HES-000711,predmet_druh,Find Types,heslar:predmet_druh
-postroj/doprava,harness/transportation,amcr,HES-000742,predmet_druh,Find Types,heslar:predmet_druh
-potrubí,plumbing pipe,amcr,HES-000741,predmet_druh,Find Types,heslar:predmet_druh
-pražnice,frying pan,amcr,HES-000771,predmet_druh,Find Types,heslar:predmet_druh
-prejz,pantile,amcr,HES-000773,predmet_druh,Find Types,heslar:predmet_druh
-prkno/fošna,board/plank,amcr,HES-000687,predmet_druh,Find Types,heslar:predmet_druh
-projektil/kule/munice,projectile/bullet/ammunition,amcr,HES-000755,predmet_druh,Find Types,heslar:predmet_druh
-prsten,finger ring,amcr,HES-000669,predmet_druh,Find Types,heslar:predmet_druh
-průvlečka,clothing buckle,amcr,HES-000683,predmet_druh,Find Types,heslar:predmet_druh
-pyl,polen,amcr,HES-001007,predmet_specifikace,Find Types,heslar:predmet_specifikace
-pánev,pan,amcr,HES-000720,predmet_druh,Find Types,heslar:predmet_druh
-písemnost,written document,amcr,HES-000839,predmet_druh,Find Types,heslar:predmet_druh
-přechovávaná přírodnina,natural object,amcr,HES-000643,predmet_druh,Find Types,heslar:predmet_druh
-předmět,object,amcr,HES-001126,nalez_typ,Find Types,heslar:nalez_typ
-přeslen,spindle whorl,amcr,HES-000809,predmet_druh,Find Types,heslar:predmet_druh
-přezka,buckle,amcr,HES-000732,predmet_druh,Find Types,heslar:predmet_druh
-přívěsek/závěsek,pendant,amcr,HES-000837,predmet_druh,Find Types,heslar:predmet_druh
-rakev,coffin,amcr,HES-000704,predmet_druh,Find Types,heslar:predmet_druh
-rolnička,jingle bell,amcr,HES-000701,predmet_druh,Find Types,heslar:predmet_druh
-rostlinné makrozbytky,plant macro-remain,amcr,HES-000644,predmet_druh,Find Types,heslar:predmet_druh
-ruda,ore,amcr,HES-000830,predmet_druh,Find Types,heslar:predmet_druh
-rydlo,graver,amcr,HES-000810,predmet_druh,Find Types,heslar:predmet_druh
-růženec/medailon,rosary/medallion,amcr,HES-000702,predmet_druh,Find Types,heslar:predmet_druh
-sekera,axe,amcr,HES-000802,predmet_druh,Find Types,heslar:predmet_druh
-sekeromlat/mlat,hammer axe,amcr,HES-000789,predmet_druh,Find Types,heslar:predmet_druh
-sekáč,chopper,amcr,HES-000801,predmet_druh,Find Types,heslar:predmet_druh
-skořápka plodu,fruit shell/nutshell,amcr,HES-000754,predmet_druh,Find Types,heslar:predmet_druh
-slitek,bloom,amcr,HES-000831,predmet_druh,Find Types,heslar:predmet_druh
-součást hrobu,grave component,amcr,HES-000673,predmet_druh,Find Types,heslar:predmet_druh
-součást oděvu,costume component,amcr,HES-000674,predmet_druh,Find Types,heslar:predmet_druh
-součást pluhu,plow component,amcr,HES-000658,predmet_druh,Find Types,heslar:predmet_druh
-součást postroje,harness component,amcr,HES-000747,predmet_druh,Find Types,heslar:predmet_druh
-součást vozu,cargo vehicle component,amcr,HES-000703,predmet_druh,Find Types,heslar:predmet_druh
-součást zbroje,armor component,amcr,HES-000648,predmet_druh,Find Types,heslar:predmet_druh
-součást štítu,shield part,amcr,HES-000790,predmet_druh,Find Types,heslar:predmet_druh
-spona,fibula,amcr,HES-000733,predmet_druh,Find Types,heslar:predmet_druh
-srp,sickle,amcr,HES-000659,predmet_druh,Find Types,heslar:predmet_druh
-stavební keramika,construction ceramics,amcr,HES-000748,predmet_druh,Find Types,heslar:predmet_druh
-stavební/spojovací prvek,structural element component,amcr,HES-000757,predmet_druh,Find Types,heslar:predmet_druh
-stilus,stylus,amcr,HES-000811,predmet_druh,Find Types,heslar:predmet_druh
-struska,slag,amcr,HES-000645,predmet_druh,Find Types,heslar:predmet_druh
-střešní krytina,roofing tile,amcr,HES-000815,predmet_druh,Find Types,heslar:predmet_druh
-surovina,raw material,amcr,HES-000832,predmet_druh,Find Types,heslar:predmet_druh
-talíř,plate,amcr,HES-000766,predmet_druh,Find Types,heslar:predmet_druh
-technická keramika,technical ceramics,amcr,HES-000774,predmet_druh,Find Types,heslar:predmet_druh
-tesák,dussack,amcr,HES-000793,predmet_druh,Find Types,heslar:predmet_druh
-trám,beam,amcr,HES-000816,predmet_druh,Find Types,heslar:predmet_druh
-tyglík,crucible,amcr,HES-000772,predmet_druh,Find Types,heslar:predmet_druh
-tyčinka/váleček,rod/log,amcr,HES-000765,predmet_druh,Find Types,heslar:predmet_druh
-třmen,stirrup,amcr,HES-000671,predmet_druh,Find Types,heslar:predmet_druh
-udidlo,bridle bit,amcr,HES-000672,predmet_druh,Find Types,heslar:predmet_druh
-uhlíky/popel,charcoal/ash,amcr,HES-000781,predmet_druh,Find Types,heslar:predmet_druh
-valoun,pebble,amcr,HES-000833,predmet_druh,Find Types,heslar:predmet_druh
-vejce,eggshell,amcr,HES-000646,predmet_druh,Find Types,heslar:predmet_druh
-vzorek,sample,amcr,HES-000818,predmet_druh,Find Types,heslar:predmet_druh
-vzorek antrakologický,anthracological sample,amcr,HES-000763,predmet_druh,Find Types,heslar:predmet_druh
-vzorek dendrochronologický,dendrochronological sample,amcr,HES-000758,predmet_druh,Find Types,heslar:predmet_druh
-vzorek geologický,geological sample,amcr,HES-000685,predmet_druh,Find Types,heslar:predmet_druh
-vzorek malakologický,malacological sample,amcr,HES-000686,predmet_druh,Find Types,heslar:predmet_druh
-vzorek paleobotanický,palaeobotanical sample,amcr,HES-000698,predmet_druh,Find Types,heslar:predmet_druh
-vzorek palynologický,palynological sample,amcr,HES-000692,predmet_druh,Find Types,heslar:predmet_druh
-vzorek pedologický,pedological sample,amcr,HES-000697,predmet_druh,Find Types,heslar:predmet_druh
-vzorek pro radiokarbonové datování,radiocarbon dating sample,amcr,HES-000759,predmet_druh,Find Types,heslar:predmet_druh
-váza,vase,amcr,HES-000841,predmet_druh,Find Types,heslar:predmet_druh
-vědro/situla,bucket/situla,amcr,HES-000819,predmet_druh,Find Types,heslar:predmet_druh
-zavazadlo,luggage,amcr,HES-000638,predmet_druh,Find Types,heslar:predmet_druh
-zbraň chladná,cold weapon,amcr,HES-000713,predmet_druh,Find Types,heslar:predmet_druh
-zbraň palná,firearm,amcr,HES-000649,predmet_druh,Find Types,heslar:predmet_druh
-zlomek keramiky,potsherd,amcr,HES-000705,predmet_druh,Find Types,heslar:predmet_druh
-zlomek kosti,bone fragment,amcr,HES-000639,predmet_druh,Find Types,heslar:predmet_druh
-zlomek mazanice,daub fragment,amcr,HES-000706,predmet_druh,Find Types,heslar:predmet_druh
-zub,tooth,amcr,HES-000647,predmet_druh,Find Types,heslar:predmet_druh
-zámek,lock,amcr,HES-000817,predmet_druh,Find Types,heslar:predmet_druh
-zápona,clasp,amcr,HES-000637,predmet_druh,Find Types,heslar:predmet_druh
-zásobnice,storage vessel,amcr,HES-000767,predmet_druh,Find Types,heslar:predmet_druh
-záušnice,temple ring,amcr,HES-000838,predmet_druh,Find Types,heslar:predmet_druh
-závaží,weight,amcr,HES-000718,predmet_druh,Find Types,heslar:predmet_druh
-závaží rybářské,net weight,amcr,HES-000721,predmet_druh,Find Types,heslar:predmet_druh
-závaží tkalcovské,loom weight,amcr,HES-000723,predmet_druh,Find Types,heslar:predmet_druh
-čepel/čepelka,blade/small blade,amcr,HES-000662,predmet_druh,Find Types,heslar:predmet_druh
-člun,boat,amcr,HES-000744,predmet_druh,Find Types,heslar:predmet_druh
-řetízek,chain necklace,amcr,HES-000756,predmet_druh,Find Types,heslar:predmet_druh
-řetěz,chain,amcr,HES-000814,predmet_druh,Find Types,heslar:predmet_druh
-šavle,sabre,amcr,HES-000791,predmet_druh,Find Types,heslar:predmet_druh
-škrabadlo,endscraper,amcr,HES-000660,predmet_druh,Find Types,heslar:predmet_druh
-šídlo,awl,amcr,HES-000827,predmet_druh,Find Types,heslar:predmet_druh
-šíp/šipka/hrot šípu/šipky,arrow/arrowhead,amcr,HES-000792,predmet_druh,Find Types,heslar:predmet_druh
-žernov/mlýnský kámen,quern,amcr,HES-000725,predmet_druh,Find Types,heslar:predmet_druh
-žeton,token,amcr,HES-000762,predmet_druh,Find Types,heslar:predmet_druh
+(polo)zemnice,pit house,amcr,HES-000497,objekt_druh,Feature,heslar:objekt_druh
+bastion/reduta,bastion/redoubt,amcr,HES-000468,objekt_druh,Feature,heslar:objekt_druh
+bašta,wall tower,amcr,HES-000528,objekt_druh,Feature,heslar:objekt_druh
+brána,gate,amcr,HES-000529,objekt_druh,Feature,heslar:objekt_druh
+budova hospodářská,non-residential building,amcr,HES-000440,objekt_druh,Feature,heslar:objekt_druh
+budova obytná,residential building,amcr,HES-000439,objekt_druh,Feature,heslar:objekt_druh
+budova/stavba,building/structure,amcr,HES-000438,objekt_druh,Feature,heslar:objekt_druh
+chodba,corridor,amcr,HES-000494,objekt_druh,Feature,heslar:objekt_druh
+cisterna,cistern,amcr,HES-000445,objekt_druh,Feature,heslar:objekt_druh
+destrukční vrstva/souvrství,destruction layer/sequence,amcr,HES-000454,objekt_druh,Feature,heslar:objekt_druh
+dláždění,pavement,amcr,HES-000492,objekt_druh,Feature,heslar:objekt_druh
+erozní rýha,gully/ravine,amcr,HES-000471,objekt_druh,Feature,heslar:objekt_druh
+geologická/přirozená vrstva,natural/geological layer,amcr,HES-000455,objekt_druh,Feature,heslar:objekt_druh
+haltýř,spring house,amcr,HES-000478,objekt_druh,Feature,heslar:objekt_druh
+hamr,hammer mill,amcr,HES-000545,objekt_druh,Feature,heslar:objekt_druh
+hať,corduroy road,amcr,HES-000521,objekt_druh,Feature,heslar:objekt_druh
+hliník,clay pit,amcr,HES-000512,objekt_druh,Feature,heslar:objekt_druh
+hradba,defensive wall,amcr,HES-000530,objekt_druh,Feature,heslar:objekt_druh
+hrob,grave,amcr,HES-000427,objekt_druh,Feature,heslar:objekt_druh
+hrob komorový,chamber grave,amcr,HES-000428,objekt_druh,Feature,heslar:objekt_druh
+hrob skříňkový,cist grave,amcr,HES-000429,objekt_druh,Feature,heslar:objekt_druh
+hrobka,tomb,amcr,HES-000430,objekt_druh,Feature,heslar:objekt_druh
+hráz,embankment/dam,amcr,HES-000493,objekt_druh,Feature,heslar:objekt_druh
+inženýrské sítě,utilities,amcr,HES-000515,objekt_druh,Feature,heslar:objekt_druh
+jeskyně/skalní prostor,cave/abri,amcr,HES-000472,objekt_druh,Feature,heslar:objekt_druh
+jáma,pit,amcr,HES-000441,objekt_druh,Feature,heslar:objekt_druh
+jáma kůlová/sloupová,stakehole/posthole,amcr,HES-000442,objekt_druh,Feature,heslar:objekt_druh
+jáma odpadní/jímka,waste pit/cesspit,amcr,HES-000446,objekt_druh,Feature,heslar:objekt_druh
+jáma stavební,construction pit,amcr,HES-000443,objekt_druh,Feature,heslar:objekt_druh
+jáma zásobní,storage pit,amcr,HES-000444,objekt_druh,Feature,heslar:objekt_druh
+kamna,stove,amcr,HES-000422,objekt_druh,Feature,heslar:objekt_druh
+kanalizace,sewer,amcr,HES-000464,objekt_druh,Feature,heslar:objekt_druh
+kašna,fountain,amcr,HES-000479,objekt_druh,Feature,heslar:objekt_druh
+klenba,vaults,amcr,HES-000495,objekt_druh,Feature,heslar:objekt_druh
+kolektor,collector,amcr,HES-000516,objekt_druh,Feature,heslar:objekt_druh
+konstrukční prvek,architectural element,amcr,HES-000491,objekt_druh,Feature,heslar:objekt_druh
+kostnice,ossuary,amcr,HES-000432,objekt_druh,Feature,heslar:objekt_druh
+kovárna,blacksmith,amcr,HES-000546,objekt_druh,Feature,heslar:objekt_druh
+kovářská výheň,forge,amcr,HES-000557,objekt_druh,Feature,heslar:objekt_druh
+kultovní/sakrální objekt,ritual/sacral feature,amcr,HES-000525,objekt_druh,Feature,heslar:objekt_druh
+křtitelnice,baptismal font,amcr,HES-000499,objekt_druh,Feature,heslar:objekt_druh
+kůl/sloup,stake/post,amcr,HES-000447,objekt_druh,Feature,heslar:objekt_druh
+lineární převýšený útvar,linear mound,amcr,HES-000538,objekt_druh,Feature,heslar:objekt_druh
+lineární zahloubený útvar,linear depression,amcr,HES-000539,objekt_druh,Feature,heslar:objekt_druh
+loch,larder (cellar),amcr,HES-000487,objekt_druh,Feature,heslar:objekt_druh
+malba/freska,painting/fresco,amcr,HES-000540,objekt_druh,Feature,heslar:objekt_druh
+menhir,menhir,amcr,HES-000500,objekt_druh,Feature,heslar:objekt_druh
+mezní pás,field boundary,amcr,HES-000503,objekt_druh,Feature,heslar:objekt_druh
+mezník/patník,milestone/boundary stone,amcr,HES-000522,objekt_druh,Feature,heslar:objekt_druh
+milíř,charcoal kiln,amcr,HES-000554,objekt_druh,Feature,heslar:objekt_druh
+mohyla,burial mound,amcr,HES-000431,objekt_druh,Feature,heslar:objekt_druh
+most,bridge,amcr,HES-000523,objekt_druh,Feature,heslar:objekt_druh
+motte,motte,amcr,HES-000531,objekt_druh,Feature,heslar:objekt_druh
+místo těžby,extracting place,amcr,HES-000559,objekt_druh,Feature,heslar:objekt_druh
+místo výroby,production place,amcr,HES-000544,objekt_druh,Feature,heslar:objekt_druh
+místo zpracování,processing place,amcr,HES-000543,objekt_druh,Feature,heslar:objekt_druh
+navážka,backfill,amcr,HES-000457,objekt_druh,Feature,heslar:objekt_druh
+neklidný terén,uneven surface,amcr,HES-000568,objekt_druh,Feature,heslar:objekt_druh
+nespecifikovaný reliéfní útvar,unspecified terrain feature,amcr,HES-000567,objekt_druh,Feature,heslar:objekt_druh
+nika,niche,amcr,HES-000448,objekt_druh,Feature,heslar:objekt_druh
+náhon,millrace,amcr,HES-000513,objekt_druh,Feature,heslar:objekt_druh
+náhrobek/náhrobní kámen,gravestone,amcr,HES-000433,objekt_druh,Feature,heslar:objekt_druh
+násep,bank,amcr,HES-000456,objekt_druh,Feature,heslar:objekt_druh
+objekt/stopa výroby,production feature/trace,amcr,HES-000578,objekt_druh_kat,Feature,heslar:objekt_druh_kat
+obval,spoil bank,amcr,HES-000561,objekt_druh,Feature,heslar:objekt_druh
+odpadní vrstva/souvrství,waste layer/sequence,amcr,HES-000458,objekt_druh,Feature,heslar:objekt_druh
+ohniště,fireplace,amcr,HES-000423,objekt_druh,Feature,heslar:objekt_druh
+ohradní zeď/plot,wall/fence,amcr,HES-000532,objekt_druh,Feature,heslar:objekt_druh
+ohrazení/fortifikace,enclosure/fortification,amcr,HES-000527,objekt_druh,Feature,heslar:objekt_druh
+oltář,altar,amcr,HES-000501,objekt_druh,Feature,heslar:objekt_druh
+otopná pec,oven,amcr,HES-000424,objekt_druh,Feature,heslar:objekt_druh
+otopné zařízení,heating equipment,amcr,HES-000421,objekt_druh,Feature,heslar:objekt_druh
+palebné postavení,gun emplacement,amcr,HES-000506,objekt_druh,Feature,heslar:objekt_druh
+palisáda,palisade,amcr,HES-000507,objekt_druh,Feature,heslar:objekt_druh
+palác,palace,amcr,HES-000481,objekt_druh,Feature,heslar:objekt_druh
+parkánová hradba,zwinger wall,amcr,HES-000533,objekt_druh,Feature,heslar:objekt_druh
+pec,kiln,amcr,HES-000477,objekt_druh,Feature,heslar:objekt_druh
+pec chlebová,bake oven,amcr,HES-000552,objekt_druh,Feature,heslar:objekt_druh
+pec cihlářská,brick oven,amcr,HES-000548,objekt_druh,Feature,heslar:objekt_druh
+pec dehtářská,tar pit,amcr,HES-000549,objekt_druh,Feature,heslar:objekt_druh
+pec hrnčířská,pottery kiln,amcr,HES-000550,objekt_druh,Feature,heslar:objekt_druh
+pec hutnická,iron-smelting furnace,amcr,HES-000551,objekt_druh,Feature,heslar:objekt_druh
+pec kovolitecká,foundry,amcr,HES-000553,objekt_druh,Feature,heslar:objekt_druh
+pec sklářská,glass furnace,amcr,HES-000555,objekt_druh,Feature,heslar:objekt_druh
+pec vápenická,lime kiln,amcr,HES-000556,objekt_druh,Feature,heslar:objekt_druh
+pilota,pier,amcr,HES-000450,objekt_druh,Feature,heslar:objekt_druh
+pilíř,pillar,amcr,HES-000449,objekt_druh,Feature,heslar:objekt_druh
+pinka,binge,amcr,HES-000562,objekt_druh,Feature,heslar:objekt_druh
+plošina,platform,amcr,HES-000569,objekt_druh,Feature,heslar:objekt_druh
+plužina,field system,amcr,HES-000504,objekt_druh,Feature,heslar:objekt_druh
+podlaha (konstrukce),floor (construction),amcr,HES-000451,objekt_druh,Feature,heslar:objekt_druh
+podlaha (vrstva/souvrství),floor layer/sequence,amcr,HES-000459,objekt_druh,Feature,heslar:objekt_druh
+pohřeb kostrový,inhumation burial,amcr,HES-000434,objekt_druh,Feature,heslar:objekt_druh
+pohřeb v sídlištním objektu,burial in settlement context,amcr,HES-000437,objekt_druh,Feature,heslar:objekt_druh
+pohřeb zvířete,animal burial,amcr,HES-000436,objekt_druh,Feature,heslar:objekt_druh
+pohřeb žárový,cremation burial,amcr,HES-000435,objekt_druh,Feature,heslar:objekt_druh
+pohřební objekt,funerary structure,amcr,HES-000426,objekt_druh,Feature,heslar:objekt_druh
+pramen,spring,amcr,HES-000473,objekt_druh,Feature,heslar:objekt_druh
+pyrotechnologické zařízení,pyrotechnological device,amcr,HES-000476,objekt_druh,Feature,heslar:objekt_druh
+převýšená plocha,mound,amcr,HES-000536,objekt_druh,Feature,heslar:objekt_druh
+příkop,moat,amcr,HES-000508,objekt_druh,Feature,heslar:objekt_druh
+přírodní útvar,natural landform,amcr,HES-000470,objekt_druh,Feature,heslar:objekt_druh
+rybník/nádrž,pond/water tank,amcr,HES-000505,objekt_druh,Feature,heslar:objekt_druh
+schodiště,staircase,amcr,HES-000452,objekt_druh,Feature,heslar:objekt_druh
+sejp/halda,spoil heap,amcr,HES-000563,objekt_druh,Feature,heslar:objekt_druh
+skalní rytina,rock carving,amcr,HES-000541,objekt_druh,Feature,heslar:objekt_druh
+sklep,cellar,amcr,HES-000488,objekt_druh,Feature,heslar:objekt_druh
+smírčí kříž,wayside cross,amcr,HES-000502,objekt_druh,Feature,heslar:objekt_druh
+součást komunikace,transportation structure,amcr,HES-000519,objekt_druh,Feature,heslar:objekt_druh
+splach/naplavenina,colluvial/alluvial layer,amcr,HES-000461,objekt_druh,Feature,heslar:objekt_druh
+stodola,barn,amcr,HES-000483,objekt_druh,Feature,heslar:objekt_druh
+stopy orby,plough marks,amcr,HES-000467,objekt_druh,Feature,heslar:objekt_druh
+studna,water well,amcr,HES-000514,objekt_druh,Feature,heslar:objekt_druh
+stáj/chlév,stable/cowshed,amcr,HES-000482,objekt_druh,Feature,heslar:objekt_druh
+stéla,stela,amcr,HES-000469,objekt_druh,Feature,heslar:objekt_druh
+sídlištní vrstva/souvrství,settlement layer/sequence,amcr,HES-000460,objekt_druh,Feature,heslar:objekt_druh
+sýpka/špýchar,granary/storehouse,amcr,HES-000484,objekt_druh,Feature,heslar:objekt_druh
+terénní hrana,terrain edge,amcr,HES-000570,objekt_druh,Feature,heslar:objekt_druh
+topný kanál,heating channel,amcr,HES-000425,objekt_druh,Feature,heslar:objekt_druh
+trativod,drainage,amcr,HES-000517,objekt_druh,Feature,heslar:objekt_druh
+těžební jáma,mining pit,amcr,HES-000566,objekt_druh,Feature,heslar:objekt_druh
+těžební objekt,mining feature,amcr,HES-000558,objekt_druh,Feature,heslar:objekt_druh
+val,rampart,amcr,HES-000534,objekt_druh,Feature,heslar:objekt_druh
+vodoteč,riverine water bodies,amcr,HES-000474,objekt_druh,Feature,heslar:objekt_druh
+vodovod,water supply pipe,amcr,HES-000518,objekt_druh,Feature,heslar:objekt_druh
+vrstva/souvrství,layer/layer sequence,amcr,HES-000453,objekt_druh,Feature,heslar:objekt_druh
+vápenická jáma,lime pit,amcr,HES-000547,objekt_druh,Feature,heslar:objekt_druh
+výkop,cut,amcr,HES-000489,objekt_druh,Feature,heslar:objekt_druh
+výplň/zásyp,fill/deposit,amcr,HES-000462,objekt_druh,Feature,heslar:objekt_druh
+výrobní objekt,production feature,amcr,HES-000542,objekt_druh,Feature,heslar:objekt_druh
+vývrat,windthrow,amcr,HES-000475,objekt_druh,Feature,heslar:objekt_druh
+věž,tower,amcr,HES-000509,objekt_druh,Feature,heslar:objekt_druh
+věžice,half tower,amcr,HES-000510,objekt_druh,Feature,heslar:objekt_druh
+zahloubená plocha,depression,amcr,HES-000537,objekt_druh,Feature,heslar:objekt_druh
+zahloubený objekt,sunken feature,amcr,HES-000486,objekt_druh,Feature,heslar:objekt_druh
+zahrada,garden,amcr,HES-000526,objekt_druh,Feature,heslar:objekt_druh
+zemědělský objekt,agricultural structure,amcr,HES-000466,objekt_druh,Feature,heslar:objekt_druh
+zvonice,bell tower,amcr,HES-000485,objekt_druh,Feature,heslar:objekt_druh
+základy,foundations,amcr,HES-000498,objekt_druh,Feature,heslar:objekt_druh
+zákop,trench,amcr,HES-000535,objekt_druh,Feature,heslar:objekt_druh
+úvoz,hollow way,amcr,HES-000524,objekt_druh,Feature,heslar:objekt_druh
+šachta,shaft,amcr,HES-000564,objekt_druh,Feature,heslar:objekt_druh
+šibenice,gallows,amcr,HES-000511,objekt_druh,Feature,heslar:objekt_druh
+štola,adit,amcr,HES-000565,objekt_druh,Feature,heslar:objekt_druh
+žlab,ditch,amcr,HES-000490,objekt_druh,Feature,heslar:objekt_druh
+žároviště,burned layer,amcr,HES-000463,objekt_druh,Feature,heslar:objekt_druh
 budova,building,amcr,HES-000250,nalezove_okolnosti,Finds Context,heslar:nalezove_okolnosti
 jiný kontext,other context,amcr,HES-000251,nalezove_okolnosti,Finds Context,heslar:nalezove_okolnosti
 kulturní vrstva/objekt,cultural layer/feature,amcr,HES-000247,nalezove_okolnosti,Finds Context,heslar:nalezove_okolnosti
@@ -476,70 +715,89 @@ podorničí/podloží,subsoil,amcr,HES-000248,nalezove_okolnosti,Finds Context,h
 povrch,surface,amcr,HES-000242,nalezove_okolnosti,Finds Context,heslar:nalezove_okolnosti
 přirozený půdní horizont,natural topsoil,amcr,HES-000246,nalezove_okolnosti,Finds Context,heslar:nalezove_okolnosti
 vodní plocha/tok,water body/stream,amcr,HES-000249,nalezove_okolnosti,Finds Context,heslar:nalezove_okolnosti
-Benešov-Nesvačily,Benešov-Nesvačily,amcr,HES-000193,letiste,Location & Admin,heslar:letiste
-Brno-Tuřany,Brno-Tuřany,amcr,HES-000184,letiste,Location & Admin,heslar:letiste
-Brno-Černovice,Brno-Černovice,amcr,HES-000182,letiste,Location & Admin,heslar:letiste
-Choceň,Choceň,amcr,HES-000188,letiste,Location & Admin,heslar:letiste
-Chomutov,Chomutov,amcr,HES-000189,letiste,Location & Admin,heslar:letiste
-Chomutov-Pesvice,Chomutov-Pesvice,amcr,HES-000190,letiste,Location & Admin,heslar:letiste
-Czestochowa,Czestochowa,amcr,HES-000185,letiste,Location & Admin,heslar:letiste
-Czestochowa-Rudniky,Czestochowa-Rudniky,amcr,HES-000186,letiste,Location & Admin,heslar:letiste
-Jaroměř,Jaroměř,amcr,HES-000191,letiste,Location & Admin,heslar:letiste
-Jihlava-Henčov,Jihlava-Henčov,amcr,HES-000195,letiste,Location & Admin,heslar:letiste
-Jičín,Jičín,amcr,HES-000192,letiste,Location & Admin,heslar:letiste
-Karlovy Vary,Karlovy Vary,amcr,HES-000196,letiste,Location & Admin,heslar:letiste
-Kladno,Kladno,amcr,HES-000197,letiste,Location & Admin,heslar:letiste
-Kolín,Kolín,amcr,HES-000198,letiste,Location & Admin,heslar:letiste
-Krakow,Krakow,amcr,HES-000199,letiste,Location & Admin,heslar:letiste
-Krakow-Balice,Krakow-Balice,amcr,HES-000200,letiste,Location & Admin,heslar:letiste
-Leszno,Leszno,amcr,HES-000201,letiste,Location & Admin,heslar:letiste
-Mnichovo Hradiště,Mnichovo Hradiště,amcr,HES-000203,letiste,Location & Admin,heslar:letiste
-Mělník-Hořín,Mělník-Hořín,amcr,HES-000202,letiste,Location & Admin,heslar:letiste
-Plasy,Plasy,amcr,HES-000204,letiste,Location & Admin,heslar:letiste
-Praha-Kbely,Praha-Kbely,amcr,HES-000205,letiste,Location & Admin,heslar:letiste
-Praha-Letňany,Praha-Letňany,amcr,HES-000206,letiste,Location & Admin,heslar:letiste
-Sazená,Sazená,amcr,HES-000207,letiste,Location & Admin,heslar:letiste
-Strunkovice,Strunkovice,amcr,HES-000208,letiste,Location & Admin,heslar:letiste
-Velká Dobrá,Velká Dobrá,amcr,HES-000209,letiste,Location & Admin,heslar:letiste
-Vlašim,Vlašim,amcr,HES-000210,letiste,Location & Admin,heslar:letiste
-Vrchlabí,Vrchlabí,amcr,HES-000211,letiste,Location & Admin,heslar:letiste
-Znojmo,Znojmo,amcr,HES-000194,letiste,Location & Admin,heslar:letiste
-anonym,anonymous,amcr,HES-000865,pristupnost,Location & Admin,heslar:pristupnost
-archeolog,archaeologist,amcr,HES-000867,pristupnost,Location & Admin,heslar:pristupnost
-archivář,archivist,amcr,HES-000868,pristupnost,Location & Admin,heslar:pristupnost
-badatel,researcher,amcr,HES-000866,pristupnost,Location & Admin,heslar:pristupnost
 bez ochrany,unprotected,amcr,HES-000175,pamatkova_ochrana,Location & Admin,heslar:pamatkova_ochrana
-bod,point,amcr,HES-001133,pian_typ,Location & Admin,heslar:pian_typ
-dno sondy,trench bottom,amcr,HES-001158,vyskovy_bod_typ,Location & Admin,heslar:vyskovy_bod_typ
-domnělé (5–50 %),alleged (5–50%),amcr,HES-001451,jistota_urceni,Location & Admin,heslar:jistota_urceni
 historická budova/komplex,historical building/complex,amcr,HES-001457,stav_dochovani,Location & Admin,heslar:stav_dochovani
-industriál,Industrial,amcr,HES-001165,vyskovy_bod_typ,Location & Admin,heslar:vyskovy_bod_typ
 jiná organizace,other organisation,amcr,HES-001128,organizace_typ,Location & Admin,heslar:organizace_typ
-jisté (> 95 %),certain (> 95%),amcr,HES-001449,jistota_urceni,Location & Admin,heslar:jistota_urceni
 kulturní památka,listed monument,amcr,HES-000177,pamatkova_ochrana,Location & Admin,heslar:pamatkova_ochrana
 lokalita pod zástavbou,site in built environment,amcr,HES-001454,stav_dochovani,Location & Admin,heslar:stav_dochovani
 muzeum,museum,amcr,HES-001127,organizace_typ,Location & Admin,heslar:organizace_typ
 nadzemní relikty,aboveground remains,amcr,HES-001455,stav_dochovani,Location & Admin,heslar:stav_dochovani
-nejisté (50–95 %),uncertain (50–95%),amcr,HES-001450,jistota_urceni,Location & Admin,heslar:jistota_urceni
 národní kulturní památka,listed national monument,amcr,HES-000178,pamatkova_ochrana,Location & Admin,heslar:pamatkova_ochrana
-odchylka desítky metrů,deviation in tens of meters,amcr,HES-000862,pian_presnost,Location & Admin,heslar:pian_presnost
-odchylka jednotky metrů,deviation in meters,amcr,HES-000861,pian_presnost,Location & Admin,heslar:pian_presnost
-odchylka stovky metrů,deviation in hundreds of meters,amcr,HES-000863,pian_presnost,Location & Admin,heslar:pian_presnost
 památková rezervace,heritage reserve,amcr,HES-000180,pamatkova_ochrana,Location & Admin,heslar:pamatkova_ochrana
 památková zóna,heritage zone,amcr,HES-000179,pamatkova_ochrana,Location & Admin,heslar:pamatkova_ochrana
-podloží,subsoil,amcr,HES-001159,vyskovy_bod_typ,Location & Admin,heslar:vyskovy_bod_typ
-poloha podle katastru,location by cadastral area,amcr,HES-000864,pian_presnost,Location & Admin,heslar:pian_presnost
-polygon,polygon,amcr,HES-001135,pian_typ,Location & Admin,heslar:pian_typ
-povrch sondy,trench surface,amcr,HES-001157,vyskovy_bod_typ,Location & Admin,heslar:vyskovy_bod_typ
-pseudolokalita (< 5 %),pseudo-site (< 5%),amcr,HES-001452,jistota_urceni,Location & Admin,heslar:jistota_urceni
 ruina,ruin,amcr,HES-001456,stav_dochovani,Location & Admin,heslar:stav_dochovani
-snížené podloží,levelled subsoil,amcr,HES-001160,vyskovy_bod_typ,Location & Admin,heslar:vyskovy_bod_typ
 terénní pracoviště,fieldwork unit,amcr,HES-001129,organizace_typ,Location & Admin,heslar:organizace_typ
 univerzita,university,amcr,HES-001132,organizace_typ,Location & Admin,heslar:organizace_typ
 výzkumná instituce,research organisation,amcr,HES-001131,organizace_typ,Location & Admin,heslar:organizace_typ
 zaniklá lokalita,buried site,amcr,HES-001453,stav_dochovani,Location & Admin,heslar:stav_dochovani
 ústav památkové péče,heritage organisation,amcr,HES-001130,organizace_typ,Location & Admin,heslar:organizace_typ
-České Budějovice-Hosín,České Budějovice-Hosín,amcr,HES-000187,letiste,Location & Admin,heslar:letiste
+barvivo,colourant,amcr,HES-000903,objekt_specifikace,Material,heslar:objekt_specifikace
+bronz,bronze,amcr,HES-000904,objekt_specifikace,Material,heslar:objekt_specifikace
+cín,tin,amcr,HES-000921,objekt_specifikace,Material,heslar:objekt_specifikace
+dehet,tar,amcr,HES-000922,objekt_specifikace,Material,heslar:objekt_specifikace
+dřevo,wood,amcr,HES-000923,objekt_specifikace,Material,heslar:objekt_specifikace
+grafit,graphite,amcr,HES-000924,objekt_specifikace,Material,heslar:objekt_specifikace
+hlína,clay,amcr,HES-000925,objekt_specifikace,Material,heslar:objekt_specifikace
+jantar,amber,amcr,HES-000926,objekt_specifikace,Material,heslar:objekt_specifikace
+jiný materiál,other material,amcr,HES-001027,predmet_specifikace,Material,heslar:predmet_specifikace
+keramika,ceramic,amcr,HES-000933,objekt_specifikace,Material,heslar:objekt_specifikace
+keramika fajáns/majolika,faience/maiolica,amcr,HES-000934,objekt_specifikace,Material,heslar:objekt_specifikace
+keramika kamenina,stoneware,amcr,HES-000935,objekt_specifikace,Material,heslar:objekt_specifikace
+keramika porcelán,porcelain,amcr,HES-000936,objekt_specifikace,Material,heslar:objekt_specifikace
+keramika terra sigillata,terra sigillata ware,amcr,HES-000937,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce cihlová,brick structure,amcr,HES-000894,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce dlaždicová,tiled structure,amcr,HES-000895,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce dřevěná,wooden structure,amcr,HES-000897,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce hrázděná,half-timber construction,amcr,HES-000900,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce kamenná,stonework,amcr,HES-000896,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce kůlová/sloupová,post-and-beam structure,amcr,HES-000898,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce roubená,log construction,amcr,HES-000899,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce sypaná/vršená,earth construction,amcr,HES-000901,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce zahloubená,sunken structure,amcr,HES-000902,objekt_specifikace,Material,heslar:objekt_specifikace
+konstrukce zděná,masonry construction,amcr,HES-000893,objekt_specifikace,Material,heslar:objekt_specifikace
+korál,coral,amcr,HES-000938,objekt_specifikace,Material,heslar:objekt_specifikace
+kost lidská,human bone,amcr,HES-000905,objekt_specifikace,Material,heslar:objekt_specifikace
+kost zvířecí,animal bone,amcr,HES-000906,objekt_specifikace,Material,heslar:objekt_specifikace
+kov,metal,amcr,HES-000907,objekt_specifikace,Material,heslar:objekt_specifikace
+kov barevný,nonferrous metal,amcr,HES-000908,objekt_specifikace,Material,heslar:objekt_specifikace
+kámen,stone,amcr,HES-000927,objekt_specifikace,Material,heslar:objekt_specifikace
+kámen broušený,polished stone,amcr,HES-000928,objekt_specifikace,Material,heslar:objekt_specifikace
+kámen drahý,gemstone,amcr,HES-000929,objekt_specifikace,Material,heslar:objekt_specifikace
+kámen drtidlo/žernov,grinding stone,amcr,HES-000930,objekt_specifikace,Material,heslar:objekt_specifikace
+kámen stavební,building stone,amcr,HES-000931,objekt_specifikace,Material,heslar:objekt_specifikace
+kámen štípaný,lithics,amcr,HES-000932,objekt_specifikace,Material,heslar:objekt_specifikace
+kůra,bark,amcr,HES-000940,objekt_specifikace,Material,heslar:objekt_specifikace
+kůže,leather,amcr,HES-000909,objekt_specifikace,Material,heslar:objekt_specifikace
+malta,mortar,amcr,HES-000910,objekt_specifikace,Material,heslar:objekt_specifikace
+mazanice,daub,amcr,HES-000911,objekt_specifikace,Material,heslar:objekt_specifikace
+mosaz,brass,amcr,HES-000913,objekt_specifikace,Material,heslar:objekt_specifikace
+měď,copper,amcr,HES-000912,objekt_specifikace,Material,heslar:objekt_specifikace
+obilky/semena,caryopses/seeds,amcr,HES-000914,objekt_specifikace,Material,heslar:objekt_specifikace
+olovo,lead,amcr,HES-000915,objekt_specifikace,Material,heslar:objekt_specifikace
+paroh,antler,amcr,HES-000918,objekt_specifikace,Material,heslar:objekt_specifikace
+pecka,fruit stone,amcr,HES-000919,objekt_specifikace,Material,heslar:objekt_specifikace
+perla,pearl,amcr,HES-000920,objekt_specifikace,Material,heslar:objekt_specifikace
+perleť/mušle,nacre/shell,amcr,HES-000941,objekt_specifikace,Material,heslar:objekt_specifikace
+plast,plastic,amcr,HES-000942,objekt_specifikace,Material,heslar:objekt_specifikace
+proutí,wattle,amcr,HES-000943,objekt_specifikace,Material,heslar:objekt_specifikace
+pryskyřice,resin,amcr,HES-000944,objekt_specifikace,Material,heslar:objekt_specifikace
+pyl,polen,amcr,HES-001007,predmet_specifikace,Material,heslar:predmet_specifikace
+roh,horn,amcr,HES-000945,objekt_specifikace,Material,heslar:objekt_specifikace
+schránky měkkýšů,mollusc shell,amcr,HES-000946,objekt_specifikace,Material,heslar:objekt_specifikace
+sklo,glass,amcr,HES-000947,objekt_specifikace,Material,heslar:objekt_specifikace
+slonovina/mamutovina,ivory,amcr,HES-000948,objekt_specifikace,Material,heslar:objekt_specifikace
+spondylus,spondylus,amcr,HES-000949,objekt_specifikace,Material,heslar:objekt_specifikace
+stříbro,silver,amcr,HES-000950,objekt_specifikace,Material,heslar:objekt_specifikace
+textil,textile,amcr,HES-000952,objekt_specifikace,Material,heslar:objekt_specifikace
+uhlí,coal,amcr,HES-000953,objekt_specifikace,Material,heslar:objekt_specifikace
+uhlí dřevěné,charcoal,amcr,HES-000954,objekt_specifikace,Material,heslar:objekt_specifikace
+vosk,wax,amcr,HES-000957,objekt_specifikace,Material,heslar:objekt_specifikace
+vápno,quicklime,amcr,HES-000955,objekt_specifikace,Material,heslar:objekt_specifikace
+zlato,gold,amcr,HES-000958,objekt_specifikace,Material,heslar:objekt_specifikace
+zub lidský,human tooth,amcr,HES-000960,objekt_specifikace,Material,heslar:objekt_specifikace
+zub zvířecí,animal tooth,amcr,HES-000961,objekt_specifikace,Material,heslar:objekt_specifikace
+švartna,sapropel,amcr,HES-000951,objekt_specifikace,Material,heslar:objekt_specifikace
+železo,iron,amcr,HES-000962,objekt_specifikace,Material,heslar:objekt_specifikace
 absolutní datování,absolute dating,amcr,HES-000634,posudek_typ,Methods,heslar:posudek_typ
 analýza stabilních izotopů,stable isotope analysis,amcr,HES-000618,posudek_typ,Methods,heslar:posudek_typ
 antrakologie/xylotomie,anthracology/xylotomy,amcr,HES-000604,posudek_typ,Methods,heslar:posudek_typ
@@ -548,12 +806,10 @@ archeogenetika,archaeogenetics,amcr,HES-000606,posudek_typ,Methods,heslar:posude
 archeomalakologie,archeomalacology,amcr,HES-000621,posudek_typ,Methods,heslar:posudek_typ
 archeoparazitologie,archeoparasitology,amcr,HES-000626,posudek_typ,Methods,heslar:posudek_typ
 archeozoologie,archaeozoology,amcr,HES-000607,posudek_typ,Methods,heslar:posudek_typ
-badatelský,research,amcr,HES-001137,projekt_typ,Methods,heslar:projekt_typ
 badatelský záměr,research project,amcr,HES-000595,adb_podnet,Methods,heslar:adb_podnet
 bez okolností,unknown context,amcr,HES-001062,akce_typ,Methods,heslar:akce_typ
 bioarcheologie,bioarchaeology,amcr,HES-001439,posudek_typ,Methods,heslar:posudek_typ
 biologická antropologie,biological anthropology,amcr,HES-000605,posudek_typ,Methods,heslar:posudek_typ
-celek akce,fieldwork extent,amcr,HES-001070,dok_jednotka_typ,Methods,heslar:dok_jednotka_typ
 chemická analýza,chemical analysis,amcr,HES-000617,posudek_typ,Methods,heslar:posudek_typ
 dendrochronologie,dendrochronology,amcr,HES-000609,posudek_typ,Methods,heslar:posudek_typ
 diatomární analýza,diatomic analysis,amcr,HES-000610,posudek_typ,Methods,heslar:posudek_typ
@@ -576,11 +832,9 @@ inženýrsko-geologický průzkum,engineering-geological survey,amcr,HES-000596,
 jiná evidence,other evidence,amcr,HES-001061,akce_typ,Methods,heslar:akce_typ
 jiné expertní zpracování,other expert analysis,amcr,HES-001495,posudek_typ_kat,Methods,heslar:posudek_typ_kat
 jiný podnět,other motivation,amcr,HES-000599,adb_podnet,Methods,heslar:adb_podnet
-katastrální území,cadastral area,amcr,HES-001073,dok_jednotka_typ,Methods,heslar:dok_jednotka_typ
 konzervace a restaurování,conservation and restoration,amcr,HES-000629,posudek_typ,Methods,heslar:posudek_typ
 letecký průzkum,aerial survey,amcr,HES-001045,akce_typ,Methods,heslar:akce_typ
 liniová stavba,line construction,amcr,HES-000600,adb_podnet,Methods,heslar:adb_podnet
-lokalita,site,amcr,HES-001074,dok_jednotka_typ,Methods,heslar:dok_jednotka_typ
 makrozbytková analýza,macroremains analysis,amcr,HES-000620,posudek_typ,Methods,heslar:posudek_typ
 materiálová analýza,material analysis,amcr,HES-000633,posudek_typ,Methods,heslar:posudek_typ
 materiálové analýzy,material analysis,amcr,HES-001494,posudek_typ_kat,Methods,heslar:posudek_typ_kat
@@ -606,7 +860,6 @@ plošný odkryv,total excavation,amcr,HES-001059,akce_typ,Methods,heslar:akce_ty
 povrchový nález,surface find,amcr,HES-001049,akce_typ,Methods,heslar:akce_typ
 povrchový sběr,surface collection survey,amcr,HES-001050,akce_typ,Methods,heslar:akce_typ
 prvková analýza,elemental analysis,amcr,HES-000631,posudek_typ,Methods,heslar:posudek_typ
-průzkum,survey,amcr,HES-001138,projekt_typ,Methods,heslar:projekt_typ
 průzkum detektorem kovu,metal detector survey,amcr,HES-001052,akce_typ,Methods,heslar:akce_typ
 radiouhlíkové datování,radiocarbon dating,amcr,HES-000608,posudek_typ,Methods,heslar:posudek_typ
 skupina sond,group of pit trenches,amcr,HES-001151,adb_typ,Methods,heslar:adb_typ
@@ -623,338 +876,7 @@ vertikální řez,linear trench,amcr,HES-001056,akce_typ,Methods,heslar:akce_typ
 vizuální/geodetický průzkum,visual/geodetic survey,amcr,HES-001044,akce_typ,Methods,heslar:akce_typ
 vrt,sediment core sample,amcr,HES-001146,adb_typ,Methods,heslar:adb_typ
 výzkum povrchové vrstvy,topsoil sampling,amcr,HES-001064,akce_typ_kat,Methods,heslar:akce_typ_kat
-záchranný,rescue,amcr,HES-001136,projekt_typ,Methods,heslar:projekt_typ
-část akce,fieldwork segment,amcr,HES-001071,dok_jednotka_typ,Methods,heslar:dok_jednotka_typ
 řez,linear trench,amcr,HES-001148,adb_typ,Methods,heslar:adb_typ
-(polo)zemnice,pit house,amcr,HES-000497,objekt_druh,Site Types,heslar:objekt_druh
-areál jiné aktivity,other site,amcr,HES-000056,areal,Site Types,heslar:areal
-areál nezemědělské výroby,production site,amcr,HES-000078,areal,Site Types,heslar:areal
-areál těžby,extracting site,amcr,HES-000032,areal,Site Types,heslar:areal
-areál vojenských aktivit,military site,amcr,HES-000041,areal,Site Types,heslar:areal
-areál zemědělské výroby,agricultural production site,amcr,HES-000036,areal,Site Types,heslar:areal
-barvivo,colourant,amcr,HES-000903,objekt_specifikace,Site Types,heslar:objekt_specifikace
-bastion/reduta,bastion/redoubt,amcr,HES-000468,objekt_druh,Site Types,heslar:objekt_druh
-bašta,wall tower,amcr,HES-000528,objekt_druh,Site Types,heslar:objekt_druh
-bodové objekty uspořádané,organized point features,amcr,HES-001030,letfoto_tvar,Site Types,heslar:letfoto_tvar
-bodový objekt,point feature,amcr,HES-001028,letfoto_tvar,Site Types,heslar:letfoto_tvar
-boj,fighting activity,amcr,HES-000008,aktivita,Site Types,heslar:aktivita
-bojiště,battlefield,amcr,HES-000042,areal,Site Types,heslar:areal
-bronz,bronze,amcr,HES-000904,objekt_specifikace,Site Types,heslar:objekt_specifikace
-brána,gate,amcr,HES-000529,objekt_druh,Site Types,heslar:objekt_druh
-budova hospodářská,non-residential building,amcr,HES-000440,objekt_druh,Site Types,heslar:objekt_druh
-budova obytná,residential building,amcr,HES-000439,objekt_druh,Site Types,heslar:objekt_druh
-budova/stavba,building/structure,amcr,HES-000438,objekt_druh,Site Types,heslar:objekt_druh
-cesta,roads,amcr,HES-000048,areal,Site Types,heslar:areal
-chodba,corridor,amcr,HES-000494,objekt_druh,Site Types,heslar:objekt_druh
-cisterna,cistern,amcr,HES-000445,objekt_druh,Site Types,heslar:objekt_druh
-cín,tin,amcr,HES-000921,objekt_specifikace,Site Types,heslar:objekt_specifikace
-dehet,tar,amcr,HES-000922,objekt_specifikace,Site Types,heslar:objekt_specifikace
-dehtárna,tar kiln,amcr,HES-000079,areal,Site Types,heslar:areal
-deponování,deposition activity,amcr,HES-000007,aktivita,Site Types,heslar:aktivita
-depot,hoard,amcr,HES-000051,areal,Site Types,heslar:areal
-destrukční vrstva/souvrství,destruction layer/sequence,amcr,HES-000454,objekt_druh,Site Types,heslar:objekt_druh
-dláždění,pavement,amcr,HES-000492,objekt_druh,Site Types,heslar:objekt_druh
-dvorec/dvůr,curia/manorial farm,amcr,HES-000014,areal,Site Types,heslar:areal
-dřevo,wood,amcr,HES-000923,objekt_specifikace,Site Types,heslar:objekt_specifikace
-důl,mine,amcr,HES-000033,areal,Site Types,heslar:areal
-erozní rýha,gully/ravine,amcr,HES-000471,objekt_druh,Site Types,heslar:objekt_druh
-geologická/přirozená vrstva,natural/geological layer,amcr,HES-000455,objekt_druh,Site Types,heslar:objekt_druh
-grafit,graphite,amcr,HES-000924,objekt_specifikace,Site Types,heslar:objekt_specifikace
-haltýř,spring house,amcr,HES-000478,objekt_druh,Site Types,heslar:objekt_druh
-hamr,hammer mill,amcr,HES-000545,objekt_druh,Site Types,heslar:objekt_druh
-hať,corduroy road,amcr,HES-000521,objekt_druh,Site Types,heslar:objekt_druh
-hliník,clay pit,amcr,HES-000512,objekt_druh,Site Types,heslar:objekt_druh
-hlína,clay,amcr,HES-000925,objekt_specifikace,Site Types,heslar:objekt_specifikace
-hrad,castle,amcr,HES-000015,areal,Site Types,heslar:areal
-hradba,defensive wall,amcr,HES-000530,objekt_druh,Site Types,heslar:objekt_druh
-hradiště,hillfort,amcr,HES-000072,areal,Site Types,heslar:areal
-hrazené sídliště,enclosed settlement,amcr,HES-000064,areal,Site Types,heslar:areal
-hrazený areál,enclosure,amcr,HES-000071,areal,Site Types,heslar:areal
-hrob,grave,amcr,HES-000427,objekt_druh,Site Types,heslar:objekt_druh
-hrob komorový,chamber grave,amcr,HES-000428,objekt_druh,Site Types,heslar:objekt_druh
-hrob skříňkový,cist grave,amcr,HES-000429,objekt_druh,Site Types,heslar:objekt_druh
-hrobka,tomb,amcr,HES-000430,objekt_druh,Site Types,heslar:objekt_druh
-hráz,embankment/dam,amcr,HES-000493,objekt_druh,Site Types,heslar:objekt_druh
-intruze,intrusion,amcr,HES-000010,aktivita,Site Types,heslar:aktivita
-inženýrské sítě,utilities,amcr,HES-000515,objekt_druh,Site Types,heslar:objekt_druh
-izolovaný pohřeb,isolated grave,amcr,HES-000026,areal,Site Types,heslar:areal
-jantar,amber,amcr,HES-000926,objekt_specifikace,Site Types,heslar:objekt_specifikace
-jeskyně/skalní prostor,cave/abri,amcr,HES-000472,objekt_druh,Site Types,heslar:objekt_druh
-jez,weir,amcr,HES-000052,areal,Site Types,heslar:areal
-jiná aktivita,other activity,amcr,HES-000009,aktivita,Site Types,heslar:aktivita
-jáma,pit,amcr,HES-000441,objekt_druh,Site Types,heslar:objekt_druh
-jáma kůlová/sloupová,stakehole/posthole,amcr,HES-000442,objekt_druh,Site Types,heslar:objekt_druh
-jáma odpadní/jímka,waste pit/cesspit,amcr,HES-000446,objekt_druh,Site Types,heslar:objekt_druh
-jáma stavební,construction pit,amcr,HES-000443,objekt_druh,Site Types,heslar:objekt_druh
-jáma zásobní,storage pit,amcr,HES-000444,objekt_druh,Site Types,heslar:objekt_druh
-kamna,stove,amcr,HES-000422,objekt_druh,Site Types,heslar:objekt_druh
-kanalizace,sewer,amcr,HES-000464,objekt_druh,Site Types,heslar:objekt_druh
-kanál/náhon,channel/millrace,amcr,HES-000053,areal,Site Types,heslar:areal
-kaple,chapel,amcr,HES-000020,areal,Site Types,heslar:areal
-kašna,fountain,amcr,HES-000479,objekt_druh,Site Types,heslar:objekt_druh
-keramika,ceramic,amcr,HES-000933,objekt_specifikace,Site Types,heslar:objekt_specifikace
-keramika fajáns/majolika,faience/maiolica,amcr,HES-000934,objekt_specifikace,Site Types,heslar:objekt_specifikace
-keramika kamenina,stoneware,amcr,HES-000935,objekt_specifikace,Site Types,heslar:objekt_specifikace
-keramika porcelán,porcelain,amcr,HES-000936,objekt_specifikace,Site Types,heslar:objekt_specifikace
-keramika terra sigillata,terra sigillata ware,amcr,HES-000937,objekt_specifikace,Site Types,heslar:objekt_specifikace
-klenba,vaults,amcr,HES-000495,objekt_druh,Site Types,heslar:objekt_druh
-klášter,monastery,amcr,HES-000073,areal,Site Types,heslar:areal
-kolektor,collector,amcr,HES-000516,objekt_druh,Site Types,heslar:objekt_druh
-komunikace,transportation activity,amcr,HES-000006,aktivita,Site Types,heslar:aktivita
-konstrukce cihlová,brick structure,amcr,HES-000894,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce dlaždicová,tiled structure,amcr,HES-000895,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce dřevěná,wooden structure,amcr,HES-000897,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce hrázděná,half-timber construction,amcr,HES-000900,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce kamenná,stonework,amcr,HES-000896,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce kůlová/sloupová,post-and-beam structure,amcr,HES-000898,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce roubená,log construction,amcr,HES-000899,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce sypaná/vršená,earth construction,amcr,HES-000901,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce zahloubená,sunken structure,amcr,HES-000902,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukce zděná,masonry construction,amcr,HES-000893,objekt_specifikace,Site Types,heslar:objekt_specifikace
-konstrukční prvek,architectural element,amcr,HES-000491,objekt_druh,Site Types,heslar:objekt_druh
-korál,coral,amcr,HES-000938,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kost lidská,human bone,amcr,HES-000905,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kost zvířecí,animal bone,amcr,HES-000906,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kostel,church,amcr,HES-000021,areal,Site Types,heslar:areal
-kostnice,ossuary,amcr,HES-000432,objekt_druh,Site Types,heslar:objekt_druh
-kov,metal,amcr,HES-000907,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kov barevný,nonferrous metal,amcr,HES-000908,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kovárna,blacksmith,amcr,HES-000546,objekt_druh,Site Types,heslar:objekt_druh
-kovářská výheň,forge,amcr,HES-000557,objekt_druh,Site Types,heslar:objekt_druh
-krajina,landscape,amcr,HES-000117,lokalita_druh,Site Types,heslar:lokalita_druh
-kult,ritual activity,amcr,HES-000005,aktivita,Site Types,heslar:aktivita
-kultovní areál,ritual site,amcr,HES-000019,areal,Site Types,heslar:areal
-kultovní místo,ritual place,amcr,HES-000023,areal,Site Types,heslar:areal
-kultovní/sakrální objekt,ritual/sacral feature,amcr,HES-000525,objekt_druh,Site Types,heslar:objekt_druh
-kámen,stone,amcr,HES-000927,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kámen broušený,polished stone,amcr,HES-000928,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kámen drahý,gemstone,amcr,HES-000929,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kámen drtidlo/žernov,grinding stone,amcr,HES-000930,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kámen stavební,building stone,amcr,HES-000931,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kámen štípaný,lithics,amcr,HES-000932,objekt_specifikace,Site Types,heslar:objekt_specifikace
-křtitelnice,baptismal font,amcr,HES-000499,objekt_druh,Site Types,heslar:objekt_druh
-kříž/boží muka,cross/calvary,amcr,HES-000022,areal,Site Types,heslar:areal
-kůl/sloup,stake/post,amcr,HES-000447,objekt_druh,Site Types,heslar:objekt_druh
-kůra,bark,amcr,HES-000940,objekt_specifikace,Site Types,heslar:objekt_specifikace
-kůže,leather,amcr,HES-000909,objekt_specifikace,Site Types,heslar:objekt_specifikace
-lineární převýšený útvar,linear mound,amcr,HES-000538,objekt_druh,Site Types,heslar:objekt_druh
-lineární systém,system of linear features,amcr,HES-001034,letfoto_tvar,Site Types,heslar:letfoto_tvar
-lineární zahloubený útvar,linear depression,amcr,HES-000539,objekt_druh,Site Types,heslar:objekt_druh
-linie,linear feature,amcr,HES-001032,letfoto_tvar,Site Types,heslar:letfoto_tvar
-linie ohrazující,delimiting line,amcr,HES-001033,letfoto_tvar,Site Types,heslar:letfoto_tvar
-loch,larder (cellar),amcr,HES-000487,objekt_druh,Site Types,heslar:objekt_druh
-lom,quarry,amcr,HES-000034,areal,Site Types,heslar:areal
-malba/freska,painting/fresco,amcr,HES-000540,objekt_druh,Site Types,heslar:objekt_druh
-malta,mortar,amcr,HES-000910,objekt_specifikace,Site Types,heslar:objekt_specifikace
-mazanice,daub,amcr,HES-000911,objekt_specifikace,Site Types,heslar:objekt_specifikace
-menhir,menhir,amcr,HES-000500,objekt_druh,Site Types,heslar:objekt_druh
-mezní pás,field boundary,amcr,HES-000503,objekt_druh,Site Types,heslar:objekt_druh
-mezník/patník,milestone/boundary stone,amcr,HES-000522,objekt_druh,Site Types,heslar:objekt_druh
-milíř,charcoal kiln,amcr,HES-000554,objekt_druh,Site Types,heslar:objekt_druh
-milířiště,charcoal kiln,amcr,HES-000029,areal,Site Types,heslar:areal
-mlýn,mill,amcr,HES-000028,areal,Site Types,heslar:areal
-mohyla,burial mound,amcr,HES-000431,objekt_druh,Site Types,heslar:objekt_druh
-mosaz,brass,amcr,HES-000913,objekt_specifikace,Site Types,heslar:objekt_specifikace
-most,bridge,amcr,HES-000523,objekt_druh,Site Types,heslar:objekt_druh
-most/brod,bridge/ford,amcr,HES-000049,areal,Site Types,heslar:areal
-motte,motte,amcr,HES-000531,objekt_druh,Site Types,heslar:objekt_druh
-muzeum/skanzen,museum/open-air museum,amcr,HES-000129,lokalita_druh,Site Types,heslar:lokalita_druh
-místo sběru,collection site,amcr,HES-000057,areal,Site Types,heslar:areal
-místo těžby,extracting place,amcr,HES-000559,objekt_druh,Site Types,heslar:objekt_druh
-místo výroby,production place,amcr,HES-000544,objekt_druh,Site Types,heslar:objekt_druh
-místo zpracování,processing place,amcr,HES-000543,objekt_druh,Site Types,heslar:objekt_druh
-město,city,amcr,HES-000074,areal,Site Types,heslar:areal
-městský palác,town palace,amcr,HES-000016,areal,Site Types,heslar:areal
-měď,copper,amcr,HES-000912,objekt_specifikace,Site Types,heslar:objekt_specifikace
-nadkomunitní areál,supracommunity site,amcr,HES-000011,areal,Site Types,heslar:areal
-navážka,backfill,amcr,HES-000457,objekt_druh,Site Types,heslar:objekt_druh
-neklidný terén,uneven surface,amcr,HES-000568,objekt_druh,Site Types,heslar:objekt_druh
-nemovitá památka,heritage site,amcr,HES-001122,lokalita_typ,Site Types,heslar:lokalita_typ
-nespecifikovaný reliéfní útvar,unspecified terrain feature,amcr,HES-000567,objekt_druh,Site Types,heslar:objekt_druh
-neurčený areál,unspecified site,amcr,HES-000060,areal,Site Types,heslar:areal
-nika,niche,amcr,HES-000448,objekt_druh,Site Types,heslar:objekt_druh
-náhon,millrace,amcr,HES-000513,objekt_druh,Site Types,heslar:objekt_druh
-náhrobek/náhrobní kámen,gravestone,amcr,HES-000433,objekt_druh,Site Types,heslar:objekt_druh
-nález v druhotné poloze,find in secondary context,amcr,HES-000061,areal,Site Types,heslar:areal
-násep,bank,amcr,HES-000456,objekt_druh,Site Types,heslar:objekt_druh
-obilky/semena,caryopses/seeds,amcr,HES-000914,objekt_specifikace,Site Types,heslar:objekt_specifikace
-objekt/stopa výroby,production feature/trace,amcr,HES-000578,objekt_druh_kat,Site Types,heslar:objekt_druh_kat
-obora,game park,amcr,HES-000037,areal,Site Types,heslar:areal
-obval,spoil bank,amcr,HES-000561,objekt_druh,Site Types,heslar:objekt_druh
-obývání,residential activity,amcr,HES-000001,aktivita,Site Types,heslar:aktivita
-odpadní vrstva/souvrství,waste layer/sequence,amcr,HES-000458,objekt_druh,Site Types,heslar:objekt_druh
-ohniště,fireplace,amcr,HES-000423,objekt_druh,Site Types,heslar:objekt_druh
-ohradní zeď/plot,wall/fence,amcr,HES-000532,objekt_druh,Site Types,heslar:objekt_druh
-ohrazení kruhové malé,circular enclosure (small),amcr,HES-001035,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení kruhové střední,circular enclosure (medium),amcr,HES-001036,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení kruhové velké,circular enclosure (large),amcr,HES-001037,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení polygonální malé,polygonal enclosure (small),amcr,HES-001041,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení polygonální střední,polygonal enclosure (medium),amcr,HES-001042,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení polygonální velké,polygonal enclosure (large),amcr,HES-001043,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení pravoúhlé malé,rectangular enclosure (small),amcr,HES-001038,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení pravoúhlé střední,rectangular enclosure (medium),amcr,HES-001039,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení pravoúhlé velké,rectangular enclosure (large),amcr,HES-001040,letfoto_tvar,Site Types,heslar:letfoto_tvar
-ohrazení/fortifikace,enclosure/fortification,amcr,HES-000527,objekt_druh,Site Types,heslar:objekt_druh
-ojedinělý nález,single find,amcr,HES-000062,areal,Site Types,heslar:areal
-olovo,lead,amcr,HES-000915,objekt_specifikace,Site Types,heslar:objekt_specifikace
-oltář,altar,amcr,HES-000501,objekt_druh,Site Types,heslar:objekt_druh
-osídlený skalní prostor,cave settlement,amcr,HES-000065,areal,Site Types,heslar:areal
-otopná pec,oven,amcr,HES-000424,objekt_druh,Site Types,heslar:objekt_druh
-otopné zařízení,heating equipment,amcr,HES-000421,objekt_druh,Site Types,heslar:objekt_druh
-palebné postavení,gun emplacement,amcr,HES-000506,objekt_druh,Site Types,heslar:objekt_druh
-palisáda,palisade,amcr,HES-000507,objekt_druh,Site Types,heslar:objekt_druh
-palác,palace,amcr,HES-000481,objekt_druh,Site Types,heslar:objekt_druh
-park,park,amcr,HES-000059,areal,Site Types,heslar:areal
-parkánová hradba,zwinger wall,amcr,HES-000533,objekt_druh,Site Types,heslar:objekt_druh
-paroh,antler,amcr,HES-000918,objekt_specifikace,Site Types,heslar:objekt_specifikace
-pastvina/louka,pasture/meadow,amcr,HES-000038,areal,Site Types,heslar:areal
-pec,kiln,amcr,HES-000477,objekt_druh,Site Types,heslar:objekt_druh
-pec chlebová,bake oven,amcr,HES-000552,objekt_druh,Site Types,heslar:objekt_druh
-pec cihlářská,brick oven,amcr,HES-000548,objekt_druh,Site Types,heslar:objekt_druh
-pec dehtářská,tar pit,amcr,HES-000549,objekt_druh,Site Types,heslar:objekt_druh
-pec hrnčířská,pottery kiln,amcr,HES-000550,objekt_druh,Site Types,heslar:objekt_druh
-pec hutnická,iron-smelting furnace,amcr,HES-000551,objekt_druh,Site Types,heslar:objekt_druh
-pec kovolitecká,foundry,amcr,HES-000553,objekt_druh,Site Types,heslar:objekt_druh
-pec sklářská,glass furnace,amcr,HES-000555,objekt_druh,Site Types,heslar:objekt_druh
-pec vápenická,lime kiln,amcr,HES-000556,objekt_druh,Site Types,heslar:objekt_druh
-pecka,fruit stone,amcr,HES-000919,objekt_specifikace,Site Types,heslar:objekt_specifikace
-perla,pearl,amcr,HES-000920,objekt_specifikace,Site Types,heslar:objekt_specifikace
-perleť/mušle,nacre/shell,amcr,HES-000941,objekt_specifikace,Site Types,heslar:objekt_specifikace
-pevnost,fortress,amcr,HES-000043,areal,Site Types,heslar:areal
-pilota,pier,amcr,HES-000450,objekt_druh,Site Types,heslar:objekt_druh
-pilíř,pillar,amcr,HES-000449,objekt_druh,Site Types,heslar:objekt_druh
-pinka,binge,amcr,HES-000562,objekt_druh,Site Types,heslar:objekt_druh
-pivovar,brewery,amcr,HES-000080,areal,Site Types,heslar:areal
-plast,plastic,amcr,HES-000942,objekt_specifikace,Site Types,heslar:objekt_specifikace
-plošina,platform,amcr,HES-000569,objekt_druh,Site Types,heslar:objekt_druh
-plošný objekt,polygonal feature,amcr,HES-001031,letfoto_tvar,Site Types,heslar:letfoto_tvar
-plužina,field system,amcr,HES-000504,objekt_druh,Site Types,heslar:objekt_druh
-podlaha (konstrukce),floor (construction),amcr,HES-000451,objekt_druh,Site Types,heslar:objekt_druh
-podlaha (vrstva/souvrství),floor layer/sequence,amcr,HES-000459,objekt_druh,Site Types,heslar:objekt_druh
-pohřbívání,burial activity,amcr,HES-000002,aktivita,Site Types,heslar:aktivita
-pohřeb kostrový,inhumation burial,amcr,HES-000434,objekt_druh,Site Types,heslar:objekt_druh
-pohřeb v sídlištním objektu,burial in settlement context,amcr,HES-000437,objekt_druh,Site Types,heslar:objekt_druh
-pohřeb zvířete,animal burial,amcr,HES-000436,objekt_druh,Site Types,heslar:objekt_druh
-pohřeb žárový,cremation burial,amcr,HES-000435,objekt_druh,Site Types,heslar:objekt_druh
-pohřebiště v sakrální stavbě,burials in sacral building,amcr,HES-000077,areal,Site Types,heslar:areal
-pohřebiště/hřbitov,cemetery/graveyard,amcr,HES-000027,areal,Site Types,heslar:areal
-pohřební areál,burial site,amcr,HES-000025,areal,Site Types,heslar:areal
-pohřební objekt,funerary structure,amcr,HES-000426,objekt_druh,Site Types,heslar:objekt_druh
-pole,cropland,amcr,HES-000039,areal,Site Types,heslar:areal
-polní opevnění,field fortification,amcr,HES-000044,areal,Site Types,heslar:areal
-polygon archeologického průzkumu,archaeological survey polygon,amcr,HES-000132,lokalita_druh_kat,Site Types,heslar:lokalita_druh_kat
-polygon leteckého průzkumu,aerial survey polygon,amcr,HES-000111,lokalita_druh,Site Types,heslar:lokalita_druh
-polygon průzkumu,survey polygon,amcr,HES-001123,lokalita_typ,Site Types,heslar:lokalita_typ
-pomník/památník,memorial,amcr,HES-000128,lokalita_druh,Site Types,heslar:lokalita_druh
-popraviště,execution site,amcr,HES-000058,areal,Site Types,heslar:areal
-pozůstatek komunikace,remains of transportation structure,amcr,HES-001429,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek kultu,remains of ritual site,amcr,HES-001433,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek mohylníku,remains of burial mounds,amcr,HES-001430,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek ohrazení,remains of enclosure,amcr,HES-001431,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek represe,remains of repression site,amcr,HES-001432,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek sídla elity,remains of manorial site,amcr,HES-001434,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek sídliště,remains of settlement,amcr,HES-001435,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek těžby,remains of extraction site,amcr,HES-001436,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek vojenství,remains of military site,amcr,HES-001437,lokalita_druh,Site Types,heslar:lokalita_druh
-pozůstatek výroby,remains of production site,amcr,HES-001438,lokalita_druh,Site Types,heslar:lokalita_druh
-pramen,spring,amcr,HES-000473,objekt_druh,Site Types,heslar:objekt_druh
-protourbánní aglomerace,proto-urban agglomeration,amcr,HES-000075,areal,Site Types,heslar:areal
-proutí,wattle,amcr,HES-000943,objekt_specifikace,Site Types,heslar:objekt_specifikace
-pryskyřice,resin,amcr,HES-000944,objekt_specifikace,Site Types,heslar:objekt_specifikace
-pyrotechnologické zařízení,pyrotechnological device,amcr,HES-000476,objekt_druh,Site Types,heslar:objekt_druh
-předměstí,suburb,amcr,HES-000076,areal,Site Types,heslar:areal
-přehrada,dam,amcr,HES-000054,areal,Site Types,heslar:areal
-převýšená plocha,mound,amcr,HES-000536,objekt_druh,Site Types,heslar:objekt_druh
-příkop,moat,amcr,HES-000508,objekt_druh,Site Types,heslar:objekt_druh
-přírodní útvar,natural landform,amcr,HES-000470,objekt_druh,Site Types,heslar:objekt_druh
-přírodní útvar s lidskou aktivitou,inhabited natural landform,amcr,HES-000133,lokalita_druh_kat,Site Types,heslar:lokalita_druh_kat
-roh,horn,amcr,HES-000945,objekt_specifikace,Site Types,heslar:objekt_specifikace
-rondel/rondeloid,roundel/rondeloid,amcr,HES-000012,areal,Site Types,heslar:areal
-rybník,pond,amcr,HES-000055,areal,Site Types,heslar:areal
-rybník/nádrž,pond/water tank,amcr,HES-000505,objekt_druh,Site Types,heslar:objekt_druh
-rýžoviště,panning site,amcr,HES-000035,areal,Site Types,heslar:areal
-samostatná usedlost,individual homestead,amcr,HES-000067,areal,Site Types,heslar:areal
-schodiště,staircase,amcr,HES-000452,objekt_druh,Site Types,heslar:objekt_druh
-schránky měkkýšů,mollusc shell,amcr,HES-000946,objekt_specifikace,Site Types,heslar:objekt_specifikace
-sejp/halda,spoil heap,amcr,HES-000563,objekt_druh,Site Types,heslar:objekt_druh
-shluk bodových objektů,group of point features,amcr,HES-001029,letfoto_tvar,Site Types,heslar:letfoto_tvar
-skalní rytina,rock carving,amcr,HES-000541,objekt_druh,Site Types,heslar:objekt_druh
-sklep,cellar,amcr,HES-000488,objekt_druh,Site Types,heslar:objekt_druh
-sklo,glass,amcr,HES-000947,objekt_specifikace,Site Types,heslar:objekt_specifikace
-sklárna,glassworks,amcr,HES-000030,areal,Site Types,heslar:areal
-slonovina/mamutovina,ivory,amcr,HES-000948,objekt_specifikace,Site Types,heslar:objekt_specifikace
-smírčí kříž,wayside cross,amcr,HES-000502,objekt_druh,Site Types,heslar:objekt_druh
-součást komunikace,transportation structure,amcr,HES-000519,objekt_druh,Site Types,heslar:objekt_druh
-splach/naplavenina,colluvial/alluvial layer,amcr,HES-000461,objekt_druh,Site Types,heslar:objekt_druh
-spondylus,spondylus,amcr,HES-000949,objekt_specifikace,Site Types,heslar:objekt_specifikace
-stanice/tábořiště,camp,amcr,HES-000066,areal,Site Types,heslar:areal
-stodola,barn,amcr,HES-000483,objekt_druh,Site Types,heslar:objekt_druh
-stopy orby,plough marks,amcr,HES-000467,objekt_druh,Site Types,heslar:objekt_druh
-strážnice/předsunutá bašta,outpost/watchtower,amcr,HES-000045,areal,Site Types,heslar:areal
-studna,water well,amcr,HES-000514,objekt_druh,Site Types,heslar:objekt_druh
-stáj/chlév,stable/cowshed,amcr,HES-000482,objekt_druh,Site Types,heslar:objekt_druh
-stéla,stela,amcr,HES-000469,objekt_druh,Site Types,heslar:objekt_druh
-stříbro,silver,amcr,HES-000950,objekt_specifikace,Site Types,heslar:objekt_specifikace
-synagoga,synagogue,amcr,HES-000024,areal,Site Types,heslar:areal
-sídlištní vrstva/souvrství,settlement layer/sequence,amcr,HES-000460,objekt_druh,Site Types,heslar:objekt_druh
-sídliště,settlement,amcr,HES-000081,areal,Site Types,heslar:areal
-sídliště specializované komunity,special-community settlement,amcr,HES-000070,areal,Site Types,heslar:areal
-sídlo elity,elite settlement,amcr,HES-000013,areal,Site Types,heslar:areal
-sýpka/špýchar,granary/storehouse,amcr,HES-000484,objekt_druh,Site Types,heslar:objekt_druh
-terénní hrana,terrain edge,amcr,HES-000570,objekt_druh,Site Types,heslar:objekt_druh
-textil,textile,amcr,HES-000952,objekt_specifikace,Site Types,heslar:objekt_specifikace
-topný kanál,heating channel,amcr,HES-000425,objekt_druh,Site Types,heslar:objekt_druh
-trativod,drainage,amcr,HES-000517,objekt_druh,Site Types,heslar:objekt_druh
-tvrz/hrádek,fortified manor,amcr,HES-000017,areal,Site Types,heslar:areal
-těžba,mining activity,amcr,HES-000004,aktivita,Site Types,heslar:aktivita
-těžební jáma,mining pit,amcr,HES-000566,objekt_druh,Site Types,heslar:objekt_druh
-těžební objekt,mining feature,amcr,HES-000558,objekt_druh,Site Types,heslar:objekt_druh
-těžený/zpracovávaný materiál,extracted/processed material,amcr,HES-000964,objekt_specifikace_kat,Site Types,heslar:objekt_specifikace_kat
-uhlí,coal,amcr,HES-000953,objekt_specifikace,Site Types,heslar:objekt_specifikace
-uhlí dřevěné,charcoal,amcr,HES-000954,objekt_specifikace,Site Types,heslar:objekt_specifikace
-val,rampart,amcr,HES-000534,objekt_druh,Site Types,heslar:objekt_druh
-vesnice/městečko,village/town,amcr,HES-000068,areal,Site Types,heslar:areal
-vodní dílo,hydraulic structure,amcr,HES-000082,areal,Site Types,heslar:areal
-vodoteč,riverine water bodies,amcr,HES-000474,objekt_druh,Site Types,heslar:objekt_druh
-vodovod,water supply pipe,amcr,HES-000518,objekt_druh,Site Types,heslar:objekt_druh
-vojenský tábor,military camp,amcr,HES-000046,areal,Site Types,heslar:areal
-vosk,wax,amcr,HES-000957,objekt_specifikace,Site Types,heslar:objekt_specifikace
-vrstva/souvrství,layer/layer sequence,amcr,HES-000453,objekt_druh,Site Types,heslar:objekt_druh
-vápenická jáma,lime pit,amcr,HES-000547,objekt_druh,Site Types,heslar:objekt_druh
-vápno,quicklime,amcr,HES-000955,objekt_specifikace,Site Types,heslar:objekt_specifikace
-výkop,cut,amcr,HES-000489,objekt_druh,Site Types,heslar:objekt_druh
-výplň/zásyp,fill/deposit,amcr,HES-000462,objekt_druh,Site Types,heslar:objekt_druh
-výroba,production activity,amcr,HES-000003,aktivita,Site Types,heslar:aktivita
-výrobní objekt,production feature,amcr,HES-000542,objekt_druh,Site Types,heslar:objekt_druh
-vývrat,windthrow,amcr,HES-000475,objekt_druh,Site Types,heslar:objekt_druh
-výšinné sídliště,hill settlement,amcr,HES-000069,areal,Site Types,heslar:areal
-věž,tower,amcr,HES-000509,objekt_druh,Site Types,heslar:objekt_druh
-věžice,half tower,amcr,HES-000510,objekt_druh,Site Types,heslar:objekt_druh
-zahloubená plocha,depression,amcr,HES-000537,objekt_druh,Site Types,heslar:objekt_druh
-zahloubený objekt,sunken feature,amcr,HES-000486,objekt_druh,Site Types,heslar:objekt_druh
-zahrada,garden,amcr,HES-000526,objekt_druh,Site Types,heslar:objekt_druh
-zahrada/sad,garden,amcr,HES-000040,areal,Site Types,heslar:areal
-zaniklý/historický areál,deserted/historical site,amcr,HES-000134,lokalita_druh_kat,Site Types,heslar:lokalita_druh_kat
-zemědělský objekt,agricultural structure,amcr,HES-000466,objekt_druh,Site Types,heslar:objekt_druh
-zlato,gold,amcr,HES-000958,objekt_specifikace,Site Types,heslar:objekt_specifikace
-zničený prostor,destroyed site,amcr,HES-000063,areal,Site Types,heslar:areal
-způsob provedení,construction type,amcr,HES-000963,objekt_specifikace_kat,Site Types,heslar:objekt_specifikace_kat
-zub lidský,human tooth,amcr,HES-000960,objekt_specifikace,Site Types,heslar:objekt_specifikace
-zub zvířecí,animal tooth,amcr,HES-000961,objekt_specifikace,Site Types,heslar:objekt_specifikace
-zvonice,bell tower,amcr,HES-000485,objekt_druh,Site Types,heslar:objekt_druh
-základy,foundations,amcr,HES-000498,objekt_druh,Site Types,heslar:objekt_druh
-zákop,trench,amcr,HES-000535,objekt_druh,Site Types,heslar:objekt_druh
-zámek/zámeček/vila,chateau/villa,amcr,HES-000018,areal,Site Types,heslar:areal
-úvoz,hollow way,amcr,HES-000524,objekt_druh,Site Types,heslar:objekt_druh
-šachta,shaft,amcr,HES-000564,objekt_druh,Site Types,heslar:objekt_druh
-šibenice,gallows,amcr,HES-000511,objekt_druh,Site Types,heslar:objekt_druh
-štola,adit,amcr,HES-000565,objekt_druh,Site Types,heslar:objekt_druh
-švartna,sapropel,amcr,HES-000951,objekt_specifikace,Site Types,heslar:objekt_specifikace
-železnice,railway,amcr,HES-000050,areal,Site Types,heslar:areal
-železo,iron,amcr,HES-000962,objekt_specifikace,Site Types,heslar:objekt_specifikace
-železářský areál,iron production site,amcr,HES-000031,areal,Site Types,heslar:areal
-žlab,ditch,amcr,HES-000490,objekt_druh,Site Types,heslar:objekt_druh
-žároviště,burned layer,amcr,HES-000463,objekt_druh,Site Types,heslar:objekt_druh
 10–20 km,10–20 km,amcr,HES-000101,dohlednost,__exclude__,heslar:dohlednost
 20–30 km,20–30 km,amcr,HES-000102,dohlednost,__exclude__,heslar:dohlednost
 30–40 km,30–40 km,amcr,HES-000103,dohlednost,__exclude__,heslar:dohlednost
@@ -1012,6 +934,7 @@ Bangladéš,Bangladesh,amcr,HES-001197,zeme,__exclude__,heslar:zeme
 Barbados,Barbados,amcr,HES-001402,zeme,__exclude__,heslar:zeme
 Belgie,Belgium,amcr,HES-001202,zeme,__exclude__,heslar:zeme
 Belize,Belize,amcr,HES-001334,zeme,__exclude__,heslar:zeme
+Benešov-Nesvačily,Benešov-Nesvačily,amcr,HES-000193,letiste,__exclude__,heslar:letiste
 Benin,Benin,amcr,HES-001207,zeme,__exclude__,heslar:zeme
 Bermudy,Bermuda,amcr,HES-001330,zeme,__exclude__,heslar:zeme
 Bhútán,Bhutan,amcr,HES-001395,zeme,__exclude__,heslar:zeme
@@ -1023,12 +946,17 @@ Bouvetův ostrov,Bouvet Island,amcr,HES-001347,zeme,__exclude__,heslar:zeme
 Brazílie,Brazil,amcr,HES-001252,zeme,__exclude__,heslar:zeme
 Britské Panenské ostrovy,Virgin Islands (British),amcr,HES-001333,zeme,__exclude__,heslar:zeme
 Britské indickooceánské území,British Indian Ocean Territory (the),amcr,HES-001285,zeme,__exclude__,heslar:zeme
+Brno-Tuřany,Brno-Tuřany,amcr,HES-000184,letiste,__exclude__,heslar:letiste
+Brno-Černovice,Brno-Černovice,amcr,HES-000182,letiste,__exclude__,heslar:letiste
 Brunej,Brunei Darussalam,amcr,HES-001359,zeme,__exclude__,heslar:zeme
 Bulharsko,Bulgaria,amcr,HES-001360,zeme,__exclude__,heslar:zeme
 Burkina Faso,Burkina Faso,amcr,HES-001361,zeme,__exclude__,heslar:zeme
 Burundi,Burundi,amcr,HES-001362,zeme,__exclude__,heslar:zeme
 Bělorusko,Belarus,amcr,HES-001329,zeme,__exclude__,heslar:zeme
 Chile,Chile,amcr,HES-001338,zeme,__exclude__,heslar:zeme
+Choceň,Choceň,amcr,HES-000188,letiste,__exclude__,heslar:letiste
+Chomutov,Chomutov,amcr,HES-000189,letiste,__exclude__,heslar:letiste
+Chomutov-Pesvice,Chomutov-Pesvice,amcr,HES-000190,letiste,__exclude__,heslar:letiste
 Chorvatsko,Croatia,amcr,HES-001339,zeme,__exclude__,heslar:zeme
 Cookovy ostrovy,Cook Islands (the),amcr,HES-001283,zeme,__exclude__,heslar:zeme
 Creative Commons Uveďte původ 4.0 Mezinárodní,Creative Commons Attribution 4.0 International,amcr,HES-001496,dokument_licence,__exclude__,heslar:dokument_licence
@@ -1038,6 +966,8 @@ Creative Commons Uveďte původ-Neužívejte komerčně-Zachovejte licenci 4.0 M
 Creative Commons Uveďte původ-Nezpracovávejte 4.0 Mezinárodní,Creative Commons Attribution-NoDerivatives 4.0 International,amcr,HES-001498,dokument_licence,__exclude__,heslar:dokument_licence
 Creative Commons Uveďte původ-Zachovejte licenci 4.0 Mezinárodní,Creative Commons Attribution-ShareAlike 4.0 International,amcr,HES-001497,dokument_licence,__exclude__,heslar:dokument_licence
 Curaçao,Curaçao,amcr,HES-001243,zeme,__exclude__,heslar:zeme
+Czestochowa,Czestochowa,amcr,HES-000185,letiste,__exclude__,heslar:letiste
+Czestochowa-Rudniky,Czestochowa-Rudniky,amcr,HES-000186,letiste,__exclude__,heslar:letiste
 Dominika,Dominica,amcr,HES-001309,zeme,__exclude__,heslar:zeme
 Dominikánská republika,Dominican Republic (the),amcr,HES-001350,zeme,__exclude__,heslar:zeme
 Dánsko,Denmark,amcr,HES-001250,zeme,__exclude__,heslar:zeme
@@ -1083,8 +1013,11 @@ Itálie,Italy,amcr,HES-001319,zeme,__exclude__,heslar:zeme
 Izrael,Israel,amcr,HES-001320,zeme,__exclude__,heslar:zeme
 Jamajka,Jamaica,amcr,HES-001245,zeme,__exclude__,heslar:zeme
 Japonsko,Japan,amcr,HES-001353,zeme,__exclude__,heslar:zeme
+Jaroměř,Jaroměř,amcr,HES-000191,letiste,__exclude__,heslar:letiste
 Jemen,Yemen,amcr,HES-001313,zeme,__exclude__,heslar:zeme
 Jersey,Jersey,amcr,HES-001364,zeme,__exclude__,heslar:zeme
+Jihlava-Henčov,Jihlava-Henčov,amcr,HES-000195,letiste,__exclude__,heslar:letiste
+Jičín,Jičín,amcr,HES-000192,letiste,__exclude__,heslar:letiste
 Jižní Afrika,South Africa,amcr,HES-001381,zeme,__exclude__,heslar:zeme
 Jižní Georgie a Jižní Sandwichovy ostrovy,South Georgia and the South Sandwich Islands,amcr,HES-001382,zeme,__exclude__,heslar:zeme
 Jižní Súdán,South Sudan,amcr,HES-001318,zeme,__exclude__,heslar:zeme
@@ -1094,12 +1027,15 @@ Kambodža,Cambodia,amcr,HES-001291,zeme,__exclude__,heslar:zeme
 Kamerun,Cameroon,amcr,HES-001292,zeme,__exclude__,heslar:zeme
 Kanada,Canada,amcr,HES-001293,zeme,__exclude__,heslar:zeme
 Kapverdy,Cape Verde,amcr,HES-001343,zeme,__exclude__,heslar:zeme
+Karlovy Vary,Karlovy Vary,amcr,HES-000196,letiste,__exclude__,heslar:letiste
 Katar,Qatar,amcr,HES-001286,zeme,__exclude__,heslar:zeme
 Kazachstán,Kazakhstan,amcr,HES-001316,zeme,__exclude__,heslar:zeme
 Keňa,Kenya,amcr,HES-001398,zeme,__exclude__,heslar:zeme
 Kiribati,Kiribati,amcr,HES-001233,zeme,__exclude__,heslar:zeme
+Kladno,Kladno,amcr,HES-000197,letiste,__exclude__,heslar:letiste
 Kokosové (Keelingovy) ostrovy,Cocos (Keeling) Islands (the),amcr,HES-001259,zeme,__exclude__,heslar:zeme
 Kolumbie,Colombia,amcr,HES-001284,zeme,__exclude__,heslar:zeme
+Kolín,Kolín,amcr,HES-000198,letiste,__exclude__,heslar:letiste
 Komory,Comoros (the),amcr,HES-001384,zeme,__exclude__,heslar:zeme
 Konžská demokratická republika,Congo (the Democratic Republic of the),amcr,HES-001251,zeme,__exclude__,heslar:zeme
 Konžská republika,Congo (the),amcr,HES-001385,zeme,__exclude__,heslar:zeme
@@ -1107,12 +1043,15 @@ Korejská lidově demokratická republika,Korea (the Democratic People's Republi
 Korejská republika,Korea (the Republic of),amcr,HES-001225,zeme,__exclude__,heslar:zeme
 Kosovo,Kosovo,amcr,HES-001200,zeme,__exclude__,heslar:zeme
 Kostarika,Costa Rica,amcr,HES-001271,zeme,__exclude__,heslar:zeme
+Krakow,Krakow,amcr,HES-000199,letiste,__exclude__,heslar:letiste
+Krakow-Balice,Krakow-Balice,amcr,HES-000200,letiste,__exclude__,heslar:letiste
 Kuba,Cuba,amcr,HES-001234,zeme,__exclude__,heslar:zeme
 Kuvajt,Kuwait,amcr,HES-001201,zeme,__exclude__,heslar:zeme
 Kypr,Cyprus,amcr,HES-001237,zeme,__exclude__,heslar:zeme
 Kyrgyzstán,Kyrgyzstan,amcr,HES-001297,zeme,__exclude__,heslar:zeme
 Laos,Lao People's Democratic Republic (the),amcr,HES-001298,zeme,__exclude__,heslar:zeme
 Lesotho,Lesotho,amcr,HES-001299,zeme,__exclude__,heslar:zeme
+Leszno,Leszno,amcr,HES-000201,letiste,__exclude__,heslar:letiste
 Libanon,Lebanon,amcr,HES-001239,zeme,__exclude__,heslar:zeme
 Libye,Libya,amcr,HES-001308,zeme,__exclude__,heslar:zeme
 Libérie,Liberia,amcr,HES-001314,zeme,__exclude__,heslar:zeme
@@ -1137,12 +1076,14 @@ Maďarsko,Hungary,amcr,HES-001374,zeme,__exclude__,heslar:zeme
 Menší odlehlé ostrovy USA,United States Minor Outlying Islands (the),amcr,HES-001247,zeme,__exclude__,heslar:zeme
 Mexiko,Mexico,amcr,HES-001210,zeme,__exclude__,heslar:zeme
 Mikronésie,Micronesia (Federated States of),amcr,HES-001211,zeme,__exclude__,heslar:zeme
+Mnichovo Hradiště,Mnichovo Hradiště,amcr,HES-000203,letiste,__exclude__,heslar:letiste
 Moldavsko,Moldova (the Republic of),amcr,HES-001269,zeme,__exclude__,heslar:zeme
 Monako,Monaco,amcr,HES-001270,zeme,__exclude__,heslar:zeme
 Mongolsko,Mongolia,amcr,HES-001240,zeme,__exclude__,heslar:zeme
 Montserrat,Montserrat,amcr,HES-001241,zeme,__exclude__,heslar:zeme
 Mosambik,Mozambique,amcr,HES-001294,zeme,__exclude__,heslar:zeme
 Myanmar,Myanmar,amcr,HES-001356,zeme,__exclude__,heslar:zeme
+Mělník-Hořín,Mělník-Hořín,amcr,HES-000202,letiste,__exclude__,heslar:letiste
 Namibie,Namibia,amcr,HES-001213,zeme,__exclude__,heslar:zeme
 Nauru,Nauru,amcr,HES-001346,zeme,__exclude__,heslar:zeme
 Nepál,Nepal,amcr,HES-001204,zeme,__exclude__,heslar:zeme
@@ -1164,10 +1105,13 @@ Papua Nová Guinea,Papua New Guinea,amcr,HES-001370,zeme,__exclude__,heslar:zeme
 Paraguay,Paraguay,amcr,HES-001363,zeme,__exclude__,heslar:zeme
 Peru,Peru,amcr,HES-001296,zeme,__exclude__,heslar:zeme
 Pitcairn,Pitcairn,amcr,HES-001287,zeme,__exclude__,heslar:zeme
+Plasy,Plasy,amcr,HES-000204,letiste,__exclude__,heslar:letiste
 Pobřeží slonoviny,Côte d'Ivoire,amcr,HES-001226,zeme,__exclude__,heslar:zeme
 Polsko,Poland,amcr,HES-001220,zeme,__exclude__,heslar:zeme
 Portoriko,Puerto Rico,amcr,HES-001221,zeme,__exclude__,heslar:zeme
 Portugalsko,Portugal,amcr,HES-001222,zeme,__exclude__,heslar:zeme
+Praha-Kbely,Praha-Kbely,amcr,HES-000205,letiste,__exclude__,heslar:letiste
+Praha-Letňany,Praha-Letňany,amcr,HES-000206,letiste,__exclude__,heslar:letiste
 Pákistán,Pakistan,amcr,HES-001224,zeme,__exclude__,heslar:zeme
 Rakousko,Austria,amcr,HES-001295,zeme,__exclude__,heslar:zeme
 Rovníková Guinea,Equatorial Guinea,amcr,HES-001235,zeme,__exclude__,heslar:zeme
@@ -1179,6 +1123,7 @@ Saint Pierre a Miquelon,Saint Pierre and Miquelon,amcr,HES-001280,zeme,__exclude
 Salvador,El Salvador,amcr,HES-001281,zeme,__exclude__,heslar:zeme
 Samoa,Samoa,amcr,HES-001321,zeme,__exclude__,heslar:zeme
 San Marino,San Marino,amcr,HES-001376,zeme,__exclude__,heslar:zeme
+Sazená,Sazená,amcr,HES-000207,letiste,__exclude__,heslar:letiste
 Saúdská Arábie,Saudi Arabia,amcr,HES-001380,zeme,__exclude__,heslar:zeme
 Senegal,Senegal,amcr,HES-001215,zeme,__exclude__,heslar:zeme
 Severní Makedonie,North Macedonia,amcr,HES-001375,zeme,__exclude__,heslar:zeme
@@ -1192,6 +1137,7 @@ Somálsko,Somalia,amcr,HES-001326,zeme,__exclude__,heslar:zeme
 Spojené arabské emiráty,United Arab Emirates (the),amcr,HES-001322,zeme,__exclude__,heslar:zeme
 Spojené státy,United States of America (the),amcr,HES-001323,zeme,__exclude__,heslar:zeme
 Srbsko,Serbia,amcr,HES-001357,zeme,__exclude__,heslar:zeme
+Strunkovice,Strunkovice,amcr,HES-000208,letiste,__exclude__,heslar:letiste
 Středoafrická republika,Central African Republic (the),amcr,HES-001386,zeme,__exclude__,heslar:zeme
 Surinam,Suriname,amcr,HES-001348,zeme,__exclude__,heslar:zeme
 Svatá Helena,"Saint Helena, Ascension and Tristan da Cunha",amcr,HES-001258,zeme,__exclude__,heslar:zeme
@@ -1225,39 +1171,93 @@ Uzbekistán,Uzbekistan,amcr,HES-001417,zeme,__exclude__,heslar:zeme
 Vanuatu,Vanuatu,amcr,HES-001419,zeme,__exclude__,heslar:zeme
 Vatikán,Holy See (the),amcr,HES-001420,zeme,__exclude__,heslar:zeme
 Velká Británie,United Kingdom of Great Britain and Northern Ireland (the),amcr,HES-001421,zeme,__exclude__,heslar:zeme
+Velká Dobrá,Velká Dobrá,amcr,HES-000209,letiste,__exclude__,heslar:letiste
 Venezuela,Venezuela (Bolivarian Republic of),amcr,HES-001422,zeme,__exclude__,heslar:zeme
 Vietnam,Viet Nam,amcr,HES-001423,zeme,__exclude__,heslar:zeme
+Vlašim,Vlašim,amcr,HES-000210,letiste,__exclude__,heslar:letiste
+Vrchlabí,Vrchlabí,amcr,HES-000211,letiste,__exclude__,heslar:letiste
 Vánoční ostrov,Christmas Island,amcr,HES-001418,zeme,__exclude__,heslar:zeme
 Východní Timor,Timor-Leste,amcr,HES-001424,zeme,__exclude__,heslar:zeme
 Wallis a Futuna,Wallis and Futuna,amcr,HES-001425,zeme,__exclude__,heslar:zeme
 Zambie,Zambia,amcr,HES-001426,zeme,__exclude__,heslar:zeme
 Zimbabwe,Zimbabwe,amcr,HES-001428,zeme,__exclude__,heslar:zeme
+Znojmo,Znojmo,amcr,HES-000194,letiste,__exclude__,heslar:letiste
 Západní Sahara,Western Sahara,amcr,HES-001427,zeme,__exclude__,heslar:zeme
 angličtina,English,amcr,HES-000169,jazyk,__exclude__,heslar:jazyk
+anonym,anonymous,amcr,HES-000865,pristupnost,__exclude__,heslar:pristupnost
+archeolog,archaeologist,amcr,HES-000867,pristupnost,__exclude__,heslar:pristupnost
+archivář,archivist,amcr,HES-000868,pristupnost,__exclude__,heslar:pristupnost
+badatel,researcher,amcr,HES-000866,pristupnost,__exclude__,heslar:pristupnost
+badatelský,research,amcr,HES-001137,projekt_typ,__exclude__,heslar:projekt_typ
+bod,point,amcr,HES-001133,pian_typ,__exclude__,heslar:pian_typ
+bodové objekty uspořádané,organized point features,amcr,HES-001030,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+bodový objekt,point feature,amcr,HES-001028,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+celek akce,fieldwork extent,amcr,HES-001070,dok_jednotka_typ,__exclude__,heslar:dok_jednotka_typ
 deštivo,rainy,amcr,HES-000587,pocasi,__exclude__,heslar:pocasi
+dno sondy,trench bottom,amcr,HES-001158,vyskovy_bod_typ,__exclude__,heslar:vyskovy_bod_typ
+domnělé (5–50 %),alleged (5–50%),amcr,HES-001451,jistota_urceni,__exclude__,heslar:jistota_urceni
 francouzština,French,amcr,HES-000170,jazyk,__exclude__,heslar:jazyk
+industriál,Industrial,amcr,HES-001165,vyskovy_bod_typ,__exclude__,heslar:vyskovy_bod_typ
 italština,Italian,amcr,HES-001448,jazyk,__exclude__,heslar:jazyk
+jisté (> 95 %),certain (> 95%),amcr,HES-001449,jistota_urceni,__exclude__,heslar:jistota_urceni
+katastrální území,cadastral area,amcr,HES-001073,dok_jednotka_typ,__exclude__,heslar:dok_jednotka_typ
 kinofilm (24 x 36 mm),cine film (24 x 36 mm),amcr,HES-000141,dokument_format,__exclude__,heslar:dokument_format
 latina,Latin,amcr,HES-000172,jazyk,__exclude__,heslar:jazyk
+lineární systém,system of linear features,amcr,HES-001034,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+linie,linear feature,amcr,HES-001032,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+linie ohrazující,delimiting line,amcr,HES-001033,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+lokalita,site,amcr,HES-001074,dok_jednotka_typ,__exclude__,heslar:dok_jednotka_typ
+nejisté (50–95 %),uncertain (50–95%),amcr,HES-001450,jistota_urceni,__exclude__,heslar:jistota_urceni
 nerelevantní,irrelevant,amcr,HES-000174,jazyk,__exclude__,heslar:jazyk
 neznámá,unknown,amcr,HES-000099,dohlednost,__exclude__,heslar:dohlednost
 neznámé počasí,unknown weather,amcr,HES-000586,pocasi,__exclude__,heslar:pocasi
+někdy v letech,approximate years,amcr,HES-000889,datum_specifikace,__exclude__,heslar:datum_specifikace
 němčina,German,amcr,HES-000168,jazyk,__exclude__,heslar:jazyk
+objekt,feature,amcr,HES-001125,nalez_typ,__exclude__,heslar:nalez_typ
 oblačno,cloudy,amcr,HES-000588,pocasi,__exclude__,heslar:pocasi
 "oblačno, zataženo","cloudy, overcast",amcr,HES-000589,pocasi,__exclude__,heslar:pocasi
+odchylka desítky metrů,deviation in tens of meters,amcr,HES-000862,pian_presnost,__exclude__,heslar:pian_presnost
+odchylka jednotky metrů,deviation in meters,amcr,HES-000861,pian_presnost,__exclude__,heslar:pian_presnost
+odchylka stovky metrů,deviation in hundreds of meters,amcr,HES-000863,pian_presnost,__exclude__,heslar:pian_presnost
+ohrazení kruhové malé,circular enclosure (small),amcr,HES-001035,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení kruhové střední,circular enclosure (medium),amcr,HES-001036,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení kruhové velké,circular enclosure (large),amcr,HES-001037,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení polygonální malé,polygonal enclosure (small),amcr,HES-001041,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení polygonální střední,polygonal enclosure (medium),amcr,HES-001042,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení polygonální velké,polygonal enclosure (large),amcr,HES-001043,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení pravoúhlé malé,rectangular enclosure (small),amcr,HES-001038,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení pravoúhlé střední,rectangular enclosure (medium),amcr,HES-001039,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+ohrazení pravoúhlé velké,rectangular enclosure (large),amcr,HES-001040,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+plošný objekt,polygonal feature,amcr,HES-001031,letfoto_tvar,__exclude__,heslar:letfoto_tvar
+podloží,subsoil,amcr,HES-001159,vyskovy_bod_typ,__exclude__,heslar:vyskovy_bod_typ
+poloha podle katastru,location by cadastral area,amcr,HES-000864,pian_presnost,__exclude__,heslar:pian_presnost
+polygon,polygon,amcr,HES-001135,pian_typ,__exclude__,heslar:pian_typ
+povrch sondy,trench surface,amcr,HES-001157,vyskovy_bod_typ,__exclude__,heslar:vyskovy_bod_typ
+průzkum,survey,amcr,HES-001138,projekt_typ,__exclude__,heslar:projekt_typ
+pseudolokalita (< 5 %),pseudo-site (< 5%),amcr,HES-001452,jistota_urceni,__exclude__,heslar:jistota_urceni
+předmět,object,amcr,HES-001126,nalez_typ,__exclude__,heslar:nalez_typ
+přesné datum,exact date,amcr,HES-000887,datum_specifikace,__exclude__,heslar:datum_specifikace
+přesně v letech,exact years,amcr,HES-000886,datum_specifikace,__exclude__,heslar:datum_specifikace
 ruština,Russian,amcr,HES-000173,jazyk,__exclude__,heslar:jazyk
+shluk bodových objektů,group of point features,amcr,HES-001029,letfoto_tvar,__exclude__,heslar:letfoto_tvar
 slovenština,Slovak,amcr,HES-000171,jazyk,__exclude__,heslar:jazyk
 slunečno,sunny,amcr,HES-000590,pocasi,__exclude__,heslar:pocasi
 "slunečno, oblačno","sunny, cloudy",amcr,HES-000591,pocasi,__exclude__,heslar:pocasi
 "slunečno, oblačno, zataženo","sunny, cloudy, overcast",amcr,HES-000592,pocasi,__exclude__,heslar:pocasi
+snížené podloží,levelled subsoil,amcr,HES-001160,vyskovy_bod_typ,__exclude__,heslar:vyskovy_bod_typ
+těžený/zpracovávaný materiál,extracted/processed material,amcr,HES-000964,objekt_specifikace_kat,__exclude__,heslar:objekt_specifikace_kat
 zataženo,overcast,amcr,HES-000593,pocasi,__exclude__,heslar:pocasi
+způsob provedení,construction type,amcr,HES-000963,objekt_specifikace_kat,__exclude__,heslar:objekt_specifikace_kat
+záchranný,rescue,amcr,HES-001136,projekt_typ,__exclude__,heslar:projekt_typ
 Ázerbájdžán,Azerbaijan,amcr,HES-001194,zeme,__exclude__,heslar:zeme
 Írán,Iran (Islamic Republic of),amcr,HES-001324,zeme,__exclude__,heslar:zeme
 Čad,Chad,amcr,HES-001405,zeme,__exclude__,heslar:zeme
 Černá Hora,Montenegro,amcr,HES-001248,zeme,__exclude__,heslar:zeme
 Česko,Czechia,amcr,HES-001198,zeme,__exclude__,heslar:zeme
+České Budějovice-Hosín,České Budějovice-Hosín,amcr,HES-000187,letiste,__exclude__,heslar:letiste
 Čína,China,amcr,HES-001249,zeme,__exclude__,heslar:zeme
 čeština,Czech,amcr,HES-000167,jazyk,__exclude__,heslar:jazyk
+část akce,fieldwork segment,amcr,HES-001071,dok_jednotka_typ,__exclude__,heslar:dok_jednotka_typ
 Řecko,Greece,amcr,HES-001304,zeme,__exclude__,heslar:zeme
 Šalomounovy ostrovy,Solomon Islands,amcr,HES-001311,zeme,__exclude__,heslar:zeme
 Španělsko,Spain,amcr,HES-001300,zeme,__exclude__,heslar:zeme

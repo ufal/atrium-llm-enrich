@@ -1,19 +1,21 @@
 {
   "counts": {
     "by_theme": {
-      "Chronology": 148,
+      "Activity Area": 100,
+      "Artefact": 209,
+      "Chronology": 145,
       "Documentation": 107,
-      "Find Types": 213,
+      "Feature": 146,
       "Finds Context": 9,
-      "Location & Admin": 64,
-      "Methods": 86,
-      "Other": 0,
-      "Site Types": 329
+      "Location & Admin": 16,
+      "Material": 67,
+      "Methods": 79,
+      "Other": 0
     },
     "collisions": 0,
-    "total": 956
+    "total": 878
   },
-  "generated_utc": "2026-08-18T11:54:28Z",
+  "generated_utc": "2026-08-18T16:38:31Z",
   "generator": "vocab_build.py",
   "schema_version": 1,
   "sources": [
@@ -42,7 +44,7 @@
   ],
   "taxonomy_config": {
     "path": "data_samples/taxonomy_config.json",
-    "sha256": "753421fa70235fbf7369f1da5bd0eff858f9c6408cd6c3dc5a87346e66ae032b"
+    "sha256": "7f36c9166672091c2f67276df2a972fb491ee37698352a8cec7de4c29ec13f9c"
   },
   "tool_version": "v0.5.2"
 }

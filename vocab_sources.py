@@ -89,6 +89,12 @@ class VocabRecord:
     ``cs`` is kept verbatim (not case-folded): the nested vocabulary and the LLM's
     ``teater_category`` enum both use it as the surface label. Use :func:`norm_label`
     when matching.
+
+    ``scheme`` is the source's coarse grouping — the AMCR heslar name, or the TEATER
+    top-level branch id — and is what the taxonomy maps a term to a facet by. ``sub`` is
+    the source's own *second* level: TEATER's depth-2 label, or the AMCR heslar again.
+    It carries the granularity both thesauri curate and the 7-theme rollup discards, and
+    it is what the prompt renders as a sub-header inside each facet.
     """
 
     cs: str
@@ -98,6 +104,7 @@ class VocabRecord:
     source_id: str = ""
     uri: str = ""
     scheme: Optional[str] = None
+    sub: Optional[str] = None
     broader: Tuple[str, ...] = ()
     sort: Optional[int] = None
     abbr: Optional[str] = None
@@ -207,6 +214,7 @@ def _amcr_record(block, ns: str) -> Optional[VocabRecord]:
         source_id=ident,
         uri=f"{AMCR_ID_BASE}{ident}" if ident else "",
         scheme=_amcr_text(block, "nazev_heslare", ns) or None,
+        sub=_amcr_text(block, "nazev_heslare", ns) or None,
         broader=tuple(broader),
         sort=int(razeni) if razeni.lstrip("-").isdigit() else None,
         abbr=_amcr_text(block, "zkratka", ns) or None,
@@ -349,7 +357,15 @@ def _teater_walk(
     ancestors: Tuple[str, ...],
     out: Dict[str, VocabRecord],
     children_key: str,
+    sub: Optional[str] = None,
 ) -> None:
+    """Flatten one TEATER subtree.
+
+    ``sub`` is the depth-2 label inherited down the branch: a depth-2 node names itself
+    and every descendant under it. Depth-1 roots keep ``sub=None`` — they are numbered
+    section titles ("5) Chronologie"), not concepts, and :func:`to_term_pairs` drops
+    them so they never reach the model as selectable terms.
+    """
     node_id = str(node.get("id") or "").strip()
     if not node_id:
         return
@@ -376,6 +392,7 @@ def _teater_walk(
             source_id=node_id,
             uri=f"{TEATER_ID_BASE}{node_id}",
             scheme=ancestors[0] if ancestors else node_id,
+            sub=sub,
             broader=ancestors,
             alt_cs=alt_cs,
             alt_en=alt_en,
@@ -385,7 +402,9 @@ def _teater_walk(
 
     for child in node.get(children_key) or []:
         if isinstance(child, dict):
-            _teater_walk(child, ancestors + (node_id,), out, children_key)
+            # A depth-1 root's children are the depth-2 groups; each names its subtree.
+            child_sub = sub if ancestors else _teater_labels(child)["cs"]
+            _teater_walk(child, ancestors + (node_id,), out, children_key, child_sub)
 
 
 def harvest_teater(
@@ -474,11 +493,20 @@ def merge(
     Label uniqueness is not cosmetic: ``build_schema`` turns the term list into an
     ``enum.Enum``, where duplicate values silently become aliases and collapse two
     distinct concepts into one.
+
+    Records are sorted by :func:`record_sort_key` before deduping, exactly as
+    :func:`to_term_pairs` does. Without that, the winner of an intra-source label
+    collision depends on the order records happened to arrive in — OAI page order during
+    a live harvest, canonical order on a ``--from-flat`` re-nest — so the same inputs
+    produced two different vocabularies. That made 116 AMCR labels resolve to a
+    different record between the two paths, moved 57 of them to a different theme, and
+    silently broke the "nesting is reproducible from the committed flat files" guarantee
+    that ``vocab_build --check`` and the refresh workflow both rest on.
     """
     chosen: Dict[str, VocabRecord] = {}
     collisions = 0
     for name in precedence:
-        for record in per_source.get(name, ([], {}))[0]:
+        for record in sorted(per_source.get(name, ([], {}))[0], key=record_sort_key):
             key = norm_label(record.cs)
             if not key:
                 continue
@@ -498,6 +526,7 @@ CSV_COLUMNS = [
     "source_id",
     "uri",
     "scheme",
+    "sub",
     "broader",
     "sort",
 ]
@@ -535,6 +564,7 @@ def flat_csv_text(records: Iterable[VocabRecord]) -> str:
                 r.source_id,
                 r.uri,
                 r.scheme or "",
+                r.sub or "",
                 " ".join(r.broader),
                 "" if r.sort is None else r.sort,
             ]
@@ -572,6 +602,7 @@ def read_flat_json(path: Path) -> Tuple[List[VocabRecord], Dict[str, Any]]:
                 source_id=item.get("source_id", ""),
                 uri=item.get("uri", ""),
                 scheme=item.get("scheme"),
+                sub=item.get("sub"),
                 broader=tuple(item.get("broader") or ()),
                 sort=item.get("sort"),
                 abbr=item.get("abbr"),
@@ -611,6 +642,11 @@ def to_term_pairs(
     for r in sorted(records, key=record_sort_key):
         if not r.cs or not r.en:
             continue
+        if r.source == "teater" and not r.broader:
+            # A depth-1 branch root — "5) Chronologie", "8) Předmět". These are numbered
+            # section titles in the thesaurus, not concepts, and offering them to the
+            # model as categories invites a shrug-answer that is technically in-vocabulary.
+            continue
         key = norm_label(r.cs)
         if key in seen:
             # Two concepts share a surface label. Keeping both is not an option: the
@@ -626,6 +662,7 @@ def to_term_pairs(
             "source": r.source,
             "source_id": r.source_id,
             "scheme": r.scheme or "",
+            "sub": r.sub or (r.scheme or ""),
             "broader": list(r.broader),
             "sort": r.sort,
         }

@@ -215,7 +215,7 @@ def main(argv: Optional[List[str]] = None) -> None:
         sys.exit(1)
 
     input_path = args.input or Path(config.get("INPUT_DIR", "data_samples/DOC_LINE_LANG_CLASS"))
-    vocab_path = config.get("VOCAB_PATH", "data_samples/teater_nested_vocab.json")
+    vocab_path = config.get("VOCAB_PATH", "data_samples/vocab/union_nested.json")
     paradata_dir = config.get("PARADATA_DIR", "paradata")
 
     model_suffix = model.replace(":", "_").replace(".", "").replace("/", "_")

@@ -217,3 +217,123 @@ def test_load_without_auto_sync_refuses_to_harvest(tmp_path):
     m = VocabularyManager(str(tmp_path / "missing.json"), str(tmp_path / "cfg.json"))
     with pytest.raises(FileNotFoundError, match="vocab_build.py"):
         m.load(auto_sync=False)
+
+
+# ── facet taxonomy: depth-2 branches, labels, validation ────────────────────
+FACET_TAXONOMY = {
+    "_settings": {
+        "tie_break": ["Chronology", "Artefact"],
+        "heslar_map": {"obdobi": "Chronology", "zeme": "__exclude__"},
+        "heslar_labels": {"obdobi": "období"},
+        "teater_branch_map": {
+            "1050": "Chronology",
+            "2557": "Documentation",
+            "2560": "__exclude__",
+        },
+    },
+    "Chronology": {"priority": 9, "keywords": {}},
+    "Artefact": {"priority": 6, "keywords": {}},
+    "Documentation": {"priority": 2, "keywords": {}},
+}
+
+
+def _facet_mgr(tmp_path):
+    return _mgr(tmp_path, taxonomy=FACET_TAXONOMY)
+
+
+def test_teater_depth_two_branch_overrides_its_parent(tmp_path):
+    """Branch 2557 mixes ethnic groups with historical regions. Resolving the broader
+    chain most-specific-first is what lets one sub-branch be dropped while its siblings
+    are kept, without a code change."""
+    m = _facet_mgr(tmp_path)
+    kept = _pair("Achájové", source="teater", source_id="9", broader=["2557", "2900"])
+    dropped = _pair("Avaři", source="teater", source_id="8", broader=["2557", "2560"])
+    assert m.assign_theme(kept) == ("Documentation", "teater:2557")
+    assert m.assign_theme(dropped) == ("__exclude__", "teater:2560")
+
+
+def test_teater_branch_map_can_key_on_the_node_itself(tmp_path):
+    m = _facet_mgr(tmp_path)
+    assert m.assign_theme(_pair("x", source="teater", source_id="1050"))[1] == "teater:1050"
+
+
+def test_amcr_heslar_gets_a_readable_subtheme_label(tmp_path):
+    """The prompt sub-header should read "období (kategorie)", not "obdobi_kat"."""
+    m = _facet_mgr(tmp_path)
+    built = m.build_nested(
+        {"eneolit": _pair("eneolit", source="amcr", scheme="obdobi", sub="obdobi")}
+    )
+    assert built["Chronology"]["eneolit"]["sub"] == "období"
+
+
+def test_unlabelled_subtheme_passes_through(tmp_path):
+    """TEATER's depth-2 labels are already human-readable and must not be mangled."""
+    m = _facet_mgr(tmp_path)
+    term = _pair(
+        "magdalénien", source="teater", source_id="9", broader=["1050"], sub="periodizace dějin"
+    )
+    built = m.build_nested({"magdalénien": term})
+    assert built["Chronology"]["magdalénien"]["sub"] == "periodizace dějin"
+
+
+def test_a_map_pointing_at_an_undeclared_facet_is_a_hard_error(tmp_path):
+    """build_nested used to create any theme a map named, silently — so a typo produced
+    a phantom facet with no priority and last place in the truncation order."""
+    import pytest
+
+    broken = json.loads(json.dumps(FACET_TAXONOMY))
+    broken["_settings"]["heslar_map"]["obdobi"] = "Chronlogy"  # typo
+    m = _mgr(tmp_path, taxonomy=broken)
+    with pytest.raises(ValueError, match="undeclared facets"):
+        m.build_nested({})
+
+
+def test_exclude_is_always_a_valid_map_target(tmp_path):
+    _facet_mgr(tmp_path).validate_settings()  # must not raise
+
+
+# ── the shipped config, not a synthetic one ─────────────────────────────────
+def _repo_root():
+    from pathlib import Path
+
+    return Path(__file__).resolve().parent.parent
+
+
+def _shipped():
+    return VocabularyManager(
+        vocab_path=str(_repo_root() / "data_samples" / "vocab" / "union_nested.json"),
+        config_path=str(_repo_root() / "data_samples" / "taxonomy_config.json"),
+    )
+
+
+def test_shipped_config_maps_only_to_declared_facets():
+    _shipped().validate_settings()  # must not raise
+
+
+def test_shipped_config_covers_every_source_list():
+    """A new AMCR heslar or TEATER branch appearing upstream must fail here rather than
+    silently landing in Other. Nothing else in the suite reads the real config."""
+    import csv
+
+    m = _shipped()
+    audits = {
+        "heslar_map": "amcr_placement_audit.csv",
+        "teater_branch_map": "teater_placement_audit.csv",
+    }
+    for map_name, filename in audits.items():
+        path = _repo_root() / "data_samples" / "vocab" / filename
+        if not path.exists():  # artifacts are optional in a bare checkout
+            continue
+        with open(path, encoding="utf-8") as fh:
+            schemes = {row["scheme"] for row in csv.DictReader(fh) if row["scheme"]}
+        unmapped = schemes - set(m.settings.get(map_name) or {})
+        assert not unmapped, f"{map_name} does not cover: {sorted(unmapped)}"
+
+
+def test_shipped_vocabulary_has_no_unplaced_terms():
+    """Other empty is the invariant that says every term was placed by an explicit rule
+    rather than falling through to a bucket the prompt then hides."""
+    m = _shipped()
+    if not m.vocab_path.exists():
+        return
+    assert m.load(auto_sync=False).get("Other", {}) == {}

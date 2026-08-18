@@ -76,7 +76,7 @@ class VocabularyManager:
 
     def __init__(
         self,
-        vocab_path: str = "data_samples/teater_nested_vocab.json",
+        vocab_path: str = "data_samples/vocab/union_nested.json",
         config_path: str = "data_samples/taxonomy_config.json",
         llm_predictor: Optional[Callable[[str], str]] = None,
     ) -> None:
@@ -351,11 +351,16 @@ class VocabularyManager:
 
         if source == "teater":
             branches = self.settings.get("teater_branch_map") or {}
+            # Walk the ancestor chain most-specific-first, so a depth-2 sub-branch
+            # overrides its depth-1 parent. That is what lets branch 2557 be judged per
+            # part — its regions and dynasties dropped while `etnika` could be kept —
+            # without the map needing a code change to express it.
             chain = list(term_pair.get("broader") or ())
-            root = chain[0] if chain else str(term_pair.get("source_id") or "")
-            mapped = branches.get(root)
-            if mapped:
-                return mapped, f"teater:{root}"
+            candidates = [str(term_pair.get("source_id") or "")] + list(reversed(chain))
+            for node in candidates:
+                mapped = branches.get(node)
+                if mapped:
+                    return mapped, f"teater:{node}"
 
         for theme in self._theme_order():
             config = self.taxonomy[theme]
@@ -392,18 +397,41 @@ class VocabularyManager:
             print(f"  [LLM] Classification error during taxonomy sync: {exc}")
         return None
 
+    def validate_settings(self) -> None:
+        """Fail loudly on a map value that is not a declared facet.
+
+        ``build_nested`` used to create any theme a map named, via ``setdefault`` — so a
+        typo like "Site Type" produced a phantom facet with no priority, no config, and
+        last place in the truncation order, with nothing printed. Silent is the wrong
+        failure mode for a file people are expected to hand-edit.
+        """
+        known = set(self.themes()) | {EXCLUDE_THEME}
+        bad: List[str] = []
+        for map_name in ("heslar_map", "teater_branch_map"):
+            for key, value in (self.settings.get(map_name) or {}).items():
+                if value not in known:
+                    bad.append(f"{map_name}[{key!r}] -> {value!r}")
+        if bad:
+            raise ValueError(
+                "taxonomy_config.json maps terms to undeclared facets: "
+                + "; ".join(sorted(bad))
+                + f". Declared facets: {sorted(self.themes())}"
+            )
+
     def build_nested(
         self,
         raw_terms: Dict[str, Dict[str, Any]],
         use_llm_fallback: bool = False,
-        keep: Optional[Sequence[str]] = ("cs", "en"),
+        keep: Optional[Sequence[str]] = ("cs", "en", "sub"),
         audit: Optional[List[Dict[str, Any]]] = None,
         rescue: Optional[Dict[str, str]] = None,
     ) -> Dict[str, Dict[str, Any]]:
         """Group flat terms into the nested taxonomy. Pure: no network, no disk.
 
-        ``keep`` limits which keys survive into each entry — the default ``("cs", "en")``
-        reproduces the on-disk entry shape every downstream consumer expects. ``audit``,
+        ``keep`` limits which keys survive into each entry. The default adds ``sub`` —
+        the source's own second level — to the ``cs``/``en`` pair every consumer already
+        reads; an extra key is inert to them (they all go through ``pair.get("en", …)``)
+        and it is what lets the prompt render facets with sub-headers. ``audit``,
         when given, receives one row per term recording the rule that placed it.
         ``rescue`` maps a normalised Czech label to a theme, used to place AMCR terms
         that only a cross-source TEATER match can explain.
@@ -414,6 +442,8 @@ class VocabularyManager:
         """
         themed: Dict[str, Dict[str, Any]] = {theme: {} for theme in self._theme_order()}
         themed.setdefault(OTHER_THEME, {})
+        self.validate_settings()
+        heslar_labels = self.settings.get("heslar_labels") or {}
 
         for cs_key, pair in raw_terms.items():
             theme, rule = self.assign_theme(pair)
@@ -446,6 +476,8 @@ class VocabularyManager:
                 continue
 
             entry = dict(pair) if keep is None else {k: pair[k] for k in keep if k in pair}
+            if entry.get("sub"):
+                entry["sub"] = heslar_labels.get(entry["sub"], entry["sub"])
             themed.setdefault(theme, {})[cs_key] = entry
 
         for theme in list(themed.keys()):
@@ -528,7 +560,7 @@ class VocabularyManager:
 
 if __name__ == "__main__":
     manager = VocabularyManager(
-        vocab_path="data_samples/teater_nested_vocab.json",
+        vocab_path="data_samples/vocab/union_nested.json",
         config_path="data_samples/taxonomy_config.json",
         llm_predictor=None,
     )

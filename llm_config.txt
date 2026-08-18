@@ -65,7 +65,7 @@ MODEL_KEY=qwen-3.6-27b-it
 # =============================================================================
 INPUT_DIR=data_samples/DOC_LINE_LANG_CLASS
 OUTPUT_DIR=data_samples/KW_PER_DOC_LLM
-VOCAB_PATH=data_samples/teater_nested_vocab.json
+VOCAB_PATH=data_samples/vocab/union_nested.json
 PARADATA_DIR=paradata
 
 # =============================================================================

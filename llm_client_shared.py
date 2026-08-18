@@ -417,6 +417,7 @@ def _collect_vocab_terms(
     raw_terms: List[dict] = [
         {
             "theme": "Administrative / Meta",
+            "sub": "",
             "cs": "Nerelevantní (meta-text)",
             "en": "Irrelevant / Meta-text",
         }
@@ -430,34 +431,31 @@ def _collect_vocab_terms(
                 en_list = data["keywords"].get("en", [])
                 for i, cs_key in enumerate(cs_list):
                     en = en_list[i] if i < len(en_list) else cs_key
-                    raw_terms.append({"theme": theme, "cs": cs_key, "en": en})
+                    raw_terms.append({"theme": theme, "sub": "", "cs": cs_key, "en": en})
             else:
                 for cs_key, pair in data.items():
                     en = pair.get("en", cs_key) if isinstance(pair, dict) else cs_key
-                    raw_terms.append({"theme": theme, "cs": cs_key, "en": en})
+                    sub = pair.get("sub", "") if isinstance(pair, dict) else ""
+                    raw_terms.append({"theme": theme, "sub": sub, "cs": cs_key, "en": en})
     return raw_terms
 
 
 def _render_vocab_prompt(header: str, term_list: List[dict], footer: str = "") -> str:
-    """Render ``term_list`` under ``header``, grouped by theme, then ``footer``.
+    """Render ``term_list`` grouped by facet, then by the source's own subgroup.
 
-    The prompt-rendering half shared by build_system_prompt() and
-    build_document_system_prompt() (single-line uses ``_EXAMPLES_FOOTER``,
-    whole-document uses no footer — see their thin wrappers below).
-
-    There is no separate 'Other (Misc)' tail: _collect_vocab_terms() never
-    emitted an excluded theme, so the capped tail this function used to append
-    was unreachable — it read as a policy ("show 15 of the Other terms") that
-    had not run since the exclusion was introduced. Whether Other reaches the
-    model is now decided in one place, by ``in_prompt`` in taxonomy_config.json;
-    when it is enabled the terms render as a normal theme, uncapped."""
-    themes: Dict[str, List[str]] = {}
+    Both AMCR and TEATER curate a second level — 50 heslars, and TEATER's depth-2 groups
+    — and flattening a 700-term facet into one undifferentiated list throws that away.
+    Two levels cost ~100 header lines and give the model structure a domain expert
+    already built."""
+    groups: Dict[Tuple[str, str], List[str]] = {}
     for t in term_list:
-        themes.setdefault(t["theme"], []).append(f"{t['cs']} ({t['en']})")
+        key = (t["theme"], t.get("sub") or "")
+        groups.setdefault(key, []).append(f"{t['cs']} ({t['en']})")
 
     prompt = header
-    for theme_name, lines in themes.items():
-        prompt += f"\n--- {theme_name} ---\n"
+    for (theme_name, sub_name), lines in groups.items():
+        title = f"{theme_name} / {sub_name}" if sub_name else theme_name
+        prompt += f"\n--- {title} ---\n"
         prompt += "\n".join(f"- {line}" for line in lines) + "\n"
     prompt += footer
     return prompt

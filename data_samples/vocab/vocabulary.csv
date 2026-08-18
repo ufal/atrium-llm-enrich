@@ -4,47 +4,65 @@ pohřbívání,burial activity
 výroba,production activity
 těžba,mining activity
 kult,ritual activity
+komunikace,transportation activity
 deponování,deposition activity
 boj,fighting activity
 jiná aktivita,other activity
 intruze,intrusion
+nadkomunitní areál,supracommunity site
 rondel/rondeloid,roundel/rondeloid
+sídlo elity,elite settlement
 dvorec/dvůr,curia/manorial farm
 hrad,castle
 městský palác,town palace
 tvrz/hrádek,fortified manor
 zámek/zámeček/vila,chateau/villa
+kultovní areál,ritual site
+kaple,chapel
+kostel,church
 kříž/boží muka,cross/calvary
 kultovní místo,ritual place
 synagoga,synagogue
+pohřební areál,burial site
 izolovaný pohřeb,isolated grave
 pohřebiště/hřbitov,cemetery/graveyard
+mlýn,mill
 milířiště,charcoal kiln
 sklárna,glassworks
 železářský areál,iron production site
+areál těžby,extracting site
 důl,mine
+lom,quarry
 rýžoviště,panning site
+areál zemědělské výroby,agricultural production site
 obora,game park
+pastvina/louka,pasture/meadow
 pole,cropland
 zahrada/sad,garden
+areál vojenských aktivit,military site
 bojiště,battlefield
 pevnost,fortress
 polní opevnění,field fortification
 strážnice/předsunutá bašta,outpost/watchtower
 vojenský tábor,military camp
+cesta,roads
 most/brod,bridge/ford
 železnice,railway
+depot,hoard
 jez,weir
 kanál/náhon,channel/millrace
 přehrada,dam
 rybník,pond
+areál jiné aktivity,other site
 místo sběru,collection site
 popraviště,execution site
 park,park
+neurčený areál,unspecified site
 nález v druhotné poloze,find in secondary context
 ojedinělý nález,single find
 zničený prostor,destroyed site
 hrazené sídliště,enclosed settlement
+osídlený skalní prostor,cave settlement
 stanice/tábořiště,camp
 samostatná usedlost,individual homestead
 vesnice/městečko,village/town
@@ -57,21 +75,12 @@ město,city
 protourbánní aglomerace,proto-urban agglomeration
 předměstí,suburb
 pohřebiště v sakrální stavbě,burials in sacral building
+areál nezemědělské výroby,production site
 dehtárna,tar kiln
 pivovar,brewery
 sídliště,settlement
-nadkomunitní areál,supracommunity site
-sídlo elity,elite settlement
-kultovní areál,ritual site
-pohřební areál,burial site
-areál nezemědělské výroby,production site
-areál těžby,extracting site
-areál zemědělské výroby,agricultural production site
-areál vojenských aktivit,military site
-depot,hoard
 vodní dílo,hydraulic structure
-areál jiné aktivity,other site
-neurčený areál,unspecified site
+neznámá,unknown
 <10 km,<10 km
 10–20 km,10–20 km
 20–30 km,20–30 km
@@ -84,7 +93,6 @@ neurčený areál,unspecified site
 90–100 km,90–100 km
 >100 km,>100 km
 polygon leteckého průzkumu,aerial survey polygon
-osídlený skalní prostor,cave settlement
 krajina,landscape
 pomník/památník,memorial
 muzeum/skanzen,museum/open-air museum
@@ -191,7 +199,6 @@ nízká kvalita,poor quality
 mikroštítek,microfiche
 povrch,surface
 ornice,arable topsoil
-pastvina/louka,pasture topsoil
 lesní hrabanka,woodland topsoil
 přirozený půdní horizont,natural topsoil
 kulturní vrstva/objekt,cultural layer/feature
@@ -263,6 +270,7 @@ moustérien,Mousterian
 taubachien,Taubachian
 krumlovien,Krumlovian
 mladší paleolit,Upper Palaeolithic
+datace neurčena,unspecified dating
 badenská kultura,Baden Culture
 kultura zvoncovitých pohárů,Bell Beaker Culture
 starší doba bronzová,Early Bronze Age
@@ -341,11 +349,12 @@ protoúnětická kultura,Proto-Únětice Culture
 středověk–novověk,Middle Ages–Modern Period
 plaňanský typ,Plaňany Type
 šárecký typ,Šárka Type
-datace neurčena,unspecified dating
+otopné zařízení,heating equipment
 kamna,stove
 ohniště,fireplace
 otopná pec,oven
 topný kanál,heating channel
+pohřební objekt,funerary structure
 hrob,grave
 hrob komorový,chamber grave
 hrob skříňkový,cist grave
@@ -357,6 +366,7 @@ pohřeb kostrový,inhumation burial
 pohřeb žárový,cremation burial
 pohřeb zvířete,animal burial
 pohřeb v sídlištním objektu,burial in settlement context
+budova/stavba,building/structure
 budova obytná,residential building
 budova hospodářská,non-residential building
 jáma,pit
@@ -371,6 +381,7 @@ pilíř,pillar
 pilota,pier
 podlaha (konstrukce),floor (construction)
 schodiště,staircase
+vrstva/souvrství,layer/layer sequence
 destrukční vrstva/souvrství,destruction layer/sequence
 geologická/přirozená vrstva,natural/geological layer
 násep,bank
@@ -382,10 +393,11 @@ splach/naplavenina,colluvial/alluvial layer
 výplň/zásyp,fill/deposit
 žároviště,burned layer
 kanalizace,sewer
-kostel,church
 zemědělský objekt,agricultural structure
 stopy orby,plough marks
 bastion/reduta,bastion/redoubt
+stéla,stela
+přírodní útvar,natural landform
 erozní rýha,gully/ravine
 jeskyně/skalní prostor,cave/abri
 pramen,spring
@@ -395,21 +407,21 @@ pyrotechnologické zařízení,pyrotechnological device
 pec,kiln
 haltýř,spring house
 kašna,fountain
-mlýn,mill
 palác,palace
 stáj/chlév,stable/cowshed
 stodola,barn
 sýpka/špýchar,granary/storehouse
 zvonice,bell tower
+zahloubený objekt,sunken feature
 loch,larder (cellar)
 sklep,cellar
 výkop,cut
 žlab,ditch
+konstrukční prvek,architectural element
 dláždění,pavement
 hráz,embankment/dam
 chodba,corridor
 klenba,vaults
-kaple,chapel
 (polo)zemnice,pit house
 základy,foundations
 křtitelnice,baptismal font
@@ -428,16 +440,18 @@ věžice,half tower
 hliník,clay pit
 náhon,millrace
 studna,water well
+inženýrské sítě,utilities
 kolektor,collector
 trativod,drainage
 vodovod,water supply pipe
 součást komunikace,transportation structure
-cesta,path/road
 hať,corduroy road
 mezník/patník,milestone/boundary stone
 most,bridge
 úvoz,hollow way
+kultovní/sakrální objekt,ritual/sacral feature
 zahrada,garden
+ohrazení/fortifikace,enclosure/fortification
 bašta,wall tower
 brána,gate
 hradba,defensive wall
@@ -468,31 +482,19 @@ milíř,charcoal kiln
 pec sklářská,glass furnace
 pec vápenická,lime kiln
 kovářská výheň,forge
+těžební objekt,mining feature
 místo těžby,extracting place
-lom,quarry
 obval,spoil bank
 pinka,binge
 sejp/halda,spoil heap
 šachta,shaft
 štola,adit
 těžební jáma,mining pit
+nespecifikovaný reliéfní útvar,unspecified terrain feature
 neklidný terén,uneven surface
 plošina,platform
 terénní hrana,terrain edge
-budova/stavba,building/structure
-zahloubený objekt,sunken feature
-konstrukční prvek,architectural element
-vrstva/souvrství,layer/layer sequence
-inženýrské sítě,utilities
-komunikace,transportation structure
-kultovní/sakrální objekt,ritual/sacral feature
 objekt/stopa výroby,production feature/trace
-ohrazení/fortifikace,enclosure/fortification
-otopné zařízení,heating equipment
-pohřební objekt,funerary structure
-přírodní útvar,natural landform
-těžební objekt,mining feature
-nespecifikovaný reliéfní útvar,unspecified terrain feature
 neznámé počasí,unknown weather
 deštivo,rainy
 oblačno,cloudy
@@ -518,6 +520,7 @@ radiouhlíkové datování,radiocarbon dating
 dendrochronologie,dendrochronology
 diatomární analýza,diatomic analysis
 fytolitová analýza,phytological analysis
+geoarcheologie,geoarchaeology
 geofyzika,geophysics
 geochemie,geochemistry
 chemická analýza,chemical analysis
@@ -534,7 +537,9 @@ petrografie/mineralogie,petrography
 konzervace a restaurování,conservation and restoration
 metalografie,metallography
 prvková analýza,elemental analysis
+stavebně-historický průzkum,building-historical survey
 materiálová analýza,material analysis
+absolutní datování,absolute dating
 dýmka,pipe
 džbán,jug
 zápona,clasp
@@ -553,6 +558,7 @@ zbraň palná,firearm
 bankovka,paper money
 akvamanile,aquamanile
 amfora,amphorae
+nástroj hrubý,utensil
 kovadlina,anvil
 lopata/rýč,shovel/spade
 otloukač,hammerstone
@@ -572,19 +578,21 @@ prsten,finger ring
 listina,deed
 třmen,stirrup
 udidlo,bridle bit
+součást hrobu,grave component
+součást oděvu,costume component
 knoflík,button
 opasek,belt
 pochva/pouzdro,sheath
 dlaždice,floor tile
 hřeb/hřebík/nýt,nail/rivet
 plech,metal sheet
+herní předmět,game equipment
 cedník,colander
 průvlečka,clothing buckle
 hrací kámen,game piece
 vzorek geologický,geological sample
 vzorek malakologický,malacological sample
 prkno/fošna,board/plank
-stéla,stela
 dyzna,nozzle
 konvice,pitcher
 lahev,bottle
@@ -605,10 +613,12 @@ zlomek keramiky,potsherd
 zlomek mazanice,daub fragment
 amorfní zlomek/předmět,amorphous fragment/object
 atypický předmět,exceptional object
+architektonický článek,architectural element
 ostění,jamb
 portál,portal
 deska,board
 zbraň chladná,cold weapon
+nádoba,vessel
 drasadlo,side scraper
 kadlub,mold
 klín,wedge
@@ -621,6 +631,7 @@ závaží tkalcovské,loom weight
 poklička,lid
 žernov/mlýnský kámen,quern
 popelnice,urn
+nástroj jemný,instrument
 klíč,key
 křesadlo/ocílka,firesteel
 lžíce,spoon
@@ -632,8 +643,10 @@ obuv,footwear
 kachel,stove tile
 kůl,pole
 okenní výplň,window panes
+omítka,plaster
 pojivo,binder
 potrubí,plumbing pipe
+postroj/doprava,harness/transportation
 brusle,ice skate
 člun,boat
 faléra,phalera
@@ -648,6 +661,7 @@ kost,single bone
 skořápka plodu,fruit shell/nutshell
 projektil/kule/munice,projectile/bullet/ammunition
 řetízek,chain necklace
+stavební/spojovací prvek,structural element component
 vzorek dendrochronologický,dendrochronological sample
 vzorek pro radiokarbonové datování,radiocarbon dating sample
 kulička/koule,ball/sphere
@@ -665,6 +679,7 @@ pražnice,frying pan
 tyglík,crucible
 prejz,pantile
 technická keramika,technical ceramics
+ekofakt,ecofact
 kamenné jádro,stone core
 malakofauna,mollusca
 odpad,waste
@@ -673,6 +688,7 @@ odpad výrobní,production waste
 uhlíky/popel,charcoal/ash
 drát,wire
 hrot/hák,spike/hook
+militaria,weapons and armour
 bulava,club
 meč,sword
 ostruha,spur
@@ -706,6 +722,7 @@ cihla,brick
 střešní krytina,roofing tile
 trám,beam
 zámek,lock
+vzorek,sample
 vědro/situla,bucket/situla
 dýka,dagger
 kopí/hrot kopí,spear/spearhead
@@ -715,35 +732,23 @@ dláto,chisel
 hladítko,smoother
 hřeben,comb
 šídlo,awl
+nehotový výrobek/polotovar,semiproduct/blank
 hřivna,ingot
 ruda,ore
 slitek,bloom
 surovina,raw material
 valoun,pebble
+ozdoba,adornment
 náhrdelník,necklace
 nánožník,anklet
 přívěsek/závěsek,pendant
 záušnice,temple ring
+písemnost,written document
 kniha,book
 váza,vase
 běžný nález,common find
-architektonický článek,architectural element
-ekofakt,ecofact
 funkčně neurčený předmět,object of unspecified function
-militaria,weapons and armour
 platidlo,currency
-nádoba,vessel
-nástroj hrubý,utensil
-nástroj jemný,instrument
-nehotový výrobek/polotovar,semiproduct/blank
-ozdoba,adornment
-písemnost,written document
-postroj/doprava,harness/transportation
-součást hrobu,grave component
-součást oděvu,costume component
-stavební/spojovací prvek,structural element component
-herní předmět,game equipment
-vzorek,sample
 odchylka jednotky metrů,deviation in meters
 odchylka desítky metrů,deviation in tens of meters
 odchylka stovky metrů,deviation in hundreds of meters
@@ -779,11 +784,22 @@ konstrukce roubená,log construction
 konstrukce hrázděná,half-timber construction
 konstrukce sypaná/vršená,earth construction
 konstrukce zahloubená,sunken structure
-perleť/mušle,nacre/shell
-způsob provedení,construction type
-těžený/zpracovávaný materiál,extracted/processed material
 barvivo,colourant
 bronz,bronze
+kost lidská,human bone
+kost zvířecí,animal bone
+kov,metal
+kov barevný,nonferrous metal
+kůže,leather
+malta,mortar
+mazanice,daub
+měď,copper
+mosaz,brass
+obilky/semena,caryopses/seeds
+olovo,lead
+paroh,antler
+pecka,fruit stone
+perla,pearl
 cín,tin
 dehet,tar
 dřevo,wood
@@ -802,26 +818,11 @@ keramika kamenina,stoneware
 keramika porcelán,porcelain
 keramika terra sigillata,terra sigillata ware
 korál,coral
-kost lidská,human bone
-kost zvířecí,animal bone
-kov,metal
-kov barevný,nonferrous metal
 kůra,bark
-kůže,leather
-malta,mortar
-mazanice,daub
-měď,copper
-mosaz,brass
-obilky/semena,caryopses/seeds
-olovo,lead
-omítka,plaster
-paroh,antler
-pecka,fruit stone
-perla,pearl
+perleť/mušle,nacre/shell
 plast,plastic
 proutí,wattle
 pryskyřice,resin
-pyl,polen
 roh,horn
 schránky měkkýšů,mollusc shell
 sklo,glass
@@ -838,11 +839,15 @@ zlato,gold
 zub lidský,human tooth
 zub zvířecí,animal tooth
 železo,iron
+způsob provedení,construction type
+těžený/zpracovávaný materiál,extracted/processed material
+pyl,polen
 jiný materiál,other material
 bodový objekt,point feature
 shluk bodových objektů,group of point features
 bodové objekty uspořádané,organized point features
 plošný objekt,polygonal feature
+linie,linear feature
 linie ohrazující,delimiting line
 lineární systém,system of linear features
 ohrazení kruhové malé,circular enclosure (small)
@@ -856,6 +861,7 @@ ohrazení polygonální střední,polygonal enclosure (medium)
 ohrazení polygonální velké,polygonal enclosure (large)
 vizuální/geodetický průzkum,visual/geodetic survey
 letecký průzkum,aerial survey
+geofyzikální průzkum,geophysical survey
 geochemický průzkum,geochemical survey
 povrchový nález,surface find
 povrchový sběr,surface collection survey
@@ -865,15 +871,16 @@ náhodný zásah/nález,chance find
 nedokumentovaná akce,undocumented fieldwork
 orientační zjištění,brief evidence
 vertikální řez,linear trench
+sonda,pit trench
 skupina/síť sond,group of pit trenches
 plošný odkryv,total excavation
+environmentální vzorek,environmental sampling
+jiná evidence,other evidence
+bez okolností,unknown context
 nedestruktivní průzkum,non-destructive survey
 výzkum povrchové vrstvy,topsoil sampling
 terénní zásah,field intervention
 terénní odkryv,field excavation
-environmentální vzorek,environmental sampling
-jiná evidence,other evidence
-bez okolností,unknown context
 celek akce,fieldwork extent
 část akce,fieldwork segment
 katastrální území,cadastral area
@@ -934,7 +941,6 @@ terénní pracoviště,fieldwork unit
 výzkumná instituce,research organisation
 univerzita,university
 bod,point
-linie,line
 polygon,polygon
 záchranný,rescue
 badatelský,research
@@ -942,15 +948,12 @@ průzkum,survey
 náhodný/povrchový nález,chance find
 neodborné narušení,non-professional intervention
 geodetický průzkum,geodetic survey
-geofyzikální průzkum,geophysical survey
-stavebně-historický průzkum,building-history survey
 geologický vrt,geological core sample
 geologická sonda,geological trench
 vrt,sediment core sample
 skupina vrtů,group of sediment core samples
 řez,linear trench
 skupina řezů,group of linear trenches
-sonda,pit trench
 skupina sond,group of pit trenches
 konference,conference
 zahraniční cesta,travel abroad
@@ -1234,6 +1237,7 @@ pozůstatek sídliště,remains of settlement
 pozůstatek těžby,remains of extraction site
 pozůstatek vojenství,remains of military site
 pozůstatek výroby,remains of production site
+bioarcheologie,bioarchaeology
 osteozoologie,osteozoology
 tafonomie,taphonomy
 geochronologie,geochronology
@@ -1254,10 +1258,6 @@ ruina,ruin
 historická budova/komplex,historical building/complex
 mladší–pozdní eneolit,Late–Final Eneolithic
 creative commons uveďte původ-neužívejte komerčně 4.0 mezinárodní,Creative Commons Attribution-NonCommercial 4.0 International
-neznámá,unknown
-bioarcheologie,bioarchaeology
-absolutní datování,absolute dating
-geoarcheologie,geoarchaeology
 materiálové analýzy,material analysis
 jiné expertní zpracování,other expert analysis
 creative commons uveďte původ 4.0 mezinárodní,Creative Commons Attribution 4.0 International

@@ -82,7 +82,7 @@ def _load_engine() -> Dict[str, Any]:
     config = load_config(config_path) if Path(config_path).exists() else {}
 
     vocab_path = os.getenv("VOCAB_PATH") or config.get(
-        "VOCAB_PATH", "data_samples/teater_nested_vocab.json"
+        "VOCAB_PATH", "data_samples/vocab/union_nested.json"
     )
     context_window = int(os.getenv("LLM_CONTEXT_WINDOW", config.get("CONTEXT_WINDOW", "32000")))
     max_retries = int(os.getenv("LLM_MAX_RETRIES", "3"))

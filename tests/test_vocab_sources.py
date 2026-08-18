@@ -160,6 +160,28 @@ def test_teater_roots_are_their_own_branch():
     assert root.scheme == "1050"
 
 
+def test_teater_carries_the_depth_two_label_as_sub():
+    """TEATER's second level is the granularity the 7-theme rollup discards — 17 kinds
+    of activity area, 18 kinds of feature. It rides along on every descendant."""
+    records, _ = vs.harvest_teater(mode="snapshot", session=_teater_session())
+    by_id = {r.source_id: r for r in records}
+    assert by_id["1090"].sub == "magdalénien"  # a depth-2 node names itself
+    assert by_id["1050"].sub is None  # a depth-1 root is a section title, not a group
+
+
+def test_teater_branch_roots_never_become_selectable_terms():
+    """ "5) Chronologie" and "12) Společnost" are numbered section titles. They belong in
+    the flat archive for completeness but must not reach the model as categories."""
+    records, _ = vs.harvest_teater(mode="snapshot", session=_teater_session())
+    assert {r.source_id for r in records} >= {"1050", "3549"}
+
+    pairs = vs.to_term_pairs(records)
+    assert "5) Chronologie" not in pairs
+    assert "12) Společnost" not in pairs
+    assert "magdalénien" in pairs
+    assert pairs["magdalénien"]["sub"] == "magdalénien"
+
+
 def test_teater_live_falls_back_to_the_snapshot():
     import requests
 
@@ -215,8 +237,16 @@ def test_merge_prefers_amcr_and_counts_collisions():
 def test_to_term_pairs_resolves_label_collisions_deterministically():
     """Duplicate labels cannot both survive: the nested dict is keyed by the label and
     build_schema turns the list into an Enum, where duplicate values become aliases."""
-    a = vs.VocabRecord(cs="komunita", en="community", source="teater", source_id="562")
-    b = vs.VocabRecord(cs="komunita", en="community (sociology)", source="teater", source_id="3552")
+    a = vs.VocabRecord(
+        cs="komunita", en="community", source="teater", source_id="562", broader=("288",)
+    )
+    b = vs.VocabRecord(
+        cs="komunita",
+        en="community (sociology)",
+        source="teater",
+        source_id="3552",
+        broader=("3549",),
+    )
     collisions = []
     forward = vs.to_term_pairs([a, b], collisions=collisions)
     backward = vs.to_term_pairs([b, a], collisions=[])
