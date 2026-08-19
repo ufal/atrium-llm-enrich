@@ -19,6 +19,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+import llm_client_shared as lcs
 from llm_client_shared import (
     approx_token_count,
     build_document_schema,
@@ -392,3 +393,72 @@ def test_prepare_document_input_converts_and_caches(tmp_path, monkeypatch):
     out2 = llm_client_shared.prepare_document_input(src)
     assert out2 == out
     assert len(calls) == 1
+
+
+# ── config quoting + vocabulary guards (2026-08-19) ──────────────────────────
+#
+# Regression tests for the e2e Stage 5 failure in ufal/atrium-project run
+# 32208408456. The hub workflow wrote `VOCAB_PATH="/workspace/work/….json"`;
+# load_config kept the quote characters, so the path could not exist,
+# VocabularyManager auto-synced, and the resulting enum held one term. Every
+# correct answer the model produced was then rejected as a validation error and
+# the run exited 0 having enriched nothing.
+
+
+class TestLoadConfigQuoting:
+    """Quoted and bare values must parse identically — nlp-enrich's sibling
+    parser has always stripped quotes, and the same hand writes both configs."""
+
+    def _write(self, tmp_path, body):
+        p = tmp_path / "cfg.txt"
+        p.write_text(body, encoding="utf-8")
+        return str(p)
+
+    def test_double_quoted_value_is_unquoted(self, tmp_path):
+        cfg = self._write(tmp_path, 'VOCAB_PATH="/workspace/work/union_nested.json"\n')
+        assert lcs.load_config(cfg)["VOCAB_PATH"] == "/workspace/work/union_nested.json"
+
+    def test_single_quoted_value_is_unquoted(self, tmp_path):
+        cfg = self._write(tmp_path, "VOCAB_PATH='/a/b.json'\n")
+        assert lcs.load_config(cfg)["VOCAB_PATH"] == "/a/b.json"
+
+    def test_bare_value_is_untouched(self, tmp_path):
+        cfg = self._write(tmp_path, "VOCAB_PATH=/a/b.json\n")
+        assert lcs.load_config(cfg)["VOCAB_PATH"] == "/a/b.json"
+
+    def test_inner_apostrophe_survives(self, tmp_path):
+        """Only a matched OUTER pair is stripped."""
+        cfg = self._write(tmp_path, "NOTE=it's fine\n")
+        assert lcs.load_config(cfg)["NOTE"] == "it's fine"
+
+    def test_unbalanced_quote_is_left_alone(self, tmp_path):
+        cfg = self._write(tmp_path, 'ODD="unbalanced\n')
+        assert lcs.load_config(cfg)["ODD"] == '"unbalanced'
+
+    def test_empty_value_does_not_crash(self, tmp_path):
+        cfg = self._write(tmp_path, "EMPTY=\n")
+        assert lcs.load_config(cfg)["EMPTY"] == ""
+
+
+class TestVocabularyReachedTheModel:
+    """build_schema must refuse a term list carrying no real vocabulary."""
+
+    def test_empty_term_list_is_rejected(self):
+        with pytest.raises(ValueError, match="empty"):
+            lcs.build_schema([])
+
+    def test_meta_only_term_list_is_rejected(self):
+        """The exact shape run 32208408456 produced: the fixed administrative
+        label and nothing else. Accepting it forces every line to that label."""
+        with pytest.raises(ValueError, match="no terms beyond"):
+            lcs.build_schema([lcs.META_TERM])
+
+    def test_meta_only_is_rejected_for_document_schema_too(self):
+        with pytest.raises(ValueError, match="no terms beyond"):
+            lcs.build_document_schema([lcs.META_TERM])
+
+    def test_one_real_term_alongside_meta_is_accepted(self):
+        """The guard is exact, not a size threshold — one real term is a
+        legitimate (if small) vocabulary and must still build."""
+        model = lcs.build_schema([lcs.META_TERM, "sonda"])
+        assert model is not None

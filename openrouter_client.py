@@ -293,7 +293,15 @@ def main(argv: Optional[List[str]] = None) -> None:
 
     with logger:
         vocab_mgr = VocabularyManager(vocab_path=vocab_path)
-        vocab_data = vocab_mgr.load()
+        # auto_sync=False: never harvest inside a pipeline run. Besides the
+        # multi-minute OAI-PMH round trip, the sync path can no longer build a
+        # usable vocabulary — fetch_amcr_vocab() emits bare {"cs", "en"} pairs
+        # with no "source"/"scheme", so assign_theme() drops every term into
+        # "Other", which excluded_prompt_themes() withholds from the prompt. The
+        # result is an enum holding only "Nerelevantní (meta-text)", which then
+        # rejects every correct answer the model gives as a validation error.
+        # A missing vocabulary is a configuration fault: say so and stop.
+        vocab_data = vocab_mgr.load(auto_sync=False)
 
         # Which themes reach the model is a taxonomy_config decision (in_prompt),
         # not a literal in the prompt builder — see excluded_prompt_themes().

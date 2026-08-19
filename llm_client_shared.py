@@ -39,6 +39,31 @@ from api_util.teitok_read import doc_id_from_path  # noqa: F401  (re-exported fo
 # ---------------------------------------------------------------------------
 
 
+def _unquote(value: str) -> str:
+    """Strip one matched pair of surrounding quotes from a config value.
+
+    Config files here are shell-flavoured KEY=VALUE, and both quoted and bare
+    values occur in the wild — this repo's own llm_config.txt writes them bare,
+    while generated configs (the cross-repo e2e workflow, deployment templates)
+    quote paths out of shell habit. Without this, a quoted value keeps its quote
+    characters and every path built from it is wrong by two bytes.
+
+    That is not hypothetical: `VOCAB_PATH="/workspace/work/…json"` parsed to a
+    path that could not exist, VocabularyManager fell through to auto-sync, and
+    the run produced a single-term enum that rejected every correct answer the
+    model gave. atrium-nlp-enrich's sibling parser (api_util/summarize_nt_udp.py)
+    has always stripped quotes; the two repos consume configs written by the same
+    hand, so differing on this is a trap rather than a design choice.
+
+    Only a MATCHED outer pair is removed, so a Windows path or a value with an
+    apostrophe inside survives untouched.
+    """
+    for quote in ('"', "'"):
+        if len(value) >= 2 and value.startswith(quote) and value.endswith(quote):
+            return value[1:-1]
+    return value
+
+
 def load_config(config_path: str = "llm_config.txt") -> Dict[str, str]:
     """Parse a KEY=VALUE config file, ignoring blank lines and # comments."""
     config: Dict[str, str] = {}
@@ -52,7 +77,7 @@ def load_config(config_path: str = "llm_config.txt") -> Dict[str, str]:
                 continue
             if "=" in line:
                 key, _, value = line.partition("=")
-                config[key.strip()] = value.strip()
+                config[key.strip()] = _unquote(value.strip())
     return config
 
 
@@ -244,7 +269,7 @@ def validate_llm_output(
     else:
         dump_data["teater_category"] = dump_data.get("teater_category", "")
 
-    if dump_data.get("teater_category") == "Nerelevantní (meta-text)":
+    if dump_data.get("teater_category") == META_TERM:
         dump_data["extracted_keywords_cs"] = []
         dump_data["extracted_keywords_en"] = []
 
@@ -307,9 +332,36 @@ _SYSTEM_HEADER = (
 )
 
 
-def build_schema(term_names: List[str]) -> type:
+#: The one administrative label _collect_vocab_terms() prepends unconditionally.
+#: It is not part of any vocabulary file, so an enum consisting of it alone proves
+#: that zero real terms survived loading + theme filtering.
+META_TERM = "Nerelevantní (meta-text)"
+
+
+def _assert_vocabulary_reached_the_model(term_names: List[str]) -> None:
+    """Reject a term list that carries no actual vocabulary.
+
+    The empty case was always caught. The meta-only case was not, and it is the
+    one that actually happened: a vocabulary that loads but whose every term is
+    filtered out yields a one-value enum, and pydantic then rejects each correct
+    answer the model returns with a validation error. The run completes, exits 0,
+    and reports "records enriched: 0" — a silent quality collapse that reads like
+    a model failure. Both cases mean the same thing and neither is a judgement
+    call about size: the check is exact, not a threshold.
+    """
     if not term_names:
         raise ValueError("term_names is empty — vocabulary failed to load or was fully truncated.")
+    if set(term_names) <= {META_TERM}:
+        raise ValueError(
+            f"Vocabulary contains no terms beyond the fixed {META_TERM!r} category, so "
+            "every enrichment would be forced to that one label. Check VOCAB_PATH points "
+            "at a built vocabulary (see vocab_build.py) and that taxonomy_config.json "
+            "does not set in_prompt=false on every theme."
+        )
+
+
+def build_schema(term_names: List[str]) -> type:
+    _assert_vocabulary_reached_the_model(term_names)
 
     TermEnum = enum.Enum("TermEnum", {f"term_{i}": name for i, name in enumerate(term_names)})
 
@@ -418,7 +470,7 @@ def _collect_vocab_terms(
         {
             "theme": "Administrative / Meta",
             "sub": "",
-            "cs": "Nerelevantní (meta-text)",
+            "cs": META_TERM,
             "en": "Irrelevant / Meta-text",
         }
     ]
@@ -578,8 +630,7 @@ def build_document_schema(term_names: List[str]) -> type:
     """Whole-document variant of build_schema(): a wrapper model holding a
     list of located enrichment items, instead of one object per target line.
     Used by run_document_level() for BACKEND=openrouter/ollama .md input."""
-    if not term_names:
-        raise ValueError("term_names is empty — vocabulary failed to load or was fully truncated.")
+    _assert_vocabulary_reached_the_model(term_names)
 
     TermEnum = enum.Enum("TermEnum", {f"term_{i}": name for i, name in enumerate(term_names)})
 
@@ -916,7 +967,7 @@ def run_document_level(
     for item in semantic_data.items:
         dump_data = item.model_dump()
         dump_data["teater_category"] = item.category_name()
-        if dump_data["teater_category"] == "Nerelevantní (meta-text)":
+        if dump_data["teater_category"] == META_TERM:
             dump_data["extracted_keywords_cs"] = []
             dump_data["extracted_keywords_en"] = []
         enriched.append(

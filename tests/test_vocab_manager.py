@@ -337,3 +337,36 @@ def test_shipped_vocabulary_has_no_unplaced_terms():
     if not m.vocab_path.exists():
         return
     assert m.load(auto_sync=False).get("Other", {}) == {}
+
+
+# ── auto_sync refusal (2026-08-19) ──────────────────────────────────────────
+#
+# load(auto_sync=False) existed but no client passed it, so a mistyped or
+# unwritten VOCAB_PATH started a live OAI-PMH harvest mid-pipeline. Worse, that
+# harvest can no longer build a usable vocabulary: fetch_amcr_vocab() emits bare
+# {"cs", "en"} pairs, assign_theme() has no "source"/"scheme" to route on, every
+# term lands in "Other", and "Other" is withheld from the prompt. The clients now
+# opt out — these tests pin both halves so neither can quietly come back.
+
+
+def test_load_without_auto_sync_raises_instead_of_harvesting(tmp_path):
+    m = _mgr(tmp_path)  # vocab.json deliberately never written
+    try:
+        m.load(auto_sync=False)
+    except FileNotFoundError as exc:
+        assert "vocab.json" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("a missing vocabulary must raise, not auto-sync")
+
+
+def test_harvest_shaped_terms_all_fall_into_other(tmp_path):
+    """The reason auto-sync is no longer a usable fallback, stated as a test.
+
+    These are exactly the pairs fetch_amcr_vocab() produces. If a future change
+    makes the harvest carry "source"/"scheme" again, this test fails and the
+    auto_sync=False decision above is worth revisiting.
+    """
+    m = _mgr(tmp_path, taxonomy={"Methods": {"priority": 10, "keywords": {"cs": ["průzkum"]}}})
+    themed = m.build_nested({"sonda": {"cs": "sonda", "en": "trench"}})
+    assert themed["Methods"] == {}
+    assert "sonda" in themed["Other"]

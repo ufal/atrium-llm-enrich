@@ -867,6 +867,31 @@ _ALWAYS_SKIP_CATEG = {"Empty", "Trash"}
 # ---------------------------------------------------------------------------
 
 
+def _unquote(value: str) -> str:
+    """Strip one matched pair of surrounding quotes from a config value.
+
+    Config files here are shell-flavoured KEY=VALUE, and both quoted and bare
+    values occur in the wild — this repo's own llm_config.txt writes them bare,
+    while generated configs (the cross-repo e2e workflow, deployment templates)
+    quote paths out of shell habit. Without this, a quoted value keeps its quote
+    characters and every path built from it is wrong by two bytes.
+
+    That is not hypothetical: `VOCAB_PATH="/workspace/work/…json"` parsed to a
+    path that could not exist, VocabularyManager fell through to auto-sync, and
+    the run produced a single-term enum that rejected every correct answer the
+    model gave. atrium-nlp-enrich's sibling parser (api_util/summarize_nt_udp.py)
+    has always stripped quotes; the two repos consume configs written by the same
+    hand, so differing on this is a trap rather than a design choice.
+
+    Only a MATCHED outer pair is removed, so a Windows path or a value with an
+    apostrophe inside survives untouched.
+    """
+    for quote in ('"', "'"):
+        if len(value) >= 2 and value.startswith(quote) and value.endswith(quote):
+            return value[1:-1]
+    return value
+
+
 def load_config(config_path: str = "llm_config.txt") -> Dict[str, str]:
     """Parse a KEY=VALUE config file, ignoring blank lines and # comments."""
     config: Dict[str, str] = {}
@@ -880,7 +905,7 @@ def load_config(config_path: str = "llm_config.txt") -> Dict[str, str]:
                 continue
             if "=" in line:
                 key, _, value = line.partition("=")
-                config[key.strip()] = value.strip()
+                config[key.strip()] = _unquote(value.strip())
     return config
 
 
