@@ -1,15 +1,26 @@
 # .github/workflows/scheduled-smoke.yml
-# Nightly smoke run against the full test suite (including slow-marked tests).
+# Nightly run of the FULL test suite, in a from-scratch environment.
 #
-# Current state: nlp-enrich has 0 tests marked @pytest.mark.slow, so
-# `pytest -m slow` exits with code 5 ("no tests collected").  The run step
-# tolerates exit 5 so the job stays green until slow tests are added.
+# What this replaced, and why (issue atrium-project#10): the step used to run
+# `pytest -m slow` against a repo with 0 tests marked @pytest.mark.slow. pytest exits 5
+# ("no tests collected") in that case, and the step explicitly tolerated exit 5 -- so
+# the nightly ran zero tests and reported success, every night, for as long as it existed.
+# A green tick that asserts nothing is worse than no job at all, because it looks like
+# coverage. (The header describing that behaviour said "nlp-enrich" throughout: it was
+# copied from that repo verbatim, which is its own small evidence of how closely anyone
+# was reading a job that never did anything.)
 #
-# Follow-up: mark the genuine LINDAT/network integration tests @pytest.mark.slow
-# (call_udpipe, call_nametag live calls) to give this job real validation value.
+# The fix is not to invent slow markers. The tests this lane can run that the PR lane
+# cannot are the ones that SKIP on absent optional dependencies -- exactly the class the
+# coverage pass found here, where 17 tests had been skipping since they were written and
+# docx_to_md.py sat at 15%. So this job installs the optional stack and runs the whole
+# suite. Exit 5 is no longer tolerated: collecting nothing is now a failure.
+#
+# `-rs` reports every remaining skip WITH ITS REASON in the log, so a dependency that
+# silently stops installing shows up as a growing skip list rather than as nothing.
 #
 # PARAM block (mirrors docker.yml build args for consistency):
-#   APT_PACKAGES     — no extra apt deps for the base nlp-enrich image
+#   APT_PACKAGES     — no extra apt deps for the base image
 #   PRE_INSTALL_TORCH — torch is not pre-installed for the CPU-only smoke run
 #   REQUIREMENTS     — base + test requirements (no LLM stack)
 #
@@ -66,18 +77,17 @@ jobs:
             pip-smoke-${{ runner.os }}-
 
       - name: Install dependencies
-        run: pip install -r requirements.txt -r requirements-test.txt
-
-      - name: Run slow-marked tests (exit-5 tolerant)
-        # Exit code 5 = "no tests collected" — tolerated until @pytest.mark.slow
-        # tests are added for LINDAT/network calls.  The `|| rc=$?` capture is
-        # load-bearing: run steps execute under `bash -e`, so a bare
-        # `pytest; rc=$?` aborts before rc is ever read (the old guard was dead).
+        # requirements-test.txt already carries pdfplumber + python-docx, so Layer A of
+        # the digital-convert converter runs here. flexiconv is added for the two tests
+        # that skip without its CLI; torch stays out, because gpu-inference.yml already
+        # covers the torch-gated tests on a runner that has a GPU.
         run: |
-          rc=0
-          python -m pytest -m slow -v --tb=short || rc=$?
-          if [ "$rc" -eq 5 ]; then echo "[smoke] No slow tests collected — OK"; exit 0; fi
-          exit $rc
+          pip install -r requirements.txt -r requirements-test.txt
+          pip install -r requirements_flexiconv.txt || echo "[smoke] flexiconv unavailable — its tests will report as skipped below"
+
+      - name: Run the full suite
+        # No exit-5 tolerance: a run that collects no tests is a failure, not a pass.
+        run: python -m pytest tests/ -v --tb=short -rs
 
       - name: Open Issue on Failure
         # Ported from atrium-translator / alto-postprocess (#18, 2026-07-29 audit):

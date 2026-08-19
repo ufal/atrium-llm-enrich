@@ -52,11 +52,15 @@ def docx_available() -> bool:
 # --------------------------------------------------------------------------- #
 # Body walking — python-docx has no built-in in-order paragraph+table iterator.
 # --------------------------------------------------------------------------- #
-def _iter_block_items(parent):
+def iter_block_items(parent):
     """Yield ``Paragraph`` and ``Table`` objects in document order.
 
     The standard python-docx recipe: walk the raw body/cell element and wrap
     each ``<w:p>`` / ``<w:tbl>`` child in its high-level object.
+
+    Public (issue atrium-project#10): ``api_util.digital_to_json`` needs the same walk
+    and had reimplemented the wrong half of it -- iterating ``Document.paragraphs``
+    alone, which silently omits every paragraph inside a table cell.
     """
     from docx.document import Document as _Document
     from docx.oxml.table import CT_Tbl
@@ -339,7 +343,7 @@ def convert(path: str | Path) -> str:
     page = 1
     parts.append(f"\n## Page {page}\n")
 
-    for block in _iter_block_items(document):
+    for block in iter_block_items(document):
         from docx.text.paragraph import Paragraph
 
         if isinstance(block, Paragraph):

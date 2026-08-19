@@ -408,3 +408,108 @@ def test_docx_extraction_carries_no_geometry(digital_fixtures):
     doc = d2j.extract_docx(str(digital_fixtures / "minimal.docx"))
     assert doc.origin == d2j.ORIGIN_DOCX
     assert all(line.bbox is None for line in doc.all_lines())
+
+
+# ── DOCX tables (issue atrium-project#10) ────────────────────────────────────
+#
+# `Document.paragraphs` yields only the direct children of <w:body>, so paragraphs inside
+# a table cell are absent from it. Iterating it alone put every table's text in
+# `tables[].cells[].text` and nowhere else — the inverse of the schema's arrangement, and
+# invisible to every consumer that reads `lines[]` (json_to_md, nlp-enrich, translator).
+# The synthetic `_document(with_table=True)` above cannot catch this: it hands Layer C a
+# grid that was never extracted from a file, and asserted the broken join key as correct.
+
+
+def test_docx_table_text_reaches_lines(digital_fixtures):
+    """The defect itself: cell text must live in lines[], not only in the grid."""
+    pytest.importorskip("docx")
+    doc = d2j.extract_docx(str(digital_fixtures / "minimal.docx"))
+    texts = [line.text for line in doc.all_lines()]
+    for cell_text in ("Vrstva", "Mocnost", "Ornice", "30 cm"):
+        assert cell_text in texts, f"{cell_text!r} missing from lines[]"
+
+
+def test_docx_table_cells_join_back_into_lines(digital_fixtures):
+    """`cells[].group_id` is documented as the join key into lines[]. It has to resolve."""
+    pytest.importorskip("docx")
+    doc = d2j.extract_docx(str(digital_fixtures / "minimal.docx"))
+    line_groups = {line.group_id for line in doc.all_lines() if line.group_id}
+    cell_groups = {
+        cell["group_id"] for page in doc.pages for table in page.tables for cell in table.cells
+    }
+    assert cell_groups, "fixture has a table; its cells must carry group_ids"
+    assert not cell_groups - line_groups, "cells[] group_ids with no line to join to"
+
+
+def test_docx_table_cells_carry_grid_shape_only(digital_fixtures):
+    """The schema is explicit: "cell text is never duplicated here, it lives once in
+    lines[]". Text in both places is two copies that can disagree."""
+    pytest.importorskip("docx")
+    doc = d2j.extract_docx(str(digital_fixtures / "minimal.docx"))
+    for page in doc.pages:
+        for table in page.tables:
+            assert table.n_rows >= 1 and table.n_cols >= 1  # schema minimum: 1
+            for cell in table.cells:
+                assert "text" not in cell
+
+
+def test_docx_reading_order_survives_a_table(digital_fixtures):
+    """The table sits between two paragraphs in the fixture, so its lines must too —
+    iterating paragraphs and tables in separate passes loses that ordering."""
+    pytest.importorskip("docx")
+    doc = d2j.extract_docx(str(digital_fixtures / "minimal.docx"))
+    texts = [line.text for line in doc.all_lines()]
+    assert texts.index("Druhý odstavec s hřeby a kamením.") < texts.index("Vrstva")
+    assert texts.index("Ornice") < texts.index("Třetí odstavec, už na druhé straně.")
+
+
+def test_docx_merged_cell_contributes_its_text_once(tmp_path):
+    """python-docx repeats a merged cell once per grid position it spans. Every position
+    still needs a cells[] entry, but the text must not be duplicated into lines[]."""
+    docx = pytest.importorskip("docx")
+    document = docx.Document()
+    table = document.add_table(rows=2, cols=2)
+    table.cell(0, 0).text = "SPAN"
+    table.cell(0, 0).merge(table.cell(0, 1))
+    table.cell(1, 0).text = "a"
+    table.cell(1, 1).text = "b"
+    path = tmp_path / "merged.docx"
+    document.save(str(path))
+
+    doc = d2j.extract_docx(str(path))
+    texts = [line.text for line in doc.all_lines()]
+    assert texts.count("SPAN") == 1
+    grid = doc.pages[0].tables[0]
+    assert len(grid.cells) == 4  # the shape is still fully described
+    # both spanned positions point at the origin cell, so the join resolves for each
+    assert grid.cells[0]["group_id"] == grid.cells[1]["group_id"]
+
+
+def test_docx_nested_table_text_is_not_lost(tmp_path):
+    """A table inside a cell is the same omission one level down."""
+    docx = pytest.importorskip("docx")
+    document = docx.Document()
+    outer = document.add_table(rows=1, cols=1)
+    inner = outer.cell(0, 0).add_table(rows=1, cols=1)
+    inner.cell(0, 0).text = "NESTED"
+    path = tmp_path / "nested.docx"
+    document.save(str(path))
+
+    doc = d2j.extract_docx(str(path))
+    assert "NESTED" in [line.text for line in doc.all_lines()]
+
+
+def test_docx_degenerate_table_is_left_out(tmp_path):
+    """`n_rows`/`n_cols` carry `minimum: 1`, so emitting an empty grid would make Layer D
+    raise on the converter's OWN output — a crash on a malformed table rather than a
+    report of one. It has no shape and no text, so nothing is lost by omitting it."""
+    docx = pytest.importorskip("docx")
+    document = docx.Document()
+    document.add_paragraph("only text")
+    document.add_table(rows=0, cols=0)
+    path = tmp_path / "degenerate.docx"
+    document.save(str(path))
+
+    doc = d2j.extract_docx(str(path))
+    assert doc.pages[0].tables == []
+    assert [line.text for line in doc.all_lines()] == ["only text"]

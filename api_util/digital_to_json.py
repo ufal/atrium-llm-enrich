@@ -486,6 +486,45 @@ def extract_pdf(path: str, doc_id: Optional[str] = None) -> DigitalDocument:
     return document
 
 
+def _docx_line(paragraph, line_no: int, group_id: Optional[str] = None) -> Optional[DigitalLine]:
+    """One `lines[]` row from a python-docx paragraph, or None when it carries no text."""
+    text = (paragraph.text or "").strip()
+    if not text:
+        return None
+    style = (getattr(paragraph.style, "name", "") or "").strip()
+    heading_level = None
+    if style.lower().startswith("heading"):
+        tail = style.split()[-1]
+        heading_level = int(tail) if tail.isdigit() else 1
+    runs = list(paragraph.runs)
+    return DigitalLine(
+        page="1",
+        line=line_no,
+        text=text,
+        bold=bool(runs) and all(bool(r.bold) for r in runs),
+        italic=bool(runs) and all(bool(r.italic) for r in runs),
+        heading_level=heading_level,
+        group_id=group_id,
+    )
+
+
+def _cell_paragraphs(cell, walk):
+    """Every paragraph inside a table cell, including those in a nested table.
+
+    `cell.paragraphs` stops at the cell's own children, so a table nested in a cell would
+    lose its text the same way the top-level walk used to lose every table's.
+    """
+    from docx.table import Table  # noqa: PLC0415  (optional dependency, imported on use)
+
+    for block in walk(cell):
+        if isinstance(block, Table):
+            for row in block.rows:
+                for inner in row.cells:
+                    yield from _cell_paragraphs(inner, walk)
+        else:
+            yield block
+
+
 def extract_docx(path: str, doc_id: Optional[str] = None) -> DigitalDocument:
     """Layer A for DOCX, via python-docx (MIT).
 
@@ -493,11 +532,25 @@ def extract_docx(path: str, doc_id: Optional[str] = None) -> DigitalDocument:
     therefore no `canvas` — the schema requires `canvas.unit` only when a bbox is present,
     and inventing coordinates would be worse than the honest absence. Everything lands on
     page "1" for the same reason: the file does not say where the page breaks fall.
+
+    Paragraphs and tables are walked TOGETHER, in document order. `Document.paragraphs`
+    yields only the direct children of `<w:body>`, so every paragraph inside a table cell is
+    absent from it: iterating it alone dropped all table text out of `lines[]` and left it
+    only in `tables[].cells[].text`, which is the exact inverse of the arrangement the
+    schema states — "cell text is never duplicated here, it lives once in lines[] and is
+    linked back via group_id". The join could not resolve either, since cells were keyed
+    `tbl0-r0c0` while lines carried no group_id at all. `api_util.docx_to_md` already had
+    the in-order walker, and its comment already said why one is needed.
+    (issue atrium-project#10)
     """
     try:
         import docx  # noqa: PLC0415  (optional dependency, imported on use)
     except ImportError as exc:
         raise _missing("python-docx", "docx") from exc
+
+    from docx.table import Table  # noqa: PLC0415
+
+    from api_util.docx_to_md import iter_block_items  # noqa: PLC0415
 
     document = DigitalDocument(
         doc_id=doc_id or canonical_doc_id(path),
@@ -510,46 +563,57 @@ def extract_docx(path: str, doc_id: Optional[str] = None) -> DigitalDocument:
     page = DigitalPage(page="1", page_index=1, unit="pt")  # 1-based, per the schema
     source = docx.Document(path)
 
-    for line_no, paragraph in enumerate(source.paragraphs):
-        text = (paragraph.text or "").strip()
-        if not text:
+    line_no = 0
+    table_no = 0
+    for block in iter_block_items(source):
+        if not isinstance(block, Table):
+            line = _docx_line(block, line_no)
+            if line is not None:
+                page.lines.append(line)
+                line_no += 1
             continue
-        style = (getattr(paragraph.style, "name", "") or "").strip()
-        heading_level = None
-        if style.lower().startswith("heading"):
-            tail = style.split()[-1]
-            heading_level = int(tail) if tail.isdigit() else 1
-        runs = list(paragraph.runs)
-        page.lines.append(
-            DigitalLine(
-                page="1",
-                line=line_no,
-                text=text,
-                bold=bool(runs) and all(bool(r.bold) for r in runs),
-                italic=bool(runs) and all(bool(r.italic) for r in runs),
-                heading_level=heading_level,
-            )
-        )
 
-    for table_no, table in enumerate(source.tables):
+        table_no += 1
+        if not block.rows or not block.columns:
+            # `n_rows`/`n_cols` carry `minimum: 1` in the schema, so a degenerate grid
+            # emitted verbatim would make Layer D raise on our OWN output — the converter
+            # would crash on a malformed table instead of reporting one. It has no shape
+            # and no text, so there is nothing to lose by leaving it out.
+            continue
+
+        group = f"tbl{table_no - 1}"
         grid = DigitalTable(
-            table_id=f"t{table_no}",
+            table_id=f"t{table_no - 1}",
             page="1",
-            n_rows=len(table.rows),
-            n_cols=len(table.columns),
-            group_id=f"tbl{table_no}",
+            n_rows=len(block.rows),
+            n_cols=len(block.columns),
+            group_id=group,
         )
-        for row_no, row in enumerate(table.rows):
+        # python-docx repeats a merged cell once per grid position it spans. Each position
+        # still needs a cells[] entry (the grid shape is what this block is for), but the
+        # text must be emitted once — so a repeat points at the group_id of the cell's
+        # first occurrence and the join still resolves.
+        origins: Dict[Any, str] = {}
+        for row_no, row in enumerate(block.rows):
             for col_no, cell in enumerate(row.cells):
+                first = origins.get(cell._tc)
+                cell_group = first or f"{group}-r{row_no}c{col_no}"
                 grid.cells.append(
                     {
                         "row": row_no,
                         "col": col_no,
                         "is_header": row_no == 0,
-                        "group_id": f"tbl{table_no}-r{row_no}c{col_no}",
-                        "text": (cell.text or "").strip(),
+                        "group_id": cell_group,
                     }
                 )
+                if first is not None:
+                    continue
+                origins[cell._tc] = cell_group
+                for paragraph in _cell_paragraphs(cell, iter_block_items):
+                    line = _docx_line(paragraph, line_no, group_id=cell_group)
+                    if line is not None:
+                        page.lines.append(line)
+                        line_no += 1
         page.tables.append(grid)
 
     document.pages.append(page)
