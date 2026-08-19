@@ -14,6 +14,13 @@
 
 name: GPU Inference Tests
 
+# One GPU run at a time per ref. `cancel-in-progress: false` because these jobs hold a
+# shared-cluster allocation: killing one mid-run wastes the allocation and reports
+# nothing, so a second dispatch queues behind the first instead.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 on:
   # INFRA-GATED — needs a self-hosted runner labelled [self-hosted, gpu].
   # No such runner is registered yet (owner: @rharasim), so scheduled runs only
