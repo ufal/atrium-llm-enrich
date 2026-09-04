@@ -255,6 +255,69 @@ def test_to_term_pairs_resolves_label_collisions_deterministically():
     assert len(collisions) == 1
 
 
+# ── to_term_pairs: dedup carries ids, qualifiers opt a record out (B1-B5) ────────
+
+
+def test_dedup_lists_every_discarded_record_on_the_survivor():
+    """M7: a same-label group that dedups still records what it absorbed, rather than
+    silently dropping every record but the winner."""
+    a = vs.VocabRecord(cs="kostel", en="church", source="amcr", source_id="HES-000021")
+    b = vs.VocabRecord(cs="kostel", en="church", source="amcr", source_id="HES-000465")
+    c = vs.VocabRecord(
+        cs="kostel", en="church", source="teater", source_id="1333", broader=("1267",)
+    )
+    pairs = vs.to_term_pairs([a, b, c])
+    assert set(pairs) == {"kostel"}
+    assert pairs["kostel"]["source_id"] == "HES-000021"  # amcr sorts first
+    discarded = {d["id"] for d in pairs["kostel"]["discarded_ids"]}
+    assert discarded == {"HES-000465", "1333"}
+
+
+def test_a_same_label_collision_dedups_by_default_even_with_different_glosses():
+    """Differing EN glosses alone must never trigger a qualifier split — most of the
+    515 real collisions are translation variance (e.g. 'fortress' vs 'fort'), not a
+    homonym, and only a human review (taxonomy_overrides.json) can tell them apart."""
+    a = vs.VocabRecord(cs="kůl", en="pole", source="amcr", source_id="HES-000737")
+    b = vs.VocabRecord(cs="kůl", en="stake", source="teater", source_id="1588", broader=("1481",))
+    pairs = vs.to_term_pairs([a, b])
+    assert set(pairs) == {"kůl"}
+    assert pairs["kůl"]["discarded_ids"][0]["id"] == "1588"
+
+
+def test_qualifier_override_pulls_a_record_into_its_own_bracketed_entry():
+    """B3: an explicitly flagged record (taxonomy_overrides.json) gets its own enum
+    entry instead of being silently dropped by the dedup — the concrete 'zámek' case
+    (lock vs. château) motyc signed off on in comment 5439363875."""
+    lock_amcr = vs.VocabRecord(cs="zámek", en="lock", source="amcr", source_id="HES-000817")
+    lock_teater = vs.VocabRecord(
+        cs="zámek", en="lock", source="teater", source_id="2358", broader=("1788",)
+    )
+    chateau = vs.VocabRecord(
+        cs="zámek", en="châteaux", source="teater", source_id="1439", broader=("1267",)
+    )
+    qualifiers = {("teater", "1439"): "sídlo elity"}
+    pairs = vs.to_term_pairs([lock_amcr, lock_teater, chateau], qualifiers=qualifiers)
+
+    assert set(pairs) == {"zámek", "zámek (sídlo elity)"}
+    assert pairs["zámek"]["source_id"] == "HES-000817"
+    assert [d["id"] for d in pairs["zámek"]["discarded_ids"]] == ["2358"]
+    assert pairs["zámek (sídlo elity)"]["source_id"] == "1439"
+    assert pairs["zámek (sídlo elity)"]["discarded_ids"] == []
+    assert pairs["zámek (sídlo elity)"]["bare_cs"] == "zámek"
+    assert "bare_cs" not in pairs["zámek"]
+
+
+def test_qualifier_override_alone_in_its_group_still_gets_bracketed():
+    """A flagged record with no competing bare entry still needs bare_cs set, so the
+    output-side stripping step (llm_run.main) can find it."""
+    only = vs.VocabRecord(
+        cs="zámek", en="châteaux", source="teater", source_id="1439", broader=("1267",)
+    )
+    pairs = vs.to_term_pairs([only], qualifiers={("teater", "1439"): "sídlo elity"})
+    assert set(pairs) == {"zámek (sídlo elity)"}
+    assert pairs["zámek (sídlo elity)"]["bare_cs"] == "zámek"
+
+
 def test_flat_json_round_trip_is_lossless(tmp_path):
     session = _StubSession([_xml("amcr_oai_page1.xml"), _xml("amcr_oai_page2.xml")])
     records, meta = vs.harvest_amcr(delay=0, session=session)

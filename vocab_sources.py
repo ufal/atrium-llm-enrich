@@ -626,44 +626,114 @@ def write_vocabulary_csv(records: Iterable[VocabRecord], path: Path) -> None:
     path.write_text(vocabulary_csv_text(records), encoding="utf-8")
 
 
-def to_term_pairs(
-    records: Iterable[VocabRecord],
-    collisions: Optional[List[Tuple[str, str, str]]] = None,
-) -> Dict[str, Dict[str, Any]]:
-    """Adapt flat records to the ``{cs: {...}}`` mapping ``VocabularyManager`` nests.
+def _discarded_id(r: "VocabRecord") -> Dict[str, str]:
+    return {
+        "source": r.source,
+        "id": r.source_id,
+        "scheme": r.scheme or "",
+        "cs": r.cs,
+        "en": r.en or "",
+    }
 
-    Carries ``scheme``/``broader``/``source`` through so the nesting stage can place a
-    term by curated list membership rather than by substring luck.
+
+def _term_pair(
+    record: "VocabRecord", discarded: Sequence["VocabRecord"], bare_cs: Optional[str] = None
+) -> Dict[str, Any]:
+    pair: Dict[str, Any] = {
+        "cs": record.cs,
+        "en": record.en,
+        "source": record.source,
+        "source_id": record.source_id,
+        "scheme": record.scheme or "",
+        "sub": record.sub or (record.scheme or ""),
+        "broader": list(record.broader),
+        "sort": record.sort,
+        "discarded_ids": [_discarded_id(d) for d in discarded],
+    }
+    if bare_cs is not None:
+        pair["bare_cs"] = bare_cs
+    return pair
+
+
+def group_by_label(records: Iterable[VocabRecord]) -> Dict[str, List[VocabRecord]]:
+    """Group records that would collide under the same ``cs`` enum key.
+
+    This is the single definition of "what counts as a collision group" — the same
+    grouping :func:`to_term_pairs` dedups or splits, and what ``vocab_review.py``
+    reports on for human review. Records without ``cs``/``en``, and TEATER depth-1
+    branch roots (numbered section titles, not concepts — "5) Chronologie"), never
+    enter a group at all, matching what actually reaches the vocabulary.
+
+    Sorted by :func:`record_sort_key` before grouping, so the group's own member
+    order — and therefore which member :func:`to_term_pairs` picks as its default
+    winner — never depends on harvest order.
     """
-    if collisions is None:
-        collisions = []
-    pairs: Dict[str, Dict[str, Any]] = {}
-    seen: Dict[str, str] = {}
+    groups: Dict[str, List[VocabRecord]] = {}
     for r in sorted(records, key=record_sort_key):
         if not r.cs or not r.en:
             continue
         if r.source == "teater" and not r.broader:
-            # A depth-1 branch root — "5) Chronologie", "8) Předmět". These are numbered
-            # section titles in the thesaurus, not concepts, and offering them to the
-            # model as categories invites a shrug-answer that is technically in-vocabulary.
             continue
-        key = norm_label(r.cs)
-        if key in seen:
-            # Two concepts share a surface label. Keeping both is not an option: the
-            # nested dict is keyed by the label, and build_schema() turns the term list
-            # into an enum.Enum where duplicate values silently become aliases and
-            # collapse two concepts into one. First-in-canonical-order wins.
-            collisions.append((r.cs, seen[key], r.source_id))
-            continue
-        seen[key] = r.source_id
-        pairs[r.cs] = {
-            "cs": r.cs,
-            "en": r.en,
-            "source": r.source,
-            "source_id": r.source_id,
-            "scheme": r.scheme or "",
-            "sub": r.sub or (r.scheme or ""),
-            "broader": list(r.broader),
-            "sort": r.sort,
-        }
+        groups.setdefault(norm_label(r.cs), []).append(r)
+    return groups
+
+
+def to_term_pairs(
+    records: Iterable[VocabRecord],
+    collisions: Optional[List[Tuple[str, str, str]]] = None,
+    qualifiers: Optional[Dict[Tuple[str, str], str]] = None,
+) -> Dict[str, Dict[str, Any]]:
+    """Adapt flat records to the ``{cs: {...}}`` mapping ``VocabularyManager`` nests.
+
+    Carries ``scheme``/``broader``/``source``/``source_id`` through so the nesting stage
+    can place a term by curated list membership rather than by substring luck.
+
+    Two records sharing a Czech label cannot both become enum entries under the same
+    key (``build_schema`` turns the term list into an ``enum.Enum``, where a repeated
+    value silently becomes an alias and collapses two concepts into one), so every
+    label group resolves to exactly one of two outcomes:
+
+    * **Dedup** (the default). Every member without an entry in ``qualifiers`` is
+      treated as the same concept — a genuine duplicate or, more often, ordinary
+      translation variance between AMCR and TEATER. The lowest-sorting record
+      (:func:`record_sort_key`, i.e. AMCR before TEATER, then id) wins the bare ``cs``
+      key; every other member's identity is recorded in its ``discarded_ids`` (issue
+      #6, M7) rather than silently dropped.
+    * **Qualified split** (opt-in, B3). A record whose ``(source, source_id)`` appears
+      in ``qualifiers`` is pulled out of the group into its own entry keyed
+      ``"{cs} ({qualifier})"``, with ``bare_cs`` set so the emitted keyword can be
+      stripped back to the plain label after inference. This never happens
+      automatically from a raw label collision — a same-label group is assumed to be
+      the same concept unless a human has reviewed it and added a qualifier (see
+      ``taxonomy_overrides.json``); guessing homonym-hood from an EN gloss mismatch
+      alone would mistake ordinary translation variance for a semantic split far more
+      often than it would catch a real one.
+    """
+    if collisions is None:
+        collisions = []
+    qualifiers = qualifiers or {}
+
+    groups = group_by_label(records)
+    pairs: Dict[str, Dict[str, Any]] = {}
+    for members in groups.values():
+        flagged = [m for m in members if (m.source, m.source_id) in qualifiers]
+        plain = [m for m in members if (m.source, m.source_id) not in qualifiers]
+
+        for m in flagged:
+            key = f"{m.cs} ({qualifiers[(m.source, m.source_id)]})"
+            if key in pairs:
+                collisions.append((key, pairs[key]["source_id"], m.source_id))
+                continue
+            pairs[key] = _term_pair(m, discarded=(), bare_cs=m.cs)
+
+        if plain:
+            winner, *discarded = plain  # already sorted by record_sort_key
+            key = winner.cs
+            if key in pairs:
+                collisions.append((key, pairs[key]["source_id"], winner.source_id))
+                continue
+            pairs[key] = _term_pair(winner, discarded=discarded)
+            for d in discarded:
+                collisions.append((d.cs, winner.source_id, d.source_id))
+
     return pairs
