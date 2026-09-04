@@ -1,0 +1,36 @@
+rule,label,branch_single_word_terms,unique_hit_term_count,unique_occurrences,unique_doc_count,shared_hit_term_count,shared_occurrences,hit_term_count,occurrences,doc_count,sample_unique_terms,sample_shared_terms
+teater:288,4) Hraniční obory / Cross-border and related disciplines,380,15,39,13,1,1,16,40,13,dějiny; fotografie; kresba; kultura; kříž; les; nápis; podloží; pohřeb; půda,krajina
+heslar:nalez_typ,nalez_typ,2,2,21,4,0,0,2,21,4,objekt; předmět,
+teater:3094,11) Povolání a pracovní činnosti / Professions and work activities,278,5,8,5,1,2,6,10,6,bitva; hrnčíř; inkrustace; sládek; válka,kult
+heslar:pian_typ,pian_typ,3,2,8,6,0,0,2,8,6,bod; linie,
+teater:1,1) Teorie a přístupy / Theory and approaches,26,3,8,4,0,0,3,8,4,archeologie; artefakt; společnost,
+heslar:dokument_typ,dokument_typ,3,2,7,5,0,0,2,7,5,hlášení; mapa,
+heslar:dok_jednotka_typ,dok_jednotka_typ,2,1,5,3,1,11,2,16,7,lokalita,sonda
+heslar:projekt_typ,projekt_typ,3,2,5,5,0,0,2,5,5,průzkum; záchranný,
+teater:3549,12) Společnost / Society,67,3,5,3,0,0,3,5,3,republika; rolník; zákon,
+heslar:vyskovy_bod_typ,vyskovy_bod_typ,5,1,4,4,1,5,2,9,7,podloží,středověk
+heslar:letfoto_tvar,letfoto_tvar,1,1,3,2,0,0,1,3,2,linie,
+heslar:letiste,letiste,25,2,3,3,0,0,2,3,3,kladno; kolín,
+heslar:zeme,zeme,189,0,0,0,1,7,1,7,2,,malta
+heslar:datum_specifikace,datum_specifikace,0,0,0,0,0,0,0,0,0,,
+heslar:dohlednost,dohlednost,1,0,0,0,0,0,0,0,0,,
+heslar:dokument_format,dokument_format,1,0,0,0,0,0,0,0,0,,
+heslar:dokument_licence,dokument_licence,1,0,0,0,0,0,0,0,0,,
+heslar:dokument_material,dokument_material,7,0,0,0,0,0,0,0,0,,
+heslar:dokument_nahrada,dokument_nahrada,2,0,0,0,0,0,0,0,0,,
+heslar:dokument_rada,dokument_rada,2,0,0,0,0,0,0,0,0,,
+heslar:dokument_ulozeni,dokument_ulozeni,0,0,0,0,0,0,0,0,0,,
+heslar:dokument_zachovalost,dokument_zachovalost,2,0,0,0,0,0,0,0,0,,
+heslar:ext_zdroj_typ,ext_zdroj_typ,1,0,0,0,0,0,0,0,0,,
+heslar:jazyk,jazyk,9,0,0,0,0,0,0,0,0,,
+heslar:jistota_urceni,jistota_urceni,0,0,0,0,0,0,0,0,0,,
+heslar:objekt_specifikace_kat,objekt_specifikace_kat,0,0,0,0,0,0,0,0,0,,
+heslar:pian_presnost,pian_presnost,0,0,0,0,0,0,0,0,0,,
+heslar:pocasi,pocasi,4,0,0,0,0,0,0,0,0,,
+heslar:pristupnost,pristupnost,4,0,0,0,0,0,0,0,0,,
+teater:2557,10) Pomocně-historická hesla / Auxiliary-historical headings,0,0,0,0,0,0,0,0,0,,
+teater:2558,10.1) bitvy / battles,1,0,0,0,0,0,0,0,0,,
+teater:2560,10.2) etnika / ethnic groups,189,0,0,0,0,0,0,0,0,,
+teater:2900,10.3) historické oblasti a státní útvary / historical regions,146,0,0,0,0,0,0,0,0,,
+teater:3076,10.4) panovnické dynastie / ruling dynasties,14,0,0,0,0,0,0,0,0,,
+teater:3091,10.5) války / wars,1,0,0,0,0,0,0,0,0,,

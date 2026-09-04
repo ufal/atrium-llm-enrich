@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import vocab_sources as vs
-from vocab_manager import VocabularyManager
+from vocab_manager import VocabularyManager, attach_same_as
 
 REPO_ROOT = Path(__file__).resolve().parent
 DEFAULT_VOCAB_DIR = REPO_ROOT / "data_samples" / "vocab"
@@ -38,6 +38,9 @@ DEFAULT_CONFIG = REPO_ROOT / "data_samples" / "taxonomy_config.json"
 # The path every consumer already points at (llm_config.txt, service/api.py, the hub's
 # e2e fixture). Kept stable so there is no flag day.
 LEGACY_NESTED = REPO_ROOT / "data_samples" / "teater_nested_vocab.json"
+# The module whose system prompt carries the geographic guardrail. Read, never written:
+# the clause stays in Python and this is a gate, not a generator (issue #6, O4 / C1).
+PROMPT_SOURCE = REPO_ROOT / "llm_run.py"
 
 SCHEMA_VERSION = 1
 CHECK_PLACEHOLDER = "<checked>"
@@ -63,19 +66,24 @@ def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
-def _base_meta(config_path: Path) -> Dict[str, Any]:
-    return {
+def _rel(path: Path) -> str:
+    return str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT) else str(path)
+
+
+def _base_meta(config_path: Path, overrides_path: Optional[Path] = None) -> Dict[str, Any]:
+    meta: Dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "generator": "vocab_build.py",
         "tool_version": _tool_version(),
         "generated_utc": _now(),
-        "taxonomy_config": {
-            "path": str(config_path.relative_to(REPO_ROOT))
-            if config_path.is_relative_to(REPO_ROOT)
-            else str(config_path),
-            "sha256": _sha256(config_path),
-        },
+        "taxonomy_config": {"path": _rel(config_path), "sha256": _sha256(config_path)},
     }
+    if overrides_path is not None:
+        meta["taxonomy_overrides"] = {
+            "path": _rel(overrides_path),
+            "sha256": _sha256(overrides_path),
+        }
+    return meta
 
 
 # ── writing, with --check ─────────────────────────────────────────────────────
@@ -169,7 +177,8 @@ def _nest(
     manager: VocabularyManager,
     records: Sequence[vs.VocabRecord],
     rescue_branches: Optional[Dict[str, str]] = None,
-) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
+    qualifiers: Optional[Dict[Tuple[str, str], str]] = None,
+) -> Tuple[Dict[str, Any], List[Dict[str, Any]], List[Tuple[str, str, str]]]:
     branch_map = manager.settings.get("teater_branch_map") or {}
     rescue = None
     if rescue_branches:
@@ -180,24 +189,104 @@ def _nest(
         }
     audit: List[Dict[str, Any]] = []
     collisions: List[Tuple[str, str, str]] = []
-    pairs = vs.to_term_pairs(records, collisions=collisions)
+    pairs = vs.to_term_pairs(records, collisions=collisions, qualifiers=qualifiers)
     if collisions:
         print(f"  [warn] {len(collisions)} label collision(s) dropped, e.g. {collisions[:3]}")
     nested = manager.build_nested(pairs, audit=audit, rescue=rescue)
-    return nested, audit
+    return nested, audit, collisions
+
+
+def _check_geo_guardrail(manager: VocabularyManager) -> None:
+    """Refuse to build a vocabulary that contradicts the prompt's geographic guardrail.
+
+    The clause ("NEVER select a country name, language name, or geographic region
+    name") and the excluded geographic branches are one decision held in two files.
+    Change either half alone and the scores measure the contradiction rather than the
+    model — which is why the O3/O4 decision package puts the two in the same change.
+    The build is where both halves are in scope, so it is where they are checked.
+
+    A missing prompt module is not an error: this repo's vocabulary artifacts are
+    copied into atrium-llm-enrich, where the prompt lives elsewhere. The vocabulary
+    half is still checked there.
+    """
+    source = PROMPT_SOURCE.read_text(encoding="utf-8") if PROMPT_SOURCE.exists() else None
+    problems = manager.geo_guardrail_problems(source)
+    if problems:
+        raise SystemExit(
+            "[guardrail] the vocabulary and the prompt disagree:\n  - "
+            + "\n  - ".join(problems)
+            + "\nSee data_samples/vocab/6.O3O4.decision-package.md; flip both halves or "
+            "neither."
+        )
+
+
+def _filter_excluded(
+    records: Sequence[vs.VocabRecord], manager: VocabularyManager
+) -> List[vs.VocabRecord]:
+    """Drop records whose own placement rule already resolves to ``__exclude__``.
+
+    Applied *before* label-collision dedup (issue #6, finding 3 of comment
+    5395681950): without this, a term whose winning record sits in an excluded list
+    is lost entirely even when a kept list also offers it under the same label — e.g.
+    "papír" would vanish once ``dokument_material`` is excluded, because that record's
+    ident happens to sort first, even though "papír" also lives in the kept Material
+    lists.
+    """
+    return [r for r in records if not manager.is_excluded(r.as_dict())]
+
+
+_AUDIT_COLUMNS = (
+    "cs",
+    "en",
+    "source",
+    "source_id",
+    "scheme",
+    "sub",
+    "theme",
+    "placed_by",
+    "same_as_count",
+)
 
 
 def _audit_text(rows: Sequence[Dict[str, Any]]) -> str:
+    """``sub`` (added alongside ``theme``/``placed_by`` in ``build_nested``) and
+    ``same_as_count`` close the audit/nested split a reviewer used to have to bridge by
+    hand: before this, the audit CSV had the placement *reason* but not the sub-header
+    a term actually renders under, and the nested JSON had ``sub``/``same_as`` but not
+    the reason. ``same_as_count`` defaults to 0 via ``.get`` — ``build_nested`` cannot
+    know it (composite links are only resolved after nesting, by
+    :func:`vocab_manager.attach_same_as`; see ``main()`` below), so callers that build
+    an audit list directly from ``build_nested`` and never enrich it still get a valid
+    CSV rather than a ``KeyError``.
+    """
     import io
 
     buf = io.StringIO(newline="")
     writer = csv.writer(buf, lineterminator="\n")
-    writer.writerow(["cs", "en", "source", "source_id", "scheme", "theme", "placed_by"])
+    writer.writerow(_AUDIT_COLUMNS)
     for row in sorted(rows, key=lambda r: (r["source"], r["theme"], r["cs"])):
         writer.writerow(
-            [row[c] for c in ("cs", "en", "source", "source_id", "scheme", "theme", "placed_by")]
+            [row.get(c, "") if c != "same_as_count" else row.get(c, 0) for c in _AUDIT_COLUMNS]
         )
     return buf.getvalue()
+
+
+def _with_same_as_counts(
+    audit: Sequence[Dict[str, Any]], nested: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """Join each audit row to its ``same_as`` link count in the just-nested vocabulary.
+
+    Keyed on ``(theme, cs)`` — audit's ``theme`` is exactly which facet the term landed
+    in and ``cs`` is the enum key (post-qualifier-split), so ``nested[theme][cs]`` is
+    the same entry the row describes; audit and nested are 1:1 by construction (every
+    surviving term gets exactly one audit row and one nested entry). Must run after
+    :func:`vocab_manager.attach_same_as`, which is what populates ``same_as`` at all.
+    """
+    out = []
+    for row in audit:
+        entry = nested.get(row["theme"], {}).get(row["cs"], {})
+        out.append({**row, "same_as_count": len(entry.get("same_as") or [])})
+    return out
 
 
 def _stats(nested: Dict[str, Any], audit: Sequence[Dict[str, Any]]) -> None:
@@ -232,6 +321,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--teater-mode", choices=("snapshot", "live"), default="snapshot")
     p.add_argument("--vocab-dir", type=Path, default=DEFAULT_VOCAB_DIR)
     p.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    p.add_argument(
+        "--overrides",
+        type=Path,
+        default=None,
+        help="per-term corrections (default: taxonomy_overrides.json next to --config)",
+    )
     p.add_argument("--delay", type=float, default=vs.DEFAULT_DELAY)
     p.add_argument(
         "--update-legacy",
@@ -266,32 +361,74 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
             changed |= _emit(vocab_dir / f"{name}_flat.csv", vs.flat_csv_text(records), args.check)
 
-    merged, collisions = vs.merge(per_source)
+    # ── stage 2 setup ────────────────────────────────────────────────────────
+    manager = VocabularyManager(
+        config_path=str(args.config),
+        overrides_path=str(args.overrides) if args.overrides else None,
+    )
+    _check_geo_guardrail(manager)
+
+    # The build is the one place that has every harvested record, so it is the one
+    # place that can tell an override whose (source, id) no longer matches anything —
+    # a list renumbered upstream, or a typo'd id that has silently done nothing since
+    # the day it was written.
+    manager.validate_settings(
+        records=[r.as_dict() for records, _meta in per_source.values() for r in records]
+    )
+    qualifiers = manager.qualifier_overrides()
+
+    # B5 (issue #6, finding 3): drop excluded records *before* any dedup, so a term
+    # whose winning record sits in an excluded list doesn't take a kept list's record
+    # down with it. Applied once, upstream of both vocabulary.csv and the nested build.
+    filtered_source: Dict[str, List[vs.VocabRecord]] = {
+        name: _filter_excluded(records, manager) for name, (records, _meta) in per_source.items()
+    }
+
+    filtered_for_merge = {
+        name: (records, per_source[name][1]) for name, records in filtered_source.items()
+    }
+    merged, _merge_collisions = vs.merge(filtered_for_merge)
     changed |= _emit(vocab_dir / "vocabulary.csv", vs.vocabulary_csv_text(merged), args.check)
 
-    # ── stage 2 artifacts ────────────────────────────────────────────────────
-    manager = VocabularyManager(config_path=str(args.config))
-    teater_records = per_source.get("teater", ([], {}))[0]
+    teater_records = filtered_source.get("teater", [])
     rescue_branches = _rescue_map(teater_records)
 
     targets: Dict[str, List[vs.VocabRecord]] = {}
-    if "amcr" in per_source:
-        targets["amcr"] = per_source["amcr"][0]
-    if "teater" in per_source:
+    if "amcr" in filtered_source:
+        targets["amcr"] = filtered_source["amcr"]
+    if "teater" in filtered_source:
         targets["teater"] = teater_records
-    if len(per_source) > 1:
-        targets["union"] = merged
+    if len(filtered_source) > 1:
+        targets["union"] = filtered_source.get("amcr", []) + teater_records
 
     last_nested: Dict[str, Any] = {}
     for name, records in targets.items():
-        nested, audit = _nest(manager, records, rescue_branches if name != "teater" else None)
+        nested, audit, collisions = _nest(
+            manager, records, rescue_branches if name != "teater" else None, qualifiers
+        )
+        # Track 3 / O1 / F: link "X/Y" composites to a standalone X or Y also offered.
+        # Scoring-time equivalence only (vocab_manager.attach_same_as docstring) — run
+        # after nesting, since a pair can span two facets or two sources and is only
+        # resolvable once dedup and placement have already happened.
+        # `extra`/`suppress` are the reviewer's two corrections to what the label
+        # shape alone can tell — both config, so a wrong link is a taxonomy_overrides
+        # edit rather than a code change.
+        same_as_extra, same_as_suppress = manager.same_as_overrides()
+        same_as_links = attach_same_as(
+            nested,
+            separators=manager.composite_separators(),
+            extra=same_as_extra,
+            suppress=same_as_suppress,
+        )
+        audit = _with_same_as_counts(audit, nested)
         last_nested = nested
-        meta = _base_meta(args.config)
+        meta = _base_meta(args.config, manager.overrides_path)
         meta["sources"] = [per_source[s][1] for s in per_source if s in ("amcr", "teater")]
         meta["counts"] = {
             "total": sum(len(v) for v in nested.values()),
             "by_theme": {k: len(v) for k, v in nested.items()},
-            "collisions": collisions if name == "union" else 0,
+            "collisions": len(collisions),
+            "same_as_links": same_as_links,
         }
         # Theme order is priority-descending and load-bearing for prompt truncation, so
         # the nested file is NOT written with sort_keys.

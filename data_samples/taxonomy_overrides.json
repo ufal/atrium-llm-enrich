@@ -1,0 +1,95 @@
+{
+  "_comment": [
+    "Per-term corrections applied to a SPECIFIC (source, id) record, checked before",
+    "heslar_map / teater_branch_map resolve the record's list/branch (issue #6,",
+    "finding 4 of comment 5395681950; workstream B4 of the post-review plan).",
+    "",
+    "'facet' forces a different facet than the record's own list/branch would give",
+    "it. Use this only for a single mis-sorted record inside an otherwise-correct",
+    "list -- moving an entire list belongs in heslar_map, an entire TEATER",
+    "(sub-)branch in teater_branch_map (which already resolves most-specific-first",
+    "along the broader chain, so no per-term override is needed for that case).",
+    "",
+    "'facet' also accepts the reserved value '__exclude__', which drops this one",
+    "record from the built vocabulary entirely -- the per-term counterpart of an",
+    "'_exclusions' entry, for a single unusable term inside a list worth keeping.",
+    "Exclusion is applied before same-label dedup, so a term another (kept) record",
+    "also offers survives under that record; only this id goes away.",
+    "",
+    "'sub' overrides the sub-header this record renders under, independently of",
+    "'facet'. Without it a record moved by 'facet' keeps the sub-header of the list",
+    "it was moved away from -- 'kostel' would read 'Feature / areál aktivity'. Give",
+    "the already-rendered Czech label (the heslar_labels value, e.g. 'druh objektu',",
+    "not 'objekt_druh'); prefer one the target facet already uses, or the prompt",
+    "grows a sub-header with a single term under it. May also supply a sub-header",
+    "for a record whose source offers none.",
+    "",
+    "'qualifier_cs' pulls this record OUT of a same-label dedup group into its own",
+    "bracketed enum entry '<cs> (<qualifier_cs>)', for a genuine homonym where two",
+    "records share a Czech label but denote different things (finding 1 of comment",
+    "5395681950; motyc 5439363875: 'Bracketed solution sounds good'). Do NOT add",
+    "one on a hunch: most same-label collisions are the same concept, or plain",
+    "translation variance, and should just dedup -- vocab_manager's default already",
+    "does that, carrying every discarded record's id on the surviving term. Only",
+    "add a qualifier once a human has actually confirmed the split (this is",
+    "@david-spacil's review per M10, not something to infer from an EN gloss diff).",
+    "",
+    "'same_as' and 'same_as_suppress' correct the composite/component links",
+    "(issue #6, O1/F). A composite label 'X/Y' is linked to a standalone 'X' or",
+    "'Y' automatically, since both are selectable answers for the same line and",
+    "an exact-match score would call one of them wrong. 'same_as' adds a link no",
+    "label shape implies; 'same_as_suppress' drops one a reviewer judges wrong",
+    "-- two senses that merely share a word. Both take a list of {source, id}",
+    "and are declared from ONE side only: a link is symmetric, so stating it",
+    "twice would just be two places to forget. Neither changes what the prompt",
+    "offers; both sides stay selectable and the link is scoring-time equivalence.",
+    "",
+    "Every override needs 'reason' and every application is recorded in the",
+    "placement audit CSV as 'override:<source>:<id>' so it stays reviewable.",
+    "Match on (source, id) only -- never on the bare label, which is exactly the",
+    "ambiguity these overrides exist to resolve."
+  ],
+  "overrides": [
+    {
+      "match": { "source": "amcr", "id": "HES-000021" },
+      "facet": "Feature",
+      "sub": "druh objektu",
+      "reason": "kostel: AMCR double-registers the term under both areal (HES-000021) and objekt_druh (HES-000465, 'church'/'church'); first-occurrence dedup keeps the lower ident (areal -> Activity Area). Domain review (issue #6, comment 5395681950) confirms Feature; the objection was withdrawn as a dedup artifact, not a taxonomy dispute (comment 5426046951)."
+    },
+    {
+      "match": { "source": "amcr", "id": "HES-000020" },
+      "facet": "Feature",
+      "sub": "druh objektu",
+      "reason": "kaple: same AMCR double-registration shape as kostel (areal HES-000020 / objekt_druh HES-000496, 'chapel'/'chapel'). Comment 5395681950."
+    },
+    {
+      "match": { "source": "amcr", "id": "HES-000028" },
+      "facet": "Feature",
+      "sub": "druh objektu",
+      "reason": "mlýn: same AMCR double-registration shape as kostel (areal HES-000028 / objekt_druh HES-000480, 'mill'/'mill'). Comment 5395681950."
+    },
+    {
+      "match": { "source": "amcr", "id": "HES-000048" },
+      "facet": "Feature",
+      "sub": "druh objektu",
+      "reason": "cesta: same AMCR double-registration shape as kostel (areal HES-000048 / objekt_druh HES-000520). Comment 5395681950."
+    },
+    {
+      "match": { "source": "amcr", "id": "HES-000526" },
+      "facet": "Activity Area",
+      "sub": "areál aktivity",
+      "reason": "zahrada: dedup currently keeps the AMCR objekt_druh record (Feature) over TEATER's 'areál zemědělské výroby' sub-branch (id 1298, branch 1267 -> Activity Area). Domain review (comment 5395681950) assigns Activity Area -- the 'building vs. ground' correction, opposite direction from kostel/kaple/mlýn/cesta."
+    },
+    {
+      "match": { "source": "amcr", "id": "HES-000470" },
+      "facet": "Finds Context",
+      "sub": "nálezové okolnosti",
+      "reason": "přírodní útvar: resolves to Feature via objekt_druh (AMCR) and branch 1481 (TEATER) alike; domain review (comment 5395681950) assigns Finds Context instead -- a natural feature is the context a find was recovered from, not a built feature."
+    },
+    {
+      "match": { "source": "teater", "id": "1439" },
+      "qualifier_cs": "sídlo elity",
+      "reason": "zámek: three records share this label -- AMCR HES-000817 (predmet_druh, 'lock') and TEATER 2358 (branch 1788, 'lock') mean the same thing and dedup normally; TEATER 1439 (branch 1267, 'châteaux') is a genuine homonym, not translation variance. motyc approved the bracketed-qualifier convention for exactly this case (comment 5439363875); 'sídlo elity' is TEATER's own sub-branch label for the châteaux sense."
+    }
+  ]
+}

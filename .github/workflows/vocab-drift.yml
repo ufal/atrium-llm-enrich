@@ -1,0 +1,105 @@
+# .github/workflows/vocab-drift.yml
+#
+# Vocabulary artifact/config parity gate (issue #6).
+#
+# WHY THIS EXISTS. vocab_build.py --from-flat --check already proves the nested
+# vocabulary is reproducible from the committed flat files (vocab-refresh.yml runs
+# it) -- but that workflow only fires monthly or on manual dispatch, and the push/PR
+# lane (pre-commit.yml) is lint-only. Nothing in the fast path ever re-ran the build,
+# so commit a5e3c8a landed a taxonomy_config.json/taxonomy_overrides.json edit
+# without the data_samples/vocab/*.json artifacts that make it take effect at
+# runtime: on master the config declared Documentation dissolved while the shipped
+# union_nested.json still had all 107 of its excluded terms reachable by the prompt.
+# The decision existed in code and was not in force. This workflow is the fix:
+# it is a named, path-scoped check so the same drift fails loudly on the next PR
+# that touches either half without the other.
+#
+# Standalone rather than a hub reusable, same reasoning as teitok-schema.yml: this
+# is nlp-enrich's own build pipeline, nothing to share yet (llm-enrich carries a
+# byte-identical copy of vocab_manager.py/vocab_sources.py/vocab_build.py as of the
+# last manual sync, but has no vocab-refresh.yml of its own and cannot regenerate
+# its artifacts -- mirroring this gate there is separate work).
+#
+# requests is a module-level import in vocab_sources.py (used even offline, for
+# type hints/session plumbing) so it is installed here too; lxml is only imported
+# lazily for the live-harvest path and --from-flat never reaches it, but it is
+# cheap and already in requirements.txt, so installed for parity with
+# vocab-refresh.yml rather than relying on that being true forever.
+
+name: Vocabulary Drift
+
+on:
+  pull_request:
+    paths:
+      - "vocab_sources.py"
+      - "vocab_manager.py"
+      - "vocab_build.py"
+      - "data_samples/taxonomy_config.json"
+      - "data_samples/taxonomy_overrides.json"
+      - "data_samples/vocab/**"
+      - "tests/test_vocab_build.py"
+      - "tests/test_vocab_manager.py"
+      - "tests/test_vocab_sources.py"
+      - ".github/workflows/vocab-drift.yml"
+  push:
+    branches: [test, master]
+    paths:
+      - "vocab_sources.py"
+      - "vocab_manager.py"
+      - "vocab_build.py"
+      - "data_samples/taxonomy_config.json"
+      - "data_samples/taxonomy_overrides.json"
+      - "data_samples/vocab/**"
+      - "tests/test_vocab_build.py"
+      - "tests/test_vocab_manager.py"
+      - "tests/test_vocab_sources.py"
+      - ".github/workflows/vocab-drift.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read   # least privilege: this job only ever reads the tree
+
+jobs:
+  vocab-drift:
+    name: Committed vocabulary matches the config
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Install requests + lxml + pytest
+        run: pip install requests lxml pytest
+
+      - name: Nesting is reproducible from the committed flat files
+        # The command vocab-refresh.yml already runs monthly -- here on every PR
+        # that touches the taxonomy or the artifacts, so a config edit without a
+        # matching rebuild fails immediately instead of silently shipping half-done.
+        run: python3 vocab_build.py --from-flat --check
+
+      - name: A real drift IS caught (negative test)
+        # The gate must fail when the artifact and the config actually disagree.
+        # If this step ever passes silently, the gate above has stopped gating.
+        run: |
+          cp data_samples/vocab/union_nested.meta.json "$RUNNER_TEMP/meta.bak.json"
+          echo '// tampered for the negative test' >> data_samples/vocab/union_nested.meta.json
+          rc=0
+          python3 vocab_build.py --from-flat --check || rc=$?
+          cp "$RUNNER_TEMP/meta.bak.json" data_samples/vocab/union_nested.meta.json
+          if [ "$rc" -eq 0 ]; then
+            echo "::error::--check accepted a tampered artifact — the drift gate is not gating"
+            exit 1
+          fi
+          echo "[expected] --check rejected the tampered artifact with exit $rc"
+
+      - name: Vocabulary unit and end-to-end tests
+        run: python3 -m pytest tests/test_vocab_build.py tests/test_vocab_manager.py tests/test_vocab_sources.py -v --tb=short

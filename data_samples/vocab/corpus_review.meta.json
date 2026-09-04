@@ -1,0 +1,12 @@
+{
+  "documents": 19,
+  "total_tokens": 16289,
+  "distinct_lemmas": 4047,
+  "terms_with_hits": 101,
+  "vocabulary_single_word_terms": 1017,
+  "sheets": [
+    "corpus_branch_evidence.csv",
+    "corpus_term_evidence.csv",
+    "gold_workbook.csv"
+  ]
+}

@@ -5,25 +5,78 @@
       "Keys starting with '_' are never treated as facets.",
       "",
       "PLACEMENT PRECEDENCE (vocab_manager.assign_theme):",
+      "  overrides         per-(source,id) correction from taxonomy_overrides.json,",
+      "                    checked FIRST. Use it for a single mis-sorted record inside",
+      "                    an otherwise-correct list; moving a whole list belongs in",
+      "                    heslar_map, a whole TEATER (sub-)branch in teater_branch_map.",
       "  heslar_map        AMCR nazev_heslare -> facet",
       "  teater_branch_map TEATER branch -> facet, resolved MOST-SPECIFIC FIRST",
       "                    along the term's broader chain, so a depth-2 sub-branch",
-      "                    overrides its depth-1 parent.",
+      "                    overrides its depth-1 parent (used both for whole excluded",
+      "                    sub-branches, e.g. 2560 'etnika', and for moving a TEATER",
+      "                    depth-2 group to a different facet, e.g. 220 'muzeum').",
       "  keyword match     legacy substring fallback; fires for nothing today",
       "  cross-source rescue / LLM fallback (opt-in) / Other",
       "Every placement is recorded in *_placement_audit.csv with the rule that made",
       "it, so the mapping can be reviewed instead of trusted. Sort that file by",
-      "'scheme' to correct a whole source list at once.",
+      "'scheme' to correct a whole source list at once; an override shows up as",
+      "'override:<source>:<id>'.",
       "",
       "'__exclude__' drops the term from the vocabulary entirely; see _exclusions",
       "for why each list is dropped.",
       "",
+      "_exclusions is keyed by the rule string the placement audit reports --",
+      "'heslar:<list>' or 'teater:<id>' -- so a note is looked up by the exact rule",
+      "that excluded the term. Each entry carries 'status' and 'reason'. 'status' is",
+      "whose call the exclusion still is, and drives the status column of",
+      "vocab_review.py --exclusions:",
+      "  settled          already ruled on (M4/M3); not an open question",
+      "  open_geo_ethnic  O3/O4 Q1 -- conflicts with the prompt's geographic",
+      "                   guardrail, so reinstating it REQUIRES relaxing that",
+      "                   wording in the same change",
+      "  open_other       O4 Q2 -- excluded a priori, no guardrail conflict at all",
+      "A bare string in place of the object still works and means status 'settled'.",
+      "",
+      "composite_separators is what splits a composite 'X/Y' label when looking for",
+      "components also offered on their own (issue #6 O1/F). Both sources are",
+      "hand-maintained, so a second convention in a later harvest is an edit here,",
+      "not a code change. Per-pair corrections -- link two records no label",
+      "connects, or drop a link a reviewer judges wrong -- are 'same_as' and",
+      "'same_as_suppress' on a taxonomy_overrides.json entry.",
+      "",
+      "nested_keep lists the keys a harvested record keeps in the built entry.",
+      "Dropping one shrinks the prompt payload; 'discarded_ids' and 'bare_cs' are",
+      "read back by the enrichment output (teater_category_ids and the bracket",
+      "strip), so dropping either changes behaviour, not just size.",
+      "",
+      "admin_stop_words sorts a term containing one of these to the BACK of its",
+      "facet, so prompt truncation drops boilerplate before it drops",
+      "archaeological vocabulary. Which words read as boilerplate is a judgement",
+      "about report language and belongs in this file, not in code -- and it is",
+      "load-bearing, since it decides what a small-context model still sees.",
+      "",
+      "geo_guardrail keeps ONE decision in step across two files. llm_run.py's",
+      "prompt forbids selecting a country, language or region name; the branches",
+      "holding those terms are excluded here. Change either half alone and the",
+      "scores measure the contradiction, not the model -- so vocab_build.py",
+      "refuses to build a vocabulary that disagrees with the prompt. 'active'",
+      "says whether the clause is in force, 'prompt_markers' is how the build",
+      "recognises it (a reworded prompt is an edit here, not a code change), and",
+      "'covers' names the rules that wording actually reaches. To reinstate one",
+      "of them: relax the prompt wording, set active false, and flip the branch",
+      "-- in the same change. See data_samples/vocab/6.O3O4.decision-package.md.",
+      "",
       "FACET ORDER IS LOAD-BEARING. build_system_prompt truncates a *prefix* of the",
       "flattened term list, so priority decides what a small-context model keeps.",
       "Chronology/Area/Feature/Artefact lead because that is what a report line is",
-      "most often about; Documentation and Location & Admin go last on purpose.",
+      "most often about; Location & Admin goes last on purpose.",
       "",
-      "heslar_labels renames AMCR's machine list names for the prompt sub-header: the model reads 'Chronology / období (kategorie)', not 'Chronology / obdobi_kat'. TEATER's depth-2 labels are already human-readable and pass through unchanged."
+      "heslar_labels renames AMCR's machine list names for the prompt sub-header: the model reads 'Chronology / období (kategorie)', not 'Chronology / obdobi_kat'. TEATER's depth-2 labels are already human-readable and pass through unchanged.",
+      "",
+      "'Documentation' was dissolved (issue #6, motyc 5424905539): excluding the",
+      "purely technical/administrative dokument_* lists and ext_zdroj_typ left it",
+      "with only udalost_typ, which now lives in Location & Admin. Implementation",
+      "detail, not a reclassification of AMCR's own udalost_typ list."
     ],
     "tie_break": [
       "Chronology",
@@ -33,9 +86,47 @@
       "Material",
       "Finds Context",
       "Methods",
-      "Documentation",
       "Location & Admin"
     ],
+    "composite_separators": [
+      "/"
+    ],
+    "nested_keep": [
+      "cs",
+      "en",
+      "sub",
+      "source",
+      "source_id",
+      "discarded_ids",
+      "bare_cs"
+    ],
+    "admin_stop_words": [
+      "datum",
+      "obsah",
+      "projekt",
+      "příloha",
+      "rok",
+      "strana",
+      "tabulka",
+      "text",
+      "zpráva",
+      "číslo"
+    ],
+    "geo_guardrail": {
+      "active": true,
+      "prompt_markers": [
+        "country name",
+        "language name",
+        "geographic region name"
+      ],
+      "covers": [
+        "heslar:zeme",
+        "heslar:jazyk",
+        "teater:2560",
+        "teater:2900",
+        "teater:3076"
+      ]
+    },
     "heslar_map": {
       "obdobi": "Chronology",
       "obdobi_kat": "Chronology",
@@ -59,14 +150,14 @@
       "adb_podnet": "Methods",
       "posudek_typ": "Methods",
       "posudek_typ_kat": "Methods",
-      "dokument_typ": "Documentation",
-      "dokument_material": "Documentation",
-      "dokument_rada": "Documentation",
-      "dokument_ulozeni": "Documentation",
-      "dokument_zachovalost": "Documentation",
-      "dokument_nahrada": "Documentation",
-      "ext_zdroj_typ": "Documentation",
-      "udalost_typ": "Documentation",
+      "dokument_typ": "__exclude__",
+      "dokument_material": "__exclude__",
+      "dokument_rada": "__exclude__",
+      "dokument_ulozeni": "__exclude__",
+      "dokument_zachovalost": "__exclude__",
+      "dokument_nahrada": "__exclude__",
+      "ext_zdroj_typ": "__exclude__",
+      "udalost_typ": "Location & Admin",
       "organizace_typ": "Location & Admin",
       "pamatkova_ochrana": "Location & Admin",
       "stav_dochovani": "Location & Admin",
@@ -96,6 +187,8 @@
       "2430": "Material",
       "102": "Methods",
       "140": "Methods",
+      "220": "Location & Admin",
+      "253": "Location & Admin",
       "1": "__exclude__",
       "288": "__exclude__",
       "3094": "__exclude__",
@@ -124,32 +217,151 @@
       "3076": "10.4) panovnické dynastie / ruling dynasties",
       "3091": "10.5) války / wars",
       "3094": "11) Povolání a pracovní činnosti / Professions and work activities",
-      "3549": "12) Společnost / Society"
+      "3549": "12) Společnost / Society",
+      "220": "3.x) muzeum / museums (sub-branch of 140, moved out of Methods)",
+      "253": "3.x) památková péče / heritage protection (sub-branch of 140, moved out of Methods)"
     },
     "_exclusions": {
-      "zeme": "249 country names. The prompt header forbids selecting one; they must not be offered.",
-      "jazyk": "9 language names — same rule.",
-      "letiste": "29 airfield place names, used only as aerial-survey provenance.",
-      "dokument_licence": "6 CC licence titles.",
-      "dokument_format": "26 file-format strings (A0, *.stl, kinofilm 24x36).",
-      "dohlednost": "12 visibility bands — survey conditions, not a topic.",
-      "pocasi": "8 weather states — same.",
-      "nalez_typ": "only 2 members, 'objekt' and 'předmět' — the top of the type hierarchy sitting as siblings of real find types, i.e. an always-correct escape hatch.",
-      "dok_jednotka_typ": "4 documentation-unit names (katastrální území, lokalita) — spatial/admin units, not methods.",
-      "projekt_typ": "3 bare adjectives (badatelský, průzkum, záchranný) — meaningless as standalone categories.",
-      "datum_specifikace": "3 date-precision qualifiers (přesné datum, někdy v letech) — qualifiers, not periods.",
-      "pian_typ": "GIS geometry types (bod, linie, polygon).",
-      "pian_presnost": "coordinate-precision buckets.",
-      "vyskovy_bod_typ": "elevation reference points (dno sondy, podloží).",
-      "jistota_urceni": "confidence percentages (jisté > 95 %) — an epistemic qualifier; confidence_score already carries this.",
-      "pristupnost": "access-control roles (anonym, archeolog, badatel).",
-      "letfoto_tvar": "16 aerial cropmark shapes (ohrazení kruhové malé) — a remote-sensing observation vocabulary, not a site or feature class.",
-      "TEATER 1": "Theory and approaches — the discipline talking about itself.",
-      "TEATER 288": "959 concepts of neighbouring disciplines — the single largest branch, and almost none of it is report vocabulary.",
-      "TEATER 2557": "740 ethnonyms, historical regions, dynasties, battles and wars. Keyed per sub-branch below so 'etnika' (2560) can be reinstated on its own.",
-      "TEATER 3094": "professions and crafts.",
-      "TEATER 3549": "society, law, social stratification.",
-      "objekt_specifikace_kat": "2 field names, not concepts: 'způsob provedení', 'těžený/zpracovávaný materiál'."
+      "heslar:datum_specifikace": {
+        "status": "settled",
+        "reason": "3 date-precision qualifiers (přesné datum, někdy v letech) — qualifiers, not periods."
+      },
+      "heslar:dohlednost": {
+        "status": "settled",
+        "reason": "12 visibility bands — survey conditions, not a topic."
+      },
+      "heslar:dok_jednotka_typ": {
+        "status": "settled",
+        "reason": "4 documentation-unit names (katastrální území, lokalita) — spatial/admin units, not methods."
+      },
+      "heslar:dokument_format": {
+        "status": "settled",
+        "reason": "26 file-format strings (A0, *.stl, kinofilm 24x36)."
+      },
+      "heslar:dokument_licence": {
+        "status": "settled",
+        "reason": "6 CC licence titles."
+      },
+      "heslar:dokument_material": {
+        "status": "settled",
+        "reason": "25 physical-carrier types (papír milimetrový, pauzák, digitální soubor) — the medium a document is recorded on. motyc 5424905539."
+      },
+      "heslar:dokument_nahrada": {
+        "status": "settled",
+        "reason": "4 reproduction-quality labels (tisková kvalita, mikroštítek) — a copy's technical quality. motyc 5424905539."
+      },
+      "heslar:dokument_rada": {
+        "status": "settled",
+        "reason": "14 digital-deliverable series names (data, fotografie terénu (digitální), plány (digitální)) — archival deliverable categories, not content. motyc 5424905539."
+      },
+      "heslar:dokument_typ": {
+        "status": "settled",
+        "reason": "41 report/document-type labels (nálezová zpráva, hlášení, expertní posudek) — what kind of paperwork accompanies a record, not what the record describes. motyc 5424905539."
+      },
+      "heslar:dokument_ulozeni": {
+        "status": "settled",
+        "reason": "7 archive-custody locations (archiv arú, archiv autora) — where a document is stored. motyc 5424905539."
+      },
+      "heslar:dokument_zachovalost": {
+        "status": "settled",
+        "reason": "6 preservation-condition bands (zachováno 80–100 %, ztraceno/skartováno) — a document's physical condition. motyc 5424905539."
+      },
+      "heslar:ext_zdroj_typ": {
+        "status": "settled",
+        "reason": "5 bibliographic source types (kniha, článek v časopise) — citation format of an external reference, not a topic. motyc 5424905539."
+      },
+      "heslar:jistota_urceni": {
+        "status": "settled",
+        "reason": "confidence percentages (jisté > 95 %) — an epistemic qualifier; confidence_score already carries this."
+      },
+      "heslar:letfoto_tvar": {
+        "status": "settled",
+        "reason": "16 aerial cropmark shapes (ohrazení kruhové malé) — a remote-sensing observation vocabulary, not a site or feature class."
+      },
+      "heslar:letiste": {
+        "status": "settled",
+        "reason": "29 airfield place names, used only as aerial-survey provenance."
+      },
+      "heslar:nalez_typ": {
+        "status": "settled",
+        "reason": "only 2 members, 'objekt' and 'předmět' — the top of the type hierarchy sitting as siblings of real find types, i.e. an always-correct escape hatch."
+      },
+      "heslar:objekt_specifikace_kat": {
+        "status": "settled",
+        "reason": "2 field names, not concepts: 'způsob provedení', 'těžený/zpracovávaný materiál'."
+      },
+      "heslar:pian_presnost": {
+        "status": "settled",
+        "reason": "coordinate-precision buckets."
+      },
+      "heslar:pian_typ": {
+        "status": "settled",
+        "reason": "GIS geometry types (bod, linie, polygon)."
+      },
+      "heslar:pocasi": {
+        "status": "settled",
+        "reason": "8 weather states — same."
+      },
+      "heslar:pristupnost": {
+        "status": "settled",
+        "reason": "access-control roles (anonym, archeolog, badatel)."
+      },
+      "heslar:projekt_typ": {
+        "status": "settled",
+        "reason": "3 bare adjectives (badatelský, průzkum, záchranný) — meaningless as standalone categories."
+      },
+      "heslar:vyskovy_bod_typ": {
+        "status": "settled",
+        "reason": "elevation reference points (dno sondy, podloží)."
+      },
+      "heslar:jazyk": {
+        "status": "open_geo_ethnic",
+        "reason": "9 language names — same rule."
+      },
+      "heslar:zeme": {
+        "status": "open_geo_ethnic",
+        "reason": "249 country names. The prompt header forbids selecting one; they must not be offered."
+      },
+      "teater:2560": {
+        "status": "open_geo_ethnic",
+        "reason": "391 ethnonyms (sub-branch of 2557). Named directly by the prompt's guardrail wording; reinstating them requires relaxing that wording in the same change."
+      },
+      "teater:2900": {
+        "status": "open_geo_ethnic",
+        "reason": "317 historical regions and state formations (sub-branch of 2557) -- 'geographic region name' in the guardrail's own words."
+      },
+      "teater:3076": {
+        "status": "open_geo_ethnic",
+        "reason": "15 ruling dynasties (sub-branch of 2557). Excluded alongside the ethnonyms and regions as a named-entity vocabulary rather than a subject one."
+      },
+      "teater:1": {
+        "status": "open_other",
+        "reason": "Theory and approaches — the discipline talking about itself."
+      },
+      "teater:288": {
+        "status": "open_other",
+        "reason": "959 concepts of neighbouring disciplines — the single largest branch, and almost none of it is report vocabulary."
+      },
+      "teater:2557": {
+        "status": "open_other",
+        "reason": "Branch root over ethnonyms, historical regions, dynasties, battles and wars. Every sub-branch is keyed separately below so one can be reinstated on its own -- 'etnika' (2560) without 'války' (3091), say."
+      },
+      "teater:2558": {
+        "status": "open_other",
+        "reason": "bitvy / battles (sub-branch of 2557). A battle NAME is not a country, language or region name, so the geographic guardrail does not reach it -- this is a plain P3 keep/exclude call, not a guardrail conflict."
+      },
+      "teater:3091": {
+        "status": "open_other",
+        "reason": "války / wars (sub-branch of 2557) -- same reading as 2558."
+      },
+      "teater:3094": {
+        "status": "open_other",
+        "reason": "professions and crafts."
+      },
+      "teater:3549": {
+        "status": "open_other",
+        "reason": "society, law, social stratification."
+      }
     },
     "heslar_labels": {
       "obdobi": "období",
@@ -228,16 +440,10 @@
     "_comment": "Fieldwork, processing and analytical methods.",
     "keywords": {}
   },
-  "Documentation": {
-    "priority": 2,
-    "in_prompt": true,
-    "_comment": "Document types, carriers, custody and condition.",
-    "keywords": {}
-  },
   "Location & Admin": {
     "priority": 1,
     "in_prompt": true,
-    "_comment": "Organisation types and heritage-protection status.",
+    "_comment": "Organisation types, heritage-protection status, event types, museums and heritage-care bodies.",
     "keywords": {}
   },
   "Other": {
