@@ -682,27 +682,88 @@ def build_document_system_prompt(
 # visually-rich Markdown (document-level) on the fly — see prepare_document_input.
 DOC_CONVERT_EXTENSIONS = frozenset({".pdf", ".docx"})
 
+#: An atrium_document record. Matched on the FULL name, not Path.suffix: the suffix
+#: of "minimal.document.json" is ".json", which is why this could not simply join
+#: DOC_CONVERT_EXTENSIONS. Kept as a literal here rather than imported from
+#: api_util.doc_to_visual_md so this module stays free of the converter's deps —
+#: the import there is lazy and must remain so.
+DOCUMENT_JSON_SUFFIX = ".document.json"
+
+
+def is_convertible_input(path: Path) -> bool:
+    """Whether prepare_document_input() will render this to Markdown.
+
+    Mirrors ``api_util.doc_to_visual_md.is_supported``. The two must agree: the
+    converter accepted ``*.document.json`` from the day it was written, but the
+    gate in front of it tested ``Path.suffix in DOC_CONVERT_EXTENSIONS``, which a
+    record can never satisfy. Feeding one to the pipeline therefore skipped
+    conversion, fell through to the line-level branch, and had csv.DictReader parse
+    a JSON file — yielding zero records, zero errors, no API call and exit 0
+    (atrium-project run 34039707673). Callers use this for input enumeration too,
+    so a directory of records is discovered rather than silently ignored.
+    """
+    return str(path).lower().endswith(DOCUMENT_JSON_SUFFIX) or (
+        Path(path).suffix.lower() in DOC_CONVERT_EXTENSIONS
+    )
+
+
+#: Formats each branch of the dispatch can actually read. Document-level is also
+#: spelled `_DOC_INPUT_EXTENSIONS` inside each client, where it selects the branch;
+#: here the two sets together answer a different question — whether ANY branch can
+#: read the file at all.
+DOC_LEVEL_EXTENSIONS = frozenset({".md", ".txt"})
+LINE_LEVEL_EXTENSIONS = frozenset({".csv"})
+
+
+def has_reader(path: Path) -> bool:
+    """Whether some branch of the client dispatch can read this file.
+
+    Nothing checked this before, and the dispatch has no else: a file that is
+    neither document-level nor convertible simply fell through to the line-level
+    branch, whatever it was. csv.DictReader does not object to being handed JSON —
+    it just yields nothing — so an unreadable input cost a full CI round trip to
+    diagnose instead of one line of output.
+    """
+    name = str(path).lower()
+    return (
+        Path(path).suffix.lower() in DOC_LEVEL_EXTENSIONS
+        or Path(path).suffix.lower() in LINE_LEVEL_EXTENSIONS
+        or name.endswith(".teitok.xml")
+        or is_convertible_input(path)
+    )
+
+
+def _markdown_cache_stem(path: Path) -> str:
+    """Base name for the cached Markdown. ``Path.stem`` strips only the last
+    extension, which would render "minimal.document.json" to "minimal.document.md";
+    stripping the whole compound suffix keeps the cache name aligned with the
+    ``doc_id`` canonical_doc_id() derives from the same file."""
+    name = path.name
+    if name.lower().endswith(DOCUMENT_JSON_SUFFIX):
+        return name[: -len(DOCUMENT_JSON_SUFFIX)]
+    return path.stem
+
 
 def prepare_document_input(path: Path, cache_dir: Optional[Path] = None, ocr: bool = False) -> Path:
     """Resolve an input file to something the pipeline can read.
 
-    ``.pdf`` / ``.docx`` are converted to visually-rich Markdown (via
-    ``api_util.doc_to_visual_md``) and cached as ``<stem>.md`` under a
+    ``.pdf`` / ``.docx`` / ``*.document.json`` are converted to visually-rich
+    Markdown (via ``api_util.doc_to_visual_md``) and cached as ``<stem>.md`` under a
     ``_visual_md_cache`` sibling dir (not re-scanned by the top-level input
     enumeration); the cached path is returned. The conversion is idempotent —
     skipped when the cached ``.md`` is newer than the source. Any other file
     type is returned unchanged. The heavy converter deps are imported lazily so
-    remote/lightweight clients don't pull them unless a PDF/DOCX is actually fed.
+    remote/lightweight clients don't pull them unless one is actually fed.
     """
     path = Path(path)
-    if path.suffix.lower() not in DOC_CONVERT_EXTENSIONS:
+    if not is_convertible_input(path):
         return path
 
     from api_util.doc_to_visual_md import convert_to_visual_md
 
     cache = Path(cache_dir) if cache_dir else path.parent / "_visual_md_cache"
     cache.mkdir(parents=True, exist_ok=True)
-    out = cache / f"{path.stem}.md"
+    out = cache / f"{_markdown_cache_stem(path)}.md"
     if out.exists() and out.stat().st_mtime >= path.stat().st_mtime:
         return out
     out.write_text(convert_to_visual_md(path, ocr=ocr), encoding="utf-8")

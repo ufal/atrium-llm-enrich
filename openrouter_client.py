@@ -41,12 +41,13 @@ from tqdm import tqdm
 from atrium_document import canonical_doc_id
 from atrium_paradata import ParadataLogger
 from llm_client_shared import (
-    DOC_CONVERT_EXTENSIONS,
     build_document_schema,
     build_document_system_prompt,
     build_schema,
     build_system_prompt,
     excluded_prompt_themes,
+    has_reader,
+    is_convertible_input,
     load_config,
     prepare_document_input,
     run_document_level,
@@ -344,10 +345,26 @@ def main(argv: Optional[List[str]] = None) -> None:
                 p
                 for p in input_path.iterdir()
                 if p.suffix.lower() in _DOC_INPUT_EXTENSIONS
-                or p.suffix.lower() in DOC_CONVERT_EXTENSIONS
+                or is_convertible_input(p)
                 or p.suffix.lower() == ".csv"
                 or p.name.lower().endswith(".teitok.xml")
             )
+
+        # Fail before spending anything on a file no branch can read. Directory
+        # enumeration above already filters to readable types, so in practice this
+        # catches an explicit --input naming the wrong thing — which is exactly how
+        # a *.document.json record used to reach the line-level branch and enrich
+        # nothing while exiting 0 (atrium-project run 34039707673).
+        unreadable = [p for p in input_files if not has_reader(p)]
+        if unreadable:
+            print(
+                "[ERROR] no reader for: "
+                + ", ".join(p.name for p in unreadable)
+                + ". Expected .csv / *.teitok.xml (line-level), .md / .txt "
+                "(document-level), or .pdf / .docx / *.document.json (converted).",
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
         # --document-json/--document-json-out (issue #13): a single-file convenience
         # wrapper around the existing, working --document-json-dir path below. Redirect

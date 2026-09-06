@@ -462,3 +462,81 @@ class TestVocabularyReachedTheModel:
         legitimate (if small) vocabulary and must still build."""
         model = lcs.build_schema([lcs.META_TERM, "sonda"])
         assert model is not None
+
+
+# ── document-record input routing (2026-09-06) ───────────────────────────────
+#
+# Regression tests for atrium-project run 34039707673. api_util.doc_to_visual_md
+# accepted `*.document.json` from the day it was written, but the gate in front of
+# it tested `Path.suffix in DOC_CONVERT_EXTENSIONS` — and a record's suffix is
+# ".json". So conversion was skipped, the dispatch fell through to the line-level
+# branch, csv.DictReader was handed a JSON file, and the run produced zero records,
+# zero errors and no API call while exiting 0.
+
+
+def _record(tmp_path, name="minimal.document.json"):
+    p = tmp_path / name
+    p.write_text(
+        json.dumps(
+            {
+                "doc_id": "minimal",
+                "source": {"origin": "digital-born-pdf"},
+                "pages": [{"page": 1}],
+                "lines": [{"page": 1, "line": 1, "text": "Náčrt sondy."}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    return p
+
+
+class TestDocumentRecordInput:
+    def test_record_is_recognised_as_convertible(self, tmp_path):
+        assert lcs.is_convertible_input(_record(tmp_path))
+
+    def test_record_is_converted_to_markdown(self, tmp_path):
+        """The behaviour the whole bug came down to: the returned path must have a
+        `.md` suffix, because that is what selects the document-level branch."""
+        out = lcs.prepare_document_input(_record(tmp_path))
+        assert out.suffix == ".md"
+        assert "Náčrt sondy." in out.read_text(encoding="utf-8")
+
+    def test_cache_name_drops_the_whole_compound_suffix(self, tmp_path):
+        """`Path.stem` would give "minimal.document.md" and desynchronise the cache
+        name from the doc_id canonical_doc_id() derives from the same file."""
+        assert lcs.prepare_document_input(_record(tmp_path)).name == "minimal.md"
+
+    def test_unrelated_json_is_not_treated_as_a_record(self, tmp_path):
+        """Matching on ".json" rather than the compound suffix would sweep in every
+        JSON file the pipeline is ever pointed at."""
+        p = tmp_path / "junk.json"
+        p.write_text("{}", encoding="utf-8")
+        assert not lcs.is_convertible_input(p)
+        assert lcs.prepare_document_input(p) == p
+
+    def test_csv_is_returned_unchanged(self, tmp_path):
+        p = tmp_path / "doc.csv"
+        p.write_text("page,line\n", encoding="utf-8")
+        assert lcs.prepare_document_input(p) == p
+
+
+@pytest.mark.parametrize(
+    "name,readable",
+    [
+        ("a.csv", True),
+        ("b.teitok.xml", True),
+        ("c.md", True),
+        ("d.txt", True),
+        ("e.pdf", True),
+        ("f.docx", True),
+        ("g.document.json", True),
+        ("junk.json", False),
+        ("notes.yaml", False),
+        ("scan.png", False),
+    ],
+)
+def test_has_reader_matrix(name, readable):
+    """The dispatch has no else branch, so anything answering True here must be
+    readable by one of them — and anything answering False is refused up front
+    rather than silently enriching nothing."""
+    assert lcs.has_reader(Path(name)) is readable
