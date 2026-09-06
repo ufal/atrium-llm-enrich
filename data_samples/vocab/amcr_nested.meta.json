@@ -1,21 +1,23 @@
 {
   "counts": {
     "by_theme": {
-      "Activity Area": 97,
+      "Activity Area": 98,
       "Artefact": 209,
       "Chronology": 145,
+      "Cultural & Geographic Context": 258,
       "Feature": 148,
-      "Finds Context": 10,
+      "Finds Context": 11,
       "Location & Admin": 21,
-      "Material": 68,
+      "Material": 71,
       "Methods": 79,
-      "Other": 0
+      "Other": 0,
+      "Related Disciplines & Society": 0
     },
-    "collisions": 184,
+    "collisions": 180,
     "same_as_links": 13,
-    "total": 777
+    "total": 1040
   },
-  "generated_utc": "2026-09-04T11:05:39Z",
+  "generated_utc": "2026-09-06T12:52:07Z",
   "generator": "vocab_build.py",
   "schema_version": 1,
   "sources": [
@@ -44,11 +46,11 @@
   ],
   "taxonomy_config": {
     "path": "data_samples/taxonomy_config.json",
-    "sha256": "67311c309cc03923873c65cd0092562f245248dc40ca2f54d74d2bcdcee73f09"
+    "sha256": "ee4e96ba4c20be40db7ec5b830bdc4f7cbd945f528c671bb0bff3f6e90bbf1d8"
   },
   "taxonomy_overrides": {
     "path": "data_samples/taxonomy_overrides.json",
-    "sha256": "64c50c7d7c6d6c9f0331132a7eeeb2677c7f1e08f032af646e622e96fb53c541"
+    "sha256": "b205ee82f89a0c4f4ef46962b76b719b582649772192476b033d87915461dffe"
   },
   "tool_version": "v0.6.1"
 }

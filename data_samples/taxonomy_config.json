@@ -86,7 +86,9 @@
       "Material",
       "Finds Context",
       "Methods",
-      "Location & Admin"
+      "Location & Admin",
+      "Cultural & Geographic Context",
+      "Related Disciplines & Society"
     ],
     "composite_separators": [
       "/"
@@ -113,7 +115,7 @@
       "číslo"
     ],
     "geo_guardrail": {
-      "active": true,
+      "active": false,
       "prompt_markers": [
         "country name",
         "language name",
@@ -161,8 +163,8 @@
       "organizace_typ": "Location & Admin",
       "pamatkova_ochrana": "Location & Admin",
       "stav_dochovani": "Location & Admin",
-      "zeme": "__exclude__",
-      "jazyk": "__exclude__",
+      "zeme": "Cultural & Geographic Context",
+      "jazyk": "Cultural & Geographic Context",
       "letiste": "__exclude__",
       "dokument_licence": "__exclude__",
       "dokument_format": "__exclude__",
@@ -189,16 +191,16 @@
       "140": "Methods",
       "220": "Location & Admin",
       "253": "Location & Admin",
-      "1": "__exclude__",
-      "288": "__exclude__",
-      "3094": "__exclude__",
-      "3549": "__exclude__",
-      "2557": "__exclude__",
-      "2558": "__exclude__",
-      "2560": "__exclude__",
-      "2900": "__exclude__",
-      "3076": "__exclude__",
-      "3091": "__exclude__"
+      "1": "Related Disciplines & Society",
+      "288": "Related Disciplines & Society",
+      "3094": "Related Disciplines & Society",
+      "3549": "Related Disciplines & Society",
+      "2557": "Related Disciplines & Society",
+      "2558": "Related Disciplines & Society",
+      "2560": "Cultural & Geographic Context",
+      "2900": "Cultural & Geographic Context",
+      "3076": "Cultural & Geographic Context",
+      "3091": "Related Disciplines & Society"
     },
     "teater_branch_labels": {
       "1": "1) Teorie a přístupy / Theory and approaches",
@@ -313,54 +315,6 @@
       "heslar:vyskovy_bod_typ": {
         "status": "settled",
         "reason": "elevation reference points (dno sondy, podloží)."
-      },
-      "heslar:jazyk": {
-        "status": "open_geo_ethnic",
-        "reason": "9 language names — same rule."
-      },
-      "heslar:zeme": {
-        "status": "open_geo_ethnic",
-        "reason": "249 country names. The prompt header forbids selecting one; they must not be offered."
-      },
-      "teater:2560": {
-        "status": "open_geo_ethnic",
-        "reason": "391 ethnonyms (sub-branch of 2557). Named directly by the prompt's guardrail wording; reinstating them requires relaxing that wording in the same change."
-      },
-      "teater:2900": {
-        "status": "open_geo_ethnic",
-        "reason": "317 historical regions and state formations (sub-branch of 2557) -- 'geographic region name' in the guardrail's own words."
-      },
-      "teater:3076": {
-        "status": "open_geo_ethnic",
-        "reason": "15 ruling dynasties (sub-branch of 2557). Excluded alongside the ethnonyms and regions as a named-entity vocabulary rather than a subject one."
-      },
-      "teater:1": {
-        "status": "open_other",
-        "reason": "Theory and approaches — the discipline talking about itself."
-      },
-      "teater:288": {
-        "status": "open_other",
-        "reason": "959 concepts of neighbouring disciplines — the single largest branch, and almost none of it is report vocabulary."
-      },
-      "teater:2557": {
-        "status": "open_other",
-        "reason": "Branch root over ethnonyms, historical regions, dynasties, battles and wars. Every sub-branch is keyed separately below so one can be reinstated on its own -- 'etnika' (2560) without 'války' (3091), say."
-      },
-      "teater:2558": {
-        "status": "open_other",
-        "reason": "bitvy / battles (sub-branch of 2557). A battle NAME is not a country, language or region name, so the geographic guardrail does not reach it -- this is a plain P3 keep/exclude call, not a guardrail conflict."
-      },
-      "teater:3091": {
-        "status": "open_other",
-        "reason": "války / wars (sub-branch of 2557) -- same reading as 2558."
-      },
-      "teater:3094": {
-        "status": "open_other",
-        "reason": "professions and crafts."
-      },
-      "teater:3549": {
-        "status": "open_other",
-        "reason": "society, law, social stratification."
       }
     },
     "heslar_labels": {
@@ -444,6 +398,16 @@
     "priority": 1,
     "in_prompt": true,
     "_comment": "Organisation types, heritage-protection status, event types, museums and heritage-care bodies.",
+    "keywords": {}
+  },
+  "Cultural & Geographic Context": {
+    "priority": 0,
+    "in_prompt": true,
+    "keywords": {}
+  },
+  "Related Disciplines & Society": {
+    "priority": 0,
+    "in_prompt": true,
     "keywords": {}
   },
   "Other": {

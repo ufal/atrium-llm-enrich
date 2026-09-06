@@ -444,6 +444,57 @@ class VocabularyManager:
             if value.get("qualifier_cs")
         }
 
+    def _qualifier_problems(self, records: Iterable[Dict[str, Any]]) -> List[str]:
+        """Qualifier faults that only exist relative to a same-label group.
+
+        ``to_term_pairs`` keys a split entry ``"{cs} ({qualifier_cs})"``. Two records in
+        one group with the same qualifier therefore build the same key: the second is
+        recorded in the collisions warning list and skipped, so its id reaches no
+        entry's ``discarded_ids`` and survives nowhere — silently, since a warning is
+        not a failure. @david-spacil identified this while working the M8 review
+        (issue #6, comment 5541507280) and adopted the safe convention himself: put the
+        qualifier only on the record that leaves the group. This makes the convention a
+        rule rather than something a reviewer has to know.
+
+        The second fault is the mirror image: qualify *every* member and the bare label
+        is offered by nobody, which no reviewer splitting a homonym intends.
+        """
+        qualifiers = self.qualifier_overrides()
+        if not qualifiers:
+            return []
+
+        groups: Dict[str, List[Tuple[str, str]]] = {}
+        for record in records:
+            cs = str(record.get("cs") or "")
+            if not cs:
+                continue
+            key = (str(record.get("source") or ""), str(record.get("source_id") or ""))
+            groups.setdefault(_norm(cs), []).append(key)
+
+        problems: List[str] = []
+        for label, members in sorted(groups.items()):
+            qualified = [(k, qualifiers[k]) for k in members if k in qualifiers]
+            if not qualified:
+                continue
+            by_qualifier: Dict[str, List[Tuple[str, str]]] = {}
+            for key, qualifier in qualified:
+                by_qualifier.setdefault(qualifier, []).append(key)
+            for qualifier, keys in sorted(by_qualifier.items()):
+                if len(keys) > 1:
+                    named = ", ".join(f"{s}:{i}" for s, i in sorted(keys))
+                    problems.append(
+                        f"qualifier_cs {qualifier!r} is on {len(keys)} records sharing the label "
+                        f"{label!r} ({named}) — they would build the same key and all but the "
+                        "first would be dropped with its id. Qualify only the record that "
+                        "leaves the group."
+                    )
+            if len(qualified) == len(members):
+                problems.append(
+                    f"every record with the label {label!r} carries a qualifier_cs, so the "
+                    "bare label would not be offered at all — leave at least one unqualified"
+                )
+        return problems
+
     def geo_guardrail(self) -> Dict[str, Any]:
         """The ``_settings.geo_guardrail`` block, with defaults filled in. See
         :data:`DEFAULT_GEO_GUARDRAIL_MARKERS`."""
@@ -752,9 +803,12 @@ class VocabularyManager:
 
         ``records`` — the harvested records this config will be applied to, when the
         caller has them — additionally reports overrides whose ``(source, id)`` matches
-        nothing. That check is opt-in because the manager is routinely used without a
-        harvest (prompt building, the single-source builds), where "no such record" is
-        normal rather than a mistake.
+        nothing, and the two qualifier faults that can only be seen against real labels:
+        two records in one same-label group carrying the *same* ``qualifier_cs`` (the
+        second builds an identical key and is dropped with its id, issue #6 M13), and a
+        group where *every* member is qualified (the bare label then disappears
+        entirely). Both are opt-in for the same reason: the manager is routinely used
+        without a harvest, where neither is knowable.
         """
         known_facets = set(self.themes()) | {EXCLUDE_THEME}
         settings = self.settings
@@ -765,9 +819,34 @@ class VocabularyManager:
             for key, value in (settings.get(map_name) or {}).items():
                 if value not in known_facets:
                     bad.append(f"{map_name}[{key!r}] -> undeclared facet {value!r}")
-        for name in settings.get("tie_break") or []:
+        tie_break = list(settings.get("tie_break") or [])
+        for name in tie_break:
             if name not in self.themes():
                 bad.append(f"tie_break lists undeclared facet {name!r}")
+
+        # ── shared priorities must be ordered on purpose, not by fallback ──────────
+        # `_theme_order` ranks by (-priority, tie_break index, name), and a facet the
+        # tie_break omits gets index len(tie_break) — it is appended after every listed
+        # one. That is a real decision being made silently: render order is truncation
+        # order, so where a facet sits among its equals is what decides whether a 32k
+        # model sees it at all (issue #6, M11 — the reinstated terms sit last *by
+        # design*, and the design lives in this list). One facet at a priority is
+        # unambiguous and needs no entry; two or more do.
+        by_priority: Dict[Any, List[str]] = {}
+        for name, config in self.themes().items():
+            by_priority.setdefault((config or {}).get("priority", 0), []).append(name)
+        for priority, names in sorted(by_priority.items(), key=lambda kv: str(kv[0])):
+            if len(names) < 2:
+                continue
+            unlisted = sorted(n for n in names if n not in tie_break)
+            if unlisted:
+                bad.append(
+                    f"facets {unlisted} share priority {priority} with "
+                    f"{sorted(n for n in names if n in tie_break)} but are absent from "
+                    "tie_break, so their render order — and what a small context window "
+                    "truncates first — would be decided by fallback rather than by you; "
+                    "list every facet at a shared priority in tie_break"
+                )
 
         # ── labels: a relabel for a list nobody maps never renders ─────────────────
         for label_map, source_map in (
@@ -806,7 +885,25 @@ class VocabularyManager:
         all_rules = {f"heslar:{k}" for k in (settings.get("heslar_map") or {})} | {
             f"teater:{k}" for k in (settings.get("teater_branch_map") or {})
         }
-        covers = set(self.geo_guardrail()["covers"])
+        guard = self.geo_guardrail()
+        covers = set(guard["covers"])
+        # An armed guardrail with nothing in scope checks nothing: `geo_guardrail_problems`
+        # loops over `covers`, so an empty list makes the gate pass whatever the maps say.
+        # That is not a hypothetical — M11 relaxed the guardrail and emptied `covers` in
+        # the same change, which left re-arming it (the "retire Q1 if problems arise" move
+        # M11 explicitly deferred) completely unguarded. `covers` names the branches that
+        # are *geographic*, which does not stop being true when they are reinstated.
+        # Only checked when the block is actually declared: an absent `geo_guardrail`
+        # defaults to active with no scope, which is the pre-M11 shape every fixture and
+        # older config still has, and demanding a scope from those would be a new
+        # requirement rather than a caught mistake.
+        declared = settings.get("geo_guardrail")
+        if isinstance(declared, dict) and guard["active"] and not covers:
+            bad.append(
+                "geo_guardrail.active is true but covers is empty, so the gate would "
+                "check nothing — list the rules the prompt's wording is about "
+                "(they stay listed whether or not they are currently excluded)"
+            )
         for rule in sorted(covers - all_rules):
             bad.append(f"geo_guardrail.covers names {rule!r}, which no map places")
         for rule, note in self.exclusion_notes().items():
@@ -849,6 +946,9 @@ class VocabularyManager:
                 bad.append(f"{where} matches no harvested record")
         for pair in sorted(contradictory, key=lambda p: sorted(p)):
             bad.append(f"same_as and same_as_suppress both name the pair {sorted(pair)}")
+
+        if records is not None:
+            bad.extend(self._qualifier_problems(records))
 
         if bad:
             raise ValueError(
@@ -1159,15 +1259,29 @@ def attach_same_as(
 
 
 if __name__ == "__main__":
+    # READ-ONLY on purpose. This block used to call sync_and_build_nested_taxonomy()
+    # against the shipped union artifact, which was destructive in a way nothing local
+    # caught: the legacy sync harvests AMCR alone and its records carry only cs/en, so
+    # assign_theme sends every one of them to `Other` — and `Other` is in_prompt: false,
+    # so save() left the pipeline injecting an EMPTY vocabulary. CI noticed (drift on
+    # union_nested.json); a curator running the module to look at the vocabulary did not.
+    #
+    # `vocab_build.py` is the builder, and it is the only thing that should write here.
+    # See data_samples/vocab/RUNBOOK.md.
     manager = VocabularyManager(
         vocab_path="data_samples/vocab/union_nested.json",
         config_path="data_samples/taxonomy_config.json",
         llm_predictor=None,
     )
-    manager.sync_and_build_nested_taxonomy(use_llm_fallback=False)
+    try:
+        manager.load(auto_sync=False)
+    except FileNotFoundError as exc:
+        raise SystemExit(f"{exc}\n\nThis entry point never builds — it only inspects.") from exc
+
     prompt_str = manager.get_prompt_string()
     print("\n[Preview of serialised LLM prompt string]")
     print(prompt_str[:500] + "\n… [truncated]")
     print("\n[Vocabulary statistics]")
     for theme, count in manager.vocab_statistics().items():
         print(f"  {theme}: {count} terms")
+    print("\n[read-only] Nothing was written. To rebuild: python3 vocab_build.py --from-flat")

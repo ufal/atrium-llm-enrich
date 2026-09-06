@@ -1,0 +1,12 @@
+  prompt blocks (geo guardrail: preference, vocabulary grouping: facet_sub) — ~502 tokens of instructions
+    [on ] role                             ~  47 tok
+    [on ] task.extract                     ~  53 tok
+    [on ] task.select                      ~  25 tok
+    [on ] rule.metatext                    ~  79 tok
+    [off] guardrail.geographic.strict      ~  72 tok
+    [on ] guardrail.geographic.preference  ~  41 tok
+    [on ] rule.ocr_normalisation           ~  62 tok
+    [on ] rule.exact_term                  ~  19 tok
+    [on ] rule.json_only                   ~  23 tok
+    [on ] vocabulary.header                ~   7 tok
+    [on ] examples                         ~ 146 tok

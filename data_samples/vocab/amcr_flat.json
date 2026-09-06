@@ -3,7 +3,7 @@
     "counts": {
       "total": 1460
     },
-    "generated_utc": "2026-09-04T07:32:18Z",
+    "generated_utc": "2026-09-06T12:47:33Z",
     "generator": "vocab_build.py",
     "schema_version": 1,
     "sources": [
@@ -21,9 +21,9 @@
     ],
     "taxonomy_config": {
       "path": "data_samples/taxonomy_config.json",
-      "sha256": "6c5272d65d40ef971e2040809ac86b1d2326fe3b3c71755be1236c89ee80ba74"
+      "sha256": "67311c309cc03923873c65cd0092562f245248dc40ca2f54d74d2bcdcee73f09"
     },
-    "tool_version": "v0.19.0"
+    "tool_version": "v0.6.1"
   },
   "terms": [
     {

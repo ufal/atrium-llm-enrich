@@ -6,8 +6,11 @@ never exercised — every test provides an on-disk vocab file or a mock predicto
 """
 
 import json
+from pathlib import Path
 
 from vocab_manager import VocabularyManager, attach_same_as, find_composite_links
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 TAXONOMY = {
     "Site Types": {"priority": 10, "keywords": {"cs": ["hrad", "mohyla"]}},
@@ -710,10 +713,15 @@ WITHOUT_CLAUSE = "Select the SINGLE most relevant category."
 
 def test_the_shipped_config_and_the_shipped_prompt_agree():
     """The invariant the build gate exists to hold: nothing in the repo today offers a
-    term the prompt forbids the model from selecting."""
+    term the prompt forbids the model from selecting. Reads the guardrail through
+    prompt_template rather than grepping llm_run.py — the wording is a config-selected
+    block now, so the only honest source is the one the runtime renders from."""
+    import prompt_template
+
     root = _repo_root()
     m = VocabularyManager(config_path=str(root / "data_samples" / "taxonomy_config.json"))
-    assert m.geo_guardrail_problems((root / "llm_run.py").read_text(encoding="utf-8")) == []
+    config = prompt_template.load_run_config(root / "llm_config.txt")
+    assert m.geo_guardrail_problems(prompt_template.guardrail_text(config)) == []
 
 
 def test_reinstating_a_covered_branch_while_the_clause_stands_is_a_problem(tmp_path):
@@ -769,6 +777,61 @@ def test_prompt_markers_are_config_not_code(tmp_path):
     assert len(m.geo_guardrail_problems(WITH_CLAUSE)) == 1
 
 
+def test_an_armed_guardrail_with_an_empty_scope_is_refused(tmp_path):
+    """`geo_guardrail_problems` loops over `covers`; an empty list makes the gate pass
+    whatever the maps say. M11 relaxed the guardrail and emptied `covers` in the same
+    change, which left re-arming it — the "retire Q1 if problems arise" move M11
+    explicitly deferred — completely unguarded: `active: true` plus the strict wording
+    plus all 982 geographic terms still offered produced zero complaints."""
+    import pytest
+
+    taxonomy = json.loads(json.dumps(FACET_TAXONOMY))
+    taxonomy["_settings"]["geo_guardrail"] = {
+        "active": True,
+        "prompt_markers": ["country name"],
+        "covers": [],
+    }
+    m = _mgr(tmp_path, taxonomy=taxonomy)
+    with pytest.raises(ValueError) as excinfo:
+        m.validate_settings()
+    assert "covers is empty" in str(excinfo.value)
+    assert "check nothing" in str(excinfo.value)
+
+
+def test_a_relaxed_guardrail_may_keep_its_scope_listed(tmp_path):
+    """The complement, and the shipped shape: `covers` names the branches that ARE
+    geographic, which does not stop being true when they are reinstated. Keeping the
+    list populated while `active` is false must stay legal — that is what makes the
+    gate work the moment anyone re-arms it."""
+    taxonomy = json.loads(json.dumps(FACET_TAXONOMY))
+    taxonomy["_settings"]["teater_branch_map"]["2560"] = "Chronology"  # reinstated
+    taxonomy["_settings"]["geo_guardrail"] = {
+        "active": False,
+        "prompt_markers": ["country name"],
+        "covers": ["teater:2560"],
+    }
+    m = _mgr(tmp_path, taxonomy=taxonomy)
+    m.validate_settings()
+    m.settings["geo_guardrail"]["active"] = True
+    problems = m.geo_guardrail_problems("NEVER select a country name")
+    assert any("teater:2560" in p for p in problems), "re-arming must report the conflict"
+
+
+def test_the_shipped_config_can_rearm_its_own_guardrail(tmp_path):
+    """End to end on the real config, because this is the move M11 deferred: flipping
+    `active` back on while the branches are still offered must name every one of them."""
+    manager = VocabularyManager(
+        config_path=str(REPO_ROOT / "data_samples" / "taxonomy_config.json")
+    )
+    manager.validate_settings()
+    assert manager.geo_guardrail()["covers"], "covers must survive reinstatement"
+    manager.settings["geo_guardrail"]["active"] = True
+    problems = manager.geo_guardrail_problems(
+        "NEVER select a country name, language name, or geographic region name"
+    )
+    assert len(problems) == len(manager.geo_guardrail()["covers"])
+
+
 def test_guardrail_scope_and_the_exclusion_register_cannot_drift(tmp_path):
     """`covers` outlives an exclusion (it is what says a reinstated branch conflicts at
     all), so the two lists are cross-checked rather than merged."""
@@ -811,6 +874,52 @@ def test_tie_break_naming_an_undeclared_facet_is_caught(tmp_path):
     never consulted, so the ordering silently is not the one that was written."""
     message = _broken(tmp_path, lambda s: s["tie_break"].append("Chronlogy"))
     assert "tie_break lists undeclared facet 'Chronlogy'" in message
+
+
+def test_facets_sharing_a_priority_must_be_ordered_in_tie_break(tmp_path):
+    """Render order is truncation order, so where a facet sits among its
+    equal-priority peers decides whether a 32k model sees it at all. A facet the
+    tie_break omits is appended after every listed one by the len(tie_break) fallback
+    — a real decision, made by nobody. This is the shape A1-facets takes: splitting the
+    probation facet in two and leaving the new half unordered.
+    """
+
+    def mutate(settings):
+        settings["teater_branch_map"]["3094"] = "Society"
+
+    import pytest
+
+    taxonomy = json.loads(json.dumps(FACET_TAXONOMY))
+    taxonomy["Society"] = {"priority": 6, "keywords": {}}  # ties with Artefact
+    mutate(taxonomy["_settings"])
+    m = _mgr(tmp_path, taxonomy=taxonomy)
+    with pytest.raises(ValueError) as excinfo:
+        m.validate_settings()
+    message = str(excinfo.value)
+    assert "share priority 6" in message
+    assert "'Society'" in message
+    assert "tie_break" in message
+
+
+def test_a_unique_priority_needs_no_tie_break_entry(tmp_path):
+    """The guard must not force every facet into the list — only the ambiguous ones.
+    Documentation sits alone at priority 2 and is absent from tie_break in the shipped
+    fixture; that is unambiguous and must stay legal."""
+    taxonomy = json.loads(json.dumps(FACET_TAXONOMY))
+    assert "Documentation" not in taxonomy["_settings"]["tie_break"]
+    _mgr(tmp_path, taxonomy=taxonomy).validate_settings()
+
+
+def test_listing_both_tied_facets_satisfies_the_guard(tmp_path):
+    """And the fix the message asks for actually works."""
+    taxonomy = json.loads(json.dumps(FACET_TAXONOMY))
+    taxonomy["Society"] = {"priority": 6, "keywords": {}}
+    taxonomy["_settings"]["teater_branch_map"]["3094"] = "Society"
+    taxonomy["_settings"]["tie_break"].append("Society")
+    m = _mgr(tmp_path, taxonomy=taxonomy)
+    m.validate_settings()
+    order = m._theme_order()
+    assert order.index("Artefact") < order.index("Society")
 
 
 def test_a_label_for_an_unmapped_list_is_caught(tmp_path):
@@ -897,6 +1006,91 @@ def test_a_stale_override_is_only_reported_when_records_are_supplied(tmp_path):
         m.validate_settings(records=live)
 
     m.validate_settings(records=live + [{"source": "amcr", "source_id": "HES-GONE"}])
+
+
+def test_two_records_sharing_a_qualifier_is_caught(tmp_path):
+    """@david-spacil, working the M8 review (issue #6, comment 5541507280): "two records
+    sharing a qualifier build the same key, and the second one is then dropped without
+    even keeping its id." He read it right — `to_term_pairs` appends the loser to the
+    collisions *warning* list and skips it, so the id reaches no `discarded_ids`. His
+    convention (qualify only the record that leaves the group) is now a rule."""
+    import pytest
+
+    m = _facet_mgr_with_overrides(
+        tmp_path,
+        [
+            {"match": {"source": "teater", "id": "1"}, "qualifier_cs": "q", "reason": "x"},
+            {"match": {"source": "teater", "id": "2"}, "qualifier_cs": "q", "reason": "x"},
+        ],
+    )
+    records = [
+        {"cs": "x", "source": "teater", "source_id": "1"},
+        {"cs": "x", "source": "teater", "source_id": "2"},
+        {"cs": "x", "source": "amcr", "source_id": "A1"},
+    ]
+    m.validate_settings()  # not knowable without the records
+    with pytest.raises(ValueError, match="would build the same key"):
+        m.validate_settings(records=records)
+
+
+def test_distinct_qualifiers_in_one_group_are_fine(tmp_path):
+    """The safe shape of the same edit: two homonyms split apart, each keeping its id."""
+    m = _facet_mgr_with_overrides(
+        tmp_path,
+        [
+            {"match": {"source": "teater", "id": "1"}, "qualifier_cs": "q1", "reason": "x"},
+            {"match": {"source": "teater", "id": "2"}, "qualifier_cs": "q2", "reason": "x"},
+        ],
+    )
+    m.validate_settings(
+        records=[
+            {"cs": "x", "source": "teater", "source_id": "1"},
+            {"cs": "x", "source": "teater", "source_id": "2"},
+            {"cs": "x", "source": "amcr", "source_id": "A1"},
+        ]
+    )
+
+
+def test_qualifying_every_member_of_a_group_is_caught(tmp_path):
+    """The mirror fault: qualify them all and the bare label is offered by nobody —
+    which no reviewer splitting a homonym intends."""
+    import pytest
+
+    m = _facet_mgr_with_overrides(
+        tmp_path,
+        [
+            {"match": {"source": "teater", "id": "1"}, "qualifier_cs": "q1", "reason": "x"},
+            {"match": {"source": "teater", "id": "2"}, "qualifier_cs": "q2", "reason": "x"},
+        ],
+    )
+    with pytest.raises(ValueError, match="bare label would not be offered"):
+        m.validate_settings(
+            records=[
+                {"cs": "x", "source": "teater", "source_id": "1"},
+                {"cs": "x", "source": "teater", "source_id": "2"},
+            ]
+        )
+
+
+def test_a_qualifier_shared_across_DIFFERENT_groups_is_fine(tmp_path):
+    """Two of the shipped verdicts both use "materiál" (`vejce`, `rostlinné
+    makrozbytty`). Different labels build different keys, so this must not be flagged —
+    the check is per group, not global."""
+    m = _facet_mgr_with_overrides(
+        tmp_path,
+        [
+            {"match": {"source": "amcr", "id": "A1"}, "qualifier_cs": "materiál", "reason": "x"},
+            {"match": {"source": "amcr", "id": "B1"}, "qualifier_cs": "materiál", "reason": "x"},
+        ],
+    )
+    m.validate_settings(
+        records=[
+            {"cs": "vejce", "source": "amcr", "source_id": "A1"},
+            {"cs": "vejce", "source": "amcr", "source_id": "A2"},
+            {"cs": "rostlinné makrozbytky", "source": "amcr", "source_id": "B1"},
+            {"cs": "rostlinné makrozbytky", "source": "amcr", "source_id": "B2"},
+        ]
+    )
 
 
 def test_every_problem_is_reported_at_once(tmp_path):
@@ -1156,16 +1350,21 @@ def test_extra_is_order_independent():
 
 
 def test_shipped_same_as_baseline_is_unchanged():
-    """162 terms carrying 98 links is the reviewed baseline (issue #6, Track 3). The
-    configurable extra/suppress path must not move it while no override uses it."""
+    """169 terms carrying 102 links, and the number has moved twice for stated reasons:
+    the reviewed baseline was 162/98; M13's `pastvina/louka (nálezové okolnosti)` split
+    added one (the qualified label still contains "/", so it is still a composite of the
+    same components); M11's reinstatement added three more, since composites and their
+    components can now both be offered across the two new context facets. The
+    configurable extra/suppress path must not move it further while no override uses
+    it."""
     import json as _json
 
     nested = _json.loads(
         (_repo_root() / "data_samples" / "vocab" / "union_nested.json").read_text(encoding="utf-8")
     )
     linked = [e for terms in nested.values() for e in terms.values() if e.get("same_as")]
-    assert len(linked) == 162
-    assert sum(len(e["same_as"]) for e in linked) == 2 * 98
+    assert len(linked) == 169
+    assert sum(len(e["same_as"]) for e in linked) == 2 * 102
 
 
 def test_shipped_vocabulary_same_as_links_are_symmetric():
@@ -1196,3 +1395,32 @@ def test_shipped_vocabulary_same_as_links_are_symmetric():
                 assert other is not None, f"{cs}: same_as points at a term not offered"
                 back = {"source": entry.get("source"), "id": entry.get("source_id")}
                 assert back in (other.get("same_as") or []), f"{cs}: one-way same_as link"
+
+
+# ── the module entry point (issue #6, gap 8) ─────────────────────────────────────
+
+
+def test_running_vocab_manager_as_a_script_never_writes_the_vocabulary():
+    """`python3 vocab_manager.py` used to call the legacy AMCR-only sync against the
+    shipped union artifact and save the result. Those records carry only cs/en, so every
+    one landed in `Other` — which is `in_prompt: false`, leaving the next pipeline run
+    injecting an empty vocabulary. CI caught it as artifact drift; a curator running the
+    module to look at the vocabulary did not. The entry point inspects and nothing else.
+
+    Asserted on the source rather than by running it: importing under `__main__` is not
+    something a test can do cleanly, and the property at stake is "this code path cannot
+    write", which the absence of the call is exactly what establishes.
+    """
+    src = (Path(__file__).resolve().parent.parent / "vocab_manager.py").read_text(encoding="utf-8")
+    main_block = src.split('if __name__ == "__main__":', 1)[1]
+    # comments explain the old behaviour by name; only executable lines are the claim
+    code = "\n".join(line for line in main_block.splitlines() if not line.lstrip().startswith("#"))
+
+    assert "sync_and_build_nested_taxonomy" not in code, (
+        "the entry point rebuilds the vocabulary again — it must only read it"
+    )
+    assert ".save()" not in code, "the entry point writes"
+    assert "auto_sync=False" in code, (
+        "load() must be told not to fall back to a harvest, or a missing artifact "
+        "triggers the very rebuild this guard exists to prevent"
+    )

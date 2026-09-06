@@ -1,36 +1,24 @@
 rule,label,raw_count,usable_count,would_be_facet,collides_with_offered,prompt_token_delta,guardrail_conflict
-teater:288,4) Hraniční obory / Cross-border and related disciplines,967,943,,23,9954,False
-teater:3094,11) Povolání a pracovní činnosti / Professions and work activities,472,469,,3,4092,False
-teater:2560,10.2) etnika / ethnic groups,391,391,,0,3722,True
-teater:2900,10.3) historické oblasti a státní útvary / historical regions,317,317,,0,2810,True
-heslar:zeme,zeme,250,249,,1,2014,True
-teater:3549,12) Společnost / Society,149,149,,0,1363,False
-teater:1,1) Teorie a přístupy / Theory and approaches,101,96,,5,1275,False
 heslar:dokument_typ,dokument_typ,41,41,,0,522,False
 heslar:letiste,letiste,29,29,,0,225,False
 heslar:dokument_format,dokument_format,26,26,,0,321,False
 heslar:dokument_material,dokument_material,25,24,,1,284,False
 heslar:letfoto_tvar,letfoto_tvar,16,16,,0,235,False
-teater:3076,10.4) panovnické dynastie / ruling dynasties,15,15,,0,161,True
 heslar:dokument_rada,dokument_rada,14,14,,0,183,False
 heslar:dohlednost,dohlednost,12,12,,0,73,False
-teater:3091,10.5) války / wars,11,11,,0,201,False
-heslar:jazyk,jazyk,9,9,,0,56,True
 heslar:pocasi,pocasi,8,8,,0,70,False
 heslar:dokument_ulozeni,dokument_ulozeni,7,7,,0,84,False
 heslar:dokument_licence,dokument_licence,7,7,,0,244,False
-teater:2558,10.1) bitvy / battles,7,7,,0,139,False
 heslar:dokument_zachovalost,dokument_zachovalost,6,6,,0,64,False
 heslar:dokument_nahrada,dokument_nahrada,5,5,,0,45,False
-heslar:vyskovy_bod_typ,vyskovy_bod_typ,9,5,,4,41,False
 heslar:pian_presnost,pian_presnost,4,4,,0,63,False
-heslar:pristupnost,pristupnost,4,4,,0,27,False
 heslar:dok_jednotka_typ,dok_jednotka_typ,5,4,,1,34,False
 heslar:ext_zdroj_typ,ext_zdroj_typ,5,4,,1,38,False
+heslar:vyskovy_bod_typ,vyskovy_bod_typ,9,4,,5,36,False
 heslar:jistota_urceni,jistota_urceni,4,4,,0,46,False
+heslar:pristupnost,pristupnost,4,3,,1,19,False
 heslar:datum_specifikace,datum_specifikace,3,3,,0,28,False
 heslar:pian_typ,pian_typ,3,3,,0,14,False
 heslar:projekt_typ,projekt_typ,3,3,,0,18,False
 heslar:objekt_specifikace_kat,objekt_specifikace_kat,2,2,,0,30,False
 heslar:nalez_typ,nalez_typ,2,2,,0,11,False
-teater:2557,10) Pomocně-historická hesla / Auxiliary-historical headings,1,1,,0,20,False

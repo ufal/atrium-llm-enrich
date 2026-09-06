@@ -21,7 +21,8 @@ jez,weir,amcr,HES-000052,areal,areál aktivity,Activity Area,heslar:areal,0
 jiná aktivita,other activity,amcr,HES-000009,aktivita,aktivita,Activity Area,heslar:aktivita,0
 kanál/náhon,channel/millrace,amcr,HES-000053,areal,areál aktivity,Activity Area,heslar:areal,1
 klášter,monastery,amcr,HES-000073,areal,areál aktivity,Activity Area,heslar:areal,0
-komunikace,transportation activity,amcr,HES-000006,aktivita,aktivita,Activity Area,heslar:aktivita,0
+komunikace,transportation structure,amcr,HES-000047,areal,areál aktivity,Activity Area,heslar:areal,0
+komunikace (aktivita),transportation activity,amcr,HES-000006,aktivita,aktivita,Activity Area,heslar:aktivita,0
 krajina,landscape,amcr,HES-000117,lokalita_druh,druh lokality,Activity Area,heslar:lokalita_druh,0
 kult,ritual activity,amcr,HES-000005,aktivita,aktivita,Activity Area,heslar:aktivita,0
 kultovní areál,ritual site,amcr,HES-000019,areal,areál aktivity,Activity Area,heslar:areal,0
@@ -153,7 +154,7 @@ konvice,pitcher,amcr,HES-000690,predmet_druh,druh předmětu,Artefact,heslar:pre
 kopí/hrot kopí,spear/spearhead,amcr,HES-000821,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
 korálek,bead,amcr,HES-000663,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
 kosa,scythe,amcr,HES-000798,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
-kost,single bone,amcr,HES-000753,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
+kost (předmět),single bone,amcr,HES-000753,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
 kostra,skeleton,amcr,HES-000642,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
 kotel/kotlík,kettle,amcr,HES-000770,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
 kovadlina,anvil,amcr,HES-000654,predmet_druh,druh předmětu,Artefact,heslar:predmet_druh,0
@@ -450,6 +451,264 @@ zemědělský pravěk,farming prehistory,amcr,HES-000304,obdobi,období,Chronolo
 štítarská kultura,Štítary Culture,amcr,HES-000297,obdobi,období,Chronology,heslar:obdobi,0
 šárecký typ,Šárka Type,amcr,HES-000394,obdobi,období,Chronology,heslar:obdobi,0
 želiezovská skupina,Želizovce Group,amcr,HES-000340,obdobi,období,Chronology,heslar:obdobi,0
+Afghánistán,Afghanistan,amcr,HES-001179,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Alandy,Åland Islands,amcr,HES-001180,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Albánie,Albania,amcr,HES-001181,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Alžírsko,Algeria,amcr,HES-001182,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Americká Samoa,American Samoa,amcr,HES-001183,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Americké Panenské ostrovy,Virgin Islands (U.S.),amcr,HES-001184,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Andorra,Andorra,amcr,HES-001185,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Angola,Angola,amcr,HES-001186,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Anguilla,Anguilla,amcr,HES-001187,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Antarktida,Antarctica,amcr,HES-001188,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Antigua a Barbuda,Antigua and Barbuda,amcr,HES-001189,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Argentina,Argentina,amcr,HES-001190,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Arménie,Armenia,amcr,HES-001191,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Aruba,Aruba,amcr,HES-001192,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Austrálie,Australia,amcr,HES-001193,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bahamy,Bahamas (the),amcr,HES-001195,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bahrajn,Bahrain,amcr,HES-001196,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bangladéš,Bangladesh,amcr,HES-001197,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Barbados,Barbados,amcr,HES-001402,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Belgie,Belgium,amcr,HES-001202,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Belize,Belize,amcr,HES-001334,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Benin,Benin,amcr,HES-001207,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bermudy,Bermuda,amcr,HES-001330,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bhútán,Bhutan,amcr,HES-001395,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bolívie,Bolivia (Plurinational State of),amcr,HES-001396,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+"Bonaire, Svatý Eustach a Saba","Bonaire, Sint Eustatius and Saba",amcr,HES-001328,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bosna a Hercegovina,Bosnia and Herzegovina,amcr,HES-001282,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Botswana,Botswana,amcr,HES-001377,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bouvetův ostrov,Bouvet Island,amcr,HES-001347,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Brazílie,Brazil,amcr,HES-001252,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Britské Panenské ostrovy,Virgin Islands (British),amcr,HES-001333,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Britské indickooceánské území,British Indian Ocean Territory (the),amcr,HES-001285,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Brunej,Brunei Darussalam,amcr,HES-001359,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bulharsko,Bulgaria,amcr,HES-001360,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Burkina Faso,Burkina Faso,amcr,HES-001361,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Burundi,Burundi,amcr,HES-001362,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Bělorusko,Belarus,amcr,HES-001329,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Chile,Chile,amcr,HES-001338,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Chorvatsko,Croatia,amcr,HES-001339,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Cookovy ostrovy,Cook Islands (the),amcr,HES-001283,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Curaçao,Curaçao,amcr,HES-001243,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Dominika,Dominica,amcr,HES-001309,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Dominikánská republika,Dominican Republic (the),amcr,HES-001350,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Dánsko,Denmark,amcr,HES-001250,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Džibutsko,Djibouti,amcr,HES-001317,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Egypt,Egypt,amcr,HES-001246,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Ekvádor,Ecuador,amcr,HES-001354,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Eritrea,Eritrea,amcr,HES-001394,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Estonsko,Estonia,amcr,HES-001232,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Etiopie,Ethiopia,amcr,HES-001335,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Faerské ostrovy,Faroe Islands (the),amcr,HES-001336,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Falklandy (Malvíny),Falkland Islands (the) (Malvinas),amcr,HES-001227,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Fidži,Fiji,amcr,HES-001337,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Filipíny,Philippines (the),amcr,HES-001261,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Finsko,Finland,amcr,HES-001262,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Francie,France,amcr,HES-001349,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Francouzská Guyana,French Guiana,amcr,HES-001404,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Francouzská Polynésie,French Polynesia,amcr,HES-001399,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Francouzská jižní a antarktická území,French Southern Territories (the),amcr,HES-001228,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Gabon,Gabon,amcr,HES-001400,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Gambie,Gambia (the),amcr,HES-001256,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Ghana,Ghana,amcr,HES-001242,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Gibraltar,Gibraltar,amcr,HES-001264,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Grenada,Grenada,amcr,HES-001265,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Gruzie,Georgia,amcr,HES-001391,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Grónsko,Greenland,amcr,HES-001266,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guadeloupe,Guadeloupe,amcr,HES-001203,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guam,Guam,amcr,HES-001217,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guatemala,Guatemala,amcr,HES-001218,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guernsey,Guernsey,amcr,HES-001301,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guinea,Guinea,amcr,HES-001219,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guinea-Bissau,Guinea-Bissau,amcr,HES-001302,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Guyana,Guyana,amcr,HES-001401,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Haiti,Haiti,amcr,HES-001214,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Heardův ostrov a MacDonaldovy ostrovy,Heard Island and McDonald Islands,amcr,HES-001275,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Honduras,Honduras,amcr,HES-001276,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Hongkong,Hong Kong,amcr,HES-001277,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Indie,India,amcr,HES-001340,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Indonésie,Indonesia,amcr,HES-001199,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Irsko,Ireland,amcr,HES-001344,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Irák,Iraq,amcr,HES-001260,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Island,Iceland,amcr,HES-001278,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Itálie,Italy,amcr,HES-001319,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Izrael,Israel,amcr,HES-001320,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jamajka,Jamaica,amcr,HES-001245,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Japonsko,Japan,amcr,HES-001353,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jemen,Yemen,amcr,HES-001313,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jersey,Jersey,amcr,HES-001364,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jižní Afrika,South Africa,amcr,HES-001381,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jižní Georgie a Jižní Sandwichovy ostrovy,South Georgia and the South Sandwich Islands,amcr,HES-001382,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jižní Súdán,South Sudan,amcr,HES-001318,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Jordánsko,Jordan,amcr,HES-001383,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kajmanské ostrovy,Cayman Islands (the),amcr,HES-001345,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kambodža,Cambodia,amcr,HES-001291,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kamerun,Cameroon,amcr,HES-001292,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kanada,Canada,amcr,HES-001293,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kapverdy,Cape Verde,amcr,HES-001343,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Katar,Qatar,amcr,HES-001286,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kazachstán,Kazakhstan,amcr,HES-001316,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Keňa,Kenya,amcr,HES-001398,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kiribati,Kiribati,amcr,HES-001233,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kokosové (Keelingovy) ostrovy,Cocos (Keeling) Islands (the),amcr,HES-001259,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kolumbie,Colombia,amcr,HES-001284,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Komory,Comoros (the),amcr,HES-001384,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Konžská demokratická republika,Congo (the Democratic Republic of the),amcr,HES-001251,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Konžská republika,Congo (the),amcr,HES-001385,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Korejská lidově demokratická republika,Korea (the Democratic People's Republic of),amcr,HES-001373,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Korejská republika,Korea (the Republic of),amcr,HES-001225,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kosovo,Kosovo,amcr,HES-001200,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kostarika,Costa Rica,amcr,HES-001271,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kuba,Cuba,amcr,HES-001234,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kuvajt,Kuwait,amcr,HES-001201,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kypr,Cyprus,amcr,HES-001237,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Kyrgyzstán,Kyrgyzstan,amcr,HES-001297,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Laos,Lao People's Democratic Republic (the),amcr,HES-001298,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Lesotho,Lesotho,amcr,HES-001299,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Libanon,Lebanon,amcr,HES-001239,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Libye,Libya,amcr,HES-001308,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Libérie,Liberia,amcr,HES-001314,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Lichtenštejnsko,Liechtenstein,amcr,HES-001371,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Litva,Lithuania,amcr,HES-001372,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Lotyšsko,Latvia,amcr,HES-001288,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Lucembursko,Luxembourg,amcr,HES-001289,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Macao,Macao,amcr,HES-001351,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Madagaskar,Madagascar,amcr,HES-001352,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Malajsie,Malaysia,amcr,HES-001327,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Malawi,Malawi,amcr,HES-001310,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Maledivy,Maldives,amcr,HES-001397,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mali,Mali,amcr,HES-001205,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Man,Isle of Man,amcr,HES-001206,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Maroko,Morocco,amcr,HES-001208,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Marshallovy ostrovy,Marshall Islands (the),amcr,HES-001267,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Martinik,Martinique,amcr,HES-001403,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mauricius,Mauritius,amcr,HES-001238,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mauritánie,Mauritania,amcr,HES-001325,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mayotte,Mayotte,amcr,HES-001389,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Maďarsko,Hungary,amcr,HES-001374,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Menší odlehlé ostrovy USA,United States Minor Outlying Islands (the),amcr,HES-001247,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mexiko,Mexico,amcr,HES-001210,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mikronésie,Micronesia (Federated States of),amcr,HES-001211,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Moldavsko,Moldova (the Republic of),amcr,HES-001269,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Monako,Monaco,amcr,HES-001270,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mongolsko,Mongolia,amcr,HES-001240,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Montserrat,Montserrat,amcr,HES-001241,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Mosambik,Mozambique,amcr,HES-001294,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Myanmar,Myanmar,amcr,HES-001356,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Namibie,Namibia,amcr,HES-001213,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nauru,Nauru,amcr,HES-001346,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nepál,Nepal,amcr,HES-001204,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Niger,Niger (the),amcr,HES-001273,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nigérie,Nigeria,amcr,HES-001274,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nikaragua,Nicaragua,amcr,HES-001229,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Niue,Niue,amcr,HES-001279,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nizozemsko,Netherlands (the),amcr,HES-001230,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Norfolk,Norfolk Island,amcr,HES-001231,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Norsko,Norway,amcr,HES-001290,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nová Kaledonie,New Caledonia,amcr,HES-001263,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Nový Zéland,New Zealand,amcr,HES-001209,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Německo,Germany,amcr,HES-001358,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Omán,Oman,amcr,HES-001223,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Palau,Palau,amcr,HES-001387,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Palestina,"Palestine, State of",amcr,HES-001368,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Panama,Panama,amcr,HES-001369,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Papua Nová Guinea,Papua New Guinea,amcr,HES-001370,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Paraguay,Paraguay,amcr,HES-001363,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Peru,Peru,amcr,HES-001296,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Pitcairn,Pitcairn,amcr,HES-001287,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Pobřeží slonoviny,Côte d'Ivoire,amcr,HES-001226,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Polsko,Poland,amcr,HES-001220,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Portoriko,Puerto Rico,amcr,HES-001221,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Portugalsko,Portugal,amcr,HES-001222,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Pákistán,Pakistan,amcr,HES-001224,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Rakousko,Austria,amcr,HES-001295,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Rovníková Guinea,Equatorial Guinea,amcr,HES-001235,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Rumunsko,Romania,amcr,HES-001236,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Rusko,Russian Federation (the),amcr,HES-001392,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Rwanda,Rwanda,amcr,HES-001393,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Réunion,Réunion,amcr,HES-001303,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Saint Pierre a Miquelon,Saint Pierre and Miquelon,amcr,HES-001280,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Salvador,El Salvador,amcr,HES-001281,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Samoa,Samoa,amcr,HES-001321,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+San Marino,San Marino,amcr,HES-001376,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Saúdská Arábie,Saudi Arabia,amcr,HES-001380,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Senegal,Senegal,amcr,HES-001215,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Severní Makedonie,North Macedonia,amcr,HES-001375,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Severní Mariany,Northern Mariana Islands (the),amcr,HES-001216,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Seychely,Seychelles,amcr,HES-001307,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Sierra Leone,Sierra Leone,amcr,HES-001257,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Singapur,Singapore,amcr,HES-001255,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Slovensko,Slovakia,amcr,HES-001367,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Slovinsko,Slovenia,amcr,HES-001312,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Somálsko,Somalia,amcr,HES-001326,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Spojené arabské emiráty,United Arab Emirates (the),amcr,HES-001322,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Spojené státy,United States of America (the),amcr,HES-001323,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Srbsko,Serbia,amcr,HES-001357,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Středoafrická republika,Central African Republic (the),amcr,HES-001386,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Surinam,Suriname,amcr,HES-001348,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatá Helena,"Saint Helena, Ascension and Tristan da Cunha",amcr,HES-001258,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatá Lucie,Saint Lucia,amcr,HES-001332,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatý Bartoloměj,Saint Barthélemy,amcr,HES-001355,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatý Kryštof a Nevis,Saint Kitts and Nevis,amcr,HES-001305,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatý Martin (FR),Saint Martin (French part),amcr,HES-001268,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatý Martin (NL),Sint Maarten (Dutch part),amcr,HES-001315,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatý Tomáš a Princův ostrov,Sao Tome and Principe,amcr,HES-001212,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svatý Vincenc a Grenadiny,Saint Vincent and the Grenadines,amcr,HES-001378,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Svazijsko,Eswatini,amcr,HES-001388,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Súdán,Sudan (the),amcr,HES-001272,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Sýrie,Syrian Arab Republic,amcr,HES-001379,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tanzanie,"Tanzania, United Republic of",amcr,HES-001244,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tchaj-wan,Taiwan (Province of China),amcr,HES-001306,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Thajsko,Thailand,amcr,HES-001341,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Togo,Togo,amcr,HES-001342,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tokelau,Tokelau,amcr,HES-001406,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tonga,Tonga,amcr,HES-001407,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Trinidad a Tobago,Trinidad and Tobago,amcr,HES-001408,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tunisko,Tunisia,amcr,HES-001409,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Turecko,Turkey,amcr,HES-001410,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Turkmenistán,Turkmenistan,amcr,HES-001411,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Turks a Caicos,Turks and Caicos Islands (the),amcr,HES-001412,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tuvalu,Tuvalu,amcr,HES-001413,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Tádžikistán,Tajikistan,amcr,HES-001390,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Uganda,Uganda,amcr,HES-001414,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Ukrajina,Ukraine,amcr,HES-001415,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Uruguay,Uruguay,amcr,HES-001416,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Uzbekistán,Uzbekistan,amcr,HES-001417,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Vanuatu,Vanuatu,amcr,HES-001419,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Vatikán,Holy See (the),amcr,HES-001420,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Velká Británie,United Kingdom of Great Britain and Northern Ireland (the),amcr,HES-001421,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Venezuela,Venezuela (Bolivarian Republic of),amcr,HES-001422,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Vietnam,Viet Nam,amcr,HES-001423,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Vánoční ostrov,Christmas Island,amcr,HES-001418,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Východní Timor,Timor-Leste,amcr,HES-001424,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Wallis a Futuna,Wallis and Futuna,amcr,HES-001425,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Zambie,Zambia,amcr,HES-001426,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Zimbabwe,Zimbabwe,amcr,HES-001428,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Západní Sahara,Western Sahara,amcr,HES-001427,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+angličtina,English,amcr,HES-000169,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+francouzština,French,amcr,HES-000170,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+italština,Italian,amcr,HES-001448,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+latina,Latin,amcr,HES-000172,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+nerelevantní,irrelevant,amcr,HES-000174,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+němčina,German,amcr,HES-000168,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+ruština,Russian,amcr,HES-000173,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+slovenština,Slovak,amcr,HES-000171,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+Ázerbájdžán,Azerbaijan,amcr,HES-001194,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Írán,Iran (Islamic Republic of),amcr,HES-001324,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Čad,Chad,amcr,HES-001405,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Černá Hora,Montenegro,amcr,HES-001248,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Česko,Czechia,amcr,HES-001198,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Čína,China,amcr,HES-001249,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+čeština,Czech,amcr,HES-000167,jazyk,jazyk,Cultural & Geographic Context,heslar:jazyk,0
+Řecko,Greece,amcr,HES-001304,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Šalomounovy ostrovy,Solomon Islands,amcr,HES-001311,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Španělsko,Spain,amcr,HES-001300,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Špicberky a Jan Mayen,Svalbard and Jan Mayen,amcr,HES-001253,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Šrí Lanka,Sri Lanka,amcr,HES-001254,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Švédsko,Sweden,amcr,HES-001331,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
+Švýcarsko,Switzerland,amcr,HES-001365,zeme,zeme,Cultural & Geographic Context,heslar:zeme,0
 (polo)zemnice,pit house,amcr,HES-000497,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
 bastion/reduta,bastion/redoubt,amcr,HES-000468,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
 bašta,wall tower,amcr,HES-000528,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
@@ -597,12 +856,13 @@ zákop,trench,amcr,HES-000535,objekt_druh,druh objektu,Feature,heslar:objekt_dru
 šibenice,gallows,amcr,HES-000511,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
 štola,adit,amcr,HES-000565,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
 žlab,ditch,amcr,HES-000490,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
-žároviště,burned layer,amcr,HES-000463,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
+žároviště (spálená vrstva),burned layer,amcr,HES-000463,objekt_druh,druh objektu,Feature,heslar:objekt_druh,0
 budova,building,amcr,HES-000250,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,1
 jiný kontext,other context,amcr,HES-000251,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
 kulturní vrstva/objekt,cultural layer/feature,amcr,HES-000247,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
 lesní hrabanka,woodland topsoil,amcr,HES-000245,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
 ornice,arable topsoil,amcr,HES-000243,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
+pastvina/louka (nálezové okolnosti),pasture topsoil,amcr,HES-000244,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
 podorničí/podloží,subsoil,amcr,HES-000248,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
 povrch,surface,amcr,HES-000242,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
 přirozený půdní horizont,natural topsoil,amcr,HES-000246,nalezove_okolnosti,nálezové okolnosti,Finds Context,heslar:nalezove_okolnosti,0
@@ -654,6 +914,7 @@ konstrukce sypaná/vršená,earth construction,amcr,HES-000901,objekt_specifikac
 konstrukce zahloubená,sunken structure,amcr,HES-000902,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 konstrukce zděná,masonry construction,amcr,HES-000893,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 korál,coral,amcr,HES-000938,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
+kost,bone,amcr,HES-000939,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 kost lidská,human bone,amcr,HES-000905,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 kost zvířecí,animal bone,amcr,HES-000906,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 kov,metal,amcr,HES-000907,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
@@ -682,6 +943,7 @@ proutí,wattle,amcr,HES-000943,objekt_specifikace,specifikace objektu,Material,h
 pryskyřice,resin,amcr,HES-000944,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 pyl,polen,amcr,HES-001007,predmet_specifikace,specifikace předmětu,Material,heslar:predmet_specifikace,0
 roh,horn,amcr,HES-000945,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
+rostlinné makrozbytky (materiál),plant macro-remains,amcr,HES-001009,predmet_specifikace,specifikace předmětu,Material,heslar:predmet_specifikace,0
 schránky měkkýšů,mollusc shell,amcr,HES-000946,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 sklo,glass,amcr,HES-000947,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 slonovina/mamutovina,ivory,amcr,HES-000948,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
@@ -690,6 +952,7 @@ stříbro,silver,amcr,HES-000950,objekt_specifikace,specifikace objektu,Material
 textil,textile,amcr,HES-000952,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 uhlí,coal,amcr,HES-000953,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 uhlí dřevěné,charcoal,amcr,HES-000954,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
+vejce (materiál),egg,amcr,HES-000956,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 vosk,wax,amcr,HES-000957,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 vápno,quicklime,amcr,HES-000955,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0
 zlato,gold,amcr,HES-000958,objekt_specifikace,specifikace objektu,Material,heslar:objekt_specifikace,0

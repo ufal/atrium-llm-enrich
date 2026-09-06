@@ -28,6 +28,25 @@ def _shipped_manager():
     return VocabularyManager(config_path=str(CONFIG))
 
 
+def _manager_with_zeme_excluded():
+    """The shipped manager with `zeme` put back to `__exclude__`.
+
+    M11 reinstated the geographic branches, so nothing in the shipped config excludes
+    country names any more — but this sheet's job is to report on whatever IS excluded,
+    and the homograph trap it guards (`malta` = mortar, not the country) is a property
+    of the tool rather than of the current ruling. Excluding one list here keeps those
+    tests measuring the tool, and keeps them working through the next ruling too."""
+    manager = _shipped_manager()
+    manager.settings["heslar_map"]["zeme"] = "__exclude__"
+    manager.settings["_exclusions"]["heslar:zeme"] = {
+        "status": "settled",
+        "reason": "re-excluded by this fixture so the branch-evidence sheet has a row to report",
+    }
+    manager.settings["geo_guardrail"] = {**manager.settings["geo_guardrail"], "covers": []}
+    manager._invalidate_cache()
+    return manager
+
+
 def _require_flat():
     if not (VOCAB_DIR / "amcr_flat.json").exists() or not (VOCAB_DIR / "teater_flat.json").exists():
         pytest.skip("flat artifacts not present in this checkout")
@@ -421,7 +440,7 @@ def test_branch_evidence_does_not_credit_zeme_for_the_mortar_homograph(tmp_path)
     geographic guardrail turn on. It must land in shared, never unique."""
     _require_flat()
     udp, lines = _malta_corpus(tmp_path)
-    manager = _shipped_manager()
+    manager = _manager_with_zeme_excluded()
     nested = cr.shipped_nested(VOCAB_DIR, manager)
     per_source = vb._load_flat(VOCAB_DIR)
 
@@ -455,7 +474,7 @@ def test_branch_evidence_without_nested_reports_everything_as_unique(tmp_path):
     CAN be classified as shared, so callers wanting the split must pass nested."""
     _require_flat()
     udp, _lines = _malta_corpus(tmp_path)
-    manager = _shipped_manager()
+    manager = _manager_with_zeme_excluded()
     per_source = vb._load_flat(VOCAB_DIR)
     rows = cr.corpus_branch_evidence_rows(per_source, manager, udp)
     zeme = next(r for r in rows if r["rule"] == "heslar:zeme")
@@ -466,7 +485,7 @@ def test_branch_evidence_without_nested_reports_everything_as_unique(tmp_path):
 def test_branch_evidence_unique_plus_shared_reconciles_with_the_total(tmp_path):
     _require_flat()
     udp, _lines = _malta_corpus(tmp_path)
-    manager = _shipped_manager()
+    manager = _manager_with_zeme_excluded()
     nested = cr.shipped_nested(VOCAB_DIR, manager)
     per_source = vb._load_flat(VOCAB_DIR)
     for row in cr.corpus_branch_evidence_rows(per_source, manager, udp, nested=nested):

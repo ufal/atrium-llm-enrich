@@ -1,0 +1,71 @@
+context_window,input_budget_tokens,grouping,facet,priority,terms,surviving,dropped,share_surviving,status
+8192,5632,facet_sub,Chronology,9,272,272,0,1.0,full
+8192,5632,facet_sub,Activity Area,8,266,147,119,0.553,partial
+8192,5632,facet_sub,Feature,7,374,0,374,0.0,dropped
+8192,5632,facet_sub,Artefact,6,728,0,728,0.0,dropped
+8192,5632,facet_sub,Material,5,160,0,160,0.0,dropped
+8192,5632,facet_sub,Finds Context,4,11,0,11,0.0,dropped
+8192,5632,facet_sub,Methods,3,198,0,198,0.0,dropped
+8192,5632,facet_sub,Location & Admin,1,71,0,71,0.0,dropped
+8192,5632,facet_sub,Cultural & Geographic Context,0,972,0,972,0.0,dropped
+8192,5632,facet_sub,Related Disciplines & Society,0,1666,0,1666,0.0,dropped
+32768,30208,facet_sub,Chronology,9,272,272,0,1.0,full
+32768,30208,facet_sub,Activity Area,8,266,266,0,1.0,full
+32768,30208,facet_sub,Feature,7,374,374,0,1.0,full
+32768,30208,facet_sub,Artefact,6,728,728,0,1.0,full
+32768,30208,facet_sub,Material,5,160,160,0,1.0,full
+32768,30208,facet_sub,Finds Context,4,11,11,0,1.0,full
+32768,30208,facet_sub,Methods,3,198,198,0,1.0,full
+32768,30208,facet_sub,Location & Admin,1,71,71,0,1.0,full
+32768,30208,facet_sub,Cultural & Geographic Context,0,972,972,0,1.0,full
+32768,30208,facet_sub,Related Disciplines & Society,0,1666,54,1612,0.032,partial
+128000,125440,facet_sub,Chronology,9,272,272,0,1.0,full
+128000,125440,facet_sub,Activity Area,8,266,266,0,1.0,full
+128000,125440,facet_sub,Feature,7,374,374,0,1.0,full
+128000,125440,facet_sub,Artefact,6,728,728,0,1.0,full
+128000,125440,facet_sub,Material,5,160,160,0,1.0,full
+128000,125440,facet_sub,Finds Context,4,11,11,0,1.0,full
+128000,125440,facet_sub,Methods,3,198,198,0,1.0,full
+128000,125440,facet_sub,Location & Admin,1,71,71,0,1.0,full
+128000,125440,facet_sub,Cultural & Geographic Context,0,972,972,0,1.0,full
+128000,125440,facet_sub,Related Disciplines & Society,0,1666,1666,0,1.0,full
+131072,128512,facet_sub,Chronology,9,272,272,0,1.0,full
+131072,128512,facet_sub,Activity Area,8,266,266,0,1.0,full
+131072,128512,facet_sub,Feature,7,374,374,0,1.0,full
+131072,128512,facet_sub,Artefact,6,728,728,0,1.0,full
+131072,128512,facet_sub,Material,5,160,160,0,1.0,full
+131072,128512,facet_sub,Finds Context,4,11,11,0,1.0,full
+131072,128512,facet_sub,Methods,3,198,198,0,1.0,full
+131072,128512,facet_sub,Location & Admin,1,71,71,0,1.0,full
+131072,128512,facet_sub,Cultural & Geographic Context,0,972,972,0,1.0,full
+131072,128512,facet_sub,Related Disciplines & Society,0,1666,1666,0,1.0,full
+256000,253440,facet_sub,Chronology,9,272,272,0,1.0,full
+256000,253440,facet_sub,Activity Area,8,266,266,0,1.0,full
+256000,253440,facet_sub,Feature,7,374,374,0,1.0,full
+256000,253440,facet_sub,Artefact,6,728,728,0,1.0,full
+256000,253440,facet_sub,Material,5,160,160,0,1.0,full
+256000,253440,facet_sub,Finds Context,4,11,11,0,1.0,full
+256000,253440,facet_sub,Methods,3,198,198,0,1.0,full
+256000,253440,facet_sub,Location & Admin,1,71,71,0,1.0,full
+256000,253440,facet_sub,Cultural & Geographic Context,0,972,972,0,1.0,full
+256000,253440,facet_sub,Related Disciplines & Society,0,1666,1666,0,1.0,full
+262144,259584,facet_sub,Chronology,9,272,272,0,1.0,full
+262144,259584,facet_sub,Activity Area,8,266,266,0,1.0,full
+262144,259584,facet_sub,Feature,7,374,374,0,1.0,full
+262144,259584,facet_sub,Artefact,6,728,728,0,1.0,full
+262144,259584,facet_sub,Material,5,160,160,0,1.0,full
+262144,259584,facet_sub,Finds Context,4,11,11,0,1.0,full
+262144,259584,facet_sub,Methods,3,198,198,0,1.0,full
+262144,259584,facet_sub,Location & Admin,1,71,71,0,1.0,full
+262144,259584,facet_sub,Cultural & Geographic Context,0,972,972,0,1.0,full
+262144,259584,facet_sub,Related Disciplines & Society,0,1666,1666,0,1.0,full
+1048576,1046016,facet_sub,Chronology,9,272,272,0,1.0,full
+1048576,1046016,facet_sub,Activity Area,8,266,266,0,1.0,full
+1048576,1046016,facet_sub,Feature,7,374,374,0,1.0,full
+1048576,1046016,facet_sub,Artefact,6,728,728,0,1.0,full
+1048576,1046016,facet_sub,Material,5,160,160,0,1.0,full
+1048576,1046016,facet_sub,Finds Context,4,11,11,0,1.0,full
+1048576,1046016,facet_sub,Methods,3,198,198,0,1.0,full
+1048576,1046016,facet_sub,Location & Admin,1,71,71,0,1.0,full
+1048576,1046016,facet_sub,Cultural & Geographic Context,0,972,972,0,1.0,full
+1048576,1046016,facet_sub,Related Disciplines & Society,0,1666,1666,0,1.0,full

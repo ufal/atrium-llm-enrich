@@ -1,0 +1,11 @@
+--- PROMPT_GEO_GUARDRAIL=strict
++++ PROMPT_GEO_GUARDRAIL=preference
+@@ -2,7 +2,7 @@
+ 1. Extract ONLY archaeological entities, features, periods, or materials from the marked line. Do NOT extract names of researchers, dates, conjunctions, or administrative words.
+ 2. Select the SINGLE most relevant category from the thematic vocabulary list below.
+ CRITICAL: If the marked line is purely administrative, a table of contents, a generic heading (e.g. page numbers, titles, author names, 'Práce:', 'Obsah:', literature references) or lacks direct archaeological context, you MUST select 'Nerelevantní (meta-text)'.
+-NEVER select a country name, language name, or geographic region name as the teater_category for any line — including administrative lines. For any line that lacks direct archaeological significance, you MUST use 'Nerelevantní (meta-text)'.
++Select a geographic, ethnic or dynastic term only when the line is genuinely about it; prefer an archaeological content term otherwise.
+ When extracting keywords, normalize obvious OCR artifacts and typos to their correct Czech forms. Do NOT include garbled tokens or split words as keywords. Prefer the normalized phrase over the raw OCR text.
+ You MUST use the exact Czech term as written in the vocabulary.
+ You MUST respond ONLY with a valid JSON object matching the requested schema.

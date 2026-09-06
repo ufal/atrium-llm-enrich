@@ -51,45 +51,138 @@
   ],
   "overrides": [
     {
-      "match": { "source": "amcr", "id": "HES-000021" },
+      "match": {
+        "source": "amcr",
+        "id": "HES-000021"
+      },
       "facet": "Feature",
       "sub": "druh objektu",
       "reason": "kostel: AMCR double-registers the term under both areal (HES-000021) and objekt_druh (HES-000465, 'church'/'church'); first-occurrence dedup keeps the lower ident (areal -> Activity Area). Domain review (issue #6, comment 5395681950) confirms Feature; the objection was withdrawn as a dedup artifact, not a taxonomy dispute (comment 5426046951)."
     },
     {
-      "match": { "source": "amcr", "id": "HES-000020" },
+      "match": {
+        "source": "amcr",
+        "id": "HES-000020"
+      },
       "facet": "Feature",
       "sub": "druh objektu",
       "reason": "kaple: same AMCR double-registration shape as kostel (areal HES-000020 / objekt_druh HES-000496, 'chapel'/'chapel'). Comment 5395681950."
     },
     {
-      "match": { "source": "amcr", "id": "HES-000028" },
+      "match": {
+        "source": "amcr",
+        "id": "HES-000028"
+      },
       "facet": "Feature",
       "sub": "druh objektu",
       "reason": "mlýn: same AMCR double-registration shape as kostel (areal HES-000028 / objekt_druh HES-000480, 'mill'/'mill'). Comment 5395681950."
     },
     {
-      "match": { "source": "amcr", "id": "HES-000048" },
+      "match": {
+        "source": "amcr",
+        "id": "HES-000048"
+      },
       "facet": "Feature",
       "sub": "druh objektu",
       "reason": "cesta: same AMCR double-registration shape as kostel (areal HES-000048 / objekt_druh HES-000520). Comment 5395681950."
     },
     {
-      "match": { "source": "amcr", "id": "HES-000526" },
+      "match": {
+        "source": "amcr",
+        "id": "HES-000526"
+      },
       "facet": "Activity Area",
       "sub": "areál aktivity",
       "reason": "zahrada: dedup currently keeps the AMCR objekt_druh record (Feature) over TEATER's 'areál zemědělské výroby' sub-branch (id 1298, branch 1267 -> Activity Area). Domain review (comment 5395681950) assigns Activity Area -- the 'building vs. ground' correction, opposite direction from kostel/kaple/mlýn/cesta."
     },
     {
-      "match": { "source": "amcr", "id": "HES-000470" },
+      "match": {
+        "source": "amcr",
+        "id": "HES-000470"
+      },
       "facet": "Finds Context",
       "sub": "nálezové okolnosti",
       "reason": "přírodní útvar: resolves to Feature via objekt_druh (AMCR) and branch 1481 (TEATER) alike; domain review (comment 5395681950) assigns Finds Context instead -- a natural feature is the context a find was recovered from, not a built feature."
     },
     {
-      "match": { "source": "teater", "id": "1439" },
+      "match": {
+        "source": "teater",
+        "id": "1439"
+      },
       "qualifier_cs": "sídlo elity",
       "reason": "zámek: three records share this label -- AMCR HES-000817 (predmet_druh, 'lock') and TEATER 2358 (branch 1788, 'lock') mean the same thing and dedup normally; TEATER 1439 (branch 1267, 'châteaux') is a genuine homonym, not translation variance. motyc approved the bracketed-qualifier convention for exactly this case (comment 5439363875); 'sídlo elity' is TEATER's own sub-branch label for the châteaux sense."
+    },
+    {
+      "match": {
+        "source": "amcr",
+        "id": "HES-000006"
+      },
+      "qualifier_cs": "aktivita",
+      "reason": "komunikace: four AMCR records share the label — aktivita (HES-000006, 'transportation activity'), areal (HES-000047), areal_kat (HES-000092) and objekt_druh_kat (HES-000576), the last three all 'transportation structure'. @david-spacil ruled the activity sense a genuine split from the structure sense (comment 5541507280); AAT verdict 'conflicting'. The three structure records keep the bare label and dedup normally."
+    },
+    {
+      "match": {
+        "source": "amcr",
+        "id": "HES-000753"
+      },
+      "qualifier_cs": "předmět",
+      "reason": "kost: HES-000753 (predmet_druh) is 'single bone' — an artefact — while HES-000939, HES-000985 and teater:2476 are all 'bone' the material. Split ruled by @david-spacil (comment 5541507280); the three material records keep the bare label."
+    },
+    {
+      "match": {
+        "source": "amcr",
+        "id": "HES-000244"
+      },
+      "qualifier_cs": "nálezové okolnosti",
+      "reason": "pastvina/louka: HES-000038 (areal) is 'pasture/meadow' as a place; HES-000244 (nalezove_okolnosti) is 'pasture topsoil' — the context a find came out of, not the area. Split ruled by @david-spacil (comment 5541507280)."
+    },
+    {
+      "match": {
+        "source": "amcr",
+        "id": "HES-001009"
+      },
+      "qualifier_cs": "materiál",
+      "reason": "rostlinné makrozbytky: HES-000644 (predmet_druh, 'plant macro-remain') and teater:1945 are the find; HES-001009 (predmet_specifikace, 'plant macro-remains') is the material a find is made of. Split ruled by @david-spacil (comment 5541507280); AAT verdict 'conflicting'."
+    },
+    {
+      "match": {
+        "source": "amcr",
+        "id": "HES-000956"
+      },
+      "qualifier_cs": "materiál",
+      "reason": "vejce: HES-000646 (predmet_druh, 'eggshell') and teater:1951 are the find; HES-000956 (objekt_specifikace, 'egg') is the material. HES-001020 (predmet_specifikace) stays with the bare label. Split ruled by @david-spacil (comment 5541507280); AAT verdict 'conflicting'."
+    },
+    {
+      "match": {
+        "source": "amcr",
+        "id": "HES-000463"
+      },
+      "qualifier_cs": "spálená vrstva",
+      "reason": "žároviště: HES-000463 (objekt_druh) is 'burned layer' — a deposit — while teater:1759 is 'cremation place', an activity area. Split ruled by @david-spacil (comment 5541507280)."
+    },
+    {
+      "match": {
+        "source": "teater",
+        "id": "605"
+      },
+      "facet": "Artefact",
+      "reason": "olej: reinstating TEATER 288 brings back record 605 ('oil'), whose id sorts below the content record 2424 ('oils', branch 1788 Předmět), so 605 wins the label and would drag the term out of Artefact. Same concept either way — the glosses agree — so this only decides the facet, and the content branch is the answer. One of the three terms the B5 exclusion-before-dedup fix rescued (comment 5395681950)."
+    },
+    {
+      "match": {
+        "source": "teater",
+        "id": "1022"
+      },
+      "facet": "Feature",
+      "reason": "vodní pramen: same shape as olej. Record 1022 ('spring', branch 288) sorts below 1685 ('spring', branch 1481 Objekt) and would capture the label. Identical glosses, so the split is purely about the facet; Feature is where the domain review put it."
+    },
+    {
+      "match": {
+        "source": "teater",
+        "id": "602"
+      },
+      "facet": "Artefact",
+      "reason": "úřední písemnost: same shape again. Record 602 ('official document', branch 288) sorts below 2250 ('official document', branch 1788). Identical glosses; Artefact is the reviewed placement."
     }
   ]
 }

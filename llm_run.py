@@ -23,8 +23,8 @@ from pydantic import BaseModel, Field  # noqa: E402
 from tqdm import tqdm  # noqa: E402
 
 import llm_utils  # noqa: E402  (side-effect: env-var guard + compat patches)
+import prompt_template  # noqa: E402
 from atrium_paradata import ParadataLogger  # noqa: E402
-from llm_client_shared import excluded_prompt_themes, write_document_record  # noqa: E402
 from llm_utils import (  # noqa: E402
     CONTEXT_RESERVED,
     _check_backend_deps,
@@ -38,28 +38,7 @@ from llm_utils import (  # noqa: E402
     process_document,
     process_document_vllm,
 )
-from vocab_manager import VocabularyManager  # noqa: E402
-
-_EXAMPLES_FOOTER = (
-    "\nEXAMPLES:\n\n"
-    'Input line: "Výzkum odhalil základy gotického kostela ze 14. '
-    'století."\n'
-    "Correct output:\n"
-    "{\n"
-    '  "extracted_keywords_cs": ["základy", "gotický kostel"],\n'
-    '  "extracted_keywords_en": ["foundations", "Gothic church"],\n'
-    '  "teater_category": "kostel",\n'
-    '  "confidence_score": 0.92\n'
-    "}\n\n"
-    'Input line: "Praha, dne 6. října 1956, Dr. Solle"\n'
-    "Correct output:\n"
-    "{\n"
-    '  "extracted_keywords_cs": [],\n'
-    '  "extracted_keywords_en": [],\n'
-    '  "teater_category": "Nerelevantní (meta-text)",\n'
-    '  "confidence_score": 1.0\n'
-    "}\n"
-)
+from vocab_manager import VocabularyManager, vocabulary_provenance  # noqa: E402
 
 
 def build_schema(term_names: List[str]) -> type:
@@ -113,109 +92,68 @@ def build_schema(term_names: List[str]) -> type:
     return ConstrainedEnrichment
 
 
+IdList = List[Dict[str, str]]
+
+
+def _id_lookup_and_strip_map(terms: List[dict]) -> Tuple[Dict[str, IdList], Dict[str, str]]:
+    """From the final surviving term list, build the two small maps ``main()`` needs
+    after inference: which record ids back a given enum label (B2/M7), and which
+    qualified labels (B3) need the bracket stripped back off for the emitted keyword.
+
+    Keyed by the exact label the model was offered (post-truncation), so a term
+    dropped by truncation simply has no entry — ``main()`` falls back to an empty id
+    list rather than inventing one for a category the model was never shown.
+    """
+    id_lookup = {t["cs"]: t["ids"] for t in terms if t.get("ids")}
+    strip_map = {t["cs"]: t["bare_cs"] for t in terms if t.get("bare_cs")}
+    return id_lookup, strip_map
+
+
 def build_system_prompt(
     vocab_data: dict,
     tokenizer: Any,
     max_tokens: int,
     skip_truncation: bool = False,
     excluded_themes: Optional[Set[str]] = None,
-) -> Tuple[str, List[str]]:
+    prompt_config: Optional[Dict[str, str]] = None,
+) -> Tuple[str, List[str], Dict[str, IdList], Dict[str, str]]:
     """Render the thematic vocabulary into a system prompt and return the term list.
 
     ``excluded_themes`` names the themes to withhold from the model, lower-cased.
-    It defaults to ``{"other"}`` — this function's previous hard-coded behaviour —
-    but main() derives it from each theme's ``in_prompt`` flag in
-    taxonomy_config.json, so which terms the model can reach is a reviewable
-    configuration decision rather than a literal in the prompt builder. This
-    matters: a term absent from the prompt is unreachable by construction, so
-    withholding one turns "the model was wrong" and "the label was withheld" into
-    the same score.
+    It defaults to ``{"other"}`` — today's hard-coded behaviour — but main() derives it
+    from each theme's ``in_prompt`` flag in taxonomy_config.json, so which terms the
+    model can reach is a reviewable configuration decision rather than a literal in the
+    prompt builder. This matters: a term absent from the prompt is unreachable by
+    construction, so withholding one turns "the model was wrong" and "the label was
+    withheld" into the same score.
+
+    Returns ``(prompt, surviving_terms, id_lookup, strip_map)``. ``id_lookup`` maps
+    each surviving enum label to the full set of ``{source, id}`` records it stands
+    for — its own plus every one B1's dedup discarded onto it (issue #6, M7) — for
+    ``main()`` to attach as ``teater_category_ids``. ``strip_map`` maps a qualified
+    label (B3, e.g. ``"zámek (sídlo elity)"``) back to its bare form, so the emitted
+    ``teater_category`` reads ``"zámek"`` while the id set still disambiguates which
+    sense was meant. Neither map is serialised into the prompt itself.
     """
-    header = (
-        "You are an expert archaeological data extractor. "
-        "Analyze the MARKED LINE enclosed in <target_line> ... </target_line> "
-        "within its surrounding document context.\n"
-        "1. Extract ONLY archaeological entities, features, periods, or materials "
-        "from the marked line. "
-        "Do NOT extract names of researchers, dates, conjunctions, or "
-        "administrative words.\n"
-        "2. Select the SINGLE most relevant category from the thematic vocabulary "
-        "list below.\n"
-        "CRITICAL: If the marked line is purely administrative, a table of contents, "
-        "a generic heading (e.g. page numbers, titles, author names, 'Práce:', "
-        "'Obsah:', literature references) or lacks direct archaeological context, "
-        "you MUST select 'Nerelevantní (meta-text)'.\n"
-        "NEVER select a country name, language name, or geographic region name "
-        "as the teater_category for any line — including administrative lines. "
-        "For any line that lacks direct archaeological significance, "
-        "you MUST use 'Nerelevantní (meta-text)'.\n"
-        "When extracting keywords, normalize obvious OCR artifacts and typos to "
-        "their correct Czech forms. "
-        "Do NOT include garbled tokens or split words as keywords. "
-        "Prefer the normalized phrase over the raw OCR text.\n"
-        "You MUST use the exact Czech term as written in the vocabulary.\n"
-        "You MUST respond ONLY with a valid JSON object matching the requested "
-        "schema.\n\n"
-        "THEMATIC VOCABULARY:\n"
-    )
+    # The instruction text is prompts/system_prompt.txt, not a literal here: which
+    # rules reach the model is a config decision (issue #6, C1), and the geographic
+    # guardrail in particular has to stay in step with taxonomy_config.json — which it
+    # cannot do while it lives in Python that vocab_build.py would have to grep.
+    header, examples_footer = prompt_template.render(prompt_config or {})
 
-    skip = {"other"} if excluded_themes is None else {t.lower() for t in excluded_themes}
-
-    raw_terms: List[dict] = []
-    raw_terms.append(
-        {
-            "theme": "Administrative / Meta",
-            "sub": "",
-            "cs": "Nerelevantní (meta-text)",
-            "en": "Irrelevant / Meta-text",
-        }
-    )
-
-    for theme, data in vocab_data.items():
-        if theme.startswith("_") or theme.lower() in skip:
-            continue
-        if isinstance(data, dict):
-            if "keywords" in data and isinstance(data["keywords"], dict):
-                cs_list = data["keywords"].get("cs", [])
-                en_list = data["keywords"].get("en", [])
-                for i, cs_key in enumerate(cs_list):
-                    en = en_list[i] if i < len(en_list) else cs_key
-                    raw_terms.append({"theme": theme, "sub": "", "cs": cs_key, "en": en})
-            else:
-                for cs_key, pair in data.items():
-                    en = pair.get("en", cs_key) if isinstance(pair, dict) else cs_key
-                    sub = pair.get("sub", "") if isinstance(pair, dict) else ""
-                    raw_terms.append({"theme": theme, "sub": sub, "cs": cs_key, "en": en})
-
-    prioritised = raw_terms
+    # Flattening and grouping live in prompt_template so that `prompt_template.py --full`
+    # renders the same prompt this function sends, without importing torch to do it.
+    prioritised = prompt_template.vocabulary_terms(vocab_data, excluded_themes)
+    grouping = prompt_template.resolve_grouping(prompt_config or {})
 
     def _build_candidate_prompt(term_list: List[dict]) -> str:
-        """Render the vocabulary grouped by facet, then by the source's own subgroup.
-
-        Both AMCR and TEATER curate a second level — 50 heslars, and TEATER's 122
-        depth-2 groups — and flattening a 726-term facet into one undifferentiated list
-        throws that away. Two levels cost ~120 header lines and give the model the
-        structure a domain expert already built.
-        """
-        groups: Dict[Tuple[str, str], List[str]] = {}
-        for t in term_list:
-            key = (t["theme"], t.get("sub") or "")
-            groups.setdefault(key, []).append(f"{t['cs']} ({t['en']})")
-
-        prompt = header
-        for (theme_name, sub_name), lines in groups.items():
-            title = f"{theme_name} / {sub_name}" if sub_name else theme_name
-            prompt += f"\n--- {title} ---\n"
-            prompt += "\n".join(f"- {line}" for line in lines) + "\n"
-
-        prompt += _EXAMPLES_FOOTER
-        return prompt
+        return header + prompt_template.vocabulary_block(term_list, grouping) + examples_footer
 
     full_prompt = _build_candidate_prompt(prioritised)
     token_count = count_tokens(full_prompt, tokenizer)
 
     _header_tok = count_tokens(header, tokenizer)
-    _examples_tok = count_tokens(_EXAMPLES_FOOTER, tokenizer)
+    _examples_tok = count_tokens(examples_footer, tokenizer)
     _vocab_tok = token_count - _header_tok - _examples_tok
     print(
         f"[vocab] {len(prioritised)} terms, {token_count} tokens total "
@@ -227,11 +165,13 @@ def build_system_prompt(
             "[vocab] Prefix caching enabled — skipping truncation, "
             f"injecting full vocabulary ({token_count} tokens)."
         )
-        return full_prompt, [t["cs"] for t in prioritised]
+        id_lookup, strip_map = _id_lookup_and_strip_map(prioritised)
+        return full_prompt, [t["cs"] for t in prioritised], id_lookup, strip_map
 
     if token_count <= max_tokens:
         print("[vocab] Full vocabulary fits within token budget.")
-        return full_prompt, [t["cs"] for t in prioritised]
+        id_lookup, strip_map = _id_lookup_and_strip_map(prioritised)
+        return full_prompt, [t["cs"] for t in prioritised], id_lookup, strip_map
 
     print(
         f"[WARN] Vocabulary ({token_count} tokens) exceeds budget "
@@ -255,7 +195,37 @@ def build_system_prompt(
         f"[vocab] Truncated to {len(surviving_cs)} terms "
         f"({count_tokens(surviving_prompt, tokenizer)} tokens)."
     )
-    return surviving_prompt, surviving_cs
+    id_lookup, strip_map = _id_lookup_and_strip_map(surviving_terms)
+    return surviving_prompt, surviving_cs, id_lookup, strip_map
+
+
+def _attach_category_ids(
+    enriched_results: List[dict],
+    id_lookup: Dict[str, List[Dict[str, str]]],
+    strip_map: Dict[str, str],
+    emit_ids: bool,
+) -> None:
+    """Post-inference id passthrough (B2/B3/C4) — mutates each record's ``enrichment``
+    dict in place. Deliberately done here rather than inside process_document*: the
+    inference loop should not need to know about vocabulary internals to run a batch,
+    and M7 asked for this to stay easy to disable ("drop it if it will create some
+    issues") without touching either backend.
+
+    ``teater_category`` is looked up *before* stripping, since ``id_lookup`` is keyed
+    by the label the model actually selected (which may carry a B3 qualifier); the
+    output field is then rewritten to the bare label so a qualifier never leaks past
+    this pipeline into a downstream index.
+    """
+    for record in enriched_results:
+        enrichment = record.get("enrichment")
+        if not isinstance(enrichment, dict):
+            continue
+        category = enrichment.get("teater_category", "")
+        if emit_ids:
+            enrichment["teater_category_ids"] = id_lookup.get(category, [])
+        bare = strip_map.get(category)
+        if bare is not None:
+            enrichment["teater_category"] = bare
 
 
 def _write_abort_marker(
@@ -281,11 +251,9 @@ def main(config_path: str = "llm_config.txt") -> None:
 
     MODEL_KEY = config.get("MODEL_KEY", "qwen-3.6-27b-it")
     HF_TOKEN = config.get("HF_TOKEN", os.environ.get("HF_TOKEN", None))
-    INPUT_DIR = Path(config.get("INPUT_DIR", "data_samples/DOC_LINE_LANG_CLASS"))
+    INPUT_DIR = Path(config.get("INPUT_DIR", "data_samples/DOC_LINE_CATEG"))
     VOCAB_PATH = config.get("VOCAB_PATH", "data_samples/vocab/union_nested.json")
     PARADATA_DIR = config.get("PARADATA_DIR", "paradata")
-    _document_json_dir_raw = config.get("DOCUMENT_JSON_DIR", "").strip()
-    DOCUMENT_JSON_DIR = Path(_document_json_dir_raw) if _document_json_dir_raw else None
 
     _base_out = Path(config.get("OUTPUT_DIR", "data_samples/KW_PER_DOC_LLM"))
     _model_suffix = MODEL_KEY.replace(".", "").replace("-", "_")
@@ -296,6 +264,11 @@ def main(config_path: str = "llm_config.txt") -> None:
     MIN_CHAR_COUNT = int(config.get("MIN_CHAR_COUNT", "3"))
     MIN_CHAR_NON_TEXT = int(config.get("MIN_CHAR_NON_TEXT", "8"))
     MIN_ALPHA_RATIO_NON_TEXT = float(config.get("MIN_ALPHA_RATIO_NON_TEXT", "0.40"))
+
+    # M7: "list them now and drop it if it will create some issues" — kept behind a
+    # config switch rather than hard-wired, so the id passthrough can be turned off
+    # without a code change if it does.
+    EMIT_CATEGORY_IDS = config.get("EMIT_CATEGORY_IDS", "true").lower() == "true"
 
     infer, sources = get_inference_defaults(MODEL_KEY, config)
 
@@ -322,12 +295,6 @@ def main(config_path: str = "llm_config.txt") -> None:
         f"\n=== LLM Semantic Enrichment Pipeline ===\n"
         f"    model:   {MODEL_KEY}\n"
         f"    output:  {OUTPUT_DIR}\n"
-        + (
-            f"    document pairing: {DOCUMENT_JSON_DIR}  "
-            "(atrium_document.py — reads/writes <doc_id>.document.json)\n"
-            if DOCUMENT_JSON_DIR is not None
-            else ""
-        )
     )
     print("  Inference parameters:")
     print(f"    {'BACKEND':<26} = {BACKEND:<12}  {_SRC_LABEL[sources['BACKEND']]}")
@@ -349,8 +316,16 @@ def main(config_path: str = "llm_config.txt") -> None:
     _check_backend_deps(BACKEND, MODEL_KEY)
     log_gpu_info()
 
+    # D3 (issue #6): every run injects the AMCR + TEATER vocabulary into its prompt,
+    # and until now the paradata recorded neither which build of it was used nor that
+    # it was used at all. vocab_build.py has always written the identity beside the
+    # artifact — taxonomy sha256s, tool version, TEATER's pinned commit — and nothing
+    # read it. Empty for a legacy or auto-synced vocabulary with no sidecar; a run
+    # must not fail over missing provenance.
+    provenance = vocabulary_provenance(VOCAB_PATH)
+
     logger = ParadataLogger(
-        program="llm-enrich",
+        program="nlp-enrich",
         config={
             **config,
             "output_dir_resolved": str(OUTPUT_DIR),
@@ -359,28 +334,39 @@ def main(config_path: str = "llm_config.txt") -> None:
             "min_char_count": MIN_CHAR_COUNT,
             "min_char_non_text": MIN_CHAR_NON_TEXT,
             "min_alpha_ratio_non_text": MIN_ALPHA_RATIO_NON_TEXT,
-            "document_json_dir": str(DOCUMENT_JSON_DIR) if DOCUMENT_JSON_DIR else None,
+            **({"vocabulary": provenance} if provenance else {}),
         },
         paradata_dir=PARADATA_DIR,
         output_types=["json"],
     )
 
+    # Both vocabulary sources are CC BY-NC 4.0 and declared *conditional* in
+    # para_config.txt, so they constrain a run's effective licence only when named
+    # here. Logged per source actually present in the build, not hard-wired to both:
+    # an AMCR-only artifact must not claim it used TEATER data.
+    print(prompt_template.describe(config))
+    for component in provenance.get("components", []):
+        logger.log_component(component)
+    if provenance:
+        src = provenance["sources"]
+        print(
+            f"  vocabulary: {provenance['vocab']['terms']} terms, built by "
+            f"{provenance['vocab']['tool_version']}, sources "
+            + ", ".join(f"{n} ({v['records']} records)" for n, v in sorted(src.items()))
+        )
+
     with logger:
         vocab_mgr = VocabularyManager(vocab_path=VOCAB_PATH)
-        # auto_sync=False: never harvest inside a pipeline run. Besides the
-        # multi-minute OAI-PMH round trip, the sync path can no longer build a
-        # usable vocabulary — fetch_amcr_vocab() emits bare {"cs", "en"} pairs
-        # with no "source"/"scheme", so assign_theme() drops every term into
-        # "Other", which excluded_prompt_themes() withholds from the prompt. The
-        # result is an enum holding only "Nerelevantní (meta-text)", which then
-        # rejects every correct answer the model gives as a validation error.
-        # A missing vocabulary is a configuration fault: say so and stop.
-        vocab_data = vocab_mgr.load(auto_sync=False)
+        vocab_data = vocab_mgr.load()
 
-        # Which themes reach the model is a taxonomy_config decision, not a literal
-        # in the prompt builder. Absent an explicit in_prompt flag the default is
-        # today's behaviour: everything except "Other".
-        excluded_themes = excluded_prompt_themes(vocab_mgr)
+        # Which themes reach the model is a taxonomy_config decision, not a literal in
+        # the prompt builder. Absent an explicit in_prompt flag the default is today's
+        # behaviour: everything except "Other".
+        excluded_themes = {
+            theme.lower()
+            for theme, cfg in vocab_mgr.themes().items()
+            if not cfg.get("in_prompt", theme.lower() != "other")
+        }
         total_terms = sum(
             len(v.get("keywords", {}).get("cs", []))
             if isinstance(v, dict) and "keywords" in v
@@ -422,12 +408,13 @@ def main(config_path: str = "llm_config.txt") -> None:
         max_input_tokens = spec["context_window"] - CONTEXT_RESERVED
 
         skip_trunc = BACKEND == "vllm" and ENABLE_PREFIX_CACHING
-        system_prompt, surviving_terms = build_system_prompt(
+        system_prompt, surviving_terms, id_lookup, strip_map = build_system_prompt(
             vocab_data,
             tokenizer,
             max_tokens=max_input_tokens,
             skip_truncation=skip_trunc,
             excluded_themes=excluded_themes,
+            prompt_config=config,
         )
         EnrichmentModel = build_schema(surviving_terms)
 
@@ -505,6 +492,8 @@ def main(config_path: str = "llm_config.txt") -> None:
                         min_alpha_ratio_non_text=MIN_ALPHA_RATIO_NON_TEXT,
                     )
 
+                _attach_category_ids(enriched_results, id_lookup, strip_map, EMIT_CATEGORY_IDS)
+
                 was_aborted = bool(doc_stats.get("aborted"))
                 total_processed += doc_stats["processed"]
                 total_errors += doc_stats["skipped_error"]
@@ -526,19 +515,6 @@ def main(config_path: str = "llm_config.txt") -> None:
                     print(f"  -> {len(enriched_results)} records → {out_file.name}")
                     logger.log_success("json", count=1)
                     logger.log_document_success()
-
-                    if DOCUMENT_JSON_DIR is not None:
-                        write_document_record(
-                            doc_id,
-                            enriched_results,
-                            DOCUMENT_JSON_DIR,
-                            run_id=logger.run_id,
-                            paradata_ref=os.path.join(
-                                logger.paradata_dir, f"{logger.run_id}_{logger.program}.json"
-                            ),
-                            enriched_path=out_file,
-                            license_detail=logger.get_license_block(),
-                        )
                 else:
                     logger.log_skip(
                         input_file.name,

@@ -1,0 +1,83 @@
+{
+  "_comment": [
+    "Canonical shape of one <doc_id>_enriched.json file, committed so a consumer can",
+    "read the contract without running the pipeline (issue #6, C4).",
+    "",
+    "The file itself is a JSON ARRAY of records shaped like 'example_records' below —",
+    "this object is the documentation of that array, not the array. 'example_records'",
+    "is the only part a program should read; everything else is prose for humans.",
+    "",
+    "The model returns only the four fields under 'enrichment' that the constrained",
+    "schema declares (llm_run.build_schema). 'teater_category_ids' is attached AFTER",
+    "inference by _attach_category_ids and is absent when EMIT_CATEGORY_IDS=false;",
+    "the surrounding record fields (file_id … original_text) come from the input CSV.",
+    "",
+    "tests/test_prompt_template.py asserts these field names stay in step with the",
+    "schema and with the examples in prompts/system_prompt.txt, so the three cannot",
+    "drift apart."
+  ],
+  "file": "<OUTPUT_DIR>/<doc_id>_enriched.json",
+  "shape": "array of records",
+  "written_by": "llm_run.py",
+  "sidecar_on_abort": {
+    "file": "<OUTPUT_DIR>/<doc_id>_enriched.abort.json",
+    "fields": {
+      "aborted": "always true; the marker exists only on an aborted document",
+      "abort_reason": "why the document was abandoned",
+      "processed_before_abort": "records written before the abort",
+      "errors_before_abort": "consecutive inference errors that triggered it",
+      "timestamp_utc": "ISO-8601, seconds precision"
+    }
+  },
+  "fields": {
+    "file_id": "document id, from the input CSV's 'file' column",
+    "page": "1-based page number within the document",
+    "line": "1-based line number within the page",
+    "categ": "OCR line-quality class carried through from the input (e.g. Clear)",
+    "quality_score": "float in [0,1] carried through from the input",
+    "original_text": "the exact source line the model was asked about",
+    "enrichment": {
+      "extracted_keywords_cs": "Czech terms found IN the line; [] when teater_category is the meta-text sentinel",
+      "extracted_keywords_en": "English translations of extracted_keywords_cs, same length and order",
+      "teater_category": "one label from the controlled vocabulary, or 'Nerelevantní (meta-text)'; a B3 bracketed qualifier is stripped back off here",
+      "confidence_score": "float in [0,1]; the model's confidence in teater_category, used for filtering",
+      "teater_category_ids": "every {source, id} record the chosen label stands for — its own plus everything dedup absorbed onto it (M7). Present only when EMIT_CATEGORY_IDS=true"
+    }
+  },
+  "example_records": [
+    {
+      "file_id": "CTX000000001",
+      "page": 2,
+      "line": 1,
+      "categ": "Clear",
+      "quality_score": 0.9268,
+      "original_text": "Výzkum odhalil základy gotického kostela ze 14. století.",
+      "enrichment": {
+        "extracted_keywords_cs": ["základy", "gotický kostel"],
+        "extracted_keywords_en": ["foundations", "Gothic church"],
+        "teater_category": "kostel",
+        "confidence_score": 0.92,
+        "teater_category_ids": [
+          { "source": "amcr", "id": "HES-000021" },
+          { "source": "amcr", "id": "HES-000465" },
+          { "source": "teater", "id": "1333" }
+        ]
+      }
+    },
+    {
+      "file_id": "CTX000000001",
+      "page": 1,
+      "line": 1,
+      "categ": "Clear",
+      "quality_score": 0.9215,
+      "original_text": "Praha, dne 6. října 1956, Dr. Solle",
+      "enrichment": {
+        "extracted_keywords_cs": [],
+        "extracted_keywords_en": [],
+        "teater_category": "Nerelevantní (meta-text)",
+        "confidence_score": 1.0,
+        "teater_category_ids": []
+      }
+    }
+  ]
+}

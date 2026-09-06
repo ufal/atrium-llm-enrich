@@ -199,6 +199,120 @@ def test_committed_artifacts_match_a_fresh_build():
     )
 
 
+# ── M11/M12: the reinstatement, and the placements it must not undo ─────────────
+
+
+@pytest.mark.parametrize(
+    "cs,facet,ids",
+    [
+        # HES-000230 is dokument_material, excluded under M4 — B5's point is that papír
+        # survives anyway, via the kept objekt_specifikace record.
+        ("papír", "Material", {"HES-000917", "HES-000999", "2529"}),
+        ("olej", "Artefact", {"605", "2424"}),
+        ("vodní pramen", "Feature", {"1022", "1685"}),
+        ("úřední písemnost", "Artefact", {"602", "2250"}),
+    ],
+)
+def test_the_b5_terms_keep_their_reviewed_facet_after_reinstatement(cs, facet, ids):
+    """The four terms the exclusion-before-dedup fix rescued (comment 5395681950).
+
+    Reinstating TEATER 288 (M11 Q2) brings back records whose ids sort BELOW the content
+    branches — 605 < 2424, 1022 < 1685, 602 < 2250 — so each would capture its label and
+    drag the term into the reinstated facet. Three overrides pin them back. This is a
+    mechanism, not three accidents: the next harvest can produce more, and a silent
+    facet change is exactly what a reviewed placement must not suffer."""
+    nested, _audit = _built_union()
+    assert cs in nested[facet], f"{cs!r} left {facet!r}"
+    entry = nested[facet][cs]
+    reachable = {entry["source_id"]} | {d["id"] for d in (entry.get("discarded_ids") or [])}
+    assert ids <= reachable, f"{cs!r} lost ids: {ids - reachable}"
+
+
+def test_reinstatement_added_the_two_context_facets_and_moved_nothing_else():
+    """Q1 and Q2 land in their own facets so either can be retired on its own (M11's
+    "evaluate later"), and the eight archaeological facets keep every term they had."""
+    nested, _audit = _built_union()
+    assert len(nested["Cultural & Geographic Context"]) == 972
+    assert len(nested["Related Disciplines & Society"]) == 1666
+    assert sum(len(t) for t in nested.values()) == 4718
+    assert nested.get("Other", {}) == {}
+
+
+def test_the_reinstated_facets_sit_last_in_the_prompt():
+    """Facet order is load-bearing — build_system_prompt truncates a *suffix*. Terms
+    reinstated on probation must be the first dropped when context is tight, not
+    compete with Chronology for the front."""
+    m = _shipped_manager()
+    order = m._theme_order()
+    tail = [f for f in order if f != "Other"][-2:]
+    assert set(tail) == {"Cultural & Geographic Context", "Related Disciplines & Society"}
+
+
+# ── M13: @david-spacil's collision verdicts (issue #6, comment 5541507280) ──────
+
+
+@pytest.mark.parametrize(
+    "qualified,bare,facet,winner_id",
+    [
+        ("komunikace (aktivita)", "komunikace", "Activity Area", "HES-000006"),
+        ("kost (předmět)", "kost", "Artefact", "HES-000753"),
+        ("pastvina/louka (nálezové okolnosti)", "pastvina/louka", "Finds Context", "HES-000244"),
+        ("rostlinné makrozbytky (materiál)", "rostlinné makrozbytky", "Material", "HES-001009"),
+        ("vejce (materiál)", "vejce", "Material", "HES-000956"),
+        ("žároviště (spálená vrstva)", "žároviště", "Feature", "HES-000463"),
+    ],
+)
+def test_each_m13_split_offers_both_senses(qualified, bare, facet, winner_id):
+    """All seven verdicts (six here plus `zámek`) put the qualifier on the record that
+    LEAVES the group, so the bare label stays offered by whatever remains. Both senses
+    must therefore be selectable — which is the whole point of the split."""
+    nested, _audit = _built_union()
+    assert nested[facet][qualified]["source_id"] == winner_id
+    assert nested[facet][qualified]["bare_cs"] == bare
+    assert any(bare in terms for terms in nested.values()), f"{bare!r} lost its bare entry"
+
+
+def test_the_seven_splits_are_the_whole_verdict_set():
+    nested, _audit = _built_union()
+    split = {cs for terms in nested.values() for cs, e in terms.items() if e.get("bare_cs")}
+    assert split == {
+        "komunikace (aktivita)",
+        "kost (předmět)",
+        "pastvina/louka (nálezové okolnosti)",
+        "rostlinné makrozbytky (materiál)",
+        "vejce (materiál)",
+        "zámek (sídlo elity)",
+        "žároviště (spálená vrstva)",
+    }
+
+
+def test_no_record_that_survives_exclusion_is_lost_by_dedup_or_splitting():
+    """M7's standing invariant, stated so it survives a config change: every record that
+    reaches dedup must be findable in the built vocabulary — as an entry's own id, or on
+    its survivor's `discarded_ids`. A split moves a record into its own entry; it never
+    discards one. Asserting a fixed count instead would have to be rewritten every time
+    a branch is reinstated, which is exactly when the invariant matters most."""
+    manager = _shipped_manager()
+    per_source = vb._load_flat(VOCAB_DIR)
+    kept = {
+        (r.source, r.source_id)
+        for name, (records, _m) in per_source.items()
+        for r in vb._filter_excluded(records, manager)
+        if r.cs and r.en and not (r.source == "teater" and not r.broader)
+    }
+
+    nested, _audit = _built_union()
+    reachable = {
+        (e["source"], e["source_id"]) for terms in nested.values() for e in terms.values()
+    } | {
+        (d["source"], d["id"])
+        for terms in nested.values()
+        for e in terms.values()
+        for d in (e.get("discarded_ids") or [])
+    }
+    assert kept - reachable == set(), f"{len(kept - reachable)} records vanished"
+
+
 # ── the geographic guardrail gate (issue #6, O4 / C1) ───────────────────────────
 
 
@@ -210,7 +324,17 @@ def test_the_build_refuses_a_vocabulary_that_contradicts_the_prompt():
     manager = _shipped_manager()
     assert vb._check_geo_guardrail(manager) is None  # the shipped pair agrees
 
-    manager.taxonomy["_settings"]["teater_branch_map"]["2560"] = "Location & Admin"
+    # Since M11 the branches ARE reinstated and the wording IS relaxed, so the
+    # contradiction has to be constructed rather than assumed: put the strict clause
+    # back in force while 2560 stays selectable — the exact state the decision package
+    # named as the one outcome to avoid.
+    settings = manager.taxonomy["_settings"]
+    settings["geo_guardrail"] = {
+        **settings["geo_guardrail"],
+        "active": True,
+        "covers": ["teater:2560"],
+    }
+    assert settings["teater_branch_map"]["2560"] != "__exclude__"
     with pytest.raises(SystemExit, match="teater:2560 is offered to the model"):
         vb._check_geo_guardrail(manager)
 
@@ -224,8 +348,11 @@ def test_the_gate_runs_before_anything_is_written(tmp_path, monkeypatch):
     import json
 
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
-    config["_settings"]["teater_branch_map"]["2560"] = "Location & Admin"
-    del config["_settings"]["_exclusions"]["teater:2560"]
+    config["_settings"]["geo_guardrail"] = {
+        **config["_settings"]["geo_guardrail"],
+        "active": True,
+        "covers": ["teater:2560"],
+    }
     broken = tmp_path / "taxonomy_config.json"
     broken.write_text(json.dumps(config, ensure_ascii=False), encoding="utf-8")
 

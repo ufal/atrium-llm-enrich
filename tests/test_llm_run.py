@@ -72,7 +72,7 @@ _VOCAB = {
 
 
 def test_build_system_prompt_full_fit():
-    prompt, terms = build_system_prompt(_VOCAB, _FakeTokenizer(), max_tokens=100_000)
+    prompt, terms, _, _ = build_system_prompt(_VOCAB, _FakeTokenizer(), max_tokens=100_000)
     # The mandatory meta-text fallback term is always injected first.
     assert terms[0] == "Nerelevantní (meta-text)"
     for cs in ("kostel", "hrad", "středověk"):
@@ -82,8 +82,8 @@ def test_build_system_prompt_full_fit():
 
 
 def test_build_system_prompt_truncates_under_tiny_budget():
-    full, full_terms = build_system_prompt(_VOCAB, _FakeTokenizer(), max_tokens=100_000)
-    trunc, trunc_terms = build_system_prompt(_VOCAB, _FakeTokenizer(), max_tokens=40)
+    full, full_terms, _, _ = build_system_prompt(_VOCAB, _FakeTokenizer(), max_tokens=100_000)
+    trunc, trunc_terms, _, _ = build_system_prompt(_VOCAB, _FakeTokenizer(), max_tokens=40)
     assert len(trunc_terms) < len(full_terms)
     assert len(trunc) < len(full)
 
@@ -91,7 +91,7 @@ def test_build_system_prompt_truncates_under_tiny_budget():
 def test_build_system_prompt_skip_truncation_keeps_full():
     # Even with a tiny budget, skip_truncation must return the full vocabulary
     # (used when vLLM prefix caching makes truncation pointless).
-    prompt, terms = build_system_prompt(
+    prompt, terms, _, _ = build_system_prompt(
         _VOCAB, _FakeTokenizer(), max_tokens=1, skip_truncation=True
     )
     for cs in ("kostel", "hrad", "středověk"):

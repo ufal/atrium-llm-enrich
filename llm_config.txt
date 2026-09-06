@@ -63,10 +63,56 @@ MODEL_KEY=qwen-3.6-27b-it
 # =============================================================================
 # Paths
 # =============================================================================
-INPUT_DIR=data_samples/DOC_LINE_LANG_CLASS
+INPUT_DIR=data_samples/DOC_LINE_CATEG
 OUTPUT_DIR=data_samples/KW_PER_DOC_LLM
 VOCAB_PATH=data_samples/vocab/union_nested.json
 PARADATA_DIR=paradata
+
+# Attach the surviving vocabulary term's source record id(s) to each enrichment as
+# teater_category_ids (issue #6, M7). Kept behind a switch since it was agreed to be
+# reversible: "list them now and drop it if it will create some issues."
+EMIT_CATEGORY_IDS=true
+
+# =============================================================================
+# System prompt
+# =============================================================================
+# The instruction text lives in prompts/system_prompt.txt, one [[block]] per rule, in
+# the order the model sees them. These flags choose which blocks render; the run banner
+# prints the resulting on/off list so a log always says what the model was told.
+#
+# `role`, `rule.json_only` and `vocabulary.header` always render and have no flag.
+PROMPT_TEMPLATE=prompts/system_prompt.txt
+
+PROMPT_TASK_EXTRACT=true
+PROMPT_TASK_SELECT=true
+PROMPT_METATEXT_RULE=true
+PROMPT_OCR_NORMALISATION=true
+PROMPT_EXACT_TERM=true
+PROMPT_EXAMPLES=true
+
+# The one three-way switch, because the decision has three states rather than two
+# (issue #6, C1 / M11 / M12):
+#   strict      — "NEVER select a country/language/region name" (pairs with the
+#                 geographic TEATER branches being excluded)
+#   preference  — "select one only when the line is genuinely about it" (pairs with
+#                 those branches reinstated)
+#   off         — no geographic rule at all
+# taxonomy_config.json's `geo_guardrail.active` must agree: vocab_build.py renders this
+# prompt and refuses to build a vocabulary that contradicts it.
+PROMPT_GEO_GUARDRAIL=preference
+
+# How the term list is laid out under "THEMATIC VOCABULARY:" — the same terms in the same
+# order, under three amounts of structure. @motyc (issue #6, M2) asked to separate "which
+# terms are available to the model" from "how those terms are grouped for inference", and
+# to check empirically how much the grouping affects results now that the whole
+# vocabulary fits a 128k window. This flag is that experiment's only moving part:
+#   facet_sub — "--- Facet / Subgroup ---", both curated levels (the shipped prompt)
+#   facet     — "--- Facet ---" only, without the source's own second level
+#   flat      — no headers at all
+# All three offer the same terms and truncate identically; `facet_sub` additionally makes
+# each facet's sub-groups contiguous. So `facet` vs `flat` measures the headers alone, and
+# `facet_sub` vs `facet` measures the source's second level.
+PROMPT_VOCAB_GROUPING=facet_sub
 
 # =============================================================================
 # Line-quality filter
@@ -106,40 +152,17 @@ MIN_ALPHA_RATIO_NON_TEXT=0.4
 # you need a different value than the model default of 16 384.
 # MAX_MODEL_LEN=16384
 
-# GB of model weights to keep in CPU RAM when GPU VRAM is insufficient
-# (vLLM UVA zero-copy — the GPU stays the sole compute engine and no CPU
-# cores are consumed; offloaded weights cross PCIe on every forward pass,
-# expect a 3–6× throughput penalty).
-#
-# CPU_OFFLOAD_GB=auto sizes the offload at engine load: it measures the
-# model's weight footprint (local HF cache → HF Hub → registry estimate),
-# subtracts the GPU weight budget (VRAM × GPU_MEMORY_UTILIZATION − 4 GB/GPU
-# KV reserve, × TENSOR_PARALLEL_SIZE), caps the result against available CPU
-# RAM, and prints the decision plus the SLURM --mem the job needs. The large
-# registry models (qwen3-235b-*, llama4-maverick, deepseek-v3) already
-# default to auto — it resolves to 0 wherever the weights fit.
-#
-# SLURM sizing when offloading: drop the big-VRAM node constraint (e.g.
-# --constraint="gpuram48G|gpuram40G") so the job can schedule on any GPU
-# node, and raise --mem so system RAM holds the offloaded weights:
-# --mem ≥ offload + ~40G (the startup log prints the exact number).
-#
+# GB of model weights to keep in CPU RAM when GPU VRAM is insufficient.
 # Useful configurations (requires vLLM ≥ 0.8.x for Qwen3 MoE):
 #
 #   qwen3-235b-a22b-fp8  on 4× L40 48 GB (dll-4gpu3, CC 8.9 — hardware FP8!):
 #     TENSOR_PARALLEL_SIZE=4
 #     CPU_OFFLOAD_GB=70     ← moves ~70 GB of weights to CPU; 503 GB CPU RAM available
-#                             (CPU_OFFLOAD_GB=auto computes ~85 GB — safer, more KV room)
 #
 #   qwen3-235b-a22b-fp8  on 8× A100 40 GB (tdll-8gpu, CC 8.0 — BF16 fallback):
 #     TENSOR_PARALLEL_SIZE=8
 #     CPU_OFFLOAD_GB=0      ← 235 GB weights fit in 320 GB without offload
 #
-#   llama3.1-70b (BF16) on a single 48 GB card:
-#     BACKEND=vllm
-#     CPU_OFFLOAD_GB=auto   ← ~105 GB of weights spill to CPU RAM (--mem ≥ 145G)
-#
-# CPU_OFFLOAD_GB=auto
 # CPU_OFFLOAD_GB=0
 
 # Guided-decoding engine (vLLM only): xgrammar (default, fastest) | outlines
@@ -147,19 +170,3 @@ MIN_ALPHA_RATIO_NON_TEXT=0.4
 
 # Disable Automatic Prefix Caching — not recommended; reduces throughput.
 # ENABLE_PREFIX_CACHING=false
-
-# =============================================================================
-# Remote / lightweight-local backends (openrouter_client.py, ollama_client.py)
-# =============================================================================
-#
-# These two entry points are separate from llm_run.py (BACKEND=transformers/
-# vllm above) — they don't load local model weights, so requirements_remote.txt
-# is enough to run them (see requirements_remote.txt vs requirements_llm.txt).
-# Every knob below can also be passed as a CLI flag; CLI flags win.
-#
-# OPENROUTER_MODEL=openai/gpt-4o-mini
-# OPENROUTER_API_KEY=sk-or-v1-xxxxxxxxxxxxxxxxxxxx
-#
-# OLLAMA_MODEL=qwen2.5:7b
-# OLLAMA_HOST=http://localhost:11434
-

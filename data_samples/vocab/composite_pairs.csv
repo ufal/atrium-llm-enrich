@@ -28,6 +28,7 @@ kulturní vrstva/objekt,Finds Context,amcr,HES-000247,kulturní vrstva,Feature,t
 kámen drtidlo/žernov,Material,amcr,HES-000930,žernov,Artefact,teater,2164,False,auto
 křesadlo/ocílka,Artefact,amcr,HES-000729,křesadlo,Artefact,teater,2115,True,auto
 křesadlo/ocílka,Artefact,amcr,HES-000729,ocílka,Artefact,teater,2125,True,auto
+kříž/boží muka,Activity Area,amcr,HES-000022,kříž,Related Disciplines & Society,teater,3815,False,auto
 kůl/sloup,Feature,amcr,HES-000447,kůl,Artefact,amcr,HES-000737,False,auto
 kůl/sloup,Feature,amcr,HES-000447,sloup,Feature,teater,1602,True,auto
 lampa/kahan,Artefact,amcr,HES-000695,lampa,Artefact,teater,2056,True,auto
@@ -50,8 +51,11 @@ ohradní zeď/plot,Feature,amcr,HES-000532,plot,Feature,teater,1635,True,auto
 oštěp/hrot oštěpu,Artefact,amcr,HES-000788,hrot oštěpu,Artefact,teater,1990,True,auto
 oštěp/hrot oštěpu,Artefact,amcr,HES-000788,oštěp,Artefact,teater,2001,True,auto
 pastvina/louka,Activity Area,amcr,HES-000038,pastvina,Activity Area,teater,1295,True,auto
+pastvina/louka (nálezové okolnosti),Finds Context,amcr,HES-000244,pastvina,Activity Area,teater,1295,False,auto
+petrografie/mineralogie,Methods,amcr,HES-000628,mineralogie,Related Disciplines & Society,teater,969,False,auto
 pochva/pouzdro,Artefact,amcr,HES-000677,pochva,Artefact,teater,1972,True,auto
 pochva/pouzdro,Artefact,amcr,HES-000677,pouzdro,Artefact,teater,2327,True,auto
+podorničí/podloží,Finds Context,amcr,HES-000248,podloží,Related Disciplines & Society,teater,987,False,auto
 pohár/číše,Artefact,amcr,HES-000722,pohár,Artefact,teater,2066,True,auto
 pohřebiště/hřbitov,Activity Area,amcr,HES-000027,hřbitov,Activity Area,teater,1408,True,auto
 pohřebiště/hřbitov,Activity Area,amcr,HES-000027,pohřebiště,Activity Area,teater,1411,True,auto
