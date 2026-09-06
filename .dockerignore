@@ -11,7 +11,22 @@ __pycache__/
 venv-nlp/
 venv/
 env/
+# Excluded wholesale — it is a ~100 MB corpus of samples, audits and decision
+# packages, none of which the runtime reads. The two exceptions below ARE runtime
+# inputs: llm_config.txt (which ships in the image) points VOCAB_PATH at the
+# vocabulary by default, and VocabularyManager reads taxonomy_config.json to decide
+# which themes reach the model. Without them the published image was internally
+# inconsistent — it shipped a config naming files it did not contain.
+#
+# That went unnoticed because a missing vocabulary used to fall back to a live AMCR
+# harvest that silently produced a one-term category enum. The clients now refuse to
+# auto-sync, so the image failed loudly instead (atrium-project run 34032532443),
+# which is how this surfaced. `docker run <image> openrouter_client.py --input …`
+# now works with no mounts and no --config, which is what the digital-born e2e and
+# any ordinary user reasonably expect of a published tool image.
 data_samples/
+!data_samples/taxonomy_config.json
+!data_samples/vocab/union_nested.json
 TEMP/
 *.log
 *.png

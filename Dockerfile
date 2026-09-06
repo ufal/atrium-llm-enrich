@@ -28,6 +28,17 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Fail the BUILD, not the pipeline, if the vocabulary stops being packaged.
+# data_samples/ is excluded in .dockerignore with two `!` exceptions, so a later
+# edit to either file's path — a rebuilt vocabulary under a new name, a tightened
+# ignore rule — silently produces an image whose own llm_config.txt points at
+# nothing. That shipped once already and only surfaced as a cross-repo e2e failure
+# in another repository (atrium-project run 34032532443). Two stat calls here turn
+# a packaging regression back into a build error.
+RUN test -f data_samples/vocab/union_nested.json \
+    && test -f data_samples/taxonomy_config.json \
+    || (echo "ERROR: runtime vocabulary missing from the image - check .dockerignore" >&2; exit 1)
+
 RUN useradd --create-home --uid 10001 atrium \
     && mkdir -p /cache/huggingface /data \
     && chown -R atrium:atrium /app /cache /data
