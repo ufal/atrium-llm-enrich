@@ -30,11 +30,14 @@ from atrium_paradata import ParadataLogger
 # Shared ATRIUM meta-contract helpers (§4). Byte-identical across every service,
 # enforced by para-drift.reusable.yml.
 from .atrium_service import (
+    ServiceState,
     add_cors,
     attach_health,
+    attach_inflight_middleware,
     build_info,
     read_tool_version,
     resolve_max_upload_mb,
+    serve_lifecycle,
 )
 
 logger = logging.getLogger(__name__)
@@ -170,6 +173,24 @@ def _load_engine() -> Dict[str, Any]:
     }
 
 
+#: Readiness/draining/in-flight state for the §4.6 disposability contract (issue #55).
+_state = ServiceState()
+
+
+def _engine_is_serviceable() -> bool:
+    """Whether the warmed engine can actually answer a request.
+
+    Same expression /info's ``ready`` field reports, kept in one place. This — not
+    merely "startup finished" — is what ``_state.warm`` is set from, because a
+    misconfigured backend here is recorded rather than fatal (see ``lifespan``): the
+    process deliberately stays up so ``/info`` and ``/docs`` still explain what is
+    wrong. Marking such a pod *ready* would then route traffic to a service that
+    503s on every request; leaving it un-ready keeps it alive but drains it from the
+    load balancer, which is the behaviour a Kubernetes readinessProbe exists for.
+    """
+    return not _engine.get("error") and bool(_engine.get("line_chat_fn"))
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Warm the backend once; a misconfigured backend is recorded, not fatal.
@@ -181,7 +202,12 @@ async def lifespan(app: FastAPI):
         _engine.clear()
         _engine["error"] = str(exc)
         logger.warning("llm-enrich engine warmup failed: %s", exc)
-    yield
+    _state.warm = _engine_is_serviceable()
+    # issue #55: composes with the warmup above rather than replacing it. Flips /ready
+    # to 503 on SIGTERM and, on shutdown, waits for in-flight requests before the
+    # `_engine.clear()` below tears the backend out from under them.
+    async with serve_lifecycle(_state):
+        yield
     _engine.clear()
 
 
@@ -191,6 +217,7 @@ app = FastAPI(
     description="LLM-based archaeological keyword extraction over text lines / documents.",
     lifespan=lifespan,
 )
+attach_inflight_middleware(app, _state)
 
 # CORS — standard §4.5 configuration (ALLOWED_ORIGINS CSV, default "*").
 add_cors(app, methods=["GET", "POST"])
@@ -205,11 +232,18 @@ def _deep_health() -> str | None:
     return None
 
 
-attach_health(app, deep_check=_deep_health)
+attach_health(app, deep_check=_deep_health, state=_state)
 
 
 def _require_engine() -> Dict[str, Any]:
     """Return the warmed engine, or 503 if the backend is not ready (§4.4 → client retries)."""
+    if _state.draining:
+        # issue #55: stop accepting NEW work the moment a shutdown signal arrives, so the
+        # drain has a bounded set of requests to wait for. /ready has already flipped to
+        # 503 by now, but a request already in the accept queue can still arrive here.
+        raise HTTPException(
+            503, "Service is shutting down; retry against a live replica."
+        ) from None
     if _engine.get("error"):
         raise HTTPException(503, f"LLM backend not ready: {_engine['error']}") from None
     if not _engine.get("line_chat_fn"):
@@ -379,7 +413,7 @@ async def info() -> Dict[str, Any]:
         limits={"max_upload_mb": MAX_UPLOAD_MB},
         backend=_engine.get("backend"),
         model=_engine.get("model"),
-        ready=not _engine.get("error") and bool(_engine.get("line_chat_fn")),
+        ready=_engine_is_serviceable(),
         supported_inputs=[*_LINE_SUFFIXES, *_DOC_SUFFIXES],
         languages=["cs", "en"],
     )

@@ -135,5 +135,16 @@ RUN chown -R atrium:atrium /app
 USER atrium
 
 EXPOSE 8000
-ENTRYPOINT ["uvicorn", "service.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# STOPSIGNAL is the default (SIGTERM) — declared explicitly so a future edit cannot
+# change it silently; service/api.py's lifespan chains to uvicorn's own handler for it
+# via serve_lifecycle (service/atrium_service.py, issue #55).
+STOPSIGNAL SIGTERM
+# --timeout-graceful-shutdown bounds uvicorn's wait for in-flight HTTP requests. Note
+# llm-enrich's slow work happens INSIDE the request (one remote LLM call per line, each
+# up to LLM_TIMEOUT), so a large document can legitimately outlive this budget and be
+# cut short — raise this together with the deployment's grace period for such a
+# workload (docs/k8s_deployment.md, "Known limits").
+ENTRYPOINT ["uvicorn", "service.api:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-graceful-shutdown", "20"]
 CMD []
+HEALTHCHECK --interval=30s --timeout=5s --start-period=180s --retries=3 \
+    CMD ["python", "/app/service/healthcheck.py"]

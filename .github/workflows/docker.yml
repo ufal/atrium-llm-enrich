@@ -70,4 +70,10 @@ jobs:
       #
       # Still declared-but-unpublished: the `api` stage. Same failure mode, older and
       # pre-existing; flagged rather than fixed here so this change stays reviewable.
-      build-targets: '["remote", "llm", "digital"]'
+      build-targets: '["remote", "llm", "digital", "api"]'
+      # issue #55: `api` was declared in the Dockerfile but never built or published
+      # (roadmap B5), so ghcr.io/ufal/atrium-llm-enrich-api did not exist at any tag and
+      # there was nothing for ARÚP/ARÚB to deploy. Now published, and container-smoked:
+      # docker run -> wait for HEALTHCHECK healthy -> GET /health and /ready -> docker
+      # stop with a clean-exit assertion. The other three targets are batch CLIs.
+      probe-targets: '["api"]'

@@ -90,6 +90,12 @@ services:
     volumes:
       - ./data:/data
       - ./llm_config.txt:/app/llm_config.txt:ro
+    # HEALTHCHECK comes from the `api` Dockerfile stage — no override needed here.
+    # stop_grace_period raised from Compose's 10s default (issue #55): the ENTRYPOINT
+    # allows uvicorn 20s to drain in-flight requests and serve_lifecycle up to another
+    # 25s after that, so 10s would SIGKILL mid-drain. Matches the grace budget in
+    # atrium-project/docs/templates/k8s/atrium-service.deployment.yaml.
+    stop_grace_period: 60s
 
 volumes:
   hf-cache:

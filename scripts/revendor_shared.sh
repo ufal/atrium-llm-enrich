@@ -49,7 +49,12 @@ FILES=(
     "atrium_paradata.py:atrium_paradata.py"
     "para_licenses.py:para_licenses.py"
     "tests/test_para_licenses.py:test_para_licenses.py"
+    # Was MISSING from this list while para-drift.reusable.yml enforced it, so the tool
+    # meant to prevent drift had drifted itself: a clean run here did not mean para-drift
+    # would pass (issue #55, found while adding service/healthcheck.py below).
+    "tests/test_document_originators.py:test_document_originators.py"
     "service/atrium_service.py:atrium_service.py"
+    "service/healthcheck.py:healthcheck.py"
     "atrium_document.py:atrium_document.py"
     "atrium_document.schema.json:atrium_document.schema.json"
     "check_version.py:check_version.py"
