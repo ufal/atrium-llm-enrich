@@ -24,7 +24,6 @@ the first inference call.
 """
 
 import argparse
-import glob
 import json
 import os
 import shutil
@@ -40,10 +39,14 @@ from tqdm import tqdm
 from atrium_document import canonical_doc_id
 from atrium_paradata import ParadataLogger
 from llm_client_shared import (
+    OUTCOME_EMPTY,
+    OUTCOME_FAILED,
     build_document_schema,
     build_document_system_prompt,
     build_schema,
     build_system_prompt,
+    classify_outcome,
+    contributes_document_record,
     excluded_prompt_themes,
     has_reader,
     is_convertible_input,
@@ -343,6 +346,9 @@ def main(argv: Optional[List[str]] = None) -> None:
                 args.document_json_dir = doc_json_scratch_dir
 
         total_processed = total_errors = total_aborted = 0
+        #: doc_id -> the record THIS RUN wrote. See openrouter_client.py: the scratch dir
+        #: already holds the caller's baseline, so it cannot be discovered by globbing.
+        document_records: dict = {}
         for f in tqdm(input_files, desc="Documents", unit="doc", dynamic_ncols=True):
             # canonical_doc_id(), never Path.stem (atrium-project#10, D1). `.stem` strips
             # only the LAST extension, so an accepted `CTX000000001.teitok.xml` input gave
@@ -387,30 +393,58 @@ def main(argv: Optional[List[str]] = None) -> None:
                 total_errors += stats["skipped_error"]
                 total_aborted += int(bool(stats.get("aborted")))
 
+                outcome = classify_outcome(results, stats)
+
                 if results:
                     with open(out_file, "w", encoding="utf-8") as out_f:
                         json.dump(results, out_f, indent=4, ensure_ascii=False)
                     tqdm.write(f"  -> {len(results)} records -> {out_file.name}")
                     logger.log_success("json", count=1)
                     logger.log_document_success()
+                elif outcome == OUTCOME_EMPTY:
+                    # Asked, answered, nothing there. Distinct from both branches below
+                    # and said out loud so a CI log shows which one happened
+                    # (atrium-project#49).
+                    tqdm.write(f"  -> 0 records: the model located nothing enrichable in {f.name}")
+                    logger.log_skip(f.name, "No records produced (model located nothing).")
+                elif outcome == OUTCOME_FAILED:
+                    tqdm.write(
+                        f"  -> 0 records: every inference call for {f.name} failed "
+                        f"({stats['skipped_error']} error(s)"
+                        f"{', aborted' if stats.get('aborted') else ''})"
+                    )
+                    logger.log_skip(f.name, "No records produced (inference failed).")
+                else:  # OUTCOME_NOT_ASKED
+                    tqdm.write(
+                        f"  -> 0 records: nothing in {f.name} was ever sent to the model "
+                        f"({stats['skipped_filter']} line(s) dropped by the quality filter)"
+                    )
+                    logger.log_skip(f.name, "No records produced (nothing reached the model).")
 
-                    if args.document_json_dir is not None:
-                        write_document_record(
-                            doc_id,
-                            results,
-                            args.document_json_dir,
-                            run_id=logger.run_id,
-                            paradata_ref=os.path.join(
-                                logger.paradata_dir, f"{logger.run_id}_{logger.program}.json"
-                            ),
-                            enriched_path=out_file,
-                            # Only a real conversion leaves a regenerable derivation.
-                            markdown_from=source_file if f != source_file else None,
-                            used_markdown_input=is_document_level,
-                            license_detail=logger.get_license_block(),
-                        )
-                else:
-                    logger.log_skip(f.name, "No records produced.")
+                # Written for a verdict of "nothing here" exactly as for a verdict with
+                # items in it, and withheld only when there is no verdict at all — see
+                # openrouter_client.py for the same reasoning and atrium-project#49 for
+                # what conflating the two cost.
+                if args.document_json_dir is not None and contributes_document_record(
+                    results, stats
+                ):
+                    record_path = write_document_record(
+                        doc_id,
+                        results,
+                        args.document_json_dir,
+                        run_id=logger.run_id,
+                        paradata_ref=os.path.join(
+                            logger.paradata_dir, f"{logger.run_id}_{logger.program}.json"
+                        ),
+                        # Nothing enriched means no `*_enriched.json` on disk to link to.
+                        enriched_path=out_file if results else None,
+                        # Only a real conversion leaves a regenerable derivation.
+                        markdown_from=source_file if f != source_file else None,
+                        used_markdown_input=is_document_level,
+                        license_detail=logger.get_license_block(),
+                    )
+                    if record_path is not None:
+                        document_records[doc_id] = Path(record_path)
 
             except Exception as exc:
                 tqdm.write(f"  Critical error on {f.name}: {exc}")
@@ -426,18 +460,23 @@ def main(argv: Optional[List[str]] = None) -> None:
         logger.finalize(input_total=len(input_files))
 
         if doc_json_scratch_dir is not None and args.document_json_out:
-            records = glob.glob(str(doc_json_scratch_dir / "*.document.json"))
-            if not records:
+            # `document_records`, NOT a glob of the scratch dir: that dir is seeded with a
+            # copy of `--document-json` before the loop runs, so a glob cannot tell a record
+            # this run WROTE from the baseline it was HANDED (atrium-project#49).
+            if not document_records:
                 print(
-                    f"[document] no document record was produced in {doc_json_scratch_dir} — "
-                    f"{args.document_json_out} was NOT written",
+                    f"[document] llm-enrich contributed no enrichment verdict, so "
+                    f"{args.document_json_out} was NOT written. The baseline passed in via "
+                    f"--document-json is unchanged and is NOT this stage's output — "
+                    f"re-emitting it would claim a contribution that did not happen. "
+                    f"See the per-document lines above for which outcome this was.",
                     file=sys.stderr,
                 )
-            else:
-                out_path = Path(args.document_json_out)
-                out_path.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(records[0], out_path)
-                print(f"[document] Record written → {out_path}", flush=True)
+                sys.exit(1)
+            out_path = Path(args.document_json_out)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(next(iter(document_records.values())), out_path)
+            print(f"[document] Record written → {out_path}", flush=True)
 
 
 if __name__ == "__main__":

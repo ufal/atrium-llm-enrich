@@ -770,6 +770,63 @@ def prepare_document_input(path: Path, cache_dir: Optional[Path] = None, ocr: bo
     return out
 
 
+#: The four outcomes one llm-enrich pass over one document can have.
+#:
+#: Until atrium-project#49 three of them were indistinguishable in the emitted artifact.
+#: `--document-json`/`--document-json-out` copies the caller's BASELINE into a scratch dir
+#: and copies whatever is in that dir back out at the end, so a run that contributed
+#: nothing shipped the untouched baseline, announced "[document] Record written", and
+#: exited 0. A crashed inference did the same. So did a healthy one that located nothing.
+#: The consumer — atrium-project's tools/e2e/e2e_assert.py, and every downstream tool —
+#: saw one record with no `enrichment` block and could only guess which of the three it
+#: was looking at. Run 34090340995 is the guess going wrong: the digital smoke reported
+#: "'enrichment' block missing from llm-enrich stage" for what was in fact a correct,
+#: successful, empty enrichment of a fixture with no archaeological content in it.
+OUTCOME_CONTRIBUTED = "contributed"
+OUTCOME_EMPTY = "empty"
+OUTCOME_FAILED = "failed"
+OUTCOME_NOT_ASKED = "not-asked"
+
+#: The outcomes that mean llm-enrich has something to say about this document, i.e. the
+#: ones that MUST write the `enrichment` block. `empty` is in here on purpose: a stage
+#: that ran and found nothing is a different fact from a stage that never ran, and
+#: `assembled.blocks` is the record's account of which tool contributed what — so the
+#: only honest way to record "llm-enrich looked and there was nothing" is an enrichment
+#: block with an empty `items` list, stamped by llm-enrich.
+_CONTRIBUTING_OUTCOMES = frozenset({OUTCOME_CONTRIBUTED, OUTCOME_EMPTY})
+
+
+def classify_outcome(results: List[dict], stats: Dict[str, int]) -> str:
+    """Which of the four outcomes this pass had, from the driver's own stats.
+
+    Order matters. Partial success is still a contribution: run_line_level() can enrich
+    nine rows and error on the tenth, and that run has results to write — the error is
+    already in `skipped_error` and in the paradata, and refusing the record over it would
+    throw away nine good enrichments.
+
+    `attempted` is what makes the empty/not-asked split possible; both have
+    ``processed == 0`` and neither raises. See the stats dicts in run_document_level()
+    and run_line_level().
+    """
+    if results:
+        return OUTCOME_CONTRIBUTED
+    if stats.get("aborted") or stats.get("skipped_error"):
+        return OUTCOME_FAILED
+    if stats.get("attempted"):
+        return OUTCOME_EMPTY
+    return OUTCOME_NOT_ASKED
+
+
+def contributes_document_record(results: List[dict], stats: Dict[str, int]) -> bool:
+    """Whether this pass may write its `enrichment` block onto the paired record.
+
+    True for a real enrichment and for a model that was asked and located nothing.
+    False when the model was never successfully consulted — there is no verdict to
+    record, and writing an empty block would claim one.
+    """
+    return classify_outcome(results, stats) in _CONTRIBUTING_OUTCOMES
+
+
 def enrichment_block(doc_id: str, results: List[dict]) -> dict:
     """Project this repo's ``*_enriched.json`` records onto the ``enrichment`` block
     of the paired per-document record (see ``atrium_document.py``).
@@ -1000,7 +1057,18 @@ def run_document_level(
     every caller's original behaviour.
     """
     file_id = Path(input_path).stem
-    stats: Dict[str, int] = {"processed": 0, "skipped_filter": 0, "skipped_error": 0, "aborted": 0}
+    stats: Dict[str, int] = {
+        "processed": 0,
+        "skipped_filter": 0,
+        "skipped_error": 0,
+        "aborted": 0,
+        # `attempted` counts model calls MADE, not records produced, and it is the only
+        # thing that separates "we asked and it located nothing" from "we never asked"
+        # (atrium-project#49). `processed` cannot: it is 0 for both. See
+        # classify_outcome() for why the difference decides whether a document record
+        # is written at all.
+        "attempted": 0,
+    }
 
     doc_text = Path(input_path).read_text(encoding="utf-8")
     user_content: Any = (
@@ -1011,6 +1079,10 @@ def run_document_level(
         {"role": "user", "content": user_content},
     ]
 
+    # Counted BEFORE the call, not after: a call that raises was still an attempt, and
+    # the failure branch below needs to be distinguishable from "no input reached the
+    # model" rather than from "the model answered".
+    stats["attempted"] = 1
     try:
         result_json = chat_fn(messages)
         try:
@@ -1088,6 +1160,11 @@ def run_line_level(
         "skipped_filter": 0,
         "skipped_error": 0,
         "aborted": 0,
+        # See run_document_level() for what `attempted` is for. Here it counts the ROWS
+        # actually sent to the model — a CSV whose every row was dropped by
+        # should_process_line() never consulted it, and must not be reported as an
+        # enrichment that found nothing.
+        "attempted": 0,
     }
     consecutive_errors = 0
     page_num = line_num = 0
@@ -1129,6 +1206,7 @@ def run_line_level(
                 },
             ]
 
+            stats["attempted"] += 1
             result_json = chat_fn(messages)
             dump_data = validate_llm_output(
                 result_json, EnrichmentModel, file_id, page_num, line_num

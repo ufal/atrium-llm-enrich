@@ -15,6 +15,8 @@ llm_client_shared.run_document_level()'s user_content_builder parameter.
 import base64
 import json
 
+import pytest
+
 import openrouter_client
 from llm_client_shared import run_document_level
 from openrouter_client import _build_attachment_content, build_arg_parser
@@ -192,3 +194,153 @@ def test_document_json_single_file_pair_round_trips_the_baseline(
     assert record["doc_id"] == env.doc_id
     for block in ("pages", "lines", "entities"):
         assert block in record, f"upstream {block!r} block was discarded"
+
+
+# ── the three zero-record outcomes are three different artifacts ─────────────
+#
+# atrium-project#49. `--document-json` seeds a scratch dir with the CALLER'S baseline and
+# the run's tail used to `glob` that dir and copy whatever it found to
+# `--document-json-out`. A glob cannot tell a record llm-enrich WROTE from the baseline it
+# was HANDED, so all three of these shipped the untouched baseline, printed
+# "[document] Record written", and exited 0:
+#
+#   * the model was asked and located nothing   -> a correct, empty enrichment
+#   * every inference call failed               -> no verdict at all
+#   * nothing ever reached the model            -> no verdict at all
+#
+# The born-digital nightly (atrium-project run 34090340995) hit the first one against a
+# fixture with no archaeology in it and reported it as "'enrichment' block missing from
+# llm-enrich stage" — the consumer guessing, because the artifact carried no way to know.
+
+
+def _stub_line_level(monkeypatch, results, **stat_overrides):
+    """Replace the line-level driver with one that returns a chosen outcome."""
+    stats = {"processed": len(results), "skipped_filter": 0, "skipped_error": 0, "aborted": 0}
+    stats.update(stat_overrides)
+    stats.setdefault("attempted", len(results))
+
+    def fake_run_line_level(*_args, **_kwargs):
+        return list(results), dict(stats)
+
+    monkeypatch.setattr(openrouter_client, "run_line_level", fake_run_line_level)
+
+
+def test_asked_and_found_nothing_still_stamps_an_empty_enrichment_block(
+    remote_client_env, seeded_baseline, stub_llm, monkeypatch
+):
+    """The atrium-project#49 case, and the reason the fix is not "assert less".
+
+    "llm-enrich ran and found nothing" and "llm-enrich never ran" are different facts and
+    the record has to be able to hold both. `assembled.blocks` is the record's account of
+    which tool contributed what, so the only honest encoding of the first is an
+    `enrichment` block with an empty `items` list, stamped by llm-enrich — which is exactly
+    what atrium-project's e2e_assert.py checks for.
+    """
+    from atrium_document import load_document
+
+    env = remote_client_env
+    stub_llm(openrouter_client)
+    _stub_line_level(monkeypatch, [], attempted=3)
+    out_path = env.root / "5_llm.json"
+
+    openrouter_client.main(
+        [
+            "--config",
+            str(env.config),
+            "--input",
+            str(env.teitok),
+            "--output-dir",
+            str(env.output_dir),
+            "--model",
+            "test/model",
+            "--api-key",
+            "test-key",
+            "--document-json",
+            str(seeded_baseline),
+            "--document-json-out",
+            str(out_path),
+        ]
+    )
+
+    assert out_path.exists(), "a completed pass must emit its record even with no items"
+    record = load_document(str(out_path))
+    assert record["enrichment"] == {"items": []}
+    assert record["assembled"]["blocks"]["enrichment"]["program"] == "llm-enrich"
+    # Accretion still holds: contributing an empty block must not cost the upstream ones.
+    for block in ("pages", "lines", "entities"):
+        assert block in record, f"upstream {block!r} block was discarded"
+    # No records means no `*_enriched.json`, so nothing may claim one.
+    assert not (env.output_dir / f"{env.doc_id}_enriched.json").exists()
+    assert "enriched" not in str(record.get("derived_from") or "")
+
+
+def test_failed_inference_never_ships_the_baseline_as_this_stage_output(
+    remote_client_env, seeded_baseline, stub_llm, monkeypatch, capsys
+):
+    """No verdict -> no record, and a non-zero exit. Previously: baseline out, exit 0."""
+    env = remote_client_env
+    stub_llm(openrouter_client)
+    _stub_line_level(monkeypatch, [], attempted=3, skipped_error=3, aborted=1)
+    out_path = env.root / "5_llm.json"
+
+    with pytest.raises(SystemExit) as excinfo:
+        openrouter_client.main(
+            [
+                "--config",
+                str(env.config),
+                "--input",
+                str(env.teitok),
+                "--output-dir",
+                str(env.output_dir),
+                "--model",
+                "test/model",
+                "--api-key",
+                "test-key",
+                "--document-json",
+                str(seeded_baseline),
+                "--document-json-out",
+                str(out_path),
+            ]
+        )
+
+    assert excinfo.value.code == 1
+    assert not out_path.exists(), "the caller's own baseline was re-emitted as our output"
+    assert "contributed no enrichment verdict" in capsys.readouterr().err
+
+
+def test_input_that_never_reached_the_model_writes_no_record(
+    remote_client_env, seeded_baseline, stub_llm, monkeypatch
+):
+    """Every row dropped by the quality filter is not an empty enrichment.
+
+    The model was never consulted, so there is no verdict to record and an empty block
+    would claim one. This is the split `attempted` exists for — `processed` is 0 here and
+    0 in the asked-and-found-nothing case above.
+    """
+    env = remote_client_env
+    stub_llm(openrouter_client)
+    _stub_line_level(monkeypatch, [], attempted=0, skipped_filter=3)
+    out_path = env.root / "5_llm.json"
+
+    with pytest.raises(SystemExit) as excinfo:
+        openrouter_client.main(
+            [
+                "--config",
+                str(env.config),
+                "--input",
+                str(env.teitok),
+                "--output-dir",
+                str(env.output_dir),
+                "--model",
+                "test/model",
+                "--api-key",
+                "test-key",
+                "--document-json",
+                str(seeded_baseline),
+                "--document-json-out",
+                str(out_path),
+            ]
+        )
+
+    assert excinfo.value.code == 1
+    assert not out_path.exists()

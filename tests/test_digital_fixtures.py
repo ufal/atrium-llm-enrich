@@ -178,7 +178,7 @@ def test_canonical_manifest_path_is_independent_of_outdir(make_fixtures, tmp_pat
 # ── the fixtures are structurally real ───────────────────────────────────────
 
 
-@pytest.mark.parametrize("name", ["minimal.pdf", "garbled.pdf"])
+@pytest.mark.parametrize("name", ["minimal.pdf", "enrichable.pdf", "garbled.pdf"])
 def test_pdf_xref_offsets_resolve(blobs, name):
     """Every xref entry must point at its own `N 0 obj`, or a real parser rejects the file.
 
@@ -209,6 +209,37 @@ def test_minimal_pdf_has_two_pages_and_three_blocks(blobs):
     assert data.count(b"BT\n") == 3, "three separate text blocks are the group_id assertion"
     # No /Info, no /ID, no dates — that is what makes the bytes reproducible.
     assert b"/CreationDate" not in data and b"/ID" not in data
+
+
+def test_enrichable_pdf_carries_archaeology_and_no_diacritics(blobs):
+    """atrium-project#49's fixture, and the two properties that make it usable.
+
+    ASCII is not a stylistic preference here. FONT_CLEAN is base-14 Helvetica with no
+    /Encoding override and no /ToUnicode, so a byte above 0x7F decodes through
+    StandardEncoding and comes back as mojibake — and decode-sanity does NOT flag it, so
+    the damage would be silent. A non-ASCII byte in this fixture is therefore a bug, not
+    a translation.
+
+    The content assertion is the other half: this fixture exists BECAUSE minimal.pdf has
+    no archaeological content in it, and a rewrite that drifted back to placeholder text
+    would put the born-digital smoke straight back where run 34090340995 found it.
+    """
+    data = blobs["enrichable.pdf"]
+    assert data.startswith(b"%PDF-1.4\n")
+    assert b"/Count 1" in data
+    assert b"/Encoding" not in data, "FONT_CLEAN must stay encoding-free; see garbled.pdf"
+
+    body = re.findall(rb"\((.*?)\) Tj", data)
+    assert body, "no text operators in the fixture"
+    for chunk in body:
+        assert all(byte < 0x80 for byte in chunk), (
+            f"non-ASCII byte in {chunk!r}: StandardEncoding turns it into mojibake that "
+            f"decode-sanity does not catch"
+        )
+
+    text = b" ".join(body).decode("ascii").lower()
+    for term in (b"sonda", b"keramiky", b"vrstvy", b"hradiste"):
+        assert term.decode("ascii") in text, f"{term!r} missing — is this still archaeology?"
 
 
 def test_garbled_pdf_is_the_issue_10_construction(blobs):

@@ -540,3 +540,91 @@ def test_has_reader_matrix(name, readable):
     readable by one of them — and anything answering False is refused up front
     rather than silently enriching nothing."""
     assert lcs.has_reader(Path(name)) is readable
+
+
+# ── outcome classification (atrium-project#49) ───────────────────────────────
+#
+# `processed == 0` is not one situation, it is three, and until #49 the record could not
+# tell them apart: a model that was asked and located nothing, a model whose every call
+# failed, and a document that never reached the model at all. `attempted` is the counter
+# that splits the first from the third; `skipped_error`/`aborted` split out the second.
+
+
+def test_document_level_counts_the_attempt_even_when_it_finds_nothing(tmp_path):
+    doc_path = tmp_path / "empty_verdict.md"
+    doc_path.write_text("# doc1\n\nBlock one, line one.\n", encoding="utf-8")
+
+    DocModel = lcs.build_document_schema(["kostel"])
+    results, stats = lcs.run_document_level(
+        doc_path, lambda _m: json.dumps({"items": []}), "system prompt", DocModel
+    )
+
+    assert results == []
+    assert stats["processed"] == 0
+    assert stats["attempted"] == 1, "the model WAS consulted; only `attempted` records that"
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_EMPTY
+    assert lcs.contributes_document_record(results, stats) is True
+
+
+def test_document_level_counts_the_attempt_even_when_the_call_raises(tmp_path):
+    doc_path = tmp_path / "boom.md"
+    doc_path.write_text("# doc1\n\nBlock one, line one.\n", encoding="utf-8")
+
+    def _boom(_messages):
+        raise RuntimeError("simulated backend failure")
+
+    DocModel = lcs.build_document_schema(["kostel"])
+    results, stats = lcs.run_document_level(doc_path, _boom, "system prompt", DocModel)
+
+    assert stats["attempted"] == 1
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_FAILED
+    assert lcs.contributes_document_record(results, stats) is False
+
+
+def test_line_level_never_asks_when_every_row_is_filtered_out(tmp_path):
+    """A CSV whose rows all fail the quality filter is NOT an empty enrichment."""
+    csv_path = tmp_path / "all_trash.csv"
+    csv_path.write_text(
+        "file_id,page_num,line_num,categ,quality_score,text\n"
+        "doc1,1,1,Trash,0.01,x\n"
+        "doc1,1,2,Trash,0.01,y\n",
+        encoding="utf-8",
+    )
+
+    Model = lcs.build_schema(["kostel"])
+    results, stats = lcs.run_line_level(csv_path, _fake_line_chat_fn, "system prompt", Model)
+
+    assert results == []
+    assert stats["attempted"] == 0
+    assert stats["skipped_filter"] == 2
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_NOT_ASKED
+    assert lcs.contributes_document_record(results, stats) is False
+
+
+def test_partial_success_is_still_a_contribution():
+    """Nine good rows and one error is a record worth writing, not a failed run."""
+    results = [{"file_id": "doc1"}]
+    stats = {"processed": 1, "skipped_filter": 0, "skipped_error": 1, "aborted": 0, "attempted": 2}
+
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_CONTRIBUTED
+    assert lcs.contributes_document_record(results, stats) is True
+
+
+def test_enrichment_block_of_an_empty_run_is_schema_valid(tmp_path):
+    """The empty block has to survive Layer D, or writing it would trade one bug for another.
+
+    write_document_record() is the repo's single write chokepoint and it RAISES on a record
+    of its own that does not validate, so reaching a written file at all is the assertion;
+    the explicit validate_document() below just says so out loud.
+    """
+    from atrium_document import load_document, validate_document
+
+    assert lcs.enrichment_block("doc1", []) == {"items": []}
+
+    path = lcs.write_document_record("doc1", [], tmp_path)
+    assert path is not None, "an empty enrichment must still produce a record"
+
+    record = load_document(str(path))
+    validate_document(record)
+    assert record["enrichment"] == {"items": []}
+    assert record["assembled"]["blocks"]["enrichment"]["program"] == "llm-enrich"

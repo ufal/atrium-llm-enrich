@@ -211,11 +211,19 @@ def test_document_json_single_file_pair_round_trips_the_baseline(
         assert block in record, f"upstream {block!r} block was discarded"
 
 
-def test_document_json_out_without_a_record_says_so_and_writes_nothing(
+def test_document_json_out_without_a_record_fails_instead_of_exiting_clean(
     remote_client_env, stub_llm, capsys
 ):
-    """Degrade-gracefully, but audibly (the J4 concern, ported with the flags): when no
-    record was produced the promised file must not silently appear empty."""
+    """When no record was produced the promised file must not appear — and the run must fail.
+
+    Was `degrade gracefully, but audibly` (the J4 concern, ported with the flags): print to
+    stderr and exit 0. atrium-project#49 is what that cost. A stage that promises
+    `--document-json-out`, writes nothing, and exits 0 hands the next stage a missing file
+    with a green light in front of it — and the hub's own e2e_assert.py already says as much
+    about the shape ("the stage ran but wrote no document JSON (a swallowed document-hook
+    failure looks exactly like this)"). Whoever chains these stages cannot act on a message
+    they only see if they read the log of a step that passed, so the exit code carries it.
+    """
     env = remote_client_env
     stub_llm(ollama_client)
     # No results -> no record -> nothing to copy out.
@@ -223,21 +231,23 @@ def test_document_json_out_without_a_record_says_so_and_writes_nothing(
     empty_teitok.write_text("<teiCorpus><text/></teiCorpus>", encoding="utf-8")
     out_path = env.root / "5_llm.json"
 
-    ollama_client.main(
-        [
-            "--config",
-            str(env.config),
-            "--input",
-            str(empty_teitok),
-            "--output-dir",
-            str(env.output_dir),
-            "--model",
-            "qwen2.5:7b",
-            "--skip-pull-check",
-            "--document-json-out",
-            str(out_path),
-        ]
-    )
+    with pytest.raises(SystemExit) as excinfo:
+        ollama_client.main(
+            [
+                "--config",
+                str(env.config),
+                "--input",
+                str(empty_teitok),
+                "--output-dir",
+                str(env.output_dir),
+                "--model",
+                "qwen2.5:7b",
+                "--skip-pull-check",
+                "--document-json-out",
+                str(out_path),
+            ]
+        )
 
+    assert excinfo.value.code == 1
     assert not out_path.exists()
     assert "was NOT written" in capsys.readouterr().err

@@ -1,4 +1,9 @@
 {
+  "enrichable.pdf": {
+    "bytes": 884,
+    "note": "1 page, diacritic-free Czech archaeology — the LLM stage's input",
+    "sha256": "fc521f4359df8c7b7a56eb4e758cbe0f493813eff852a416982c9c0cd2218483"
+  },
   "garbled.pdf": {
     "bytes": 722,
     "note": "WinAnsi declared over cp1250, no /ToUnicode — must trip decode-sanity",

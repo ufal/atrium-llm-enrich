@@ -245,14 +245,19 @@ def _run_extraction(
     read and written back with only llm-enrich's ``enrichment`` block updated — every other
     tool's block passes through untouched (rule 2). With no baseline present the record holds
     just llm-enrich's own part (rule 3), mirroring ``llm_run.py``/``openrouter_client.py``/
-    ``ollama_client.py``'s ``write_document_record`` call. No results → nothing is written,
-    same as those batch entry points.
+    ``ollama_client.py``'s ``write_document_record`` call. A run that CONSULTED the model
+    and located nothing still writes the block, with an empty ``items`` list — "ran and
+    found nothing" is a different fact from "never ran", and only the record can carry
+    that difference (atrium-project#49). A run that never reached the model (every row
+    dropped by the quality filter) or whose every call failed writes nothing, same as
+    those batch entry points.
 
     The Layer D schema gate (atrium-project#10, D4) lives in ``write_document_record()`` —
     the repo's single write chokepoint — so an invalid record is never written here either.
     What this function adds is the gate on the record it hands BACK: see below.
     """
     from llm_client_shared import (
+        contributes_document_record,
         run_document_level,
         run_line_level,
         schema_gate,
@@ -278,7 +283,7 @@ def _run_extraction(
 
     result: Dict[str, Any] = {"mode": mode, "results": records, "stats": stats}
 
-    if document_record_dir is not None and records:
+    if document_record_dir is not None and contributes_document_record(records, stats):
         from atrium_document import load_document
 
         with ParadataLogger(

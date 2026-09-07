@@ -36,11 +36,19 @@ The sha256 manifest is committed at `tests/fixtures/MANIFEST.json` and its path 
 INDEPENDENT of `--outdir`: the bytes are scratch, the manifest is the repo's canonical
 record of what they must be. Override it only with an explicit `--manifest`.
 
-The three fixtures and what each one is for:
+The four fixtures and what each one is for:
 
     minimal.pdf   2 pages, 3 text blocks, clean ASCII-safe Latin. The happy path: exact
                   bboxes, a real page break, and blocks that must land as distinct
-                  `lines[].group_id` values.
+                  `lines[].group_id` values. Its text is deliberately CONTENTLESS
+                  ("block one, line one") so a bbox diff is readable — which is exactly
+                  why it is the wrong input for a semantic stage; see enrichable.pdf.
+    enrichable.pdf
+                  1 page of diacritic-free Czech archaeological prose. The born-digital
+                  E2E's llm-enrich input (atrium-project#49): a fixture the semantic
+                  stage can actually find something in, so a green digital smoke means
+                  more than "the plumbing connects". Diacritic-free is load-bearing —
+                  see the builder's docstring.
     garbled.pdf   1 page, Czech text, /WinAnsiEncoding declared over cp1250 bytes, no
                   /ToUnicode. Text extraction SUCCEEDS and returns wrong characters — the
                   case that must trip the decode-sanity check and set
@@ -196,6 +204,55 @@ def minimal_pdf() -> bytes:
     return _build_pdf([page1, page2], FONT_CLEAN)
 
 
+def enrichable_pdf() -> bytes:
+    """One page of real archaeological content, for the LLM stage rather than the geometry one.
+
+    Added for atrium-project#49. The born-digital E2E (atrium-project's
+    e2e-digital-smoke.yml) fed `minimal.pdf` to llm-enrich, and `minimal.pdf` says
+    "Excavation report, block one, line one." — placeholder chosen to make BLOCK BOUNDARIES
+    reviewable, with no site, find, method, period or material anywhere in it. The
+    document-level prompt's own instruction for that input is "If the document has no
+    archaeologically relevant passages, return an empty items list", so run 34090340995's
+    `records enriched: 0` was the model being RIGHT. The smoke was asserting a semantic
+    outcome against a fixture built to pin bboxes.
+
+    So this is a separate fixture rather than a rewrite of `minimal.pdf`: that one's bytes
+    are a geometry golden and there is no reason to disturb them, and one fixture doing two
+    unrelated jobs is how the confusion started.
+
+    NO DIACRITICS, and that is a hard constraint, not a style choice. FONT_CLEAN is base-14
+    Helvetica with no /Encoding override and no /ToUnicode, i.e. StandardEncoding. Czech
+    text written through it comes back from every extractor as mojibake — measured, not
+    assumed:
+
+        "Zpráva o sondě číslo 3."  ->  'ZprÆva o sond(cid:236) Ł(cid:237)slo 3.'
+
+    and decode-sanity does NOT flag it (needs_ocr stayed False), so such a fixture would
+    quietly break the happy-path contract instead of failing loudly. Diacritic-free Czech
+    is what the corpus's own legacy digitisations look like anyway, it round-trips
+    byte-exactly through StandardEncoding, and it keeps the vocabulary in the language the
+    TEATER/AMCR terms are actually written in. Getting diacritics in here needs a
+    /ToUnicode CMap, which is a deliberate change to `_build_pdf`, not a change to a string.
+    """
+    return _build_pdf(
+        [
+            _text_block(
+                72,
+                720,
+                [
+                    b"Zprava o zachrannem archeologickem vyzkumu.",
+                    b"Lokalita: hradiste u Horni Mezi, okres Beroun.",
+                    b"Sonda II odkryla cast valoveho telesa.",
+                    b"Mocnost kulturni vrstvy cinila 40 cm.",
+                    b"Nalezeny zlomky keramiky z raneho stredoveku,",
+                    b"zelezne hreby a mazanice z vypalene hliny.",
+                ],
+            )
+        ],
+        FONT_CLEAN,
+    )
+
+
 def garbled_pdf() -> bytes:
     """One page of Czech in cp1250 bytes under a /WinAnsiEncoding declaration.
 
@@ -328,12 +385,14 @@ def minimal_docx() -> bytes:
 
 BUILDERS = {
     "minimal.pdf": minimal_pdf,
+    "enrichable.pdf": enrichable_pdf,
     "garbled.pdf": garbled_pdf,
     "minimal.docx": minimal_docx,
 }
 
 NOTES = {
     "minimal.pdf": "2 pages, 3 text blocks, no diacritics — happy path for bbox + group_id",
+    "enrichable.pdf": "1 page, diacritic-free Czech archaeology — the LLM stage's input",
     "garbled.pdf": "WinAnsi declared over cp1250, no /ToUnicode — must trip decode-sanity",
     "minimal.docx": "heading + 2 paragraphs + 2x2 table + explicit page break",
 }
