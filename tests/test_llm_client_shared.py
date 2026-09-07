@@ -628,3 +628,198 @@ def test_enrichment_block_of_an_empty_run_is_schema_valid(tmp_path):
     validate_document(record)
     assert record["enrichment"] == {"items": []}
     assert record["assembled"]["blocks"]["enrichment"]["program"] == "llm-enrich"
+
+
+# ── repairing a non-conforming document reply (atrium-project run 34123820218) ──
+#
+# The digital smoke's first run against enrichable content got five items whose CONTENT
+# was right — "sonda, valove teleso", "zlomky keramiky, rany stredovek" — and whose every
+# field was the wrong type, so all five were thrown away and the document aborted. The
+# request goes out as plain `json_object` (a 4719-value enum is too big for the
+# json_schema variant on most providers), so the shape is enforced by the prompt, and the
+# document-level prompt had no worked example at all.
+
+#: gpt-4o-mini's actual reply from that run, reconstructed field for field from the
+#: pydantic errors in the job log. Keeping it verbatim is the point: this is not an
+#: invented edge case, it is what the model does.
+_RUN_34123820218_REPLY = json.dumps(
+    {
+        "items": [
+            {
+                "locator": "Lokalita: hradiste u Horni Mezi",
+                "page": 1,
+                "extracted_keywords_cs": "hradiste, lokalita, Beroun",
+                "extracted_keywords_en": "fortress, site, Beroun",
+                "teater_category": "hradiště",
+                "confidence_score": 0.9,
+            },
+            {
+                "locator": "Sonda II odkryla cast",
+                "page": 1,
+                "extracted_keywords_cs": "sonda, valove teleso",
+                "extracted_keywords_en": "probe, rampart structure",
+                "teater_category": "sonda",
+                "confidence_score": 0.85,
+            },
+        ]
+    }
+)
+
+_TERMS = [lcs.META_TERM, "hradiště", "sonda"]
+
+
+def test_strict_validation_really_does_reject_that_reply():
+    """The premise. If this ever starts passing, the repair pass below is dead weight."""
+    with pytest.raises(ValidationError):
+        lcs.build_document_schema(_TERMS).model_validate_json(_RUN_34123820218_REPLY)
+
+
+def test_repair_recovers_the_shape_the_model_actually_returns():
+    model = lcs.build_document_schema(_TERMS)
+    validated, dropped = lcs._repair_document_response(_RUN_34123820218_REPLY, model, "enrichable")
+
+    assert dropped == []
+    first, second = validated.items
+    assert first.page == "1", "int page must become the string the schema documents"
+    assert first.extracted_keywords_cs == ["hradiste", "lokalita", "Beroun"]
+    assert first.extracted_keywords_en == ["fortress", "site", "Beroun"]
+    assert second.category_name() == "sonda"
+
+
+def test_repair_resolves_a_near_miss_category_but_never_invents_one():
+    """Case and whitespace are recovered; a term the vocabulary does not contain is not.
+
+    Mapping an unlisted category onto some "closest" listed one would put a claim in the
+    record that no vocabulary supports — worse than dropping the item, because the record
+    is what goes to FAIR catalogue export.
+    """
+    model = lcs.build_document_schema(_TERMS)
+    reply = json.dumps(
+        {
+            "items": [
+                {
+                    "locator": "a",
+                    "page": "1",
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "  SONDA  ",
+                    "confidence_score": 0.5,
+                },
+                {
+                    "locator": "b",
+                    "page": "1",
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "a category nobody listed",
+                    "confidence_score": 0.5,
+                },
+            ]
+        }
+    )
+
+    validated, dropped = lcs._repair_document_response(reply, model, "doc1")
+
+    assert [item.category_name() for item in validated.items] == ["sonda"]
+    assert len(dropped) == 1
+    assert "a category nobody listed" in dropped[0]
+
+
+def test_repair_clamps_confidence_and_drops_a_non_numeric_one():
+    model = lcs.build_document_schema(_TERMS)
+    reply = json.dumps(
+        {
+            "items": [
+                {
+                    "locator": "a",
+                    "page": None,
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "sonda",
+                    "confidence_score": 1.4,
+                },
+                {
+                    "locator": "b",
+                    "page": None,
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "sonda",
+                    "confidence_score": "very sure",
+                },
+            ]
+        }
+    )
+
+    validated, dropped = lcs._repair_document_response(reply, model, "doc1")
+
+    assert [item.confidence_score for item in validated.items] == [1.0]
+    assert len(dropped) == 1 and "very sure" in dropped[0]
+
+
+@pytest.mark.parametrize(
+    "reply",
+    ["not json at all", '{"no_items_key": 1}', '{"items": "a string"}'],
+    ids=["unparseable", "no-items", "items-not-a-list"],
+)
+def test_repair_refuses_a_reply_that_is_not_merely_misshapen(reply):
+    """Coercion is for formatting slips. A reply with no items array is a real failure and
+    must reach run_document_level's error handler rather than becoming a silent empty."""
+    model = lcs.build_document_schema(_TERMS)
+    with pytest.raises((ValueError, json.JSONDecodeError)):
+        lcs._repair_document_response(reply, model, "doc1")
+
+
+def test_run_document_level_repairs_and_reports_it_in_stats(tmp_path):
+    """End to end: the run that aborted in CI now completes and contributes."""
+    doc_path = tmp_path / "enrichable.md"
+    doc_path.write_text("# enrichable\n\n## Page 1\n\nSonda II.\n", encoding="utf-8")
+
+    model = lcs.build_document_schema(_TERMS)
+    results, stats = lcs.run_document_level(
+        doc_path, lambda _m: _RUN_34123820218_REPLY, "system prompt", model
+    )
+
+    assert stats["aborted"] == 0 and stats["skipped_error"] == 0
+    assert stats["processed"] == 2
+    assert stats["repaired"] == 1 and stats["dropped_items"] == 0
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_CONTRIBUTED
+    assert results[0]["enrichment"]["extracted_keywords_en"] == ["fortress", "site", "Beroun"]
+
+
+def test_a_conforming_reply_does_not_go_through_the_repair_pass(tmp_path):
+    """The fast path must stay untouched — `repaired` is absent when nothing was repaired."""
+    doc_path = tmp_path / "clean.md"
+    doc_path.write_text("# clean\n\n## Page 1\n\nSonda II.\n", encoding="utf-8")
+
+    reply = json.dumps(
+        {
+            "items": [
+                {
+                    "locator": "Sonda II",
+                    "page": "1",
+                    "extracted_keywords_cs": ["sonda"],
+                    "extracted_keywords_en": ["trench"],
+                    "teater_category": "sonda",
+                    "confidence_score": 0.9,
+                }
+            ]
+        }
+    )
+    results, stats = lcs.run_document_level(
+        doc_path, lambda _m: reply, "system prompt", lcs.build_document_schema(_TERMS)
+    )
+
+    assert stats["processed"] == 1
+    assert "repaired" not in stats
+
+
+def test_document_prompt_ships_a_worked_example_and_names_every_field():
+    """The other half of the fix. The header used to say the four remaining fields had the
+    "same meaning as the single-line task" — a task the document prompt never shows."""
+    prompt, _terms = lcs.build_document_system_prompt(
+        {"theme": {"a": {"cs": "sonda", "en": "trench"}}}, max_tokens=100_000
+    )
+
+    assert "EXAMPLE OF THE REQUIRED OUTPUT SHAPE" in prompt
+    assert "same meaning as the single-line task" not in prompt
+    assert "NEVER a single comma-separated string" in prompt
+    assert '"page": "2"' in prompt, "the example must show page QUOTED"

@@ -25,6 +25,7 @@ prompt over there, mirror the change here.
 import csv
 import enum
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
@@ -610,8 +611,25 @@ _DOC_SYSTEM_HEADER = (
     "  - page: the page number of that passage, read from the nearest "
     "'<!-- PAGE_BREAK: pg_N -->' or '## Page N' marker ABOVE it (just the number/"
     "label, e.g. 3); null if the document has no page markers.\n"
-    "  - extracted_keywords_cs / extracted_keywords_en, teater_category, "
-    "confidence_score — same meaning as the single-line task.\n"
+    # Spelled out rather than delegated. This used to read "same meaning as the
+    # single-line task" — a task this prompt never shows the model, because the
+    # document-level prompt is built from _DOC_SYSTEM_HEADER alone. So the four
+    # remaining fields were specified nowhere the model could see, and it invented
+    # a shape: `page` as an integer, the keyword lists as one comma-joined string,
+    # and a `teater_category` of its own wording. atrium-project run 34123820218 is
+    # that, five times over, on a document it had otherwise read correctly.
+    "  - extracted_keywords_cs: a JSON ARRAY of Czech terms found in the passage, "
+    'e.g. ["sonda", "kulturní vrstva"]. NEVER a single comma-separated string. '
+    "Empty array if none.\n"
+    "  - extracted_keywords_en: a JSON ARRAY of English translations of "
+    "extracted_keywords_cs, same length and order. NEVER a single "
+    "comma-separated string.\n"
+    "  - teater_category: ONE value copied EXACTLY, character for character, from "
+    "the THEMATIC VOCABULARY list below — including its diacritics and any "
+    "parenthesised qualifier. Do not translate it, do not shorten it, do not "
+    "invent a category. If no listed term fits the passage, the passage is not an "
+    "extraction target: omit the item entirely.\n"
+    "  - confidence_score: a number between 0.0 and 1.0.\n"
     "The document may contain HTML-comment layout cues (e.g. "
     "'<!-- BBOX: … -->', '<!-- FONT: … -->'); use them as positional hints but "
     "never extract or quote them as content.\n"
@@ -623,6 +641,42 @@ _DOC_SYSTEM_HEADER = (
     "You MUST respond ONLY with a valid JSON object matching the requested "
     "schema.\n\n"
     "THEMATIC VOCABULARY:\n"
+)
+
+
+#: The document-level counterpart of _EXAMPLES_FOOTER.
+#:
+#: build_system_prompt() has passed _EXAMPLES_FOOTER to _fit_vocab_prompt() since it was
+#: written; build_document_system_prompt() passed no footer at all, so the whole-document
+#: prompt shipped without a single worked example. A prompt that only DESCRIBES a JSON
+#: shape and never shows one is how atrium-project run 34123820218 got five items whose
+#: content was right and whose every field was the wrong type. The example is the cheap
+#: half of the fix; the tolerant parse in _repair_document_response() is the other half.
+#:
+#: `page` is quoted here deliberately — it is a STRING in the schema so labels like "iv"
+#: or "A-1" survive, and an unquoted 1 is exactly what the model returned instead.
+_DOC_EXAMPLES_FOOTER = (
+    "\nEXAMPLE OF THE REQUIRED OUTPUT SHAPE:\n\n"
+    "For a document containing:\n"
+    "  ## Page 2\n"
+    "  Sonda II odkryla cast valoveho telesa.\n"
+    "  Nalezeny zlomky keramiky z raneho stredoveku.\n\n"
+    "Correct output:\n"
+    "{\n"
+    '  "items": [\n'
+    "    {\n"
+    '      "locator": "Sonda II odkryla cast",\n'
+    '      "page": "2",\n'
+    '      "extracted_keywords_cs": ["sonda", "valové těleso"],\n'
+    '      "extracted_keywords_en": ["trench", "rampart body"],\n'
+    '      "teater_category": "<an exact term from the vocabulary above>",\n'
+    '      "confidence_score": 0.9\n'
+    "    }\n"
+    "  ]\n"
+    "}\n\n"
+    'Note: "page" is a STRING, both keyword fields are ARRAYS, and '
+    '"teater_category" is copied verbatim from the vocabulary. A document with '
+    'nothing archaeological in it returns {"items": []}.\n'
 )
 
 
@@ -661,6 +715,10 @@ def build_document_schema(term_names: List[str]) -> type:
     class DocumentEnrichment(BaseModel):
         items: List[LocatedEnrichment] = Field(default_factory=list)
 
+    #: The enum's values, hung on the class so _repair_document_response() can resolve a
+    #: near-miss category without reaching back into pydantic's internals. Assigned after
+    #: class creation so pydantic does not mistake it for a field.
+    DocumentEnrichment.allowed_terms = tuple(term_names)
     return DocumentEnrichment
 
 
@@ -674,7 +732,12 @@ def build_document_system_prompt(
     whole-document instruction header instead of the single-line one."""
     raw_terms = _collect_vocab_terms(vocab_data, excluded_themes)
     return _fit_vocab_prompt(
-        _DOC_SYSTEM_HEADER, raw_terms, max_tokens, skip_truncation, verbose=False
+        _DOC_SYSTEM_HEADER,
+        raw_terms,
+        max_tokens,
+        skip_truncation,
+        footer=_DOC_EXAMPLES_FOOTER,
+        verbose=False,
     )
 
 
@@ -1037,6 +1100,157 @@ def write_document_record(
     return baseline
 
 
+# ---------------------------------------------------------------------------
+# 7b. Repairing a document-level reply — atrium-project#49 / run 34123820218
+# ---------------------------------------------------------------------------
+#
+# The whole-document request goes out as `response_format: {"type": "json_object"}`
+# unless --structured-outputs is passed, and the E2E does not pass it: with a 4719-value
+# enum the json_schema variant is far larger than most providers accept, and
+# --provider-data-collection deny narrows routing to providers whose structured-output
+# support varies. So the shape is enforced by the PROMPT, and the prompt is advice.
+#
+# gpt-4o-mini's deviations, observed in full in run 34123820218 (five items, four
+# validation errors each, on content it had otherwise read correctly):
+#
+#   page                    -> 1 (int)                      instead of "1"
+#   extracted_keywords_cs   -> "hradiste, lokalita, Beroun" instead of [...]
+#   extracted_keywords_en   -> "fortress, site, Beroun"     instead of [...]
+#   teater_category         -> a term of its own wording, not one from the vocabulary
+#
+# The first three are unambiguous formatting slips over a correct answer, and throwing
+# the answer away for them is the wrong trade. The fourth is not a formatting slip: an
+# unlisted category is a claim the vocabulary does not support, and inventing a mapping
+# for it would fabricate data. So the first three are coerced and the fourth is resolved
+# only against the vocabulary itself — exact, then case- and whitespace-insensitive —
+# and the item is DROPPED, loudly and counted, when that fails.
+
+_KEYWORD_SEPARATORS = re.compile(r"[;,]")
+
+
+def _as_keyword_list(value: Any) -> List[str]:
+    """A keyword field as the list the schema asks for.
+
+    A bare string is split on commas/semicolons — that is the exact form the model
+    returns, and it is unambiguous here because a vocabulary keyword never contains one.
+    """
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        return [str(v).strip() for v in value if str(v).strip()]
+    if isinstance(value, str):
+        return [part.strip() for part in _KEYWORD_SEPARATORS.split(value) if part.strip()]
+    return [str(value).strip()]
+
+
+def _as_page_label(value: Any) -> Optional[str]:
+    """A page as the STRING the schema asks for, preserving non-numeric labels.
+
+    `page` is a string so "iv" or "A-1" survive (the same reason lines[].page is one).
+    A float that is a whole number renders as "2", not "2.0" — json.loads gives a float
+    for `2.0`, and "2.0" would not match any page label a renderer emits.
+    """
+    if value is None:
+        return None
+    if isinstance(value, float) and value.is_integer():
+        return str(int(value))
+    text = str(value).strip()
+    return text or None
+
+
+def _term_resolver(model: type) -> Callable[[Any], Optional[str]]:
+    """Resolve a model-supplied category against the vocabulary the enum was built from.
+
+    Exact match first, then a casefolded/whitespace-collapsed match, which recovers the
+    near-misses ("Kostel", "kostel " ) without inventing anything. Anything else is
+    unresolvable BY DESIGN: see the module note above.
+    """
+    allowed = tuple(getattr(model, "allowed_terms", ()) or ())
+    loose = {" ".join(term.casefold().split()): term for term in allowed}
+
+    def resolve(value: Any) -> Optional[str]:
+        if not isinstance(value, str):
+            return None
+        if value in allowed:
+            return value
+        return loose.get(" ".join(value.casefold().split()))
+
+    return resolve
+
+
+def _repair_document_response(result_json: str, model: type, file_id: str) -> Tuple[Any, List[str]]:
+    """Coerce a near-miss document-level reply into the schema, or raise.
+
+    Returns the validated model plus one human-readable line per dropped item. Raises
+    (to run_document_level's handler, which records an inference error) when the payload
+    is not JSON, is not an object with an `items` array, or still fails validation after
+    coercion — those are not formatting slips and must stay loud.
+    """
+    raw = json.loads(result_json, strict=False)
+    if isinstance(raw, list):
+        # Some replies drop the wrapper and return the array on its own.
+        raw = {"items": raw}
+    if not isinstance(raw, dict):
+        raise ValueError(f"expected a JSON object, got {type(raw).__name__}")
+
+    items = raw.get("items")
+    if items is None:
+        raise ValueError("reply has no 'items' key")
+    if not isinstance(items, list):
+        raise ValueError(f"'items' is {type(items).__name__}, expected a list")
+
+    resolve = _term_resolver(model)
+    repaired: List[dict] = []
+    dropped: List[str] = []
+
+    for index, item in enumerate(items):
+        if not isinstance(item, dict):
+            dropped.append(f"item {index}: not an object ({type(item).__name__})")
+            continue
+
+        category = resolve(item.get("teater_category"))
+        if category is None:
+            dropped.append(
+                f"item {index}: teater_category {item.get('teater_category')!r} is not in "
+                f"the vocabulary"
+            )
+            continue
+
+        fixed = dict(item)
+        fixed["teater_category"] = category
+        fixed["page"] = _as_page_label(item.get("page"))
+        fixed["extracted_keywords_cs"] = _as_keyword_list(item.get("extracted_keywords_cs"))
+        fixed["extracted_keywords_en"] = _as_keyword_list(item.get("extracted_keywords_en"))
+        try:
+            fixed["confidence_score"] = min(1.0, max(0.0, float(item.get("confidence_score"))))
+        except (TypeError, ValueError):
+            dropped.append(
+                f"item {index}: confidence_score {item.get('confidence_score')!r} is not a number"
+            )
+            continue
+        repaired.append(fixed)
+
+    validated = model.model_validate({"items": repaired})
+
+    print(
+        f"  [{file_id}] repaired a non-conforming document reply: "
+        f"{len(repaired)} item(s) recovered, {len(dropped)} dropped"
+    )
+    for reason in dropped:
+        print(f"    [dropped] {reason}")
+    if items and not repaired:
+        # Every item unusable is a systematic mismatch, not a quiet "found nothing".
+        # It still returns cleanly — the run completed and the verdict is empty — but it
+        # must be greppable, because an empty enrichment block downstream looks the same
+        # either way.
+        print(
+            f"  [{file_id}] WARNING - the model returned {len(items)} item(s) and NONE "
+            f"survived repair. Check that teater_category values match the vocabulary.",
+            file=sys.stderr,
+        )
+    return validated, dropped
+
+
 def run_document_level(
     input_path: Path,
     chat_fn: ChatFn,
@@ -1088,8 +1302,15 @@ def run_document_level(
         try:
             semantic_data = DocumentEnrichmentModel.model_validate_json(result_json)
         except ValidationError:
-            raw_dict = json.loads(result_json, strict=False)
-            semantic_data = DocumentEnrichmentModel.model_validate(raw_dict)
+            # The repair pass. This used to re-validate the SAME payload against the
+            # SAME strict model, so for a shape error it could only raise again —
+            # a retry that cannot succeed. _repair_document_response() coerces the
+            # deviations the model actually produces before re-validating.
+            semantic_data, dropped = _repair_document_response(
+                result_json, DocumentEnrichmentModel, file_id
+            )
+            stats["repaired"] = 1
+            stats["dropped_items"] = len(dropped)
     except Exception as exc:
         print(f"  [{file_id}] Document-level inference/validation error: {exc}")
         stats["skipped_error"] += 1
