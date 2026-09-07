@@ -1,9 +1,11 @@
 # 📓 atrium-llm-enrich — agent_dev_logs/DEVLOG.md (timeline index)
-> _LLM-driven enrichment of archaeological documents (local multi-GPU + remote-as-a-service). 3 open
-> issues (#8, #10, #11). `test` HEAD `3e7a909` (2026-07-22) · **v0.2.0**._
-> _Per-issue detail: `digests/{8,10,11}.digest.md` · `plans/{8,10}.plan.md` · `issues/` exports
-> (source of truth). Cross-repo/hub history (DU benchmark #22, spin-out #24) lives in
-> `ufal/atrium-project/agent_dev_logs/DEVLOG.md` (deduplicated out of this file)._
+> _LLM-driven enrichment of archaeological documents (local multi-GPU + remote-as-a-service). 5 open
+> issues (#10, #11, #13, #18, #24); #8 closed. `test`==`main` HEAD `ee16913` (2026-09-06) · **v0.6.2**._
+> _Per-issue detail: `digests/{id}.digest.md` · `plans/{id}.plan.md` · `issues/` exports
+> (source of truth). Cross-repo/hub history (DU benchmark hub#22, this repo's spin-out from
+> hub#24) lives in `ufal/atrium-project/agent_dev_logs/DEVLOG.md` (deduplicated out of this file).
+> Note: this repo's own **#24 "Application of olmOCR"** (opened 09-03) is a different,
+> coincidentally-numbered issue — not the hub spin-out issue of the same number._
 
 ## 2026-07-12
 - **#8 LLM applications to data — initialization of repository** — Opened by K4TEL as the repo-side
@@ -132,3 +134,80 @@ flags successfully added to `atrium-page-classification`, `atrium-translator`, `
 
 * **#13** — Identified the necessity to build a PDF and DOCX to JSON converter explicitly to service digital-born 
 documents appropriately, mapping required actions back to the criteria in Issue #10.
+* **#8** — Closed: the repo-initialization work this issue tracked (engine copy, `openrouter_client.py`/
+`ollama_client.py`, torch-free `llm_client_shared.py`) has been done and superseded by #10/#11/#13 since July.
+* **#18 Build explicit PDF/DOCX-2-JSON converter — digital-born documents** — Opened by K4TEL: supersedes/extends
+#10. The Markdown-with-HTML-comments intermediate format is now deprecated in favor of `atrium_document` JSON as
+the first-class canonical IR; a new `api_util/digital_to_json.py` must ingest digital-born PDF/DOCX directly into
+the schema, mapping the #10 layout-cue taxonomy onto JSON nodes instead of Markdown comments.
+
+## 2026-08-03 – 2026-08-04
+
+* **#18** — Architecture defined and largely built same week: block-ownership decided (`BLOCK_OWNERS` gains tuple
+values; `source.origin` selects the originator per document) — three defects this surfaced are fixed. A 08-04
+review pass found the §1a "one originator per block" contract itself **escapable in five ways**; all five fixed
+and tested. Digital-born converter scripts land (`4c28020`) alongside a large GHA infrastructure copy (dependabot,
+CodeQL, api-contract, docker workflows — the standard five-repo template); doc-related dependencies added
+(`054288d`); `atrium_document.py` re-aligned to the hub template repeatedly (`070908e`, `0f231ca`, `abbac79`,
+`a02eee6`, `30c1c99`, `9ef2ae6`, `bd8ea39`, `8381b13`) as the shared contract kept moving underneath. Suite reaches
+382 passed / 6 skipped / 0 failed by the end of this window.
+
+## 2026-08-06
+
+* **v0.6.0 — first release of the `digital-convert` originator.** `api_util/digital_to_json.py` (807 lines) plus
+`tests/test_digital_to_json.py` (404 lines) land (`796c795`), completing #18's core task: a four-layer born-digital
+PDF/DOCX converter with a **decode-sanity gate** that catches a text layer extracting *successfully and wrongly*
+(CP1250 bytes misread as CP1252), reporting `needs_ocr` rather than silently rewriting text that `source.sha256`
+still describes as unchanged. **Real defect fixed**: DOCX tables previously lost their text entirely —
+`extract_docx()` now walks paragraphs and tables in document order (reusing `docx_to_md.py`'s existing in-order
+walker), so cell text reaches both `lines[]` and `cells[].group_id`; before this, every table's text existed only
+in `tables[].cells[].text`, invisible to `json_to_md`, nlp-enrich and the translator, with the documented join
+resolving to nothing. Degenerate grids are now omitted rather than raising a Layer D violation on the converter's
+own output. Also: a further "LLM review+fix round by Opus" (`f5418f3`), `ruff.toml` hardening (`f58e24c`), one more
+`atrium_document.py` fix pass (`ce95280`), the version bump (`6c71425`), GHA test-coverage req fixes (`d475a78`),
+and a Docker GHA update (`57d8073`).
+
+## 2026-08-18 – 2026-08-20
+
+* **The AMCR + TEATER vocabulary work ported over from `atrium-nlp-enrich`'s issue #6** (no dedicated issue here —
+tracked purely through commits): `45d2668` aligns the vocabulary with nlp-enrich's harvest, `05aec39` fixes the
+union, `8331b2e` fixes it again for the E2E GHA run. **v0.6.1** ships (08-19): vocabulary expanded and aligned,
+explicitly flagged "work-in-progress in terms of the vocabulary definition" — llm-enrich is following nlp-enrich's
+governance rulings (see that repo's DEVLOG, Phases 4-8) rather than making its own. Further GHA hardening
+(`d52e0d7`, `3699c42` — another Opus-reviewed round touching GHA/template/converters) and a `vllm`-related
+requirements fix (`549afa6`).
+
+## 2026-09-03
+
+* **#24 Application of olmOCR** — Opened by K4TEL: flags the LLM-based OCR system described in a blog post
+(structure + coordinates, no comments yet) as worth reading about — a candidate for the still-deferred
+scanned/curve-only OCR path from #10.
+* Routine action bump (`d1b6bdd`); issue logs refreshed.
+
+## 2026-09-04
+
+* Vocabulary work continues in lockstep with nlp-enrich's #6 Phase 9-10 (see that repo's DEVLOG): `806efad` adds
+the `vocab_sources.py` util here, `a92b6e6` brings over the decision-package docs (`6.D-eval.decision-package.md`,
+`6.O3O4.decision-package.md`) and the new `vocab-drift.yml`/`vocab-refresh.yml` workflows, `5468e29` rebuilds the
+vocab files from the flat harvest. Version bumped (`e5a674c`).
+
+## 2026-09-06
+
+* **v0.6.2** ships. Vocabulary and prompts brought fully in step with nlp-enrich's shipped state (`609c247`,
+`084dda9`); `bef7fae` fixes the Docker build for the GHA digital-born e2e run; `ee16913` fixes GHA-related code in
+`llm_client_shared.py`/`ollama_client.py`/`openrouter_client.py` with a new `tests/test_llm_client_shared.py`
+(78 lines). Issue logs refreshed same day.
+
+## 2026-09-07
+
+* **State**: 5 open issues (#10, #11, #13, #18, #24); #8 closed. `test` and `main` both at `ee16913`, **v0.6.2**.
+Confirmed live: the hub reusable-workflow reference is pinned to `@v1`. The document-format architecture (#10/#11/
+#13) is implemented and stable; #18's core converter shipped in v0.6.0 with the DOCX-table defect it was built to
+avoid already caught and fixed. The active thread is the vocabulary/prompt alignment with `nlp-enrich`'s #6 — this
+repo has no issue of its own for that work, so its state should be read alongside nlp-enrich's DEVLOG rather than
+this repo's issue tracker. #24 (olmOCR) is a fresh, unstarted lead on the still-deferred OCR path from #10.
+
+---
+_Timeline index refreshed 2026-09-07 against live `test`/`main` HEAD, the `CONTRIBUTING.md` changelog table, and
+open-issue state via the GitHub API. Nothing removed from the issues themselves (per hub #29); this file is a
+derived reading aid in `agent_dev_logs/`._
