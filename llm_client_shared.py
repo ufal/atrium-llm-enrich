@@ -624,11 +624,23 @@ _DOC_SYSTEM_HEADER = (
     "  - extracted_keywords_en: a JSON ARRAY of English translations of "
     "extracted_keywords_cs, same length and order. NEVER a single "
     "comma-separated string.\n"
+    # The heading warning is not padding. _render_vocab_prompt() emits the vocabulary as
+    # `--- {theme} / {sub} ---` section headings over `- cs (en)` bullets, and in
+    # atrium-project run 34125325468 the model answered 'Artefact / druh předmětu' for
+    # every item — a heading this very renderer had printed. Nothing in the prompt had
+    # ever said which of the two kinds of line is selectable.
     "  - teater_category: ONE value copied EXACTLY, character for character, from "
     "the THEMATIC VOCABULARY list below — including its diacritics and any "
     "parenthesised qualifier. Do not translate it, do not shorten it, do not "
-    "invent a category. If no listed term fits the passage, the passage is not an "
-    "extraction target: omit the item entirely.\n"
+    "invent a category.\n"
+    "    The vocabulary is printed as sections. A line of the form "
+    "'--- Something / Something ---' is a SECTION HEADING and is NOT a category: "
+    "never return one. Only the entries listed under a heading are categories, and "
+    "each is printed as '- <czech term> (<english gloss>)'. Return ONLY the Czech "
+    "term, without the English gloss and without its surrounding parentheses: from "
+    "'- sonda (trench)' the correct value is exactly 'sonda'.\n"
+    "    If no listed term fits the passage, the passage is not an extraction "
+    "target: omit the item entirely.\n"
     "  - confidence_score: a number between 0.0 and 1.0.\n"
     "The document may contain HTML-comment layout cues (e.g. "
     "'<!-- BBOX: … -->', '<!-- FONT: … -->'); use them as positional hints but "
@@ -1127,6 +1139,16 @@ def write_document_record(
 
 _KEYWORD_SEPARATORS = re.compile(r"[;,]")
 
+#: One trailing "(...)" group, used only as a last resort — see _term_resolver().
+_PARENTHETICAL_TAIL = re.compile(r"\s*\([^()]*\)\s*$")
+
+#: A value shaped like one of _render_vocab_prompt()'s own `--- theme / sub ---` headings.
+#: Recognised purely so the drop reason can NAME the mistake: a heading coming back as a
+#: category means the prompt failed to distinguish its two kinds of line, which is a
+#: prompt bug to fix, not a model quirk to absorb. Deliberately never resolved to a term —
+#: a heading names a whole section, so picking any member of it would be a guess.
+_LOOKS_LIKE_A_HEADING = re.compile(r"^[^/]+ / [^/]+$")
+
 
 def _as_keyword_list(value: Any) -> List[str]:
     """A keyword field as the list the schema asks for.
@@ -1168,12 +1190,28 @@ def _term_resolver(model: type) -> Callable[[Any], Optional[str]]:
     allowed = tuple(getattr(model, "allowed_terms", ()) or ())
     loose = {" ".join(term.casefold().split()): term for term in allowed}
 
+    def _loose(value: str) -> Optional[str]:
+        return loose.get(" ".join(value.casefold().split()))
+
     def resolve(value: Any) -> Optional[str]:
         if not isinstance(value, str):
             return None
         if value in allowed:
             return value
-        return loose.get(" ".join(value.casefold().split()))
+        hit = _loose(value)
+        if hit is not None:
+            return hit
+        # The vocabulary is printed as `- <czech> (<english>)`, so a model that copies a
+        # whole bullet returns "sonda (trench)". Strip ONE trailing parenthetical and
+        # retry — but only here, after the full string has already failed to match, which
+        # is what keeps terms that legitimately end in one ("atlantik (paleoklimatologie)",
+        # META_TERM itself) from being mangled: those match on the first two attempts.
+        trimmed = _PARENTHETICAL_TAIL.sub("", value).strip()
+        if trimmed and trimmed != value:
+            if trimmed in allowed:
+                return trimmed
+            return _loose(trimmed)
+        return None
 
     return resolve
 
@@ -1208,11 +1246,17 @@ def _repair_document_response(result_json: str, model: type, file_id: str) -> Tu
             dropped.append(f"item {index}: not an object ({type(item).__name__})")
             continue
 
-        category = resolve(item.get("teater_category"))
+        raw_category = item.get("teater_category")
+        category = resolve(raw_category)
         if category is None:
+            hint = ""
+            if isinstance(raw_category, str) and _LOOKS_LIKE_A_HEADING.match(raw_category.strip()):
+                hint = (
+                    " — that is one of the vocabulary's own '--- theme / sub ---' SECTION "
+                    "HEADINGS, not a term under it"
+                )
             dropped.append(
-                f"item {index}: teater_category {item.get('teater_category')!r} is not in "
-                f"the vocabulary"
+                f"item {index}: teater_category {raw_category!r} is not in the vocabulary{hint}"
             )
             continue
 
@@ -1230,25 +1274,28 @@ def _repair_document_response(result_json: str, model: type, file_id: str) -> Tu
             continue
         repaired.append(fixed)
 
-    validated = model.model_validate({"items": repaired})
+    for reason in dropped:
+        print(f"    [dropped] {reason}")
+
+    if items and not repaired:
+        # Every single item unusable is a systematic mismatch, and it must NOT become an
+        # empty verdict. An `enrichment: {items: []}` block is the record's way of saying
+        # "the model looked and there was nothing here" — reporting it when the model in
+        # fact found five things we could not read would be a lie in the record and a
+        # green digital smoke that enriched nothing. A gate that goes quiet is worse than
+        # one that goes red. So this raises, and run_document_level's handler turns it
+        # into an inference error, which under atrium-project#49's contract means no
+        # document record and a non-zero exit.
+        raise ValueError(
+            f"the model returned {len(items)} item(s) and none survived repair: "
+            + "; ".join(dropped)
+        )
 
     print(
         f"  [{file_id}] repaired a non-conforming document reply: "
         f"{len(repaired)} item(s) recovered, {len(dropped)} dropped"
     )
-    for reason in dropped:
-        print(f"    [dropped] {reason}")
-    if items and not repaired:
-        # Every item unusable is a systematic mismatch, not a quiet "found nothing".
-        # It still returns cleanly — the run completed and the verdict is empty — but it
-        # must be greppable, because an empty enrichment block downstream looks the same
-        # either way.
-        print(
-            f"  [{file_id}] WARNING - the model returned {len(items)} item(s) and NONE "
-            f"survived repair. Check that teater_category values match the vocabulary.",
-            file=sys.stderr,
-        )
-    return validated, dropped
+    return model.model_validate({"items": repaired}), dropped
 
 
 def run_document_level(

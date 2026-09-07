@@ -823,3 +823,168 @@ def test_document_prompt_ships_a_worked_example_and_names_every_field():
     assert "same meaning as the single-line task" not in prompt
     assert "NEVER a single comma-separated string" in prompt
     assert '"page": "2"' in prompt, "the example must show page QUOTED"
+
+
+# ── the category the model actually picks (atrium-project run 34125325468) ────
+#
+# Second live run against enrichable content, second distinct wrong answer. Every item
+# came back as `teater_category: 'Artefact / druh předmětu'` — which is not an invented
+# term at all: it is one of _render_vocab_prompt()'s OWN section headings, printed as
+# `--- Artefact / druh předmětu ---` above the bullets it groups. The prompt showed the
+# model two kinds of line and never said which kind was selectable.
+
+
+def test_a_section_heading_is_never_resolved_to_a_term_and_says_why():
+    """A heading names a whole section; picking any member of it would be a guess.
+
+    The drop reason has to NAME the mistake, because the fix is in the prompt (which now
+    says headings are not categories) and a bare "not in the vocabulary" would send the
+    next reader looking at the vocabulary file instead.
+    """
+    model = lcs.build_document_schema([lcs.META_TERM, "sonda"])
+    reply = json.dumps(
+        {
+            "items": [
+                {
+                    "locator": "Sonda II",
+                    "page": 1,
+                    "extracted_keywords_cs": ["sonda"],
+                    "extracted_keywords_en": ["trench"],
+                    "teater_category": "sonda",
+                    "confidence_score": 0.9,
+                },
+                {
+                    "locator": "x",
+                    "page": 1,
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "Artefact / druh předmětu",
+                    "confidence_score": 0.9,
+                },
+            ]
+        }
+    )
+
+    validated, dropped = lcs._repair_document_response(reply, model, "enrichable")
+
+    assert [item.category_name() for item in validated.items] == ["sonda"]
+    assert len(dropped) == 1
+    assert "SECTION HEADING" in dropped[0]
+
+
+def test_a_whole_vocabulary_bullet_resolves_to_its_czech_term():
+    """The vocabulary prints `- sonda (trench)`; a model that copies the bullet is close
+    enough to recover, and the english gloss is not part of the term."""
+    model = lcs.build_document_schema([lcs.META_TERM, "sonda"])
+    reply = json.dumps(
+        {
+            "items": [
+                {
+                    "locator": "Sonda II",
+                    "page": "1",
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "sonda (trench)",
+                    "confidence_score": 0.9,
+                }
+            ]
+        }
+    )
+
+    validated, dropped = lcs._repair_document_response(reply, model, "doc1")
+
+    assert dropped == []
+    assert validated.items[0].category_name() == "sonda"
+
+
+def test_a_term_that_legitimately_ends_in_a_parenthetical_is_not_mangled():
+    """The guard on the gloss-stripping step. Many real terms end in a parenthesised
+    qualifier — META_TERM itself, 'atlantik (paleoklimatologie)' — and they must match
+    before any stripping is attempted."""
+    model = lcs.build_document_schema([lcs.META_TERM, "atlantik (paleoklimatologie)"])
+    for term in (lcs.META_TERM, "atlantik (paleoklimatologie)"):
+        reply = json.dumps(
+            {
+                "items": [
+                    {
+                        "locator": "x",
+                        "page": "1",
+                        "extracted_keywords_cs": [],
+                        "extracted_keywords_en": [],
+                        "teater_category": term,
+                        "confidence_score": 1.0,
+                    }
+                ]
+            }
+        )
+        validated, dropped = lcs._repair_document_response(reply, model, "doc1")
+        assert dropped == []
+        assert validated.items[0].category_name() == term
+
+
+def test_a_reply_where_nothing_survives_aborts_rather_than_reporting_empty(tmp_path):
+    """The vacuity guard, and the reason this is not "assert less".
+
+    An `enrichment: {items: []}` block means "the model looked and there was nothing
+    here". Emitting that when the model in fact found five passages we could not read
+    would put a false verdict in the record AND turn the digital smoke green while it
+    enriched nothing. So it becomes an inference error, which under atrium-project#49's
+    contract means no document record and a non-zero exit — red, at the right step.
+    """
+    doc_path = tmp_path / "enrichable.md"
+    doc_path.write_text("# enrichable\n\n## Page 1\n\nSonda II.\n", encoding="utf-8")
+
+    reply = json.dumps(
+        {
+            "items": [
+                {
+                    "locator": f"item {i}",
+                    "page": 1,
+                    "extracted_keywords_cs": [],
+                    "extracted_keywords_en": [],
+                    "teater_category": "Artefact / druh předmětu",
+                    "confidence_score": 0.9,
+                }
+                for i in range(5)
+            ]
+        }
+    )
+    model = lcs.build_document_schema([lcs.META_TERM, "sonda"])
+
+    results, stats = lcs.run_document_level(doc_path, lambda _m: reply, "prompt", model)
+
+    assert results == []
+    assert stats["aborted"] == 1 and stats["skipped_error"] == 1
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_FAILED
+    assert lcs.contributes_document_record(results, stats) is False
+
+
+def test_an_honestly_empty_reply_is_still_an_empty_verdict(tmp_path):
+    """The other side of the guard: {"items": []} must NOT be swept up by it.
+
+    That reply validates strictly, never reaches the repair pass, and stays
+    OUTCOME_EMPTY — a stamped empty block, which is what the smoke's minimal.pdf case
+    legitimately produces.
+    """
+    doc_path = tmp_path / "nothing.md"
+    doc_path.write_text("# nothing\n\nBlock one, line one.\n", encoding="utf-8")
+    model = lcs.build_document_schema([lcs.META_TERM, "sonda"])
+
+    results, stats = lcs.run_document_level(
+        doc_path, lambda _m: json.dumps({"items": []}), "prompt", model
+    )
+
+    assert results == [] and stats["aborted"] == 0 and stats["skipped_error"] == 0
+    assert lcs.classify_outcome(results, stats) == lcs.OUTCOME_EMPTY
+    assert lcs.contributes_document_record(results, stats) is True
+
+
+def test_document_prompt_says_headings_are_not_categories():
+    prompt, _terms = lcs.build_document_system_prompt(
+        {"Artefact": {"a": {"cs": "sonda", "en": "trench", "sub": "druh předmětu"}}},
+        max_tokens=100_000,
+    )
+
+    assert "SECTION HEADING and is NOT a category" in prompt
+    assert "never return one" in prompt
+    assert "'- sonda (trench)' the correct value is exactly 'sonda'" in prompt
