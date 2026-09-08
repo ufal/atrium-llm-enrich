@@ -27,7 +27,8 @@ report `ready: false`, while the extraction endpoints return `503` until configu
 | Method | Path                     | Purpose                                                                            |
 |--------|--------------------------|------------------------------------------------------------------------------------|
 | GET    | `/info`                  | service identity + capabilities: `service`, `version`, `endpoints`, `limits`, `backend`, `model`, `ready`, `supported_inputs`, `languages` |
-| GET    | `/health`                | liveness probe; `?deep=true` additionally checks the backend is configured (503 on fail) |
+| GET    | `/health`                | liveness probe — 200 always, even mid-shutdown. `?deep=true` additionally checks the backend is configured (503 on fail or while draining) |
+| GET    | `/ready`                 | readiness probe (issue #55) — 503 until the backend is serviceable, 200 while serving, 503 the instant `SIGTERM` arrives. The Kubernetes `readinessProbe`/`startupProbe` target |
 | POST   | `/extract_keywords`      | extract keywords from an uploaded document                                          |
 | POST   | `/extract_keywords_text` | extract keywords from an inline JSON `{"lines": [...]}` body                        |
 
@@ -109,6 +110,27 @@ system prompt and Pydantic schema once, and binds a `chat_fn` to the chosen back
 request writes the upload to a temp file and calls `llm_client_shared.run_line_level` (CSV/
 TEITOK) or `run_document_level` (MD/TXT) in a threadpool, so the event loop stays responsive.
 Backend warmup failures are recorded rather than fatal, keeping `/info` and `/health` live.
+
+## Shutdown behavior (issue #55)
+
+The `api` image declares `HEALTHCHECK` (shallow `GET /health` via the vendored
+`service/healthcheck.py`) and `STOPSIGNAL SIGTERM`, and its `ENTRYPOINT` passes
+`--timeout-graceful-shutdown 20`.
+
+On `SIGTERM` the service flips `GET /ready` to **503** at once (so an orchestrator stops
+routing to it), starts refusing new work in `_require_engine()` with a 503, and lets
+uvicorn finish in-flight requests before exiting. `GET /health` deliberately stays 200
+throughout — a liveness probe failing mid-shutdown would get the container killed before
+the drain completed.
+
+⚠️ llm-enrich's slow work happens **inside** the request: one remote LLM call per line,
+each bounded by `LLM_TIMEOUT` (default 300s). A large document can therefore legitimately
+run longer than the 20s drain budget and be cut short. Raise both
+`--timeout-graceful-shutdown` and the deployment's grace period together for that
+workload — see `docs/k8s_deployment.md` ("Known limits") in the hub.
+
+A clean shutdown exits **143** (128 + SIGTERM), not 0: uvicorn re-raises the captured
+signal on purpose so a supervisor sees the real cause. That is a normal stop, not a crash.
 
 ## Tests
 

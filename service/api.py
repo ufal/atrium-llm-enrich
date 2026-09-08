@@ -14,23 +14,30 @@ the extraction endpoints answer 503 until configured.
 from __future__ import annotations
 
 import asyncio
-import csv
+import json
 import logging
+import os
 import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Body, FastAPI, File, HTTPException, UploadFile
+
+from atrium_document import FILE_SUFFIX, canonical_doc_id
+from atrium_paradata import ParadataLogger
 
 # Shared ATRIUM meta-contract helpers (§4). Byte-identical across every service,
 # enforced by para-drift.reusable.yml.
 from .atrium_service import (
+    ServiceState,
     add_cors,
     attach_health,
+    attach_inflight_middleware,
     build_info,
     read_tool_version,
     resolve_max_upload_mb,
+    serve_lifecycle,
 )
 
 logger = logging.getLogger(__name__)
@@ -68,6 +75,7 @@ def _load_engine() -> Dict[str, Any]:
         build_document_system_prompt,
         build_schema,
         build_system_prompt,
+        excluded_prompt_themes,
         load_config,
     )
     from vocab_manager import VocabularyManager
@@ -77,7 +85,7 @@ def _load_engine() -> Dict[str, Any]:
     config = load_config(config_path) if Path(config_path).exists() else {}
 
     vocab_path = os.getenv("VOCAB_PATH") or config.get(
-        "VOCAB_PATH", "data_samples/teater_nested_vocab.json"
+        "VOCAB_PATH", "data_samples/vocab/union_nested.json"
     )
     context_window = int(os.getenv("LLM_CONTEXT_WINDOW", config.get("CONTEXT_WINDOW", "32000")))
     max_retries = int(os.getenv("LLM_MAX_RETRIES", "3"))
@@ -91,9 +99,25 @@ def _load_engine() -> Dict[str, Any]:
         "min_alpha_ratio_non_text": float(config.get("MIN_ALPHA_RATIO_NON_TEXT", "0.40")),
     }
 
-    vocab_data = VocabularyManager(vocab_path=vocab_path).load()
-    line_prompt, line_terms = build_system_prompt(vocab_data, max_tokens=max_input_tokens)
-    doc_prompt, doc_terms = build_document_system_prompt(vocab_data, max_tokens=max_input_tokens)
+    vocab_mgr = VocabularyManager(vocab_path=vocab_path)
+    # auto_sync=False: never harvest inside a pipeline run. Besides the
+    # multi-minute OAI-PMH round trip, the sync path can no longer build a
+    # usable vocabulary — fetch_amcr_vocab() emits bare {"cs", "en"} pairs
+    # with no "source"/"scheme", so assign_theme() drops every term into
+    # "Other", which excluded_prompt_themes() withholds from the prompt. The
+    # result is an enum holding only "Nerelevantní (meta-text)", which then
+    # rejects every correct answer the model gives as a validation error.
+    # A missing vocabulary is a configuration fault: say so and stop.
+    vocab_data = vocab_mgr.load(auto_sync=False)
+    # Which themes reach the model is a taxonomy_config decision (in_prompt), not a
+    # literal in the prompt builder — see excluded_prompt_themes().
+    excluded_themes = excluded_prompt_themes(vocab_mgr)
+    line_prompt, line_terms = build_system_prompt(
+        vocab_data, max_tokens=max_input_tokens, excluded_themes=excluded_themes
+    )
+    doc_prompt, doc_terms = build_document_system_prompt(
+        vocab_data, max_tokens=max_input_tokens, excluded_themes=excluded_themes
+    )
     line_model = build_schema(line_terms)
     doc_model = build_document_schema(doc_terms)
     session = requests.Session()
@@ -108,7 +132,9 @@ def _load_engine() -> Dict[str, Any]:
         if not model:
             raise RuntimeError("OPENROUTER_MODEL is not set")
         headers = _build_headers(
-            api_key, os.getenv("OPENROUTER_SITE_URL"), os.getenv("OPENROUTER_APP_NAME", "atrium-llm-enrich")
+            api_key,
+            os.getenv("OPENROUTER_SITE_URL"),
+            os.getenv("OPENROUTER_APP_NAME", "atrium-llm-enrich"),
         )
         line_chat_fn = make_chat_fn(
             session, headers, model, line_model.model_json_schema(), max_retries, timeout, None
@@ -147,6 +173,24 @@ def _load_engine() -> Dict[str, Any]:
     }
 
 
+#: Readiness/draining/in-flight state for the §4.6 disposability contract (issue #55).
+_state = ServiceState()
+
+
+def _engine_is_serviceable() -> bool:
+    """Whether the warmed engine can actually answer a request.
+
+    Same expression /info's ``ready`` field reports, kept in one place. This — not
+    merely "startup finished" — is what ``_state.warm`` is set from, because a
+    misconfigured backend here is recorded rather than fatal (see ``lifespan``): the
+    process deliberately stays up so ``/info`` and ``/docs`` still explain what is
+    wrong. Marking such a pod *ready* would then route traffic to a service that
+    503s on every request; leaving it un-ready keeps it alive but drains it from the
+    load balancer, which is the behaviour a Kubernetes readinessProbe exists for.
+    """
+    return not _engine.get("error") and bool(_engine.get("line_chat_fn"))
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Warm the backend once; a misconfigured backend is recorded, not fatal.
@@ -158,7 +202,12 @@ async def lifespan(app: FastAPI):
         _engine.clear()
         _engine["error"] = str(exc)
         logger.warning("llm-enrich engine warmup failed: %s", exc)
-    yield
+    _state.warm = _engine_is_serviceable()
+    # issue #55: composes with the warmup above rather than replacing it. Flips /ready
+    # to 503 on SIGTERM and, on shutdown, waits for in-flight requests before the
+    # `_engine.clear()` below tears the backend out from under them.
+    async with serve_lifecycle(_state):
+        yield
     _engine.clear()
 
 
@@ -168,6 +217,7 @@ app = FastAPI(
     description="LLM-based archaeological keyword extraction over text lines / documents.",
     lifespan=lifespan,
 )
+attach_inflight_middleware(app, _state)
 
 # CORS — standard §4.5 configuration (ALLOWED_ORIGINS CSV, default "*").
 add_cors(app, methods=["GET", "POST"])
@@ -182,11 +232,18 @@ def _deep_health() -> str | None:
     return None
 
 
-attach_health(app, deep_check=_deep_health)
+attach_health(app, deep_check=_deep_health, state=_state)
 
 
 def _require_engine() -> Dict[str, Any]:
     """Return the warmed engine, or 503 if the backend is not ready (§4.4 → client retries)."""
+    if _state.draining:
+        # issue #55: stop accepting NEW work the moment a shutdown signal arrives, so the
+        # drain has a bounded set of requests to wait for. /ready has already flipped to
+        # 503 by now, but a request already in the accept queue can still arrive here.
+        raise HTTPException(
+            503, "Service is shutting down; retry against a live replica."
+        ) from None
     if _engine.get("error"):
         raise HTTPException(503, f"LLM backend not ready: {_engine['error']}") from None
     if not _engine.get("line_chat_fn"):
@@ -195,22 +252,60 @@ def _require_engine() -> Dict[str, Any]:
 
 
 def _doc_id(filename: str) -> str:
-    name = Path(filename).name
-    for suffix in (".teitok.xml", ".csv", ".md", ".txt"):
-        if name.lower().endswith(suffix):
-            return name[: -len(suffix)]
-    return name
+    """The uploaded document's identity, derived the one canonical way.
+
+    Delegates to ``atrium_document.canonical_doc_id()`` (atrium-project#10, D3): this was a
+    THIRD independent suffix-stripper in this repo, alongside
+    ``api_util/teitok_read.doc_id_from_path`` and the two batch clients' ``Path.stem``. The
+    accretion contract is keyed on ``doc_id``, so a service that re-keys the record it was
+    handed silently orphans the caller's baseline — which is exactly what D1/D2 did in the
+    batch clients and in alto's ``/process``.
+    """
+    return canonical_doc_id(filename)
 
 
-def _run_extraction(tmp_path: str, filename: str, engine: Dict[str, Any]) -> Dict[str, Any]:
-    """Blocking enrichment call, dispatched by file extension (line vs document level)."""
-    from llm_client_shared import run_document_level, run_line_level
+def _run_extraction(
+    tmp_path: str,
+    filename: str,
+    engine: Dict[str, Any],
+    doc_id: str,
+    document_record_dir: Optional[Path] = None,
+) -> Dict[str, Any]:
+    """Blocking enrichment call, dispatched by file extension (line vs document level).
+
+    When ``document_record_dir`` is given, also folds the results into this document's
+    paired ATRIUM record (accretion model, docs/document_schema.md / issue #13): a baseline
+    at ``<document_record_dir>/<doc_id>.document.json``, if the caller placed one there, is
+    read and written back with only llm-enrich's ``enrichment`` block updated — every other
+    tool's block passes through untouched (rule 2). With no baseline present the record holds
+    just llm-enrich's own part (rule 3), mirroring ``llm_run.py``/``openrouter_client.py``/
+    ``ollama_client.py``'s ``write_document_record`` call. A run that CONSULTED the model
+    and located nothing still writes the block, with an empty ``items`` list — "ran and
+    found nothing" is a different fact from "never ran", and only the record can carry
+    that difference (atrium-project#49). A run that never reached the model (every row
+    dropped by the quality filter) or whose every call failed writes nothing, same as
+    those batch entry points.
+
+    The Layer D schema gate (atrium-project#10, D4) lives in ``write_document_record()`` —
+    the repo's single write chokepoint — so an invalid record is never written here either.
+    What this function adds is the gate on the record it hands BACK: see below.
+    """
+    from llm_client_shared import (
+        contributes_document_record,
+        run_document_level,
+        run_line_level,
+        schema_gate,
+        write_document_record,
+    )
 
     name = filename.lower()
     path = Path(tmp_path)
     if name.endswith(_LINE_SUFFIXES):
         records, stats = run_line_level(
-            path, engine["line_chat_fn"], engine["line_prompt"], engine["line_model"],
+            path,
+            engine["line_chat_fn"],
+            engine["line_prompt"],
+            engine["line_model"],
             **engine["filter_params"],
         )
         mode = "line"
@@ -219,7 +314,65 @@ def _run_extraction(tmp_path: str, filename: str, engine: Dict[str, Any]) -> Dic
             path, engine["doc_chat_fn"], engine["doc_prompt"], engine["doc_model"]
         )
         mode = "document"
-    return {"mode": mode, "results": records, "stats": stats}
+
+    result: Dict[str, Any] = {"mode": mode, "results": records, "stats": stats}
+
+    if document_record_dir is not None and contributes_document_record(records, stats):
+        from atrium_document import load_document
+
+        with ParadataLogger(
+            program="llm-enrich-api",
+            config={"mode": mode, "backend": engine["backend"], "model": engine["model"]},
+            paradata_dir=str(Path(document_record_dir) / "paradata"),
+            output_types=["json"],
+        ) as para_logger:
+            try:
+                record_path = write_document_record(
+                    doc_id,
+                    records,
+                    document_record_dir,
+                    run_id=para_logger.run_id,
+                    paradata_ref=os.path.join(
+                        para_logger.paradata_dir,
+                        f"{para_logger.run_id}_{para_logger.program}.json",
+                    ),
+                    used_markdown_input=(mode == "document"),
+                    license_detail=para_logger.get_license_block(),
+                )
+            except RuntimeError as exc:
+                # The Layer D refusal (D4). Translated here rather than left to
+                # _extract_from_path's blanket `RuntimeError -> 502 LLM backend error`,
+                # which would blame the upstream provider for a record WE built wrong —
+                # and 502 invites a retry that would fail identically. A record llm-enrich
+                # cannot emit is a defect on this side, so it is a 500, named as such.
+                raise HTTPException(
+                    500, f"Document record rejected by its own schema: {exc}"
+                ) from exc
+            if record_path is not None:
+                para_logger.log_success("json")
+                para_logger.log_document_success()
+
+        if record_path is not None:
+            record = load_document(str(record_path))
+            # Layer D on the way OUT (atrium-project#10, D4). write_document_record() has
+            # already refused to emit a record whose invalidity was ours, so anything caught
+            # here is a record it deliberately let through because the caller's own uploaded
+            # baseline did not validate. Re-raising would contradict that decision (and 500
+            # on somebody else's bad data), and returning it in silence is what D4 is about —
+            # so the response says so, in a field an automated caller can test instead of
+            # grepping the service log.
+            schema_error = schema_gate(record, f"{doc_id}{FILE_SUFFIX}")
+            if schema_error:
+                logger.warning(
+                    "returned document record for %s does not validate against the ATRIUM "
+                    "document schema: %s",
+                    doc_id,
+                    schema_error,
+                )
+                result["document_json_schema_error"] = schema_error
+            result["document_json"] = record
+
+    return result
 
 
 def _envelope(engine: Dict[str, Any], doc_id: str, payload: Dict[str, Any]) -> Dict[str, Any]:
@@ -232,10 +385,18 @@ def _envelope(engine: Dict[str, Any], doc_id: str, payload: Dict[str, Any]) -> D
     }
 
 
-async def _extract_from_path(tmp_path: str, filename: str, engine: Dict[str, Any]) -> Dict[str, Any]:
+async def _extract_from_path(
+    tmp_path: str,
+    filename: str,
+    engine: Dict[str, Any],
+    doc_id: str,
+    document_record_dir: Optional[Path] = None,
+) -> Dict[str, Any]:
     loop = asyncio.get_event_loop()
     try:
-        return await loop.run_in_executor(None, _run_extraction, tmp_path, filename, engine)
+        return await loop.run_in_executor(
+            None, _run_extraction, tmp_path, filename, engine, doc_id, document_record_dir
+        )
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
     except RuntimeError as exc:
@@ -252,14 +413,27 @@ async def info() -> Dict[str, Any]:
         limits={"max_upload_mb": MAX_UPLOAD_MB},
         backend=_engine.get("backend"),
         model=_engine.get("model"),
-        ready=not _engine.get("error") and bool(_engine.get("line_chat_fn")),
+        ready=_engine_is_serviceable(),
         supported_inputs=[*_LINE_SUFFIXES, *_DOC_SUFFIXES],
         languages=["cs", "en"],
     )
 
 
 @app.post("/extract_keywords")
-async def extract_keywords(file: UploadFile = File(...)):  # noqa: B008
+async def extract_keywords(
+    file: UploadFile = File(...),  # noqa: B008
+    document_json: UploadFile = File(  # noqa: B008
+        None,
+        description=(
+            "Optional baseline ATRIUM Document JSON (accretion model, docs/document_schema.md "
+            "/ issue #13). When given, the response's `document_json` carries the record back "
+            "with only llm-enrich's `enrichment` block updated — every other tool's block "
+            "(pages, lines, entities, translations, ...) passes through untouched. A baseline "
+            "that does not validate against atrium_document.schema.json is still accepted "
+            "(rule 6), but the response then also carries `document_json_schema_error`."
+        ),
+    ),
+):
     """Extract archaeological keywords from an uploaded document (§4.2).
 
     ``.csv`` / ``*.teitok.xml`` → line-level (one record per qualifying line);
@@ -279,56 +453,58 @@ async def extract_keywords(file: UploadFile = File(...)):  # noqa: B008
     if len(data) > MAX_UPLOAD_BYTES:
         raise HTTPException(413, f"File too large. Maximum size is {MAX_UPLOAD_MB} MB.") from None
 
+    doc_id = _doc_id(file.filename)
     suffix = ".teitok.xml" if name.endswith(".teitok.xml") else Path(name).suffix
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-        tmp.write(data)
-        tmp_path = tmp.name
-    try:
-        result = await _extract_from_path(tmp_path, file.filename, engine)
-    finally:
-        Path(tmp_path).unlink(missing_ok=True)
-    return _envelope(engine, _doc_id(file.filename), result)
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        work_dir = Path(tmp_dir)
+        tmp_path = work_dir / f"input{suffix}"
+        tmp_path.write_bytes(data)
+
+        document_record_dir: Optional[Path] = None
+        if document_json is not None:
+            baseline_bytes = await document_json.read()
+            (work_dir / f"{doc_id}{FILE_SUFFIX}").write_bytes(baseline_bytes)
+            document_record_dir = work_dir
+
+        result = await _extract_from_path(
+            str(tmp_path), file.filename, engine, doc_id, document_record_dir
+        )
+
+    return _envelope(engine, doc_id, result)
 
 
 @app.post("/extract_keywords_text")
-async def extract_keywords_text(payload: Dict[str, Any]):
-    """Line-level extraction from an inline JSON ``{"lines": [...]}`` body (§4.3 sibling).
-
-    ``lines`` items may be plain strings or objects with a ``text`` field; agents can call
-    without materializing a file.
-    """
+async def extract_keywords_text(
+    text: str = Body(
+        ..., description="Raw text for document-level archaeological keyword extraction."
+    ),
+    document_json: dict = Body(
+        None,
+        description="Optional baseline ATRIUM Document JSON. When given, the response's `document_json` carries the record back with only llm-enrich's `enrichment` block updated. An invalid baseline is still accepted, and the response then also carries `document_json_schema_error`.",
+    ),
+):
+    """Extract archaeological keywords from inline text (§4.2)."""
     engine = _require_engine()
-    lines = payload.get("lines")
-    if not isinstance(lines, list) or not lines:
-        raise HTTPException(422, "'lines' must be a non-empty list.") from None
 
-    rows: List[Dict[str, Any]] = []
-    for i, item in enumerate(lines, start=1):
-        if isinstance(item, str):
-            rows.append({"page_num": 1, "line_num": i, "text": item, "categ": "", "quality_score": 0.0})
-        elif isinstance(item, dict) and item.get("text"):
-            rows.append(
-                {
-                    "page_num": item.get("page_num", 1),
-                    "line_num": item.get("line_num", i),
-                    "text": item["text"],
-                    "categ": item.get("categ", ""),
-                    "quality_score": item.get("quality_score", 0.0),
-                }
-            )
-    if not rows:
-        raise HTTPException(422, "No usable text lines found in 'lines'.") from None
+    # Assign a dummy doc_id for inline text (or generate a UUID if preferred)
+    doc_id = "inline_text"
 
-    doc_id = str(payload.get("doc_id", "document"))
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".csv", mode="w", newline="", encoding="utf-8") as tmp:
-        writer = csv.DictWriter(tmp, fieldnames=["page_num", "line_num", "text", "categ", "quality_score"])
-        writer.writeheader()
-        writer.writerows(rows)
-        tmp_path = tmp.name
-    try:
-        result = await _extract_from_path(tmp_path, f"{doc_id}.csv", engine)
-    finally:
-        Path(tmp_path).unlink(missing_ok=True)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        work_dir = Path(tmp_dir)
+        tmp_path = work_dir / "input.txt"
+        tmp_path.write_text(text, encoding="utf-8")
+
+        document_record_dir: Optional[Path] = None
+        if document_json is not None:
+            baseline_path = work_dir / f"{doc_id}{FILE_SUFFIX}"
+            baseline_path.write_text(json.dumps(document_json), encoding="utf-8")
+            document_record_dir = work_dir
+
+        result = await _extract_from_path(
+            str(tmp_path), "input.txt", engine, doc_id, document_record_dir
+        )
+
     return _envelope(engine, doc_id, result)
 
 
