@@ -24,7 +24,7 @@ Three tools, in dependency order:
 
 ### What is in this directory
 
-29 files, three kinds. Only the first kind is input; everything else is generated and is
+30 files, three kinds. Only the first kind is input; everything else is generated and is
 overwritten without warning by the command in its row.
 
 | Files                                                | Kind                                                                                                       | Written by                               |
@@ -34,6 +34,7 @@ overwritten without warning by the command in its row.
 | `{amcr,teater,union}_nested.meta.json`               | provenance sidecar: source endpoints, record counts, `tool_version`, and the sha256 of both taxonomy files | `vocab_build.py --from-flat`             |
 | `{amcr,teater,union}_placement_audit.csv`            | one row per term: which rule placed it, and where                                                          | `vocab_build.py --from-flat`             |
 | `vocabulary.csv`                                     | the union as one flat spreadsheet, for reading outside the repo                                            | `vocab_build.py --from-flat`             |
+| `union.skos.ttl`                                     | the SKOS view: every harvested concept as `skos:Concept`, under the SOURCES' own URIs (5.2 MB)             | `vocab_build.py --from-flat --skos`      |
 | the 8 review sheets (§2)                             | evidence for an open question                                                                              | `vocab_review.py --all`                  |
 | the 3 corpus sheets + `corpus_review.meta.json` (§3) | evidence from real report text                                                                             | `corpus_review.py --all`                 |
 | `6.*.decision-package.md`, `RUNBOOK.md`              | prose                                                                                                      | hand-written                             |
@@ -52,7 +53,8 @@ Two stages. Stage 1 (harvest) is the only thing that touches the network; stage 
 ```bash
 # Everyday case: re-nest from the committed flat harvests after editing the taxonomy.
 python3 vocab_build.py --from-flat            # rewrites data_samples/vocab/*
-python3 vocab_build.py --from-flat --check    # exit 0 = artifacts match the config
+python3 vocab_build.py --from-flat --skos     # ...and the SKOS view (what CI builds)
+python3 vocab_build.py --from-flat --skos --check   # exit 0 = artifacts match the config
 python3 vocab_build.py --from-flat --stats    # per-facet counts + which rule placed what
 
 # Refresh the source data (needs api.aiscr.cz + raw.githubusercontent.com).
@@ -66,6 +68,28 @@ config dissolved the `Documentation` facet while the shipped vocabulary still of
 all 107 of its terms to the model, and nothing failed. `--from-flat --check` is the
 gate; it runs in CI (`.github/workflows/vocab-drift.yml`) and as
 `tests/test_vocab_build.py::test_committed_artifacts_match_a_fresh_build`.
+
+`--skos` additionally writes `union.skos.ttl` — the SKOS serialisation of every harvested
+concept (issue atrium-project#51). Three things about it are deliberate and worth knowing
+before editing it:
+
+* **It is built from the raw harvest, not from the nested artifacts.** The nesting stage
+  deduplicates by label (624 collisions on the current build) and drops the `__exclude__`
+  lists; both are right for a prompt glossary and are data loss for a concept graph, where
+  each of those terms has its own URI. Curation stays in the nested files.
+* **No URI is minted for a source concept.** Subjects are `https://api.aiscr.cz/id/HES-…`
+  and `https://teater.aiscr.cz/id/…` — the identifiers AMCR and TEATER already publish, and
+  the ones that become PID references when the SKOSification project ships. The only
+  ATRIUM-minted URIs in the file are the two `skos:ConceptScheme`s describing the harvest.
+* **AMCR's `hierarchie_vyse` is emitted as `skos:related`, not `skos:broader`.** All 1,176
+  edges cross heslář boundaries — `obývání`, an activity, declares 22 `areal` "parents" — so
+  it is associative, not hierarchical. TEATER's chain is a real hierarchy, but the field holds
+  the whole root-first ancestry, so only its last element is `skos:broader` and the rest are
+  `skos:broaderTransitive`. Neither mistake would fail a validator; both would be false.
+
+It is drift-gated like everything else here: `--from-flat --skos --check` is what CI runs, so
+regenerate it in the same commit as any taxonomy change. Full rationale in the hub's
+[`docs/skos_strategy.md`](https://github.com/ufal/atrium-project/blob/test/docs/skos_strategy.md).
 
 `--update-legacy` additionally writes `data_samples/teater_nested_vocab.json` (the
 pre-union path). The refresh workflow does not pass it, so that file keeps diverging;
