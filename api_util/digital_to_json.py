@@ -97,9 +97,50 @@ PROGRAM = "digital-convert"
 ORIGIN_PDF = "digital-born-pdf"
 ORIGIN_DOCX = "digital-born-docx"
 
+# ---------------------------------------------------------------------------
+# Line-category labels  (hub registry: atrium_vocab.LINE_CATEGORY_ORIGINATORS)
+# ---------------------------------------------------------------------------
+# The two load-bearing `categ` spellings this converter writes, and the only ones it
+# ever writes. `lines[].categ`'s other authorised originator, alto-postprocess, emits a
+# DISJOINT five-value set ({Clear, Empty, Noisy, Non-text, Trash}) — an OCR verdict over
+# a rendered image, where these two are a decode-sanity verdict over an embedded text
+# layer. The disjointness is deliberate and is not drift to reconcile; a consumer that
+# filters this field must handle BOTH sets (see defect V-1 in the hub's
+# docs/skos_strategy.md §6, and the note over `json_to_md.DROP_CATEGORIES`).
+#
+# The strings are TAKEN FROM the hub registry rather than typed here, so the declaration
+# and the emission cannot drift apart unnoticed — but never at the cost of changing what
+# this converter emits. `atrium_vocab.py` is a vendored copy and is legitimately absent
+# in some execution contexts (a bare api_util/ next to a notebook, an image built before
+# the vendor step), and a stale or re-ordered copy must not silently re-spell the
+# contract. So the literals below are the floor: the registry is used only when it
+# agrees with them, and a disagreement is REPORTED and then ignored. That follows the
+# house idiom (atrium_document.py's origin check, alto-postprocess's text_util.py):
+# abstain with a NOTE on stderr, never fatal. Silence means agreement.
+_CATEG_FALLBACK: Tuple[str, ...] = ("Garbage", "Inverted")
+
+try:
+    from atrium_vocab import LINE_CATEGORY_ORIGINATORS as _VOCAB_LINE_CATEGORY_ORIGINATORS
+except ImportError:  # registry not vendored here — abstain, do not guess
+    _declared: Tuple[str, ...] = ()
+else:
+    _declared = tuple(sorted(_VOCAB_LINE_CATEGORY_ORIGINATORS.get(PROGRAM, ())))
+
+if _declared and _declared != _CATEG_FALLBACK:
+    print(
+        f"[digital_to_json] NOTE - line-category drift: this module emits "
+        f"{list(_CATEG_FALLBACK)} but atrium_vocab declares {list(_declared)} for "
+        f"originator {PROGRAM!r}. Emission is unchanged; reconcile the registry or this "
+        f"file (see defect V-1 in the hub's docs/skos_strategy.md).",
+        file=sys.stderr,
+    )
+
+#: Sorted, so the comparison above and the unpacking here are order-independent — the
+#: registry sorts its own union the same way (`atrium_vocab.LINE_CATEGORIES`).
+CATEGORIES_EMITTED: Tuple[str, ...] = _declared if _declared == _CATEG_FALLBACK else _CATEG_FALLBACK
+
 #: The two load-bearing `categ` spellings (`json_to_md.DROP_CATEGORIES`).
-CATEG_GARBAGE = "Garbage"
-CATEG_INVERTED = "Inverted"
+CATEG_GARBAGE, CATEG_INVERTED = CATEGORIES_EMITTED
 
 #: Below this decode-sanity ratio a line is `Garbage` — the density signal, for a line
 #: whose diacritics are mostly wrong.

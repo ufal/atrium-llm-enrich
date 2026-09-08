@@ -52,6 +52,7 @@ indent-style = "space"
 # template. If you add a file to the para-drift set, add it here too. (issue atrium-project#10)
 exclude = [
     "atrium_document.py",
+    "atrium_vocab.py",
     "atrium_paradata.py",
     "para_licenses.py",
     "check_version.py",

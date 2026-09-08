@@ -170,6 +170,10 @@ def _load_engine() -> Dict[str, Any]:
         "doc_model": doc_model,
         "doc_chat_fn": doc_chat_fn,
         "filter_params": filter_params,
+        # Where the flat vocabulary artifacts sit, for entities[].pid resolution in
+        # write_document_record(). Derived from the same VOCAB_PATH the prompt vocabulary
+        # was loaded from, so the two can never point at different harvests.
+        "vocab_dir": os.path.dirname(vocab_path) or ".",
     }
 
 
@@ -338,6 +342,10 @@ def _run_extraction(
                     ),
                     used_markdown_input=(mode == "document"),
                     license_detail=para_logger.get_license_block(),
+                    # `.get`, not `[...]`: the contract tests build engine dicts by hand,
+                    # and an absent key must fall back to resolve_pid's default rather
+                    # than KeyError inside the record write.
+                    vocab_dir=engine.get("vocab_dir"),
                 )
             except RuntimeError as exc:
                 # The Layer D refusal (D4). Translated here rather than left to

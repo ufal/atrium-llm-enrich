@@ -42,9 +42,24 @@ if _repo_root not in sys.path:
 from api_util import xml_to_md  # noqa: E402
 from atrium_document import load_document  # noqa: E402
 
-#: Line categories excluded from the rendered text by default — heuristic
-#: OCR/layout noise (see alto-postprocess's compute_quality_score) that would
-#: only degrade the LLM's read of the page, not inform it.
+#: Line categories excluded from the rendered text by default — text this pipeline has
+#: already judged untrustworthy, which would only degrade the LLM's read of the page
+#: rather than inform it.
+#:
+#: KNOWN DEFECT — tracked as V-1 in the hub's `docs/skos_strategy.md` §6. These two
+#: spellings are the `digital-convert` set and ONLY that set: they are what
+#: `api_util/digital_to_json.py` writes into `lines[].categ` on the digital-born path
+#: (see `atrium_vocab.LINE_CATEGORY_ORIGINATORS["digital-convert"]`). `lines[].categ`'s
+#: other authorised originator, alto-postprocess, emits a DISJOINT set —
+#: {Clear, Empty, Noisy, Non-text, Trash} — so on the OCR path this filter matches
+#: nothing at all and every garbage OCR line reaches the model. The earlier wording here
+#: attributing these values to "alto-postprocess's compute_quality_score" was simply
+#: wrong, and is what made the mismatch invisible.
+#:
+#: The semantic set a fix would filter on is `atrium_vocab.UNTRUSTWORTHY_LINE_CATEGORIES`
+#: — ("Garbage", "Inverted", "Trash") — which spans both originators. Wiring it in is a
+#: real change to what the model is shown on every OCR document, so it is deliberately
+#: NOT made here; V-1 records the one-line fix for whoever decides to take it.
 DROP_CATEGORIES = frozenset({"Garbage", "Inverted"})
 
 #: The only implemented profile today. "standard"/"minimal" are the down-profiles

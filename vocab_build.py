@@ -333,6 +333,14 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=f"also write the union nesting to {LEGACY_NESTED.name} (the path consumers use)",
     )
+    p.add_argument(
+        "--skos",
+        action="store_true",
+        help=(
+            "also emit union.skos.ttl -- the SKOS view of every harvested concept, "
+            "using the sources' own URIs (issue atrium-project#51)"
+        ),
+    )
     p.add_argument("--check", action="store_true", help="report drift, write nothing")
     p.add_argument("--stats", action="store_true", help="print per-theme counts")
     return p
@@ -389,6 +397,43 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     }
     merged, _merge_collisions = vs.merge(filtered_for_merge)
     changed |= _emit(vocab_dir / "vocabulary.csv", vs.vocabulary_csv_text(merged), args.check)
+
+    # ── the SKOS view (issue atrium-project#51) ──────────────────────────────
+    #
+    # Emitted from `per_source`, NOT from `merged` or `filtered_source`, and that is
+    # the whole design decision:
+    #
+    #   * `merged` is label-keyed and DEDUPLICATED -- one winner per Czech label, the
+    #     rest recorded as `discarded_ids`. That is correct for a prompt glossary,
+    #     where two concepts sharing a label are a problem to resolve. It is data loss
+    #     for a SKOS view, where each of those concepts has its own URI and its own
+    #     upstream identity. 624 collisions in the shipped union means 624 concepts
+    #     would silently vanish.
+    #   * `filtered_source` has the `__exclude__` lists removed. Exclusion is a
+    #     decision about what to OFFER A MODEL, not a claim that a concept does not
+    #     exist; dropping `zeme` from an alignment graph because the prompt does not
+    #     need country names would make the graph lie about AMCR's contents.
+    #
+    # So the SKOS artifact is every harvested concept, and the curation decisions stay
+    # where they belong -- in the nested artifacts the pipeline actually reads.
+    #
+    # Turtle only. `skos_jsonld_text()` renders the same triples (the two are checked
+    # isomorphic) and is available from a consumer that wants it, but committing a
+    # second 7 MB file that provably carries no additional information is bytes, not
+    # data.
+    if args.skos:
+        skos_records = [r for _name, (records, _m) in sorted(per_source.items()) for r in records]
+        skos_meta = _base_meta(args.config, args.overrides)
+        skos_meta["sources"] = [m for _n, (_r, m) in sorted(per_source.items())]
+        skos_meta["counts"] = {
+            "concepts": len(skos_records),
+            "triples": len(vs.skos_triples(skos_records)),
+        }
+        changed |= _emit(
+            vocab_dir / "union.skos.ttl",
+            vs.skos_turtle_text(skos_records, skos_meta),
+            args.check,
+        )
 
     teater_records = filtered_source.get("teater", [])
     rescue_branches = _rescue_map(teater_records)

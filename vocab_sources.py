@@ -78,6 +78,30 @@ MAX_PAGES = 500
 _TEATER_ALT_KEYS = {"cz_eq_title": "cs", "en_eq_title": "en", "de_eq_title": "de"}
 _TEATER_NOTE_KEY = "comment_title"
 
+# AMCR <odkaz> mapping relations -> the VocabRecord field that carries them.
+#
+# This used to be a single `== "skos:exactMatch"` test, and everything else the
+# heslar asserts was dropped on the floor. The narrowing was deliberate and its
+# reason was sound -- broadMatch is not an identity claim, so promoting it into a
+# field named `exact_match` would have been a lie -- but the fix for "this URI means
+# something weaker" is a field for the weaker thing, not silence. SKOS already draws
+# the distinction; we just have to keep it.
+#
+# The four SKOS mapping properties, and what each licenses:
+#   exactMatch   - interchangeable across applications, and TRANSITIVE. The strong one.
+#   closeMatch   - interchangeable in SOME applications; deliberately not transitive.
+#   broadMatch   - the external concept is broader than ours.
+#   relatedMatch - associative, no hierarchy claimed.
+#
+# `exact_match` keeps its name and its exact previous contents, so every existing
+# consumer (vocab_review._aat_verdict, collision_review.csv) is untouched.
+AMCR_MAPPING_RELATIONS: Dict[str, str] = {
+    "skos:exactMatch": "exact_match",
+    "skos:closeMatch": "close_match",
+    "skos:broadMatch": "broad_match",
+    "skos:relatedMatch": "related_match",
+}
+
 
 # ── the normalised record ─────────────────────────────────────────────────────
 
@@ -113,12 +137,44 @@ class VocabRecord:
     note_cs: Optional[str] = None
     note_en: Optional[str] = None
     exact_match: Tuple[str, ...] = field(default=())
+    close_match: Tuple[str, ...] = field(default=())
+    broad_match: Tuple[str, ...] = field(default=())
+    related_match: Tuple[str, ...] = field(default=())
+    citation_uri: Tuple[str, ...] = field(default=())
 
     def as_dict(self) -> Dict[str, Any]:
         d = asdict(self)
-        for key in ("broader", "alt_cs", "alt_en", "exact_match"):
+        for key in _TUPLE_FIELDS:
             d[key] = list(d[key])
         return d
+
+    def mappings(self) -> Dict[str, Tuple[str, ...]]:
+        """The SKOS mapping properties this record asserts, keyed by property name.
+
+        Empty tuples are omitted, so a caller can iterate without checking. Note that
+        :attr:`citation_uri` is deliberately NOT included: see its note below.
+        """
+        out = {
+            relation: getattr(self, attr)
+            for relation, attr in AMCR_MAPPING_RELATIONS.items()
+            if getattr(self, attr)
+        }
+        return out
+
+
+#: Every VocabRecord field that is a tuple on the dataclass and a list in JSON.
+#: as_dict() and read_flat_json() both walk this, so adding a field means editing
+#: one list rather than three call sites that silently disagree.
+_TUPLE_FIELDS: Tuple[str, ...] = (
+    "broader",
+    "alt_cs",
+    "alt_en",
+    "exact_match",
+    "close_match",
+    "broad_match",
+    "related_match",
+    "citation_uri",
+)
 
 
 def record_sort_key(record: "VocabRecord") -> Tuple[str, int, str, str]:
@@ -200,12 +256,17 @@ def _amcr_record(block, ns: str) -> Optional[VocabRecord]:
         if parent is not None and parent.get("id"):
             broader.append(parent.get("id"))
 
-    exact: List[str] = []
+    # One bucket per SKOS mapping property AMCR is known to assert. An <odkaz> whose
+    # relation is not in AMCR_MAPPING_RELATIONS is skipped rather than guessed at:
+    # inventing a relation for an unrecognised one would put a claim in the graph that
+    # the source never made, and a mapping nobody asserted is worse than none.
+    matches: Dict[str, List[str]] = {attr: [] for attr in AMCR_MAPPING_RELATIONS.values()}
     for odkaz in block.findall(f"{{{ns}}}odkaz"):
         relation = _amcr_text(odkaz, "skos_mapping_relation", ns)
         uri = _amcr_text(odkaz, "uri", ns)
-        if uri and relation == "skos:exactMatch":
-            exact.append(uri)
+        attr = AMCR_MAPPING_RELATIONS.get(relation)
+        if uri and attr:
+            matches[attr].append(uri)
 
     return VocabRecord(
         cs=cs,
@@ -220,7 +281,10 @@ def _amcr_record(block, ns: str) -> Optional[VocabRecord]:
         abbr=_amcr_text(block, "zkratka", ns) or None,
         note_cs=_amcr_text(block, "popis", ns) or None,
         note_en=_amcr_text(block, "popis_en", ns) or None,
-        exact_match=tuple(exact),
+        exact_match=tuple(matches["exact_match"]),
+        close_match=tuple(matches["close_match"]),
+        broad_match=tuple(matches["broad_match"]),
+        related_match=tuple(matches["related_match"]),
     )
 
 
@@ -329,6 +393,7 @@ def _teater_descriptions(node: Dict[str, Any]) -> Dict[str, Any]:
     """
     alt: Dict[str, List[str]] = {"cs": [], "en": [], "de": []}
     note_cs = note_en = None
+    citations: List[str] = []
 
     for desc in node.get("description") or []:
         if not isinstance(desc, dict):
@@ -348,8 +413,43 @@ def _teater_descriptions(node: Dict[str, Any]) -> Dict[str, Any]:
             elif key == _TEATER_NOTE_KEY and isinstance(text, dict):
                 note_cs = note_cs or (text.get("cz") or "").strip() or None
                 note_en = note_en or (text.get("en") or "").strip() or None
+            citations.extend(_teater_quote_urls(entry))
 
-    return {"alt": alt, "note_cs": note_cs, "note_en": note_en}
+    return {
+        "alt": alt,
+        "note_cs": note_cs,
+        "note_en": note_en,
+        "citations": tuple(dict.fromkeys(citations)),
+    }
+
+
+def _teater_quote_urls(entry: Dict[str, Any]) -> List[str]:
+    """URLs cited in support of one label equivalent.
+
+    TEATER hangs a ``quotes`` list off each ``description[].content[]`` entry, and some
+    of those quotes point at Getty AAT (``title_page: "AAT"``,
+    ``location.url: "http://vocab.getty.edu/aat/..."``). The parser walked straight past
+    them, so alignment data TEATER already publishes was never harvested.
+
+    THESE ARE CITATIONS, NOT MAPPINGS. A quote is bibliographic support for a label --
+    "this English equivalent is attested in AAT" -- not an assertion that the two
+    concepts are the same thing. Promoting them to ``skos:exactMatch`` would manufacture
+    identity claims TEATER never made, which is exactly the over-claim the AMCR side
+    avoids by refusing to promote ``broadMatch``. They land in ``citation_uri`` and are
+    serialised as ``dcterms:source``. Upgrading any of them to a real mapping is an
+    editorial act for the vocabulary curators, not a parsing decision.
+    """
+    urls: List[str] = []
+    for quote in entry.get("quotes") or []:
+        if not isinstance(quote, dict):
+            continue
+        location = quote.get("location")
+        if not isinstance(location, dict):
+            continue
+        url = (location.get("url") or "").strip()
+        if url:
+            urls.append(url)
+    return urls
 
 
 def _teater_walk(
@@ -398,6 +498,7 @@ def _teater_walk(
             alt_en=alt_en,
             note_cs=extra["note_cs"],
             note_en=extra["note_en"],
+            citation_uri=extra["citations"],
         )
 
     for child in node.get(children_key) or []:
@@ -611,6 +712,10 @@ def read_flat_json(path: Path) -> Tuple[List[VocabRecord], Dict[str, Any]]:
                 note_cs=item.get("note_cs"),
                 note_en=item.get("note_en"),
                 exact_match=tuple(item.get("exact_match") or ()),
+                close_match=tuple(item.get("close_match") or ()),
+                broad_match=tuple(item.get("broad_match") or ()),
+                related_match=tuple(item.get("related_match") or ()),
+                citation_uri=tuple(item.get("citation_uri") or ()),
             )
         )
     return records, payload.get("_meta", {})
@@ -624,6 +729,274 @@ def write_flat_csv(records: Iterable[VocabRecord], path: Path) -> None:
 def write_vocabulary_csv(records: Iterable[VocabRecord], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(vocabulary_csv_text(records), encoding="utf-8")
+
+
+# ── SKOS serialisation ────────────────────────────────────────────────────────
+#
+# WHAT IS AND IS NOT ASSERTED HERE, AND WHY
+# =========================================
+# Concept URIs are the SOURCES' OWN. AMCR and TEATER both already mint resolvable
+# identifiers, they are already in `VocabRecord.uri`, and per ufal/atrium-project#51
+# they are the identifiers that will become PID references to the eventually-published
+# SKOS version. ATRIUM mints nothing for them. The only ATRIUM-minted URIs in this
+# output are the two ConceptSchemes below, which describe *the harvest* -- an artifact
+# ATRIUM really does own -- and never the concepts inside it.
+#
+# `broader` MEANS DIFFERENT THINGS IN THE TWO SOURCES, and neither maps to
+# `skos:broader` directly. Measured over the shipped artifacts:
+#
+#   AMCR   1,176 `hierarchie_vyse` edges. ALL of them cross heslar boundaries; NONE
+#          stay inside one. `obývání` (heslar `aktivita`, an activity) declares 22
+#          "superior" terms and every one is an `areal` -- a site type. That is an
+#          ASSOCIATIVE relation ("this activity is recorded for these site types"),
+#          not a thesaurus hierarchy, and `skos:broader` would both misstate it and
+#          give one concept 22 parents. It is emitted as `skos:related`.
+#
+#   TEATER 14,684 edges, ALL inside one top-level branch, none crossing. That is a
+#          real hierarchy -- but the field holds the WHOLE ancestor chain root-first
+#          (up to 12 deep), not the parent. `skos:broader` is defined as the DIRECT
+#          link, so only the last element becomes `skos:broader`; the rest become
+#          `skos:broaderTransitive`, which is exactly what SKOS provides for a
+#          transitive ancestor claim.
+#
+# Getting this wrong would not fail any validator. `skos:broader` on 22 cross-facet
+# parents is perfectly well-formed RDF; it is just false. That asymmetry -- syntax
+# checks pass, meaning is wrong -- is the whole argument for writing the semantics
+# down next to the code that emits it.
+
+#: ATRIUM-minted scheme URIs for the two harvests. The concepts they contain keep the
+#: sources' own URIs; only the harvest is ATRIUM's.
+SKOS_HARVEST_SCHEMES = {
+    "amcr": "https://w3id.org/atrium/scheme/amcr-harvest",
+    "teater": "https://w3id.org/atrium/scheme/teater-harvest",
+}
+
+_SKOS_PREFIXES = {
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "dct": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "atrium": "https://w3id.org/atrium/",
+}
+
+_SKOS_SCHEME_LABELS = {
+    "amcr": (
+        "ATRIUM harvest of the AMCR heslar",
+        "ATRIUM's harvested view of the AMCR controlled lists (heslare), gathered over "
+        "OAI-PMH. The concepts are AMCR's and keep their own api.aiscr.cz identifiers; "
+        "this scheme describes the harvest, which is ATRIUM's artifact.",
+    ),
+    "teater": (
+        "ATRIUM harvest of TEATER",
+        "ATRIUM's harvested view of TEATER, the Thesaurus of Archaeological "
+        "Terminology. The concepts are TEATER's and keep their own teater.aiscr.cz "
+        "identifiers; this scheme describes the harvest.",
+    ),
+}
+
+
+def _ttl_lit(value: str, lang: Optional[str] = None) -> str:
+    escaped = (
+        str(value)
+        .replace("\\", "\\\\")
+        .replace('"', '\\"')
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("\t", "\\t")
+    )
+    return f'"{escaped}"@{lang}' if lang else f'"{escaped}"'
+
+
+def _source_id_to_uri(source: str, ident: str) -> str:
+    base = AMCR_ID_BASE if source == "amcr" else TEATER_ID_BASE
+    return f"{base}{ident}"
+
+
+def skos_triples(
+    records: Sequence[VocabRecord],
+) -> List[Tuple[str, str, Tuple[str, Any, Optional[str]]]]:
+    """Every SKOS triple for *records*, once, sorted.
+
+    Objects are ``("uri", value, None)`` or ``("lit", value, lang_or_None)``. Both
+    serialisers below render this and nothing else, so the Turtle and the JSON-LD
+    cannot describe different graphs -- a property worth engineering rather than
+    hoping for, since a hand-written pair of renderers over one table is precisely
+    how a label set drifts.
+    """
+    out: List[Tuple[str, str, Tuple[str, Any, Optional[str]]]] = []
+    present = sorted({r.source for r in records if r.source in SKOS_HARVEST_SCHEMES})
+
+    for source in present:
+        scheme = SKOS_HARVEST_SCHEMES[source]
+        title, description = _SKOS_SCHEME_LABELS[source]
+        out.append((scheme, "rdf:type", ("uri", "skos:ConceptScheme", None)))
+        out.append((scheme, "dct:title", ("lit", title, "en")))
+        out.append((scheme, "dct:description", ("lit", description, "en")))
+        out.append(
+            (
+                scheme,
+                "dct:license",
+                ("uri", "https://creativecommons.org/licenses/by-nc/4.0/", None),
+            )
+        )
+
+    for record in sorted(records, key=record_sort_key):
+        if not record.uri:
+            # No source identifier means no subject to hang triples off. Minting one
+            # would invent an identity for a concept that has none upstream.
+            continue
+        uri = record.uri
+        out.append((uri, "rdf:type", ("uri", "skos:Concept", None)))
+        if record.source in SKOS_HARVEST_SCHEMES:
+            out.append((uri, "skos:inScheme", ("uri", SKOS_HARVEST_SCHEMES[record.source], None)))
+        if record.source_id:
+            out.append((uri, "skos:notation", ("lit", record.source_id, None)))
+        for lang, value in (("cs", record.cs), ("en", record.en), ("de", record.de)):
+            if value:
+                out.append((uri, "skos:prefLabel", ("lit", value, lang)))
+        for value in record.alt_cs:
+            out.append((uri, "skos:altLabel", ("lit", value, "cs")))
+        for value in record.alt_en:
+            out.append((uri, "skos:altLabel", ("lit", value, "en")))
+        if record.abbr:
+            # An abbreviation is a label the source curates, not a second notation:
+            # `zkratka` is not unique across heslare, and skos:notation is meant to be.
+            out.append((uri, "skos:altLabel", ("lit", record.abbr, "cs")))
+        if record.note_cs:
+            out.append((uri, "skos:scopeNote", ("lit", record.note_cs, "cs")))
+        if record.note_en:
+            out.append((uri, "skos:scopeNote", ("lit", record.note_en, "en")))
+
+        # See the long note above: the two sources' `broader` fields are different
+        # relations and are emitted as different properties.
+        if record.broader:
+            if record.source == "teater":
+                chain = [b for b in record.broader if b]
+                if chain:
+                    parent = _source_id_to_uri(record.source, chain[-1])
+                    out.append((uri, "skos:broader", ("uri", parent, None)))
+                for ancestor in chain[:-1]:
+                    out.append(
+                        (
+                            uri,
+                            "skos:broaderTransitive",
+                            ("uri", _source_id_to_uri(record.source, ancestor), None),
+                        )
+                    )
+            else:
+                for related in record.broader:
+                    if related:
+                        out.append(
+                            (
+                                uri,
+                                "skos:related",
+                                ("uri", _source_id_to_uri(record.source, related), None),
+                            )
+                        )
+
+        for relation, uris in record.mappings().items():
+            for target in uris:
+                out.append((uri, relation, ("uri", target, None)))
+        for target in record.citation_uri:
+            # dcterms:source, never a skos match -- see _teater_quote_urls().
+            out.append((uri, "dct:source", ("uri", target, None)))
+
+    seen: set = set()
+    unique = []
+    for triple in out:
+        if triple in seen:
+            continue
+        seen.add(triple)
+        unique.append(triple)
+    return sorted(unique, key=lambda t: (t[0], t[1], str(t[2][1]), t[2][2] or ""))
+
+
+def _skos_meta_comment(meta: Dict[str, Any]) -> List[str]:
+    """Provenance header lines. ``generated_utc`` is deliberately omitted.
+
+    ``vocab_build._normalise_for_check`` blanks that one line before comparing, and it
+    only knows how to do so for the ``"generated_utc"`` JSON key. A timestamp in a
+    Turtle comment would be invisible to it and would make every ``--check`` run report
+    drift, which is how a drift gate gets switched off.
+    """
+    lines = ["# ATRIUM SKOS view of the harvested source vocabularies.", "#"]
+    for entry in meta.get("sources", []) or []:
+        bits = [f"name={entry.get('name')}", f"records={entry.get('records')}"]
+        for key in ("strategy", "set", "snapshot_ref", "endpoint", "license"):
+            if entry.get(key):
+                bits.append(f"{key}={entry[key]}")
+        lines.append("# source: " + " ".join(bits))
+    lines.append("#")
+    lines.append("# Concept URIs are the sources' own; see skos_triples() for what is asserted.")
+    lines.append("")
+    return lines
+
+
+def skos_turtle_text(records: Sequence[VocabRecord], meta: Dict[str, Any]) -> str:
+    """The SKOS view as Turtle. Deterministic; safe for ``--check``."""
+    lines = _skos_meta_comment(meta)
+    lines.append("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .")
+    for prefix in sorted(_SKOS_PREFIXES):
+        lines.append(f"@prefix {prefix}: <{_SKOS_PREFIXES[prefix]}> .")
+    lines.append("")
+
+    grouped: Dict[str, List[Tuple[str, Tuple[str, Any, Optional[str]]]]] = {}
+    order: List[str] = []
+    for subject, prop, obj in skos_triples(records):
+        if subject not in grouped:
+            grouped[subject] = []
+            order.append(subject)
+        grouped[subject].append((prop, obj))
+
+    for subject in order:
+        rendered = []
+        for prop, obj in grouped[subject]:
+            kind, value, lang = obj
+            if kind == "uri":
+                rendered.append(
+                    f"    {prop} "
+                    + (value if ":" in value and not value.startswith("http") else f"<{value}>")
+                )
+            else:
+                rendered.append(f"    {prop} {_ttl_lit(value, lang)}")
+        head = f"<{subject}> {rendered[0].lstrip()}"
+        lines.append(" ;\n".join([head] + rendered[1:]) + " .")
+        lines.append("")
+    return "\n".join(lines).rstrip("\n") + "\n"
+
+
+def skos_jsonld_text(records: Sequence[VocabRecord], meta: Dict[str, Any]) -> str:
+    """The SKOS view as JSON-LD. Renders the same triples as :func:`skos_turtle_text`."""
+    grouped: Dict[str, Dict[str, List[Any]]] = {}
+    order: List[str] = []
+    for subject, prop, obj in skos_triples(records):
+        if subject not in grouped:
+            grouped[subject] = {}
+            order.append(subject)
+        kind, value, lang = obj
+        key = "@type" if prop == "rdf:type" else prop
+        if kind == "uri":
+            rendered: Any = value if key == "@type" else {"@id": value}
+        elif lang:
+            rendered = {"@language": lang, "@value": value}
+        else:
+            rendered = value
+        grouped[subject].setdefault(key, []).append(rendered)
+
+    graph = []
+    for subject in order:
+        node: Dict[str, Any] = {"@id": subject}
+        for key in sorted(grouped[subject]):
+            values = grouped[subject][key]
+            node[key] = values[0] if len(values) == 1 else values
+        graph.append(node)
+
+    context = dict(_SKOS_PREFIXES)
+    payload = {
+        "@context": context,
+        "_meta": {k: v for k, v in sorted(meta.items()) if k != "generated_utc"},
+        "@graph": graph,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
 
 def _discarded_id(r: "VocabRecord") -> Dict[str, str]:

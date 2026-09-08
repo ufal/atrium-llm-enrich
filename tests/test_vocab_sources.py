@@ -78,8 +78,136 @@ def test_amcr_captures_the_whole_heslo_record():
     assert term.abbr == "tz"
     assert term.note_cs == "zásah v terénu"
     assert term.uri == "https://api.aiscr.cz/id/HES-001065"
-    # only skos:exactMatch is promoted; broadMatch is not an identity claim
+    # exact_match holds ONLY skos:exactMatch, exactly as before -- broadMatch is not
+    # an identity claim and must never leak into a field named `exact_match`.
+    # It is no longer discarded, though; see test_amcr_captures_every_mapping_relation.
     assert term.exact_match == ("http://vocab.getty.edu/aat/300077463",)
+
+
+def test_amcr_captures_every_mapping_relation():
+    """Each SKOS mapping relation lands in its own field (issue atrium-project#51).
+
+    The harvester used to test `relation == "skos:exactMatch"` and drop everything
+    else on the floor. The narrowing was right -- a broadMatch in a field called
+    `exact_match` would be a false identity claim -- but the fix for "this URI means
+    something weaker" is a field for the weaker thing, not silence. The fixture's
+    HES-001065 carries one of each, which is why it can tell the two apart.
+    """
+    session = _StubSession([_xml("amcr_oai_page1.xml"), _xml("amcr_oai_page2.xml")])
+    records, _ = vs.harvest_amcr(delay=0, session=session)
+    term = {r.source_id: r for r in records}["HES-001065"]
+
+    assert term.exact_match == ("http://vocab.getty.edu/aat/300077463",)
+    assert term.broad_match == ("http://vocab.getty.edu/aat/300000000",)
+    assert term.close_match == ()
+    assert term.related_match == ()
+    # mappings() is what the serialiser iterates: SKOS property -> URIs, empties elided.
+    assert term.mappings() == {
+        "skos:exactMatch": ("http://vocab.getty.edu/aat/300077463",),
+        "skos:broadMatch": ("http://vocab.getty.edu/aat/300000000",),
+    }
+
+
+def test_amcr_ignores_an_unrecognised_mapping_relation():
+    """An <odkaz> whose relation we do not model is skipped, never guessed at.
+
+    Inventing a relation for an unknown one would put a claim in the graph that AMCR
+    never made -- worse than having no mapping at all.
+    """
+    mutated = (
+        (FIXTURES / "amcr_oai_page1.xml")
+        .read_text(encoding="utf-8")
+        .replace(
+            "<skos_mapping_relation>skos:broadMatch</skos_mapping_relation>",
+            "<skos_mapping_relation>skos:someRelationWeHaveNeverSeen</skos_mapping_relation>",
+        )
+    )
+    session = _StubSession([_Response(mutated.encode("utf-8")), _xml("amcr_oai_page2.xml")])
+    records, _ = vs.harvest_amcr(delay=0, session=session)
+    term = {r.source_id: r for r in records}["HES-001065"]
+
+    assert term.exact_match == ("http://vocab.getty.edu/aat/300077463",)
+    assert term.broad_match == ()
+    assert term.mappings() == {"skos:exactMatch": ("http://vocab.getty.edu/aat/300077463",)}
+
+
+def test_teater_harvests_quote_urls_as_citations_not_mappings():
+    """TEATER cites AAT inside description[].content[].quotes[]; we keep it as a citation.
+
+    The parser used to walk straight past those URLs. They are bibliographic support
+    for a label -- "this English equivalent is attested in AAT" -- and NOT an assertion
+    that the two concepts are the same. Promoting them to skos:exactMatch would
+    manufacture identity claims TEATER never made.
+    """
+    nodes = json.loads((FIXTURES / "teater_import_sample.json").read_text(encoding="utf-8"))
+    out: dict = {}
+    for root in nodes:
+        vs._teater_walk(root, (), out, "subcategories")
+
+    term = out["1090"]
+    assert term.cs == "magdalénien"
+    assert term.citation_uri == ("http://vocab.getty.edu/aat/1",)
+    # A citation is not a mapping. Nothing may leak into the SKOS match fields.
+    assert term.mappings() == {}
+    assert term.exact_match == ()
+
+
+def test_teater_broader_is_the_full_ancestor_chain_root_first():
+    """Pinned because the SKOS serialiser depends on the ORDER.
+
+    Only the last element is the direct parent (skos:broader); the rest are
+    skos:broaderTransitive. If this chain were ever reversed, every TEATER concept
+    would be reparented to its top-level branch in silence.
+    """
+    nodes = json.loads((FIXTURES / "teater_import_sample.json").read_text(encoding="utf-8"))
+    out: dict = {}
+    for root in nodes:
+        vs._teater_walk(root, (), out, "subcategories")
+
+    assert out["1050"].broader == ()  # a depth-1 root has no ancestors
+    assert out["1090"].broader == ("1050",)
+    assert out["1090"].scheme == "1050"
+
+
+def test_skos_turtle_is_deterministic_and_uses_source_uris():
+    """The SKOS view mints no concept URIs of its own (issue atrium-project#51).
+
+    ATRIUM does not own these concepts and must not name them. The only ATRIUM URI in
+    the output is the scheme describing the harvest, which ATRIUM does own.
+    """
+    session = _StubSession([_xml("amcr_oai_page1.xml"), _xml("amcr_oai_page2.xml")])
+    records, meta = vs.harvest_amcr(delay=0, session=session)
+
+    first = vs.skos_turtle_text(records, {"sources": [meta]})
+    assert first == vs.skos_turtle_text(records, {"sources": [meta]})
+
+    assert "<https://api.aiscr.cz/id/HES-001065>" in first
+    assert "https://w3id.org/atrium/scheme/amcr-harvest" in first
+    # Every concept subject is a source URI, never an ATRIUM-minted one.
+    for line in first.splitlines():
+        if line.rstrip().endswith("rdf:type skos:Concept ;"):
+            assert line.startswith("<https://api.aiscr.cz/id/"), line
+    # No timestamp: vocab_build._normalise_for_check cannot blank one in Turtle, so a
+    # timestamp here would make every --check run report drift.
+    assert "generated_utc" not in first
+
+
+def test_skos_emits_amcr_hierarchy_as_related_not_broader():
+    """AMCR's hierarchie_vyse crosses heslar boundaries in 100% of the shipped data.
+
+    An `aktivita` term declaring 22 `areal` "parents" is an associative relation, not a
+    thesaurus hierarchy. skos:broader would be well-formed RDF and still false -- the
+    failure mode this assertion exists to catch, because no validator would flag it.
+    """
+    session = _StubSession([_xml("amcr_oai_page1.xml"), _xml("amcr_oai_page2.xml")])
+    records, _ = vs.harvest_amcr(delay=0, session=session)
+    triples = vs.skos_triples(records)
+
+    subject = "https://api.aiscr.cz/id/HES-001065"
+    props = {prop for subj, prop, _obj in triples if subj == subject}
+    assert "skos:related" in props
+    assert "skos:broader" not in props
+    assert "skos:broaderTransitive" not in props
 
 
 def test_amcr_keeps_terms_without_an_english_gloss():
