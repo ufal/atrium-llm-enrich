@@ -934,6 +934,119 @@ def enrichment_block(doc_id: str, results: List[dict]) -> dict:
     return {"items": items}
 
 
+#: One-shot latch so a vocabulary that cannot be consulted is announced once per process,
+#: not once per document. See entity_pid_rows().
+_pid_lookup_warned = False
+
+
+def _note_pid(message: str) -> None:
+    """Advisory stderr note about pid resolution, at most once per process."""
+    global _pid_lookup_warned
+    if not _pid_lookup_warned:
+        print(f"[document] NOTE - entities[].pid: {message}", file=sys.stderr)
+        _pid_lookup_warned = True
+
+
+def entity_pid_rows(
+    entities: List[Dict[str, Any]],
+    vocab_dir: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """`entities[]` patch rows carrying nothing but their natural key and a resolved `pid`.
+
+    ``entities`` is a block **nlp-enrich owns and originates**; llm-enrich is a field-level
+    co-contributor with exactly one field in it —
+    ``BLOCK_FIELD_OWNERS["entities"]["llm-enrich"] == ["pid"]`` — and nothing in the
+    ecosystem has ever written it, so the schema's "ARIADNE/GoTriple hook" has been null on
+    every record produced so far. This builds the patch; ``write_document_record()`` merges
+    it with ``own_fields=["pid"]`` so nlp-enrich's and translator's fields on the same row
+    are left untouched.
+
+    Each row carries the fields of ``BLOCK_KEY_FIELDS["entities"]`` (page, line, char_span)
+    that the source row actually has, plus ``pid``. The key list is read from
+    ``atrium_document`` rather than re-typed here, and every key value is copied from the
+    source row, because that is what makes ``merge_block()`` land the patch ON the existing
+    row instead of appending a second, pid-only fork of it.
+
+    Resolution tries ``lemma`` first and falls back to ``surface``: the concept index is
+    keyed on the vocabulary's Czech labels, which are lemmas, so an inflected surface form
+    ("gotického kostela") misses where the lemma ("kostel") hits. ``resolve_pid()``
+    normalises (NFC, casefold, whitespace) internally, so nothing is folded here.
+
+    **A row is emitted only when at least one sub-key actually resolved.** ``resolve_pid()``
+    answers with an all-None dict for a label it does not know, and most entities in an
+    excavation report are people and places this archaeological vocabulary holds no concept
+    for. Writing ``{"wikidata": null, "geonames": null, "aat": null, "amcr": null}`` onto
+    every one of them would add a block of nulls the schema already implies and — since
+    ``merge_block()`` stamps ``assembled.blocks.entities`` with the most recent writer —
+    would re-attribute nlp-enrich's block to llm-enrich on every re-run for no content at
+    all. Returning ``[]`` means the caller never merges and the stamp stays where it was.
+
+    Degrades to ``[]``, never raises. The flat artifacts (``amcr_flat.json``,
+    ``teater_flat.json``) are legitimately absent in a slim image or in a checkout that has
+    not run ``vocab_build.py``, and ``vocab_manager`` imports ``requests`` at module scope,
+    which is why the import is deferred to here rather than taken at module import. A run
+    without the vocabulary should lose the URIs, not the record.
+    """
+    try:
+        from atrium_document import BLOCK_KEY_FIELDS
+        from vocab_manager import resolve_pid
+    except ImportError as exc:
+        _note_pid(f"not resolved ({exc})")
+        return []
+
+    keys = BLOCK_KEY_FIELDS.get("entities") or []
+    # resolve_pid carries the repo-wide default directory; passing vocab_dir=None through
+    # would override that default with None rather than fall back to it.
+    lookup = {} if vocab_dir is None else {"vocab_dir": str(vocab_dir)}
+
+    #: natural key -> (patch row, pid), plus the keys that resolved two different ways.
+    resolved: Dict[str, Tuple[Dict[str, Any], Dict[str, Optional[str]]]] = {}
+    conflicting: Set[str] = set()
+
+    try:
+        for entity in entities or []:
+            if not isinstance(entity, dict):
+                continue
+            pid: Optional[Dict[str, Optional[str]]] = None
+            for field in ("lemma", "surface"):
+                label = entity.get(field)
+                if not isinstance(label, str) or not label.strip():
+                    continue
+                candidate = resolve_pid(label, **lookup)
+                if any(candidate.values()):
+                    pid = candidate
+                    break
+            if pid is None:
+                continue
+
+            row = {k: entity[k] for k in keys if k in entity}
+            # Rows sharing a natural key share a merge target, so a second pid for the same
+            # key would land on the FIRST row and claim an identity resolved from a
+            # different entity. Only reachable when upstream rows are keyless (no
+            # page/line/char_span at all keys them all to the same tuple), but a
+            # cross-entity identity claim is precisely what resolve_pid refuses to guess at,
+            # so it is refused here too: agreeing duplicates collapse, disagreeing ones
+            # leave every row under that key unresolved.
+            ident = json.dumps([row.get(k) for k in keys], sort_keys=True, default=str)
+            if ident in resolved:
+                if resolved[ident][1] != pid:
+                    conflicting.add(ident)
+                continue
+            resolved[ident] = (row, pid)
+    except Exception as exc:  # noqa: BLE001 — an odd vocabulary must not cost us the record
+        _note_pid(f"not resolved ({exc})")
+        return []
+
+    if conflicting:
+        _note_pid(
+            f"{len(conflicting)} natural key(s) matched entities with different concepts "
+            f"— left unresolved"
+        )
+    return [
+        {**row, "pid": pid} for ident, (row, pid) in resolved.items() if ident not in conflicting
+    ]
+
+
 #: One-shot latch so a DISABLED gate is announced once per process, not once per document.
 #: See schema_gate().
 _schema_gate_disabled_warned = False
@@ -999,6 +1112,7 @@ def write_document_record(
     detail: str = "full",
     license_detail: Optional[dict] = None,
     used_markdown_input: bool = False,
+    vocab_dir: Optional[str] = None,
 ) -> Optional[Path]:
     """Write/update this document's paired record, contributing llm-enrich's block only.
 
@@ -1006,6 +1120,14 @@ def write_document_record(
     writes it back with the ``enrichment`` block replaced — every other tool's block
     passes through untouched. With no baseline present the record is just this tool's
     own part, which is the intended standalone behaviour.
+
+    The one exception to "own block only" is llm-enrich's single declared field in
+    somebody else's block: ``entities[].pid``, granted by
+    ``BLOCK_FIELD_OWNERS["entities"]``. It is merged FIELD-wise onto the rows nlp-enrich
+    already wrote (``own_fields=["pid"]``), never set wholesale, and only for entities the
+    controlled vocabulary can actually identify — see ``entity_pid_rows()``. ``vocab_dir``
+    is where the flat vocabulary artifacts live; ``None`` uses ``vocab_manager``'s own
+    default, and a directory without them simply yields no pids.
 
     The ``regenerable.markdown`` recipe records how to rebuild the Markdown this run
     actually fed the LLM (rule: never reference a transient artifact by a stored path).
@@ -1074,6 +1196,16 @@ def write_document_record(
         out_dir=str(record_dir),
     ) as doc:
         doc.set_block("enrichment", enrichment_block(doc_id, results))
+
+        # llm-enrich's one field in a block it does not own. merge_block, not set_block:
+        # `entities` is nlp-enrich's, and a wholesale write would erase the morphology and
+        # spans it holds. Reading the block back through get_block() is what supplies the
+        # rows to patch — they are the baseline's, so a standalone run (no baseline, no
+        # entities) resolves nothing and merges nothing, and the block is not created.
+        pid_rows = entity_pid_rows(doc.get_block("entities") or [], vocab_dir)
+        if pid_rows:
+            doc.merge_block("entities", pid_rows, own_fields=["pid"])
+
         if enriched_path is not None:
             doc.add_derived_from("enriched", str(enriched_path))
         if used_markdown_input:

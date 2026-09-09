@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from fastapi import Body, FastAPI, File, HTTPException, UploadFile
+from fastapi.staticfiles import StaticFiles
 
 from atrium_document import FILE_SUFFIX, canonical_doc_id
 from atrium_paradata import ParadataLogger
@@ -170,6 +171,10 @@ def _load_engine() -> Dict[str, Any]:
         "doc_model": doc_model,
         "doc_chat_fn": doc_chat_fn,
         "filter_params": filter_params,
+        # Where the flat vocabulary artifacts sit, for entities[].pid resolution in
+        # write_document_record(). Derived from the same VOCAB_PATH the prompt vocabulary
+        # was loaded from, so the two can never point at different harvests.
+        "vocab_dir": os.path.dirname(vocab_path) or ".",
     }
 
 
@@ -221,6 +226,22 @@ attach_inflight_middleware(app, _state)
 
 # CORS — standard §4.5 configuration (ALLOWED_ORIGINS CSV, default "*").
 add_cors(app, methods=["GET", "POST"])
+
+# Demo frontend (§9) — served at /frontend when the directory is present.
+#
+# Guarded by `.exists()` on purpose, so this block is a no-op wherever
+# `service/frontend/` was not shipped. That is what makes it safe on every branch:
+# the page currently lives only on `agent-skill`, and this same code changes nothing
+# on a branch without it, so there is no fork to forward-merge later.
+#
+# Until 2026-09-09 the branch README advertised a frontend "mounted at `/frontend`"
+# while nothing mounted anything — the page shipped unreachable. The skill-validate
+# endpoint check could not catch it: step 2 skips `/`-rooted tokens, and step 4's
+# `GET /x` pattern deliberately ignores a bare backticked `/frontend` precisely
+# because that form also names slash-commands and static mounts.
+_frontend_dir = Path(__file__).resolve().parent / "frontend"
+if _frontend_dir.exists():
+    app.mount("/frontend", StaticFiles(directory=str(_frontend_dir), html=True), name="frontend")
 
 
 def _deep_health() -> str | None:
@@ -338,6 +359,10 @@ def _run_extraction(
                     ),
                     used_markdown_input=(mode == "document"),
                     license_detail=para_logger.get_license_block(),
+                    # `.get`, not `[...]`: the contract tests build engine dicts by hand,
+                    # and an absent key must fall back to resolve_pid's default rather
+                    # than KeyError inside the record write.
+                    vocab_dir=engine.get("vocab_dir"),
                 )
             except RuntimeError as exc:
                 # The Layer D refusal (D4). Translated here rather than left to

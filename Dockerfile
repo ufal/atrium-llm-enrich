@@ -67,8 +67,20 @@ RUN chown -R atrium:atrium /app
 USER atrium
 
 EXPOSE 8000
-ENTRYPOINT ["uvicorn", "service.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Issue #55 container contract, restored 2026-09-09 to match the default branch.
+# STOPSIGNAL is already SIGTERM by default; declared so a later edit cannot change it
+# silently — service/api.py's lifespan chains to uvicorn's own handler for it via
+# serve_lifecycle (service/atrium_service.py). --timeout-graceful-shutdown bounds
+# uvicorn's wait for in-flight requests, and --start-period on HEALTHCHECK covers the
+# first-run model download.
+#
+# This branch had shipped service/healthcheck.py with nothing referencing it and no
+# HEALTHCHECK at all, while service/README.md documented the behaviour as live.
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["uvicorn", "service.api:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-graceful-shutdown", "20"]
 CMD []
+HEALTHCHECK --interval=30s --timeout=5s --start-period=180s --retries=3 \
+    CMD ["python", "/app/service/healthcheck.py"]
 
 # The local multi-GPU (transformers/vLLM) image lives on the development branch;
 # this agent-skill branch is torch-free and serves the API only.

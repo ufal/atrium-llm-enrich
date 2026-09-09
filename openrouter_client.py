@@ -509,6 +509,10 @@ def main(argv: Optional[List[str]] = None) -> None:
                         markdown_from=source_file if f != source_file else None,
                         used_markdown_input=is_document_level,
                         license_detail=logger.get_license_block(),
+                        # Same directory the prompt vocabulary was loaded from, so
+                        # entities[].pid resolves against the artifacts this run actually
+                        # used rather than resolve_pid's built-in default path.
+                        vocab_dir=os.path.dirname(vocab_path) or ".",
                     )
                     if record_path is not None:
                         document_records[doc_id] = Path(record_path)

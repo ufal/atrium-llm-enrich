@@ -53,39 +53,46 @@
         pre { background: #f4f6f8; padding: 0.75rem; border-radius: 4px; overflow-x: auto; }
         .error { color: #721c24; background-color: #f8d7da; padding: 0.75rem; border-radius: 4px; }
         footer.api { font-size: 0.9rem; color: #555; }
+        table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+        th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; vertical-align: top; }
+        th { background: #f4f6f8; }
+        p.meta { font-size: 0.9rem; color: #555; margin: 0.25rem 0; }
+        #serverInfo {
+            font-size: 0.85rem;
+            color: #555;
+            background: #f4f6f8;
+            border-left: 3px solid #007bff;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body>
     <main>
         <h1>ATRIUM LLM Enrichment 🗝️</h1>
         <p>Extract <strong>vocabulary-guided archaeological keywords</strong> (TEATER/AMCR) from
-        digitized document lines using an LLM backend. Paste text lines, or upload a
+        digitized documents using an LLM backend. Paste text, or upload a
         TXT/CSV/TEITOK file.</p>
+
+        <!-- The backend and model are chosen once, server-side, from the LLM_BACKEND
+             environment variable — there is no per-request override, so this banner
+             reports what the running server picked rather than offering a choice. -->
+        <div id="serverInfo">Reading server capabilities from <code>/info</code>…</div>
 
         <form id="extractForm">
             <div class="form-group">
-                <label for="linesInput">Text lines (one per line):</label>
-                <textarea id="linesInput" placeholder="Výzkum odhalil základy kostela...&#10;Nalezená keramika pochází z raného středověku."></textarea>
+                <label for="textInput">Text (document-level extraction):</label>
+                <textarea id="textInput" placeholder="Výzkum odhalil základy kostela.&#10;Nalezená keramika pochází z raného středověku."></textarea>
             </div>
             <div class="form-group">
                 <label for="fileInput">… or upload a file (.txt / .csv / .teitok.xml):</label>
                 <input type="file" id="fileInput" accept=".txt,.csv,.xml">
             </div>
 
-            <div class="row">
-                <div class="form-group">
-                    <label for="backendInput">Backend:</label>
-                    <select id="backendInput">
-                        <option value="" selected>server default</option>
-                        <option value="openrouter">openrouter (remote LLM API)</option>
-                        <option value="ollama">ollama (local Ollama server)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="topkInput">Keywords per line (top_k):</label>
-                    <input type="number" id="topkInput" value="10" min="1" max="50">
-                </div>
-            </div>
+            <!-- No backend / top_k inputs: both moved server-side. `POST
+                 /extract_keywords_text` takes `{text, document_json}` and
+                 `POST /extract_keywords` takes `file` + optional `document_json`;
+                 neither reads a backend or a top_k any more. -->
 
             <button type="submit">Extract keywords</button>
         </form>
@@ -98,11 +105,17 @@
             <h3>API usage 📡</h3>
             <p>This page is a thin client over the REST API. The same calls from the command line:</p>
             <pre><code>curl -X POST "http://localhost:8000/extract_keywords" \
-  -F "file=@lines.txt" -F "backend=openrouter" -F "top_k=10"
+  -F "file=@lines.txt"
+
+# optional: accrete into an existing ATRIUM Document record
+curl -X POST "http://localhost:8000/extract_keywords" \
+  -F "file=@lines.txt" -F "document_json=@CTX000000001.atrium.json"
 
 curl -X POST "http://localhost:8000/extract_keywords_text" \
   -H "Content-Type: application/json" \
-  -d '{"lines": ["Výzkum odhalil základy kostela."], "top_k": 5}'</code></pre>
+  -d '{"text": "Výzkum odhalil základy kostela."}'</code></pre>
+            <p>The backend and model are server-side settings (<code>LLM_BACKEND</code>);
+            <code>GET /info</code> reports which ones the running server chose.</p>
             <p>
                 Interactive docs: <a href="/docs">/docs</a> (Swagger UI) ·
                 machine-readable schema: <a href="/openapi.json">/openapi.json</a> ·

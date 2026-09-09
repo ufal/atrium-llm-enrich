@@ -15,6 +15,7 @@ Handles:
 
 import json
 import re
+import sys
 import time
 import unicodedata
 import urllib.parse
@@ -177,6 +178,106 @@ DEFAULT_NESTED_KEEP = ("cs", "en", "sub", "source", "source_id", "discarded_ids"
 # these parameters already use to mean something specific (`keep=None` = keep every
 # key), so it cannot be spelled as a default of None.
 _FROM_CONFIG: Any = object()
+
+
+#: The flat artifacts a concept lookup is built from, in precedence order. AMCR first,
+#: matching vs.merge()'s precedence, so a label both sources carry resolves to the AMCR
+#: concept in the index exactly as it does in vocabulary.csv.
+CONCEPT_INDEX_SOURCES: Tuple[str, ...] = ("amcr_flat.json", "teater_flat.json")
+
+_CONCEPT_INDEX_CACHE: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
+
+def concept_index(vocab_dir: str = "data_samples/vocab") -> Dict[str, Dict[str, Any]]:
+    """Map a normalised Czech label to the concept identity behind it.
+
+    WHY THIS EXISTS RATHER THAN A `nested_keep` ENTRY. The obvious way to get concept
+    URIs to runtime is to add `exact_match` and `uri` to
+    `taxonomy_config.json:_settings.nested_keep`. It is the wrong way:
+    :meth:`VocabularyManager.get_prompt_string` serialises the ENTIRE nested structure
+    into the model's system prompt, so those 707 Getty URIs and 5,594 source URIs would
+    be injected verbatim into every request. This repo maintains a whole reviewer sheet
+    (`context_budget.csv`) about how much of the vocabulary survives a context window;
+    spending that budget on identifiers the model can neither read nor use would be a
+    poor trade, and it would change model behaviour -- which populating a provenance
+    field must not do.
+
+    So the identity stays out of the prompt and is looked up here instead, straight from
+    the flat artifacts that already carry it. Returns, per normalised label::
+
+        {"uri": ..., "source": ..., "source_id": ..., "exact_match": (...), ...}
+
+    Read with stdlib ``json`` only -- deliberately NOT through ``vocab_sources``, whose
+    module-scope ``requests`` import (and lazy ``lxml``) must stay off the service import
+    path. See the note at the top of ``vocab_sources.py``.
+
+    Cached per directory. A missing directory yields ``{}`` rather than raising: an
+    enrichment run without the flat artifacts should lose the URIs, not fail.
+    """
+    key = str(vocab_dir)
+    if key in _CONCEPT_INDEX_CACHE:
+        return _CONCEPT_INDEX_CACHE[key]
+
+    index: Dict[str, Dict[str, Any]] = {}
+    for filename in CONCEPT_INDEX_SOURCES:
+        path = Path(vocab_dir) / filename
+        if not path.exists():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            print(f"NOTE [vocab_manager] {path}: {exc}", file=sys.stderr)
+            continue
+        for term in payload.get("terms", []):
+            label = _norm(term.get("cs"))
+            if not label or label in index:
+                # First source wins -- CONCEPT_INDEX_SOURCES is in precedence order.
+                continue
+            index[label] = {
+                "uri": term.get("uri") or "",
+                "source": term.get("source") or "",
+                "source_id": term.get("source_id") or "",
+                "scheme": term.get("scheme"),
+                "en": term.get("en"),
+                "exact_match": tuple(term.get("exact_match") or ()),
+                "close_match": tuple(term.get("close_match") or ()),
+                "broad_match": tuple(term.get("broad_match") or ()),
+            }
+    _CONCEPT_INDEX_CACHE[key] = index
+    return index
+
+
+def resolve_pid(label: str, vocab_dir: str = "data_samples/vocab") -> Dict[str, Optional[str]]:
+    """The ``entities[].pid`` block for a controlled term, or all-None if unknown.
+
+    Fills the two keys this vocabulary can actually answer for -- ``amcr`` and ``aat``
+    -- and leaves ``wikidata`` and ``geonames`` as ``None``, because nothing in this
+    repo resolves them and a guess in a FAIR cross-reference field is worse than a null.
+    The schema calls the block "the ARIADNE/GoTriple hook", and a hook that lies is not
+    a hook.
+
+    ``aat`` is taken only from ``exact_match`` on a ``vocab.getty.edu`` URI: an
+    exactMatch is an identity claim the source made deliberately, whereas ``broad_match``
+    ("this AAT concept is broader") and ``citation_uri`` ("this label is attested in
+    AAT") are not, and neither belongs in a field a consumer will read as "this IS the
+    AAT concept".
+    """
+    entry = concept_index(vocab_dir).get(_norm(label))
+    pid: Dict[str, Optional[str]] = {
+        "wikidata": None,
+        "geonames": None,
+        "aat": None,
+        "amcr": None,
+    }
+    if not entry:
+        return pid
+    if entry.get("source") == "amcr" and entry.get("uri"):
+        pid["amcr"] = entry["uri"]
+    for uri in entry.get("exact_match", ()):
+        if "vocab.getty.edu/aat/" in uri:
+            pid["aat"] = uri
+            break
+    return pid
 
 
 def _canonical_exclusion_key(key: str) -> str:
