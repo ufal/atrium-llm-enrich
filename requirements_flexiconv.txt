@@ -1,1 +1,23 @@
-flexiconv @ git+https://github.com/ufal/flexiconv.git
+# flexiconv — format conversion to TEITOK XML (api_util/flexiconv_convert.py).
+#
+# PINNED 2026-09-11 (atrium-project#62, twelve-factor II): this line read
+# `git+https://github.com/ufal/flexiconv.git` with NO REF, so every install resolved
+# whatever the default branch happened to be that day. Same class of defect as roadmap
+# B9 — a build whose inputs are decided at install time rather than declared — and the
+# last two instances of it in the ecosystem, after alto-postprocess#50 pinned its
+# layoutreader clone and vendored alto-tools.
+#
+# A TAG rather than a bare SHA, so the intent stays readable; the resolution it stood
+# for is recorded beside it, the same way tools/ci/workflow_lint.py requires a `# vX`
+# comment next to every pinned action SHA:
+#
+#     v0.3.10 = a982b88f363828bd6c71478d72d4f4e56a555677   (highest published tag)
+#     main    = a4f0fd9ce472c4e4d9ccd2827751e417b4480783   (ahead of it, untagged)
+#
+# Move the pin deliberately: bump the tag, re-resolve the SHA above, and run
+# tests/test_flexiconv_convert.py — they SKIP when flexiconv is absent, so a bad pin is
+# only ever caught by a run that actually installed it. The contract this package has to
+# satisfy is small and stated in api_util/flexiconv_convert.py: either a `flexiconv`
+# module exposing `convert(in, out, target_format="teitok")`, or a `flexiconv` CLI on
+# PATH. No Dockerfile installs this file — it is an opt-in extra.
+flexiconv @ git+https://github.com/ufal/flexiconv.git@v0.3.10
