@@ -85,8 +85,13 @@ services:
       OLLAMA_MODEL: ${OLLAMA_MODEL:-}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
       MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-10}
+      PORT: ${PORT:-8000}
     ports:
-      - "8000:8000"
+    # PORT is passed through so `PORT=9000 docker compose --profile api up` moves the
+    # listener, the published port and the container's own HEALTHCHECK together — the
+    # service reads it in service/api.py's __main__ block and service/healthcheck.py
+    # probes it. (atrium-project#58)
+      - "${PORT:-8000}:${PORT:-8000}"
     volumes:
       - ./data:/data
       - ./llm_config.txt:/app/llm_config.txt:ro

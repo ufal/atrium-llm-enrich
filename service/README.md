@@ -14,6 +14,8 @@ pip install -r service/requirements.txt
 
 # choose a backend and give it a key/model, then launch:
 export LLM_BACKEND=openrouter OPENROUTER_API_KEY=sk-... OPENROUTER_MODEL=openai/gpt-4o-mini
+python -m service.api                     # honours PORT/HOST; default 0.0.0.0:8000
+# or, for development with auto-reload:
 uvicorn service.api:app --host 0.0.0.0 --port 8000
 # or:
 docker compose --profile api up -d
@@ -24,13 +26,13 @@ report `ready: false`, while the extraction endpoints return `503` until configu
 
 ## Endpoints
 
-| Method | Path                     | Purpose                                                                            |
-|--------|--------------------------|------------------------------------------------------------------------------------|
-| GET    | `/info`                  | service identity + capabilities: `service`, `version`, `endpoints`, `limits`, `backend`, `model`, `ready`, `supported_inputs`, `languages` |
-| GET    | `/health`                | liveness probe — 200 always, even mid-shutdown. `?deep=true` additionally checks the backend is configured (503 on fail or while draining) |
+| Method | Path                     | Purpose                                                                                                                                                                         |
+|--------|--------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| GET    | `/info`                  | service identity + capabilities: `service`, `version`, `endpoints`, `limits`, `backend`, `model`, `ready`, `supported_inputs`, `languages`                                      |
+| GET    | `/health`                | liveness probe — 200 always, even mid-shutdown. `?deep=true` additionally checks the backend is configured (503 on fail or while draining)                                      |
 | GET    | `/ready`                 | readiness probe (issue #55) — 503 until the backend is serviceable, 200 while serving, 503 the instant `SIGTERM` arrives. The Kubernetes `readinessProbe`/`startupProbe` target |
-| POST   | `/extract_keywords`      | extract keywords from an uploaded document                                          |
-| POST   | `/extract_keywords_text` | extract keywords from an inline JSON `{"lines": [...]}` body                        |
+| POST   | `/extract_keywords`      | extract keywords from an uploaded document                                                                                                                                      |
+| POST   | `/extract_keywords_text` | extract keywords from an inline JSON `{"lines": [...]}` body                                                                                                                    |
 
 ### `POST /extract_keywords` (multipart form)
 
@@ -70,14 +72,14 @@ curl -s http://localhost:8000/info
 }
 ```
 
-| Field     | Type   | Description                                                       |
-|-----------|--------|------------------------------------------------------------------|
-| `service` | str    | canonical tool id (`atrium-llm-enrich`)                          |
-| `doc_id`  | str    | document id derived from the upload filename                     |
-| `backend` | str    | active LLM backend (`openrouter` / `ollama`)                    |
-| `mode`    | str    | `line` (CSV/TEITOK) or `document` (MD/TXT)                       |
-| `results` | list   | per-line/per-document records; `enrichment` holds the keywords   |
-| `stats`   | object | processed / filtered / errored counts (+ `aborted` on abort)     |
+| Field     | Type   | Description                                                    |
+|-----------|--------|----------------------------------------------------------------|
+| `service` | str    | canonical tool id (`atrium-llm-enrich`)                        |
+| `doc_id`  | str    | document id derived from the upload filename                   |
+| `backend` | str    | active LLM backend (`openrouter` / `ollama`)                   |
+| `mode`    | str    | `line` (CSV/TEITOK) or `document` (MD/TXT)                     |
+| `results` | list   | per-line/per-document records; `enrichment` holds the keywords |
+| `stats`   | object | processed / filtered / errored counts (+ `aborted` on abort)   |
 
 ## Errors
 
@@ -91,17 +93,33 @@ curl -s http://localhost:8000/info
 
 ## Configuration (environment)
 
-| Variable             | Default                    | Meaning                                        |
-|----------------------|----------------------------|------------------------------------------------|
-| `LLM_BACKEND`        | `openrouter`               | `openrouter` or `ollama`                       |
-| `OPENROUTER_API_KEY` | —                          | key for the OpenRouter backend                 |
-| `OPENROUTER_MODEL`   | —                          | OpenRouter model id                            |
-| `OLLAMA_HOST`        | `http://localhost:11434`   | Ollama server URL                              |
-| `OLLAMA_MODEL`       | —                          | Ollama model tag                               |
-| `VOCAB_PATH`         | from `llm_config.txt`      | archaeological vocabulary JSON                  |
-| `MAX_UPLOAD_MB`      | `10`                       | canonical upload limit                          |
-| `ALLOWED_ORIGINS`    | `*`                        | CSV of CORS origins                             |
-| `LLM_TIMEOUT`        | `300`                      | per-call read timeout (s)                       |
+| Variable              | Default                  | Meaning                                                                                   |
+|-----------------------|--------------------------|-------------------------------------------------------------------------------------------|
+| `LLM_BACKEND`         | `openrouter`             | `openrouter` or `ollama`                                                                  |
+| `OPENROUTER_API_KEY`  | —                        | key for the OpenRouter backend                                                            |
+| `OPENROUTER_MODEL`    | —                        | OpenRouter model id                                                                       |
+| `OLLAMA_HOST`         | `http://localhost:11434` | Ollama server URL                                                                         |
+| `OLLAMA_MODEL`        | —                        | Ollama model tag                                                                          |
+| `VOCAB_PATH`          | from `llm_config.txt`    | archaeological vocabulary JSON                                                            |
+| `MAX_UPLOAD_MB`       | `10`                     | canonical upload limit                                                                    |
+| `ALLOWED_ORIGINS`     | `*`                      | CSV of CORS origins                                                                       |
+| `LLM_TIMEOUT`         | `300`                    | per-call read timeout (s)                                                                 |
+| `PORT`                | `8000`                   | port the service **binds**, and the one `service/healthcheck.py` probes (issues #55, #58) |
+| `HOST`                | `0.0.0.0`                | bind address (issue #58). ⚠️ see the warning below                                        |
+| `GRACEFUL_SHUTDOWN_S` | `20`                     | seconds uvicorn waits for in-flight requests (issue #55)                                  |
+| `RELOAD`              | `false`                  | filesystem auto-reload — development only                                                 |
+| `LOG_LEVEL`           | `INFO`                   | root logger level for the `python -m service.api` start path (issue #61)                  |
+
+`PORT` and `HOST` are read by `service/api.py`'s `__main__` block, which is what the `api`
+image's `ENTRYPOINT` (`python -m service.api`) runs. Before issue #58 the entrypoint baked
+`--port 8000` into an exec-form array — which runs no shell, so `$PORT` could not expand —
+while `service/healthcheck.py` read it. Setting `PORT` therefore moved the health *probe*
+and not the listener, and the container reported unhealthy forever.
+
+> ⚠️ `HOST=127.0.0.1` yields a container that reports **healthy** and serves nobody:
+> `service/healthcheck.py` always probes loopback by design and never reads `HOST`, so a
+> loopback bind passes every probe while being unreachable from outside the container.
+
 
 ## How it works
 
@@ -114,8 +132,10 @@ Backend warmup failures are recorded rather than fatal, keeping `/info` and `/he
 ## Shutdown behavior (issue #55)
 
 The `api` image declares `HEALTHCHECK` (shallow `GET /health` via the vendored
-`service/healthcheck.py`) and `STOPSIGNAL SIGTERM`, and its `ENTRYPOINT` passes
-`--timeout-graceful-shutdown 20`.
+`service/healthcheck.py`) and `STOPSIGNAL SIGTERM`, and sets `ENV GRACEFUL_SHUTDOWN_S=20`,
+which `service/api.py`'s `__main__` block passes to uvicorn as
+`timeout_graceful_shutdown`. (It was the `--timeout-graceful-shutdown 20` CLI flag until
+issue #58 moved the whole start command into that block so `$PORT` could be honoured.)
 
 On `SIGTERM` the service flips `GET /ready` to **503** at once (so an orchestrator stops
 routing to it), starts refusing new work in `_require_engine()` with a 503, and lets
@@ -126,7 +146,7 @@ the drain completed.
 ⚠️ llm-enrich's slow work happens **inside** the request: one remote LLM call per line,
 each bounded by `LLM_TIMEOUT` (default 300s). A large document can therefore legitimately
 run longer than the 20s drain budget and be cut short. Raise both
-`--timeout-graceful-shutdown` and the deployment's grace period together for that
+`GRACEFUL_SHUTDOWN_S` and the deployment's grace period together for that
 workload — see `docs/k8s_deployment.md` ("Known limits") in the hub.
 
 A clean shutdown exits **143** (128 + SIGTERM), not 0: uvicorn re-raises the captured

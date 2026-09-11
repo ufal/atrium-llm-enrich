@@ -517,6 +517,51 @@ async def extract_keywords_text(
 
 
 if __name__ == "__main__":
+    import logging
+    import os
+    import sys
+
     import uvicorn
 
-    uvicorn.run("service.api:app", host="0.0.0.0", port=8000)
+    # (12-factor XI) Logs are an event stream: emit to stdout and let the supervisor
+    # route them. The library modules only getLogger(); this is the one place allowed
+    # to configure handlers. The format string is alto-postprocess's, verbatim, in all
+    # five services — a partner tailing five logs wants one shape, and format drift is
+    # never fixed later. (issue #61)
+    logging.basicConfig(
+        level=os.getenv("LOG_LEVEL", "INFO").upper(),
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
+        stream=sys.stdout,
+    )
+
+    # (12-factor VII) The service exports itself by binding a port, and which port is
+    # configuration. This was baked into an exec-form ENTRYPOINT array, where no shell
+    # exists to expand a variable even if one is set — while the reference manifest we
+    # hand ARÚP/ARÚB (atrium-project docs/templates/k8s/atrium-service.deployment.yaml)
+    # declares `env: PORT` and service/healthcheck.py already reads it. Setting PORT
+    # therefore moved the health PROBE and not the listener, so the container reported
+    # unhealthy forever rather than simply ignoring the knob. (issue #58)
+    reload = os.getenv("RELOAD", "false").strip().lower() in ("true", "1", "yes", "on")
+
+    # uvicorn needs an IMPORT STRING to respawn workers on reload; everywhere else the
+    # app OBJECT is correct and strictly better. Passing a string under the container
+    # entrypoint (`python -m service.api`) re-imports this module under its real name
+    # while it is already running as __main__: the whole body executes twice, and the
+    # copy uvicorn serves is not the one __main__ built. __spec__ is None under a direct
+    # `python api.py` from service/ (service/README.md's documented start), where no
+    # import string resolves anyway — so reload degrades to a uvicorn warning there
+    # instead of silently pretending to be on.
+    _app_ref = f"{__spec__.name}:app" if reload and __spec__ is not None else app
+
+    uvicorn.run(
+        _app_ref,
+        host=os.getenv("HOST", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8000")),
+        reload=reload,
+        # (12-factor IX) Disposability: this is the `--timeout-graceful-shutdown 20`
+        # that moved off the ENTRYPOINT line when the port became configurable. It
+        # bounds uvicorn's wait for in-flight requests; serve_lifecycle() adds its own
+        # drain on top, and docs/k8s_deployment.md in the hub carries the full grace
+        # budget the two have to fit inside. (issue #55)
+        timeout_graceful_shutdown=int(os.getenv("GRACEFUL_SHUTDOWN_S", "20")),
+    )
