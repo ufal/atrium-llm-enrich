@@ -20,6 +20,10 @@ file by atrium-nlp-enrich's ``api_flexiconv.sh``, or standalone:
   ``<stem>.<ext>.teitok.xml`` so no conversion overwrites another. The rule depends only on
   the directory listing, so it is the same in every run.
 * An existing output is kept (resume) unless ``force`` is set.
+* Exit codes of the command line: 0 converted (or kept), 1 flexiconv could not convert this
+  file, 3 flexiconv is not installed (neither library nor CLI). ``--check`` exits 0 or 3
+  without converting anything, so a batch can stop before its first file instead of
+  failing on every one of them.
 """
 
 import argparse
@@ -52,6 +56,8 @@ FLEXICONV_EXTENSIONS = frozenset(
 )
 _TABULAR = frozenset({"csv", "xlsx"})
 CLI_TIMEOUT_S = 300
+EXIT_CONVERSION_FAILED = 1
+EXIT_NOT_INSTALLED = 3
 
 
 class FlexiconvNotInstalled(RuntimeError):
@@ -166,8 +172,13 @@ def convert_to_teitok(
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Convert one document to TEITOK XML (flexiconv).")
-    parser.add_argument("input_file", type=Path)
-    parser.add_argument("--out-dir", type=Path, required=True)
+    parser.add_argument("input_file", type=Path, nargs="?")
+    parser.add_argument("--out-dir", type=Path)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Only report whether flexiconv is installed (exit 0) or not (exit 3).",
+    )
     parser.add_argument(
         "--force", action="store_true", help="Overwrite an existing <stem>.teitok.xml."
     )
@@ -177,14 +188,25 @@ def main(argv=None) -> int:
         help="Allowed extensions (space/comma separated) used for the same-stem naming rule.",
     )
     args = parser.parse_args(argv)
+    if args.check:
+        if flexiconv_available():
+            print("[OK] flexiconv is available")
+            return 0
+        print(f"[FAIL] {INSTALL_HINT}", file=sys.stderr)
+        return EXIT_NOT_INSTALLED
+    if args.input_file is None or args.out_dir is None:
+        parser.error("input_file and --out-dir are required unless --check is given")
     allowed = normalize_ext_list(args.formats) or None
 
     existed = output_path_for(args.input_file, args.out_dir, allowed).exists()
     try:
         out = convert_to_teitok(args.input_file, args.out_dir, force=args.force, allowed=allowed)
-    except (FlexiconvNotInstalled, FlexiconvConversionError) as exc:
+    except FlexiconvNotInstalled as exc:
         print(f"[FAIL] {args.input_file.name}: {exc}", file=sys.stderr)
-        return 1
+        return EXIT_NOT_INSTALLED
+    except FlexiconvConversionError as exc:
+        print(f"[FAIL] {args.input_file.name}: {exc}", file=sys.stderr)
+        return EXIT_CONVERSION_FAILED
     status = "SKIP" if existed and not args.force else "OK"
     print(f"[{status}] {args.input_file.name} -> {out}")
     return 0

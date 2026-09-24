@@ -19,7 +19,13 @@ pytest.importorskip("transformers")
 
 from pydantic import BaseModel, Field  # noqa: E402
 
-from llm_utils import _should_process_line, get_context_window, validate_llm_output  # noqa: E402
+from llm_utils import (  # noqa: E402
+    _row_quality,
+    _should_process_line,
+    get_context_window,
+    read_input_rows,
+    validate_llm_output,
+)
 
 
 class DummyEnrichment(BaseModel):
@@ -67,6 +73,39 @@ def test_should_process_line_noise_rejection():
 
     should_proc, _ = _should_process_line("Good length text", "Trash", 0.80, True, 3, 8, 0.40)
     assert not should_proc
+
+
+def test_a_row_without_a_quality_score_is_not_trash():
+    """A TEITOK document (or a text table) has no line quality. Treating the missing score as
+    0.0 turned every such row into "Trash", so a .teitok.xml input enriched nothing (#13 P5.1)."""
+    should_proc, _ = _should_process_line("A readable line", "", None, True, 3, 8, 0.40)
+    assert should_proc
+    should_proc, _ = _should_process_line("ab", "", None, True, 3, 8, 0.40)
+    assert not should_proc  # the length rules still apply
+
+
+def test_row_quality_reads_the_score_or_none():
+    assert _row_quality({"quality_score": "0.91"}) == 0.91
+    assert _row_quality({"quality_score": 0.2}) == 0.2
+    assert _row_quality({"quality_score": ""}) is None
+    assert _row_quality({"quality_score": None}) is None
+    assert _row_quality({}) is None
+    assert _row_quality({"quality_score": "n/a"}) is None
+
+
+def test_teitok_rows_reach_the_model(tmp_path):
+    teitok = tmp_path / "doc.teitok.xml"
+    teitok.write_text(
+        '<TEI><text><body><pb n="1"/><div><s id="s-1" text="Výzkum proběhl v Praze.">'
+        "<tok>Výzkum</tok></s></div></body></text></TEI>",
+        encoding="utf-8",
+    )
+    rows = read_input_rows(teitok)
+    assert rows and rows[0]["quality_score"] is None
+    should_proc, reason = _should_process_line(
+        rows[0]["text"], rows[0]["categ"], _row_quality(rows[0]), True, 3, 8, 0.40
+    )
+    assert should_proc, reason
 
 
 def test_get_context_window_formatting():

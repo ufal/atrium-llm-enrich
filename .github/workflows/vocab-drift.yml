@@ -14,11 +14,12 @@
 # it is a named, path-scoped check so the same drift fails loudly on the next PR
 # that touches either half without the other.
 #
-# Standalone rather than a hub reusable, same reasoning as teitok-schema.yml: this
-# is nlp-enrich's own build pipeline, nothing to share yet (llm-enrich carries a
-# byte-identical copy of vocab_manager.py/vocab_sources.py/vocab_build.py as of the
-# last manual sync, but has no vocab-refresh.yml of its own and cannot regenerate
-# its artifacts -- mirroring this gate there is separate work).
+# Standalone rather than a hub reusable: the vocabulary build is shared by two repos
+# only (this one and atrium-nlp-enrich), nothing to put in the hub yet. This header was
+# first copied from nlp-enrich's; as of 2026-09-24 in this repo vocab_manager.py and
+# vocab_sources.py are byte-identical to nlp-enrich's, vocab_build.py is this repo's own
+# (it differs), and vocab-refresh.yml exists here too, so the artifacts can be
+# regenerated in this repo.
 #
 # requests is a module-level import in vocab_sources.py (used even offline, for
 # type hints/session plumbing) so it is installed here too; lxml is only imported

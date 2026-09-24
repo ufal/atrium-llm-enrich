@@ -30,9 +30,12 @@ if _repo_root not in sys.path:
 
 from api_util import layout_md as L  # noqa: E402
 from api_util.teitok_read import (  # noqa: E402
+    _events,
+    _join_tokens,
+    _Pages,
+    _token_records,
     doc_id_from_path,
     parse_teitok,
-    pb_page_number,
     read_teitok_rows,
     sentence_text,
 )
@@ -189,76 +192,136 @@ def _read_alto_layout(path: str | Path) -> tuple:
     return rows, pages
 
 
+def _union(boxes: List[list]) -> list | None:
+    boxes = [b for b in boxes if b]
+    if not boxes:
+        return None
+    return [
+        min(b[0] for b in boxes),
+        min(b[1] for b in boxes),
+        max(b[2] for b in boxes),
+        max(b[3] for b in boxes),
+    ]
+
+
+def _bbox_origin(root: ET.Element) -> str | None:
+    """What atrium-nlp-enrich's writer says its boxes are measured from
+    (``<application ident="atrium-nlp-enrich"><desc>bbox origin: page|printspace</desc>``),
+    or None for a document it did not write."""
+    for el in root.iter():
+        if _local_tag(el) == "application" and el.get("ident") == "atrium-nlp-enrich":
+            for desc in el:
+                text = "".join(desc.itertext()) if _local_tag(desc) == "desc" else ""
+                if text.strip().startswith("bbox origin:"):
+                    return text.split(":", 1)[1].strip() or None
+    return None
+
+
 def _read_teitok_layout(path: str | Path) -> tuple:
     """TEITOK → (rows, pages) with coordinates.
 
-    Mirrors teitok_read.read_teitok_rows()'s page/line/text logic (page numbers via
-    ``teitok_read.pb_page_number``, sentence text via ``teitok_read.sentence_text``, which
-    keeps the document's own spacing and ignores ``<dtok>``), plus a per-sentence ``bbox``
-    (aggregated from child ``<tok bbox>``), page canvas dimensions from
-    ``<surface lrx lry>`` (in document order), and figure regions from
-    ``<figure bbox type>``. Documents without ``<s>`` (flexiconv output) get
-    teitok_read's line/block rows, without a bbox.
+    The rows are ``teitok_read.read_teitok_rows()``'s -- the same page and line numbering
+    (the vendored reader's private ``_Pages``/``_events`` helpers, pinned with it), one row per
+    ``<s>`` or per page part of an ``<s>`` that contains a ``<pb/>`` (nlp-enrich writes one
+    there when a sentence runs over a page break) -- plus a ``bbox`` aggregated from the
+    ``<tok bbox>`` of that row, so a box never spans two pages. A page labelled otherwise than
+    its number (``pb@n="I"``) gives its rows a ``page_label``. ``pages`` holds the canvas size
+    from ``<surface lrx lry>`` (in document order), the figures from ``<figure bbox type>``,
+    and ``origin="printspace"`` when the writer says its boxes are PrintSpace-relative.
+    Documents without ``<s>`` (flexiconv output) get teitok_read's line/block rows, without
+    a bbox.
     """
     root = parse_teitok(path)
     rows: List[dict] = []
     pages: dict = {}
     surface_dims: List[tuple] = []
-
-    page_num = 1
-    line_num = 1
-    page_order: List[int] = []
-    has_sentences = False
-    pages.setdefault(page_num, {"width": None, "height": None, "figures": []})
-
     for elem in root.iter():
-        tag = _local_tag(elem)
-        if tag == "surface":
+        if _local_tag(elem) == "surface":
             try:
                 surface_dims.append(
                     (int(float(elem.get("lrx", "") or "")), int(float(elem.get("lry", "") or "")))
                 )
             except (ValueError, TypeError):
                 surface_dims.append((None, None))
-        elif tag == "pb":
-            # `n` is usually a plain page count, but archival front matter /
-            # appendices legitimately use roman numerals or other non-numeric
-            # labels (e.g. n="I"), and converters often omit it: the shared rule
-            # (the first <pb> is page 1, later ones advance) instead of int().
-            page_num = pb_page_number(elem, page_num, first=not page_order)
-            pages.setdefault(page_num, {"width": None, "height": None, "figures": []})
-            page_order.append(page_num)
-        elif tag == "lb":
-            line_num += 1
-        elif tag == "figure":
-            box = _parse_bbox_attr(elem.get("bbox"))
-            if box:
-                pages[page_num]["figures"].append({"bbox": box, "type": elem.get("type", "")})
-        elif tag == "s":
-            has_sentences = True
-            text = sentence_text(elem)
-            if not text:
-                continue
-            boxes = [
-                _parse_bbox_attr(tok.get("bbox"))
-                for tok in elem.iter()
-                if _local_tag(tok) == "tok" and tok.get("bbox")
-            ]
-            boxes = [b for b in boxes if b]
-            bbox = None
-            if boxes:
-                bbox = [
-                    min(b[0] for b in boxes),
-                    min(b[1] for b in boxes),
-                    max(b[2] for b in boxes),
-                    max(b[3] for b in boxes),
-                ]
-            rows.append({"page_num": page_num, "line_num": line_num, "text": text, "bbox": bbox})
+
+    def page(num: int) -> dict:
+        return pages.setdefault(num, {"width": None, "height": None, "figures": []})
+
+    pager = _Pages()
+    page(pager.num)
+    page_order: List[int] = []
+    records = _token_records(root)
+    has_sentences = False
+    sent = None
+
+    def new_part():
+        return {"at": pager.snapshot(), "line0": pager.line, "line": None, "toks": []}
+
+    def add_row(text, part, toks):
+        at = part["at"]
+        row = {
+            "page_num": at["page_num"],
+            "line_num": part["line"] if part["line"] is not None else part["line0"],
+            "text": text,
+            "bbox": _union([_parse_bbox_attr(t.get("bbox")) for t in toks]),
+        }
+        if at["page_label"] and at["page_label"] != str(at["page_num"]):
+            row["page_label"] = at["page_label"]
+        rows.append(row)
+
+    for kind, value in _events(root):
+        if kind == "tok":
+            if sent is not None:
+                part = sent["parts"][-1]
+                if part["line"] is None:
+                    part["line"] = pager.line
+                part["toks"].append(value)
+            pager.content()
+            continue
+        if kind == "text":
+            continue
+        tag = _local_tag(value)
+        if kind == "start":
+            if tag == "pb":
+                pager.pb(value)
+                page(pager.num)
+                page_order.append(pager.num)
+                if sent is not None:
+                    sent["parts"].append(new_part())
+            elif tag == "lb":
+                pager.lb()
+            elif tag == "figure":
+                box = _parse_bbox_attr(value.get("bbox"))
+                if box:
+                    page(pager.num)["figures"].append({"bbox": box, "type": value.get("type", "")})
+            elif tag == "s" and sent is None:
+                has_sentences = True
+                sent = {"elem": value, "parts": [new_part()]}
+        elif sent is not None and value is sent["elem"]:
+            parts = [p for p in sent["parts"] if p["toks"]]
+            if len(parts) > 1:
+                for part in parts:
+                    text = _join_tokens([records[t] for t in part["toks"]])
+                    if text:
+                        add_row(text, part, part["toks"])
+            else:
+                part = parts[0] if parts else sent["parts"][0]
+                text = sentence_text(value)
+                if text:
+                    add_row(text, part, part["toks"])
+                    pager.content()
+            sent = None
 
     if not has_sentences:
-        rows = [dict(row, bbox=None) for row in read_teitok_rows(path)]
-        for row in rows:
-            pages.setdefault(row["page_num"], {"width": None, "height": None, "figures": []})
+        rows = []
+        for row in read_teitok_rows(path):
+            out = {k: row[k] for k in ("page_num", "line_num", "text")}
+            out["bbox"] = None
+            label = row.get("page_label")
+            if label and label != str(row["page_num"]):
+                out["page_label"] = label
+            rows.append(out)
+            page(row["page_num"])
 
     # Surfaces are written one-per-page, in the same document order that
     # <pb> elements introduce pages — align positionally against THAT order,
@@ -270,12 +333,18 @@ def _read_teitok_layout(path: str | Path) -> tuple:
     # instead of the real one. Fall back to the single implicit page when
     # the document has no <pb> at all.
     if not page_order:
-        page_order = [page_num]
+        page_order = [pager.num]
     for i, (w, h) in enumerate(surface_dims):
         if i < len(page_order):
             target_page = page_order[i]
             pages[target_page]["width"] = w
             pages[target_page]["height"] = h
+
+    # BBOX_ORIGIN=printspace: the boxes are not page boxes; say so in every page's DOC_META
+    # (atrium-llm-enrich#13, P5.4). The default, "page", is what the cues mean anyway.
+    if _bbox_origin(root) == "printspace":
+        for meta in pages.values():
+            meta["origin"] = "printspace"
 
     return rows, pages
 
@@ -337,8 +406,11 @@ def rows_to_layout_markdown(rows: List[dict], pages: dict, title: str = "") -> s
             parts.append(f"\n## Page {label}\n")
             meta = pages.get(page, {})
             w, h = meta.get("width"), meta.get("height")
+            origin = {"origin": meta["origin"]} if meta.get("origin") else {}
             if w and h:
-                parts.append(L.doc_meta(size=f"{w}x{h}{meta.get('unit', 'px')}"))
+                parts.append(L.doc_meta(size=f"{w}x{h}{meta.get('unit', 'px')}", **origin))
+            elif origin:
+                parts.append(L.doc_meta(**origin))
             for fig in meta.get("figures", []):
                 parts.append(L.image(fig.get("type", "figure"), "", fig.get("bbox")))
             if meta.get("needs_ocr"):

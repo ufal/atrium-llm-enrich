@@ -287,7 +287,11 @@ Output is page-sectioned (`## Page N` headings) so the whole-document system pro
 instructions ("prefer including the nearest page heading above the located passage") resolve
 against real anchors in the rendered text. Pass `--format layout` to additionally emit the
 visual-layout cues below (page dimensions, per-line bounding boxes, page breaks, figures) from the
-TEITOK/ALTO coordinates — the same annotated-Markdown schema the PDF/DOCX converter produces.
+TEITOK/ALTO coordinates — the same annotated-Markdown schema the PDF/DOCX converter produces. A
+sentence that runs over a page break is rendered as two lines, one under each page, each with its
+own page's box; a page labelled `n="I"` is headed `## Page I`; and when nlp-enrich wrote its boxes
+relative to the ALTO PrintSpace (`BBOX_ORIGIN=printspace`), the page's `DOC_META` cue says
+`origin=printspace`, so the model is not told they are page coordinates.
 
 ## Visually-Rich Document Input (`api_util/doc_to_visual_md.py`)
 
@@ -413,9 +417,15 @@ has no offload path; for over-VRAM models the supported answer is `BACKEND=vllm`
 
 * **Input (local & remote/lightweight-local, line-level):** `INPUT_DIR/*.csv` or
   `*.teitok.xml` — expects `file_id`/`page_num`/`line_num`/`categ`/`quality_score`/`text` columns
-  (CSV) or TEITOK's native `pb`/`lb`/`s` structure. One row per `<s>` (nlp-enrich output);
-  documents without `<s>` (flexiconv output) give one row per `<lb/>` line or text block. Reader:
+  (CSV) or TEITOK's native `pb`/`lb`/`s` structure. One row per `<s>` (nlp-enrich output), or
+  per page part of an `<s>` that runs over a page break (nlp-enrich puts a `<pb/>` inside it);
+  documents without `<s>` (flexiconv output) give one row per `<lb/>` line or text block; line
+  numbers restart on every page. Reader:
   [`api_util/teitok_read.py`](api_util/teitok_read.py) 📎, vendored verbatim from atrium-nlp-enrich.
+  A row without a `quality_score` (every TEITOK row; a CSV without the column) has an *unknown*
+  quality: the quality bands of the line filter do not apply to it, only the length rules — it
+  used to count as 0.0, i.e. "Trash", so a `.teitok.xml` input enriched nothing. The output
+  record then carries `"quality_score": null`.
 * **Input (remote/lightweight-local, document-level):** `.md`/`.txt` (from
   [`api_util/xml_to_md.py`](api_util/xml_to_md.py) 📎), or `.pdf`/`.docx` auto-converted to
   visually-rich Markdown by [`api_util/doc_to_visual_md.py`](api_util/doc_to_visual_md.py) 📎.

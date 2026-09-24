@@ -14,6 +14,7 @@ from api_util.xml_to_md import (
     convert,
     is_alto,
     read_document_rows,
+    rows_to_layout_markdown,
     rows_to_markdown,
     rows_to_plain_text,
 )
@@ -199,7 +200,7 @@ def test_rows_to_plain_text_no_leading_blank_for_first_page():
 # ── _read_teitok_layout ──────────────────────────────────────────────────────
 # Previously zero test coverage despite backing both `xml_to_md.py --format
 # layout` and (transitively, via rows_to_layout_markdown) json_to_md.py's
-# renderer -- the two converters issue #13's TODO calls out by name
+# renderer -- the two converters atrium-project#24's TODO calls out by name
 # ("Make sure JSON-2-MD and TEITOK-2-MD pipelines work correctly ... with
 # ... complex XMLs of pages").
 
@@ -356,3 +357,49 @@ def test_read_teitok_layout_reads_flexiconv_output_without_sentences(tmp_path):
     assert [r["text"] for r in rows] == ["Výzkum proběhl v Praze.", "Nalezeno 12 střepů."]
     assert all(r["bbox"] is None for r in rows)
     assert 1 in pages
+
+
+# ── nlp-enrich format 2 after its issue #38: <pb/> inside <s> ─────────────────
+WRITER_SAMPLE = (
+    Path(__file__).resolve().parent / "fixtures" / "teitok" / "writer" / "CTX000000002.teitok.xml"
+)
+
+
+def test_a_sentence_over_a_page_break_gives_one_boxed_row_per_page():
+    """CTX000000002 s-5 runs from page 3 onto page 4. As one row its box was the union of
+    boxes on two different pages; now each page part is a row with its own page's box."""
+    rows, pages = _read_teitok_layout(WRITER_SAMPLE)
+    by_text = {r["text"]: r for r in rows}
+    first, second = by_text["qpqb dbqp uunn"], by_text["Soubor nálezů byl uložen v depozitáři."]
+    assert (first["page_num"], first["line_num"]) == (3, 2)
+    assert (second["page_num"], second["line_num"]) == (4, 1)
+    assert second["bbox"][1] == 160  # the top line of page 4, not page 3's 210
+    assert all(pages[p]["width"] == 1654 for p in (1, 2, 3, 4))
+    md = rows_to_layout_markdown(rows, pages, "CTX000000002")
+    assert md.index("## Page 4") < md.index("Soubor nálezů")
+
+
+def test_printspace_boxes_are_labelled_in_doc_meta(tmp_path):
+    """P5.4: BBOX_ORIGIN=printspace boxes are not page boxes; the cue says so."""
+    text = WRITER_SAMPLE.read_text(encoding="utf-8").replace(
+        "<desc>bbox origin: page</desc>", "<desc>bbox origin: printspace</desc>"
+    )
+    doc = tmp_path / "ps.teitok.xml"
+    doc.write_text(text, encoding="utf-8")
+    rows, pages = _read_teitok_layout(doc)
+    md = rows_to_layout_markdown(rows, pages)
+    assert "DOC_META: size=1654x2339px, origin=printspace" in md
+    rows, pages = _read_teitok_layout(WRITER_SAMPLE)
+    assert "origin=" not in rows_to_layout_markdown(rows, pages)
+
+
+def test_page_labels_head_the_page_sections(tmp_path):
+    doc = tmp_path / "roman.teitok.xml"
+    doc.write_text(
+        '<TEI><text><body><div><pb n="I"/><s text="Předmluva."/><pb n="II"/><s text="Úvod."/>'
+        "</div></body></text></TEI>",
+        encoding="utf-8",
+    )
+    rows, pages = _read_teitok_layout(doc)
+    md = rows_to_layout_markdown(rows, pages)
+    assert "## Page I" in md and "## Page II" in md

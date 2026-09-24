@@ -26,6 +26,8 @@ from llm_client_shared import (
     build_schema,
     get_context_window,
     load_config,
+    read_input_rows,
+    row_quality,
     run_document_level,
     run_line_level,
     should_process_line,
@@ -91,6 +93,37 @@ def test_should_process_line_mid_quality_score_forces_noisy_but_keeps():
         "Reasonably long text here", "Text", 0.55, True, 3, 8, 0.40
     )
     assert should_proc
+
+
+def test_a_row_without_a_quality_score_is_not_trash():
+    """P5.1 (#13): a missing score is "unknown", not 0.0 -- the quality bands do not apply,
+    the length rules still do. A .teitok.xml input used to enrich zero lines."""
+    should_proc, _ = should_process_line("A readable line", "", None, True, 3, 8, 0.40)
+    assert should_proc
+    should_proc, _ = should_process_line("ab", "", None, True, 3, 8, 0.40)
+    assert not should_proc
+
+
+def test_row_quality_reads_the_score_or_none():
+    assert row_quality({"quality_score": "0.91"}) == 0.91
+    assert row_quality({"quality_score": ""}) is None
+    assert row_quality({}) is None
+    assert row_quality({"quality_score": "n/a"}) is None
+
+
+def test_teitok_rows_carry_no_quality_and_pass_the_filter(tmp_path):
+    teitok = tmp_path / "doc.teitok.xml"
+    teitok.write_text(
+        '<TEI><text><body><pb n="1"/><div><s id="s-1" text="Výzkum proběhl v Praze.">'
+        "<tok>Výzkum</tok></s></div></body></text></TEI>",
+        encoding="utf-8",
+    )
+    rows = read_input_rows(teitok)
+    assert rows and rows[0]["quality_score"] is None
+    should_proc, reason = should_process_line(
+        rows[0]["text"], rows[0]["categ"], row_quality(rows[0]), True, 3, 8, 0.40
+    )
+    assert should_proc, reason
 
 
 def test_should_process_line_empty_text_always_rejected():

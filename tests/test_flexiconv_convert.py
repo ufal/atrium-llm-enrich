@@ -161,14 +161,45 @@ def test_convert_raises_when_missing(monkeypatch, tmp_path):
         convert_to_teitok(in_file, tmp_path / "out")
 
 
-def test_main_prints_one_line_and_exits_1_on_failure(monkeypatch, tmp_path, capsys):
+def test_main_exits_3_when_flexiconv_is_missing(monkeypatch, tmp_path, capsys):
+    """Not installed is not a per-file failure: api_flexiconv.sh stops on exit 3."""
     in_file = tmp_path / "test.docx"
     in_file.write_text("x")
     _hide_library(monkeypatch)
     monkeypatch.setattr(shutil, "which", lambda x: None)
-    assert flexiconv_convert.main([str(in_file), "--out-dir", str(tmp_path / "out")]) == 1
+    assert flexiconv_convert.main([str(in_file), "--out-dir", str(tmp_path / "out")]) == 3
     err = capsys.readouterr().err
     assert err.startswith("[FAIL] test.docx:") and "Traceback" not in err
+
+
+def test_main_prints_one_line_and_exits_1_when_a_conversion_fails(monkeypatch, tmp_path, capsys):
+    in_file = tmp_path / "test.docx"
+    in_file.write_text("x")
+
+    class _Result:
+        success = False
+        error_message = "Package not found"
+
+    monkeypatch.setattr(
+        flexiconv_convert, "_library_run_convert", lambda: lambda *a, **k: _Result()
+    )
+    assert flexiconv_convert.main([str(in_file), "--out-dir", str(tmp_path / "out")]) == 1
+    err = capsys.readouterr().err
+    assert err.strip() == "[FAIL] test.docx: Package not found"
+
+
+def test_check_reports_availability_without_converting(monkeypatch, capsys):
+    _hide_library(monkeypatch)
+    monkeypatch.setattr(shutil, "which", lambda x: None)
+    assert flexiconv_convert.main(["--check"]) == 3
+    assert "not installed" in capsys.readouterr().err
+    monkeypatch.setattr(shutil, "which", lambda x: "/usr/bin/flexiconv")
+    assert flexiconv_convert.main(["--check"]) == 0
+
+
+def test_main_requires_an_input_without_check():
+    with pytest.raises(SystemExit):
+        flexiconv_convert.main([])
 
 
 @pytest.mark.skipif(not flexiconv_available(), reason="flexiconv library or CLI is not installed")

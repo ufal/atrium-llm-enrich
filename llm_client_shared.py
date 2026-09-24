@@ -114,19 +114,36 @@ _ALWAYS_SKIP_CATEG = {"Empty", "Trash"}
 _NOISE_CATEG = {"Empty", "Trash", "Non-text"}
 
 
+def row_quality(row: dict) -> Optional[float]:
+    """The row's ``quality_score``, or None when it has none (a TEITOK row, a CSV without the
+    column). None means "unknown", not "worst": ``should_process_line`` then skips the
+    quality bands and only the length rules apply."""
+    value = row.get("quality_score")
+    if value is None or str(value).strip() == "":
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def should_process_line(
     text: str,
     categ: str,
-    quality_score: float,
+    quality_score: Optional[float],
     include_non_text: bool,
     min_char_count: int,
     min_char_non_text: int,
     min_alpha_ratio_non_text: float,
 ) -> Tuple[bool, str]:
-    if quality_score < 0.40:
-        categ = "Trash"
-    elif quality_score < 0.70 and categ != "Trash":
-        categ = "Noisy"
+    # Quality bands only for rows that carry a score. A TEITOK document (or a table without
+    # the column) has none; read as 0.0, every such row became "Trash" and a .teitok.xml
+    # input enriched nothing (atrium-llm-enrich#13, P5.1).
+    if quality_score is not None:
+        if quality_score < 0.40:
+            categ = "Trash"
+        elif quality_score < 0.70 and categ != "Trash":
+            categ = "Noisy"
 
     if not text:
         return False, "empty text"
@@ -171,7 +188,7 @@ def read_input_rows(input_path: Path) -> List[dict]:
                 "page_num": str(r.get("page_num", "")),
                 "line_num": str(r.get("line_num", "")),
                 "categ": "",  # Falls back to plain text handling
-                "quality_score": 0.0,
+                "quality_score": None,  # unknown: TEITOK carries no line quality
             }
             for r in teitok_read.read_teitok_rows(str(input_path))
         ]
@@ -1599,7 +1616,7 @@ def run_line_level(
 
             text_chunk = row.get("text", "").strip()
             categ = row.get("categ", "").strip()
-            quality_score = float(row.get("quality_score") or 0.0)
+            quality_score = row_quality(row)
 
             should_process, _ = should_process_line(
                 text_chunk,

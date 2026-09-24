@@ -160,19 +160,15 @@ def seeded_baseline(remote_client_env):
 def stub_llm(monkeypatch):
     """Make a client module's inference offline. Call it with the module under test.
 
-    Two things are neutralised, and the second one is not cosmetic:
+    Only ``make_chat_fn`` is replaced -- with a canned, schema-valid reply, so no HTTP happens
+    and no API key or Ollama daemon is needed. Everything else is the real code: row reading,
+    the line filter, the record write, the accretion.
 
-    * ``make_chat_fn`` — replaced with a canned, schema-valid reply, so no HTTP happens and
-      no API key or Ollama daemon is needed.
-    * ``should_process_line`` — a pass-through. TEITOK rows carry no quality signal, so
-      ``read_input_rows()`` synthesises ``quality_score=0.0`` for every one of them and the
-      filter maps anything below 0.40 to ``categ="Trash"`` and skips it. A ``.teitok.xml``
-      input therefore enriches ZERO lines today and never reaches
-      ``write_document_record()`` at all — a separate defect from D1, found while writing
-      these tests and reported rather than fixed here, because what counts as processable is
-      a cost/quality decision (it is identical in ``llm_utils.py``'s GPU path). Everything
-      downstream of the filter — row reading, the record write, the accretion — is the real
-      code under test.
+    Until #13 P5.1 this fixture also replaced ``should_process_line`` with a pass-through:
+    ``read_input_rows()`` gave every TEITOK row ``quality_score=0.0``, the filter turned that
+    into ``categ="Trash"``, and a ``.teitok.xml`` input enriched zero lines. A missing score
+    is now "unknown" (the quality bands do not apply), so TEITOK rows reach the model through
+    the real filter -- which these tests now exercise.
     """
 
     def _install(client_module):
@@ -189,9 +185,6 @@ def stub_llm(monkeypatch):
 
             return chat_fn
 
-        import llm_client_shared
-
         monkeypatch.setattr(client_module, "make_chat_fn", fake_make_chat_fn)
-        monkeypatch.setattr(llm_client_shared, "should_process_line", lambda *a, **k: (True, ""))
 
     return _install

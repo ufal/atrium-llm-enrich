@@ -17,8 +17,15 @@ tools themselves (flexipipe, flexiconv, teitok-tools):
   documents without ``<s>`` -- flexiconv output -- fall back to ``<lb/>``-delimited lines
   when they are tokenized (PAGE XML, hOCR, ALTO) and to leaf text blocks (``<p>``,
   ``<head>``, ``<item>``, ...) when they are not (txt, md, docx, pdf, html, ...).
-* Legacy exports that close ``<name>`` with ``</n>`` are repaired before parsing, and
-  non-numeric ``<pb n>`` labels (``n="I"``) advance the page counter instead of crashing.
+* **Pages and lines**: every row carries ``page_num`` (``pb@n`` when numeric; a non-numeric
+  label such as ``n="I"`` advances the counter instead of crashing), ``page_idx`` (the
+  page's ordinal: the k-th ``<pb/>`` of the document) and ``page_label`` (``pb@n`` verbatim,
+  ``""`` without one). ``line_num`` counts ``<lb/>`` on the current page and restarts at
+  every ``<pb/>``; the first ``<lb/>`` of a page starts line 1 unless text precedes it.
+* A ``<pb/>`` inside an ``<s>`` (a sentence running over a page break, as nlp-enrich's writer
+  emits it since issue #38) splits the sentence into one row per page part, each with the
+  text of its own tokens -- a row never spans two pages.
+* Legacy exports that close ``<name>`` with ``</n>`` are repaired before parsing.
 """
 
 import re
@@ -176,50 +183,121 @@ def sentence_text(s_elem: ET.Element) -> str:
     return _WS_RUN.sub(" ", "".join(s_elem.itertext())).strip()
 
 
+class _Pages:
+    """Page and line state while a document is walked in order (see the module docstring)."""
+
+    def __init__(self):
+        self.num, self.idx, self.label, self.line = 1, 1, "", 1
+        self._seen_pb = False
+        self._doc_content = False
+        self._page_content = False
+        self._lbs = 0
+        self._offset = 0
+
+    def pb(self, elem: ET.Element) -> None:
+        if self._seen_pb or self._doc_content:
+            self.idx += 1
+        self.num = pb_page_number(elem, self.num, first=not self._seen_pb)
+        self.label = (elem.get("n") or "").strip()
+        self._seen_pb = True
+        self._page_content = False
+        self._lbs = self._offset = 0
+        self.line = 1
+
+    def lb(self) -> None:
+        if self._lbs == 0 and self._page_content:
+            self._offset = 1  # text before the page's first <lb/> was line 1
+        self._lbs += 1
+        self.line = self._lbs + self._offset
+
+    def content(self) -> None:
+        self._doc_content = self._page_content = True
+
+    def snapshot(self) -> dict:
+        return {"page_num": self.num, "page_idx": self.idx, "page_label": self.label}
+
+    def row(self, text: str, line=None, at=None) -> dict:
+        where = at or self.snapshot()
+        return {
+            "page_num": where["page_num"],
+            "line_num": self.line if line is None else line,
+            "text": text,
+            "page_idx": where["page_idx"],
+            "page_label": where["page_label"],
+        }
+
+
 def _rows_from_sentences(root: ET.Element) -> list:
+    """One row per ``<s>``, or per page part of an ``<s>`` that contains a ``<pb/>``."""
     rows = []
-    page_num = 1
-    line_num = 1
-    seen_pb = False
-    for elem in root.iter():
-        tag = _local(elem.tag)
-        if tag == "pb":
-            page_num = pb_page_number(elem, page_num, first=not seen_pb)
-            seen_pb = True
-        elif tag == "lb":
-            line_num += 1
-        elif tag == "s":
-            text = sentence_text(elem)
-            if text:
-                rows.append({"page_num": page_num, "line_num": line_num, "text": text})
+    pages = _Pages()
+    records = _token_records(root)
+    sent = None
+
+    def new_part():
+        return {"at": pages.snapshot(), "line0": pages.line, "line": None, "toks": []}
+
+    for kind, value in _events(root):
+        if kind == "tok":
+            if sent is not None:
+                part = sent["parts"][-1]
+                if part["line"] is None:
+                    part["line"] = pages.line
+                part["toks"].append(records[value])
+            pages.content()
+            continue
+        if kind == "text":
+            continue
+        tag = _local(value.tag)
+        if kind == "start":
+            if tag == "pb":
+                pages.pb(value)
+                if sent is not None:
+                    sent["parts"].append(new_part())
+            elif tag == "lb":
+                pages.lb()
+            elif tag == "s" and sent is None:
+                sent = {"elem": value, "parts": [new_part()]}
+        elif sent is not None and value is sent["elem"]:
+            parts = [p for p in sent["parts"] if p["toks"]]
+            if len(parts) > 1:
+                for part in parts:
+                    text = _join_tokens(part["toks"])
+                    if text:
+                        rows.append(pages.row(text, line=part["line"], at=part["at"]))
+            else:
+                part = parts[0] if parts else sent["parts"][0]
+                text = sentence_text(value)
+                if text:
+                    line = part["line"] if part["line"] is not None else part["line0"]
+                    rows.append(pages.row(text, line=line, at=part["at"]))
+                    pages.content()
+            sent = None
     return rows
 
 
 def _rows_from_lines(scope: ET.Element, records: dict) -> list:
     """Tokenized documents without ``<s>`` (flexiconv PAGE/hOCR/ALTO): one row per line."""
     rows = []
-    page_num = 1
-    seen_pb = False
-    lines_on_page = 0
+    pages = _Pages()
     current = []
 
     def flush():
         text = _join_tokens(current)
         if text:
-            rows.append({"page_num": page_num, "line_num": max(1, lines_on_page), "text": text})
+            rows.append(pages.row(text))
         current.clear()
 
     for kind, value in _events(scope):
         if kind == "tok":
             current.append(records[value])
+            pages.content()
         elif kind == "start" and _local(value.tag) == "pb":
             flush()
-            page_num = pb_page_number(value, page_num, first=not seen_pb)
-            seen_pb = True
-            lines_on_page = 0
+            pages.pb(value)
         elif kind == "start" and _local(value.tag) == "lb":
             flush()
-            lines_on_page += 1
+            pages.lb()
         elif kind == "end" and _local(value.tag) in _BOUNDARY_TAGS:
             flush()
     flush()
@@ -229,14 +307,12 @@ def _rows_from_lines(scope: ET.Element, records: dict) -> list:
 def _rows_from_blocks(scope: ET.Element) -> list:
     """Untokenized documents (flexiconv txt/md/docx/pdf/html...): one row per leaf block."""
     rows = []
-    page_num = 1
-    seen_pb = False
+    pages = _Pages()
     line_num = 0
     for elem in scope.iter():
         tag = _local(elem.tag)
         if tag == "pb":
-            page_num = pb_page_number(elem, page_num, first=not seen_pb)
-            seen_pb = True
+            pages.pb(elem)
             line_num = 0
         elif tag in _BLOCK_TAGS and not any(
             _local(d.tag) in _BLOCK_TAGS for d in elem.iter() if d is not elem
@@ -244,7 +320,8 @@ def _rows_from_blocks(scope: ET.Element) -> list:
             text = _WS_RUN.sub(" ", "".join(elem.itertext())).strip()
             if text:
                 line_num += 1
-                rows.append({"page_num": page_num, "line_num": line_num, "text": text})
+                rows.append(pages.row(text, line=line_num))
+                pages.content()
     return rows
 
 
@@ -261,7 +338,8 @@ def _rows(root: ET.Element) -> list:
 def read_teitok_rows(path: str | Path) -> list[dict]:
     """
     Parses TEITOK XML.
-    Returns: list of dicts [{"page_num": int, "line_num": int, "text": str}]
+    Returns: list of dicts [{"page_num": int, "line_num": int, "text": str,
+    "page_idx": int, "page_label": str}] -- see the module docstring for the page keys.
     """
     return _rows(parse_teitok(path))
 

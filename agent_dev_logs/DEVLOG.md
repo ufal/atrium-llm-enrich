@@ -1,6 +1,7 @@
 # 📓 atrium-llm-enrich — agent_dev_logs/DEVLOG.md (timeline index)
-> _LLM-driven enrichment of archaeological documents (local multi-GPU + remote-as-a-service). 5 open
-> issues (#10, #11, #13, #18, #24); #8 closed. `test`==`main` HEAD `ee16913` (2026-09-06) · **v0.6.2**._
+> _LLM-driven enrichment of archaeological documents (local multi-GPU + remote-as-a-service). 6 open
+> issues (#10, #11, #13, #18, #24, #25); #8 closed. `test` HEAD `c1ad762` (2026-09-24, issue exports) · **v0.7.0**
+> (2026-09-16). The 2026-09-24 round-4 fixes are delivered as files and not yet on `test`._
 > _Per-issue detail: `digests/{id}.digest.md` · `plans/{id}.plan.md` · `issues/` exports
 > (source of truth). Cross-repo/hub history (DU benchmark hub#22, this repo's spin-out from
 > hub#24) lives in `ufal/atrium-project/agent_dev_logs/DEVLOG.md` (deduplicated out of this file).
@@ -221,7 +222,39 @@ this repo's issue tracker. #24 (olmOCR) is a fresh, unstarted lead on the still-
   * `para_config.txt` records flexiconv as GPL-3.0 (conditional); README / CONTRIBUTING updated.
   * `pytest -m "not slow"`: 935 passed, 18 environment-only skips. #10/#13 dev logs updated.
 
+## 2026-09-24
+
+* **TEITOK round 4 (atrium-nlp-enrich umbrella plan, Stage 7) — audit, dev logs.** The 09-23 Stage-5 work above is on
+  `test` as `f62921c` (the branch name in that entry is historical). Re-checked this round:
+  * the ten vendored TEITOK files still hash-equal nlp-enrich `3654e73` (v0.21.0, format 2);
+  * **a `.teitok.xml` given as line-level input enriches zero lines** — `read_input_rows()` scores every TEITOK row 0.0
+    and the line filter turns that into "Trash" (`tests/conftest.py`'s `stub_llm` hides it); a CSV without a
+    `quality_score` column is hit the same way;
+  * the GPU path calls `_should_process_line` with 6 of its 7 arguments (`llm_utils.py:2059`, `:2301`);
+  * `xml_to_md.py` ignores the writer's bbox origin; the #13 design's "JSON → TEITOK re-projection already exists" was
+    never true.
+  * The hub's `agent_dev_logs/{digests,plans}/13.*` held this repo's #13 design (hub #13 is the CAA paper); the design
+    content moved into [`digests/13.digest.md`](digests/13.digest.md) §2, and the hub pair was rewritten.
+  * #10 and #13 digests/plans refreshed; fixes are planned with nlp-enrich's round 4 (#13 plan P5).
+* **TEITOK round 4 — implemented the same day (#13 plan P5; delivered as files, not yet on `test`).**
+  * `llm_client_shared.row_quality()` / `llm_utils._row_quality()`: a missing quality score is "unknown" (None) and
+    skips the quality bands; the output record carries `"quality_score": null`; both GPU call sites pass it;
+    `tests/conftest.py`'s `stub_llm` no longer patches the filter. TEITOK input now enriches its rows.
+  * Re-vendored from nlp-enrich's round 4: `api_util/teitok_read.py` (lines numbered per page, a sentence crossing a
+    `<pb/>` split into page parts, `page_idx`/`page_label`), `api_util/flexiconv_convert.py` (exit 3 / 1) and
+    `tests/test_flexiconv_convert.py`; pins updated; nlp-enrich's released `CTX000000002` (a `<pb/>` inside s-5)
+    vendored as `tests/fixtures/teitok/writer/CTX000000002.teitok.xml`.
+  * `xml_to_md.py`'s TEITOK layout reader rebuilt on the reader's page model: one line per page part, lines numbered
+    per page, `## Page <label>`, `DOC_META … origin=printspace` when the writer says so.
+  * README, CONTRIBUTING (the "`llm_utils.py` copied verbatim" claim corrected; v0.5.2 row fixed; Unreleased row),
+    `para_config.txt`, the `vocab-drift.yml` header; the #24-vs-#13 test comments.
+  * `pytest -m "not slow"`: 947 passed, 18 environment-only skips; `ruff` clean.
+* **#10** — stranak asked (09-23 22:56) which route to Markdown to take: markitdown, flexiconv or the custom
+  converters. The digest and plan (§9) carry a draft answer from the code and the §5 measurements (flexiconv writes
+  no Markdown; markitdown keeps no layout cues); the decision and the reply are the user's.
+* #25 (archivatorium as a VLM OCR backend) was opened on 09-17 and has no digest/plan yet; not part of this round.
+
 ---
 _Timeline index refreshed 2026-09-07 against live `test`/`main` HEAD, the `CONTRIBUTING.md` changelog table, and
-open-issue state via the GitHub API. Nothing removed from the issues themselves (per hub #29); this file is a
+open-issue state via the GitHub API; header and the 2026-09-24 entries refreshed 2026-09-24 against `test` `122915c`, then `c1ad762`. Nothing removed from the issues themselves (per hub #29); this file is a
 derived reading aid in `agent_dev_logs/`._

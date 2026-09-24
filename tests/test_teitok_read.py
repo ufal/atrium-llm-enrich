@@ -107,17 +107,41 @@ def test_every_doc_id_entry_point_in_this_repo_agrees(name):
     assert {doc_id_from_path(name), _doc_id(name), canonical_doc_id(name)} == {"CTX000000001"}
 
 
+def _core(row):
+    """The keys every reader has always given; ``page_idx``/``page_label`` are additive."""
+    return {k: row[k] for k in ("page_num", "line_num", "text")}
+
+
+WRITER_SAMPLE = (
+    Path(__file__).resolve().parent / "fixtures" / "teitok" / "writer" / "CTX000000002.teitok.xml"
+)
+
+
+def test_a_sentence_over_a_page_break_is_one_row_per_page():
+    """nlp-enrich's format-2 writer puts a <pb/> inside an <s> that runs over a page break
+    (its released sample, vendored): the reader gives the two page parts as two rows, so
+    xml_to_md never unions boxes of two pages into one line."""
+    rows = read_teitok_rows(WRITER_SAMPLE)
+    parts = [
+        r for r in rows if r["text"] in ("qpqb dbqp uunn", "Soubor nálezů byl uložen v depozitáři.")
+    ]
+    assert [(r["page_idx"], r["line_num"]) for r in parts] == [(3, 2), (4, 1)]
+    assert sorted({r["page_idx"] for r in rows}) == [1, 2, 3, 4]
+
+
 def test_read_teitok_rows(sample_teitok):
     rows = read_teitok_rows(sample_teitok)
     assert len(rows) == 3
 
     # Check page and line tracking
-    assert rows[0] == {"page_num": 1, "line_num": 1, "text": "První věta na stránce."}
+    assert _core(rows[0]) == {"page_num": 1, "line_num": 1, "text": "První věta na stránce."}
+    assert (rows[0]["page_idx"], rows[0]["page_label"]) == (1, "1")
 
     # Check fallback text reconstruction from <tok> elements if @text is missing
-    assert rows[1] == {"page_num": 1, "line_num": 2, "text": "Druhá chybí text"}
+    assert _core(rows[1]) == {"page_num": 1, "line_num": 2, "text": "Druhá chybí text"}
 
-    assert rows[2] == {"page_num": 2, "line_num": 2, "text": "Věta na druhé straně."}
+    # Line numbers restart on every page (they ran on across pages before nlp-enrich #38).
+    assert _core(rows[2]) == {"page_num": 2, "line_num": 1, "text": "Věta na druhé straně."}
 
 
 def test_read_teitok_text(sample_teitok):
@@ -142,8 +166,8 @@ def test_read_teitok_tokens(sample_teitok):
     assert tokens[7] == {"form": "text", "lemma": "text", "upos": "", "space_after": True}
 
 
-# ── Regression: <pb n="..."> with a non-numeric label (issue #13 TODO — ────
-# ── TEITOK-2-MD must survive archival roman-numeral front matter) ──────────
+# ── Regression: <pb n="..."> with a non-numeric label (atrium-project#24 TODO ──
+# ── — TEITOK-2-MD must survive archival roman-numeral front matter) ────────────
 
 ROMAN_PB_SAMPLE = """<?xml version="1.0" encoding="UTF-8"?>
 <TEI>
@@ -186,7 +210,7 @@ def test_read_teitok_rows_pb_missing_n(tmp_path):
         encoding="utf-8",
     )
     rows = read_teitok_rows(p)
-    assert rows == [{"page_num": 1, "line_num": 1, "text": "Only page."}]
+    assert [_core(r) for r in rows] == [{"page_num": 1, "line_num": 1, "text": "Only page."}]
 
     p.write_text(
         '<TEI><text><body><div><pb/><s text="One."/><pb/><s text="Two."/></div></body></text></TEI>',
@@ -217,7 +241,7 @@ def test_read_teitok_rows_survives_name_misclose(tmp_path):
     p.write_text(NAME_MISCLOSE_SAMPLE, encoding="utf-8")
 
     rows = read_teitok_rows(p)
-    assert rows == [
+    assert [_core(r) for r in rows] == [
         {"page_num": 1, "line_num": 1, "text": "Vyzkum odhalil zaklady gotickeho kostela"}
     ]
 

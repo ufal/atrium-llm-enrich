@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TEI xmlnsoff="http://www.tei-c.org/ns/1.0" lang="cs">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>CTX000000002</title></titleStmt>
+      <publicationStmt><p>Unpublished</p></publicationStmt>
+      <notesStmt><note n="orgfile">CTX000000002.alto.xml</note></notesStmt>
+      <sourceDesc><p>Source image: CTX000000002.pdf</p></sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <appInfo>
+        <application ident="atrium-nlp-enrich" version="teitok-2"><label>atrium-nlp-enrich TEITOK writer</label><desc>bbox origin: page</desc></application>
+        <application ident="udpipe" version="2"><label>UDPipe 2, https://lindat.mff.cuni.cz/services/udpipe</label><desc>Model: czech-pdt-ud-2.15-241121</desc></application>
+        <application ident="nametag"><label>NameTag NER</label><desc>Model: nametag3-czech-cnec2.0-240830</desc></application>
+        <application ident="ocr"><label>DemoScanner Pro 1.0</label></application>
+      </appInfo>
+    </encodingDesc>
+    <profileDesc><langUsage><language ident="cs"/></langUsage></profileDesc>
+    <revisionDesc>
+      <change when="2026-09-23" who="altoconvert" type="converted">Converted from ALTO file CTX000000002.alto.xml</change>
+      <change when="2024-06-02" who="DemoScanner Pro">OCR processing</change>
+      <change when="2026-09-23" who="udpipe" type="tagged" subtype="parsed">tokenized, lemmatized and dependency parsed with UDPipe model czech-pdt-ud-2.15-241121 (UDPipe 2, https://lindat.mff.cuni.cz/services/udpipe)</change>
+      <change when="2026-09-23" who="nametag" type="ner">named entity recognition with NameTag model nametag3-czech-cnec2.0-240830</change>
+    </revisionDesc>
+  </teiHeader>
+  <facsimile>
+    <surface id="facs-1" lrx="1654" lry="2339">
+      <graphic url="CTX000000002-1.png"/>
+    </surface>
+    <surface id="facs-2" lrx="1654" lry="2339">
+      <graphic url="CTX000000002-2.png"/>
+    </surface>
+    <surface id="facs-3" lrx="1654" lry="2339">
+      <graphic url="CTX000000002-3.png"/>
+    </surface>
+    <surface id="facs-4" lrx="1654" lry="2339">
+      <graphic url="CTX000000002-4.png"/>
+    </surface>
+  </facsimile>
+  <text>
+    <body>
+      <pb n="1" id="pb-1" facs="CTX000000002-1.png" corresp="#facs-1" bbox="0 0 1654 2339"/>
+      <div type="TextBlock" id="b-1.1" bbox="220 160 1420 360">
+        <s id="s-1" text="HRADIŠTĚ U HORNÍ MEZÍ Lokalita: okr. Horní Mezi Sonda II odkryla část valového tělesa.">
+          <lb id="lb-1.1" bbox="220 160 1120 200"/><name id="n-1" type="LOC" cnec="gu" sameAs="#w-1 #w-2 #w-3 #w-4"><tok id="w-1" type="w" ord="1" lemma="hradiště" upos="PROPN" xpos="NNNS1-----A----" feats="Case=Nom|Gender=Neut|Number=Sing" deprel="root" bbox="220 160 420 194">HRADIŠTĚ</tok> <tok id="w-2" type="w" ord="2" lemma="u" upos="ADP" xpos="RR--2----------" feats="AdpType=Prep|Case=Gen" head="w-4" deprel="case" bbox="440 160 470 194">U</tok> <tok id="w-3" type="w" ord="3" lemma="horní" upos="ADJ" xpos="AAFS2----1A----" feats="Case=Gen|Degree=Pos|Gender=Fem|Number=Sing|Polarity=Pos" head="w-4" deprel="amod" bbox="485 160 625 194">HORNÍ</tok> <tok id="w-4" type="w" ord="4" lemma="mez" upos="NOUN" xpos="NNFP2-----A----" feats="Case=Gen|Gender=Fem|Number=Plur" head="w-1" deprel="nmod" bbox="645 160 765 194">MEZÍ</tok>
+          </name><lb id="lb-1.2" bbox="220 210 1020 250"/><tok id="w-5" type="w" ord="5" lemma="lokalita" upos="NOUN" xpos="NNFS1-----A----" feats="Case=Nom|Gender=Fem|Number=Sing" head="w-1" deprel="dep" join="right" bbox="220 210 400 244">Lokalita</tok><tok id="w-6" type="pc" ord="6" lemma=":" upos="PUNCT" xpos="Z:-------------" head="w-13" deprel="punct">:</tok> <tok id="w-7" type="w" ord="7" lemma="okrázek" upos="NOUN" xpos="NNIXX-----A---b" feats="Abbr=Yes|Animacy=Inan|Gender=Masc" head="w-13" deprel="nsubj" join="right" bbox="420 210 500 244">okr</tok><tok id="w-8" type="pc" ord="8" lemma="." upos="PUNCT" xpos="Z:-------------" head="w-7" deprel="punct">.</tok> <name id="n-2" type="LOC" cnec="gr" sameAs="#w-9 #w-10"><tok id="w-9" type="w" ord="9" lemma="horní" upos="ADJ" xpos="AAFS1----1A----" feats="Case=Nom|Degree=Pos|Gender=Fem|Number=Sing|Polarity=Pos" head="w-7" deprel="amod" bbox="515 210 635 244">Horní</tok> <tok id="w-10" type="w" ord="10" lemma="mezi" upos="ADP" xpos="RR--7----------" feats="AdpType=Prep|Case=Ins" head="w-11" deprel="case" bbox="655 210 755 244">Mezi</tok>
+          </name><lb id="lb-1.3" bbox="220 260 1220 300"/><tok id="w-11" type="w" ord="11" lemma="Sonda" upos="PROPN" xpos="NNFS1-----A----" feats="Case=Nom|Gender=Fem|NameType=Geo|Number=Sing" head="w-7" deprel="nmod" bbox="220 260 340 294">Sonda</tok> <tok id="w-12" type="w" ord="12" lemma="II" upos="NUM" xpos="C}-------------" feats="NumForm=Roman|NumType=Card" head="w-11" deprel="nummod" bbox="360 260 400 294">II</tok> <tok id="w-13" type="w" ord="13" lemma="odkrýt" upos="VERB" xpos="VpQW----R-AAP--" feats="Aspect=Perf|Gender=Fem,Neut|Number=Plur,Sing|Polarity=Pos|Tense=Past|VerbForm=Part|Voice=Act" head="w-1" deprel="conj" bbox="415 260 565 294">odkryla</tok> <tok id="w-14" type="w" ord="14" lemma="část" upos="NOUN" xpos="NNFS4-----A----" feats="Case=Acc|Gender=Fem|Number=Sing" head="w-13" deprel="obj" bbox="585 260 675 294">část</tok> <tok id="w-15" type="w" ord="15" lemma="valový" upos="ADJ" xpos="AANS2----1A----" feats="Case=Gen|Degree=Pos|Gender=Neut|Number=Sing|Polarity=Pos" head="w-16" deprel="amod" bbox="695 260 875 294">valového</tok> <tok id="w-16" type="w" ord="16" lemma="těleso" upos="NOUN" xpos="NNNS2-----A----" feats="Case=Gen|Gender=Neut|Number=Sing" head="w-14" deprel="nmod" join="right" bbox="895 260 1045 294">tělesa</tok><tok id="w-17" type="pc" ord="17" lemma="." upos="PUNCT" xpos="Z:-------------" head="w-1" deprel="punct">.</tok>
+        </s>
+      </div>
+      <pb n="2" id="pb-2" facs="CTX000000002-2.png" corresp="#facs-2" bbox="0 0 1654 2339"/>
+      <div type="TextBlock" id="b-2.1" bbox="220 160 1420 360">
+        <s id="s-2" text="Eva Procházková dokumentovala nálezy.">
+          <lb id="lb-2.1" bbox="220 160 1220 200"/><name id="n-3" type="PER" cnec="P" sameAs="#w-18 #w-19"><tok id="w-18" type="w" ord="1" lemma="Eva" upos="PROPN" xpos="NNFS1-----A----" feats="Case=Nom|Gender=Fem|NameType=Giv|Number=Sing" head="w-20" deprel="nsubj" bbox="220 160 290 194">Eva</tok> <tok id="w-19" type="w" ord="2" lemma="Procházková" upos="PROPN" xpos="NNFS1-----A----" feats="Case=Nom|Gender=Fem|NameType=Giv|Number=Sing" head="w-18" deprel="flat" bbox="310 160 550 194">Procházková</tok> </name><tok id="w-20" type="w" ord="3" lemma="dokumentovat" upos="VERB" xpos="VpQW----R-AAB--" feats="Aspect=Imp,Perf|Gender=Fem,Neut|Number=Plur,Sing|Polarity=Pos|Tense=Past|VerbForm=Part|Voice=Act" deprel="root" bbox="570 160 850 194">dokumentovala</tok> <tok id="w-21" type="w" ord="4" lemma="nález" upos="NOUN" xpos="NNIP4-----A----" feats="Animacy=Inan|Case=Acc|Gender=Masc|Number=Plur" head="w-20" deprel="obj" join="right" bbox="870 160 1020 194">nálezy</tok><tok id="w-22" type="pc" ord="5" lemma="." upos="PUNCT" xpos="Z:-------------" head="w-20" deprel="punct">.</tok>
+        </s>
+        <s id="s-3" text="rnn1 ww0rd vv_~~">
+          <lb id="lb-2.2" bbox="220 210 820 250"/><name id="n-4" type="MISC" cnec="or" sameAs="#w-23 #w-24"><tok id="w-23" type="w" ord="1" lemma="rnn" upos="NOUN" xpos="BNXXX-----A----" feats="Abbr=Yes" deprel="root" join="right" bbox="220 210 300 244">rnn</tok><tok id="w-24" type="w" ord="2" lemma="1" upos="NUM" xpos="C=-------------" feats="NumForm=Digit|NumType=Card" head="w-23" deprel="nummod" bbox="220 210 300 244">1</tok> </name><tok id="w-25" type="w" ord="3" lemma="ww" upos="NOUN" xpos="BNXXX-----A----" feats="Abbr=Yes" head="w-23" deprel="dep" join="right" bbox="320 210 440 244">ww</tok><tok id="w-26" type="w" ord="4" lemma="0" upos="NUM" xpos="C=-------------" feats="NumForm=Digit|NumType=Card" head="w-23" deprel="dep" join="right" bbox="320 210 440 244">0</tok><tok id="w-27" type="w" ord="5" lemma="rd" upos="NOUN" xpos="BNXXX-----A----" feats="Abbr=Yes" head="w-23" deprel="dep" bbox="320 210 440 244">rd</tok> <tok id="w-28" type="w" ord="6" lemma="vv" upos="NOUN" xpos="BNXXX-----A----" feats="Abbr=Yes" head="w-23" deprel="dep" join="right" bbox="460 210 560 244">vv</tok><tok id="w-29" type="pc" ord="7" upos="PUNCT" xpos="Z:-------------" head="w-30" deprel="punct" join="right">_</tok><tok id="w-30" type="w" ord="8" lemma="~" upos="NOUN" xpos="Q3-------------" feats="Abbr=Yes" head="w-28" deprel="nmod" join="right" bbox="460 210 560 244">~</tok><tok id="w-31" type="w" ord="9" lemma="~" upos="NOUN" xpos="Z:-------------" head="w-23" deprel="dep" bbox="460 210 560 244">~</tok>
+        </s>
+      </div>
+      <pb n="3" id="pb-3" facs="CTX000000002-3.png" corresp="#facs-3" bbox="0 0 1654 2339"/>
+      <div type="TextBlock" id="b-3.1" bbox="220 160 1420 360">
+        <s id="s-4" text="Mocnost kulturní vrstvy činila 40 cm.">
+          <lb id="lb-3.1" bbox="220 160 1120 200"/><tok id="w-32" type="w" ord="1" lemma="mocnost" upos="NOUN" xpos="NNFS1-----A----" feats="Case=Nom|Gender=Fem|Number=Sing" head="w-35" deprel="nsubj" bbox="220 160 380 194">Mocnost</tok> <tok id="w-33" type="w" ord="2" lemma="kulturní" upos="ADJ" xpos="AAFS2----1A----" feats="Case=Gen|Degree=Pos|Gender=Fem|Number=Sing|Polarity=Pos" head="w-34" deprel="amod" bbox="400 160 570 194">kulturní</tok> <tok id="w-34" type="w" ord="3" lemma="vrstva" upos="NOUN" xpos="NNFS2-----A----" feats="Case=Gen|Gender=Fem|Number=Sing" head="w-32" deprel="nmod" bbox="590 160 720 194">vrstvy</tok> <tok id="w-35" type="w" ord="4" lemma="činit" upos="VERB" xpos="VpQW----R-AAI--" feats="Aspect=Imp|Gender=Fem,Neut|Number=Plur,Sing|Polarity=Pos|Tense=Past|VerbForm=Part|Voice=Act" deprel="root" bbox="740 160 860 194">činila</tok> <name id="n-5" type="MISC" cnec="nc" sameAs="#w-36"><tok id="w-36" type="w" ord="5" lemma="40" upos="NUM" xpos="C=-------------" feats="NumForm=Digit|NumType=Card" head="w-35" deprel="obj" bbox="880 160 930 194">40</tok> </name><name id="n-6" type="MISC" cnec="oe" sameAs="#w-37"><tok id="w-37" type="w" ord="6" lemma="centimetr" upos="NOUN" xpos="NNIXX-----A---b" feats="Abbr=Yes|Animacy=Inan|Gender=Masc" head="w-36" deprel="nmod" join="right" bbox="945 160 1015 194">cm</tok></name><tok id="w-38" type="pc" ord="7" lemma="." upos="PUNCT" xpos="Z:-------------" head="w-35" deprel="punct">.</tok>
+        </s>
+        <s id="s-5" text="qpqb dbqp uunn Soubor nálezů byl uložen v depozitáři.">
+          <lb id="lb-3.2" bbox="220 210 720 250"/><tok id="w-39" type="w" ord="1" lemma="qpqb" upos="NOUN" xpos="NNIS1-----A----" feats="Animacy=Inan|Case=Nom|Gender=Masc|Number=Sing" head="w-45" deprel="nsubj:pass" bbox="220 210 310 244">qpqb</tok> <tok id="w-40" type="w" ord="2" lemma="dbqp" upos="X" xpos="F%-------------" feats="Foreign=Yes" head="w-39" deprel="nmod" bbox="330 210 420 244">dbqp</tok> <tok id="w-41" type="w" ord="3" lemma="uunn" upos="X" xpos="F%-------------" feats="Foreign=Yes" head="w-40" deprel="flat:foreign" bbox="440 210 530 244">uunn</tok>
+          <pb n="4" id="pb-4" facs="CTX000000002-4.png" corresp="#facs-4" bbox="0 0 1654 2339"/><lb id="lb-4.1" bbox="220 160 1220 200"/><tok id="w-42" type="w" ord="4" lemma="soubor" upos="NOUN" xpos="NNIS1-----A----" feats="Animacy=Inan|Case=Nom|Gender=Masc|Number=Sing" head="w-45" deprel="nsubj:pass" bbox="220 160 360 194">Soubor</tok> <tok id="w-43" type="w" ord="5" lemma="nález" upos="NOUN" xpos="NNIP2-----A----" feats="Animacy=Inan|Case=Gen|Gender=Masc|Number=Plur" head="w-42" deprel="nmod" bbox="380 160 520 194">nálezů</tok> <tok id="w-44" type="w" ord="6" lemma="být" upos="AUX" xpos="VpYS----R-AAI--" feats="Aspect=Imp|Gender=Masc|Number=Sing|Polarity=Pos|Tense=Past|VerbForm=Part|Voice=Act" head="w-45" deprel="aux:pass" bbox="540 160 610 194">byl</tok> <tok id="w-45" type="w" ord="7" lemma="uložený" upos="ADJ" xpos="VsYS----X-APP--" feats="Aspect=Perf|Degree=Pos|Gender=Masc|Number=Sing|Polarity=Pos|Variant=Short|VerbForm=Part|Voice=Pass" deprel="root" bbox="630 160 770 194">uložen</tok> <tok id="w-46" type="w" ord="8" lemma="v" upos="ADP" xpos="RR--6----------" feats="AdpType=Prep|Case=Loc" head="w-47" deprel="case" bbox="790 160 815 194">v</tok> <tok id="w-47" type="w" ord="9" lemma="depozitář" upos="NOUN" xpos="NNIS6-----A----" feats="Animacy=Inan|Case=Loc|Gender=Masc|Number=Sing" head="w-45" deprel="obl" join="right" bbox="830 160 1060 194">depozitáři</tok><tok id="w-48" type="pc" ord="10" lemma="." upos="PUNCT" xpos="Z:-------------" head="w-45" deprel="punct">.</tok>
+        </s>
+      </div>
+      <div type="TextBlock" id="b-4.1" bbox="220 160 1420 280">
+        <s id="s-6" text="A123/2024">
+          <lb id="lb-4.2" bbox="220 210 420 250"/><tok id="w-49" type="w" ord="1" lemma="A" upos="NOUN" xpos="Q3-------------" feats="Abbr=Yes" deprel="root" join="right" bbox="220 210 420 244">A</tok><name id="n-7" type="MISC" cnec="n_" sameAs="#w-50"><tok id="w-50" type="w" ord="2" lemma="123" upos="NUM" xpos="C=-------------" feats="NumForm=Digit|NumType=Card" head="w-49" deprel="nummod" join="right" bbox="220 210 420 244">123</tok></name><tok id="w-51" type="pc" ord="3" lemma="/" upos="PUNCT" xpos="Z:-------------" head="w-52" deprel="punct" join="right">/</tok><name id="n-8" type="MISC" cnec="n_" sameAs="#w-52"><tok id="w-52" type="w" ord="4" lemma="2024" upos="NUM" xpos="C=-------------" feats="NumForm=Digit|NumType=Card" head="w-50" deprel="conj" join="right" bbox="220 210 420 244">2024</tok></name></s>
+      </div>
+    </body>
+  </text>
+</TEI>

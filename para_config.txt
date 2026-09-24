@@ -38,7 +38,10 @@ docx2python = MIT ; conditional ; DOCX fallback for headers/footers/core-propert
 # Declares GPL-3.0-or-later in its pyproject.toml (checked at the pinned v0.3.10; the
 # repository has no LICENSE file); para_licenses folds "-or-later" into GPL-3.0. Same row
 # as atrium-nlp-enrich's para_config.txt. Conditional: it only constrains runs that
-# actually convert documents with it.
+# actually convert documents with it -- and no stage of this repo does (the adapter is
+# vendored for its tests and for direct use; nothing here calls log_component("flexiconv")),
+# so the row never enters a run's licence union here. Converting is nlp-enrich's
+# api_flexiconv.sh, which logs it.
 flexiconv   = GPL-3.0 ; conditional ; flexiconv document -> TEITOK converter (api_util/flexiconv_convert.py)
 #
 # ── controlled vocabularies (issue nlp-enrich#6) ─────────────────────────────
