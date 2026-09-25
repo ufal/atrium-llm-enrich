@@ -56,6 +56,32 @@ def test_convert_drops_garbage_and_inverted_lines(tmp_path):
     assert "Flipped line." not in md
 
 
+def test_convert_drops_trash_lines_on_the_ocr_path(tmp_path):
+    """V-1 (hub docs/skos_strategy.md §6): alto-postprocess's categories are Clear/Empty/
+    Noisy/Non-text/Trash, so a filter of the digital-convert labels alone let every OCR
+    `Trash` line through to the model. The filter is the hub's untrustworthy set."""
+    from atrium_vocab import LINE_CATEGORY_ORIGINATORS, UNTRUSTWORTHY_LINE_CATEGORIES
+
+    path = _write_record(
+        tmp_path,
+        pages=[{"page": "1"}],
+        lines=[
+            {"page": "1", "line": 1, "text": "Clear line.", "categ": "Clear"},
+            {"page": "1", "line": 2, "text": "Noisy line.", "categ": "Noisy"},
+            {"page": "1", "line": 3, "text": "~~ |||| 3", "categ": "Trash"},
+            {"page": "1", "line": 4, "text": "Non-text line.", "categ": "Non-text"},
+        ],
+    )
+    md = json_to_md.convert(path)
+    assert "Clear line." in md and "Noisy line." in md and "Non-text line." in md
+    assert "~~ |||| 3" not in md
+    assert json_to_md.DROP_CATEGORIES == frozenset(UNTRUSTWORTHY_LINE_CATEGORIES)
+    for originator, labels in LINE_CATEGORY_ORIGINATORS.items():
+        assert json_to_md.DROP_CATEGORIES & set(labels), (
+            f"{originator}'s untrustworthy lines are not dropped"
+        )
+
+
 def test_convert_min_quality_drops_low_score_lines(tmp_path):
     path = _write_record(
         tmp_path,

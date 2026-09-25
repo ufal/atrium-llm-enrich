@@ -41,26 +41,23 @@ if _repo_root not in sys.path:
 
 from api_util import xml_to_md  # noqa: E402
 from atrium_document import load_document  # noqa: E402
+from atrium_vocab import UNTRUSTWORTHY_LINE_CATEGORIES  # noqa: E402
 
 #: Line categories excluded from the rendered text by default — text this pipeline has
 #: already judged untrustworthy, which would only degrade the LLM's read of the page
 #: rather than inform it.
 #:
-#: KNOWN DEFECT — tracked as V-1 in the hub's `docs/skos_strategy.md` §6. These two
-#: spellings are the `digital-convert` set and ONLY that set: they are what
-#: `api_util/digital_to_json.py` writes into `lines[].categ` on the digital-born path
-#: (see `atrium_vocab.LINE_CATEGORY_ORIGINATORS["digital-convert"]`). `lines[].categ`'s
-#: other authorised originator, alto-postprocess, emits a DISJOINT set —
-#: {Clear, Empty, Noisy, Non-text, Trash} — so on the OCR path this filter matches
-#: nothing at all and every garbage OCR line reaches the model. The earlier wording here
-#: attributing these values to "alto-postprocess's compute_quality_score" was simply
-#: wrong, and is what made the mismatch invisible.
+#: The hub's semantic set, `atrium_vocab.UNTRUSTWORTHY_LINE_CATEGORIES` — ("Garbage",
+#: "Inverted", "Trash") — which spans both originators of `lines[].categ`:
+#: `api_util/digital_to_json.py` writes Garbage/Inverted on the digital-born path
+#: (`atrium_vocab.LINE_CATEGORY_ORIGINATORS["digital-convert"]`), alto-postprocess writes
+#: {Clear, Empty, Noisy, Non-text, Trash} on the OCR path.
 #:
-#: The semantic set a fix would filter on is `atrium_vocab.UNTRUSTWORTHY_LINE_CATEGORIES`
-#: — ("Garbage", "Inverted", "Trash") — which spans both originators. Wiring it in is a
-#: real change to what the model is shown on every OCR document, so it is deliberately
-#: NOT made here; V-1 records the one-line fix for whoever decides to take it.
-DROP_CATEGORIES = frozenset({"Garbage", "Inverted"})
+#: FIXED — defect V-1 of the hub's `docs/skos_strategy.md` §6 (atrium-alto-postprocess#31,
+#: 2026-09-25). This was frozenset({"Garbage", "Inverted"}), the digital-convert set only, so
+#: on the OCR path it matched nothing and every `Trash` line reached the model. Filtering
+#: `Trash` changes what the model is shown on every OCR document — the point of the fix.
+DROP_CATEGORIES = frozenset(UNTRUSTWORTHY_LINE_CATEGORIES)
 
 #: The only implemented profile today. "standard"/"minimal" are the down-profiles
 #: from issue #13 §B, still deferred across the whole MD front-end — accepted

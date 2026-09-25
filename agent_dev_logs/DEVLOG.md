@@ -283,6 +283,23 @@ Dev logs: #10 (answer posted), #11 (the 08-02 validation task and its state; the
 #13 (pushed), #18 (converter shipped in v0.6.0; three of four boxes done, layout cues open), #24 (milestone, sibling
 #25), **new #25 pair**; milestones relabelled on 2026-09-08 are in every pair.
 
+## 2026-09-25: defect V-1 fixed (found by atrium-alto-postprocess#31)
+
+* **Found:** the hub's `docs/skos_strategy.md` recorded the V-1 fix as taken on 2026-09-16 (F1, "pinned by
+  `test_convert_drops_trash_lines_on_the_ocr_path`"), but `api_util/json_to_md.py` still had
+  `DROP_CATEGORIES = frozenset({"Garbage", "Inverted"})` on `test` and `main`, and that test did not exist. So every
+  alto-postprocess `Trash` line still reached the model on the OCR path — now also the lines of every non-ALTO input
+  alto-postprocess's text-lines method reads.
+* **Fixed:** `DROP_CATEGORIES = frozenset(atrium_vocab.UNTRUSTWORTHY_LINE_CATEGORIES)` (Garbage, Inverted, Trash) and the
+  comment over it; `tests/test_json_to_md.py::test_convert_drops_trash_lines_on_the_ocr_path` pins it (Clear, Noisy and
+  Non-text are kept; each originator's untrustworthy label is dropped). **Behaviour change:** what the model is shown on
+  every OCR document. CONTRIBUTING Unreleased row.
+* The hub's canonical `atrium_vocab.py` comments and the schema's `categ` description say the same now; re-vendor them
+  with the hub's next `v1`.
+* `pytest tests/test_json_to_md.py tests/test_digital_to_json.py tests/test_atrium_vocab.py`: 65 passed, 10 skipped; the
+  fast suite with the hub's new `atrium_document.py`/`.schema.json`/`atrium_vocab.py` swapped in: 923 passed, as before.
+  Not pushed: files delivered in chat.
+
 ---
 _Timeline index refreshed 2026-09-07 against live `test`/`main` HEAD, the `CONTRIBUTING.md` changelog table, and
 open-issue state via the GitHub API; header and the 2026-09-24 entries refreshed 2026-09-24 against `test` `122915c`, then `c1ad762`, and after the push against `08dff48` (with the 09-07 → 09-17 gap filled). Nothing removed from the issues themselves (per hub #29); this file is a
