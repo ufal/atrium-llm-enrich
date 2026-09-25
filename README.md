@@ -41,6 +41,7 @@ a confidence score.
 - [Lightweight Local — Ollama (`ollama_client.py`)](#lightweight-local--ollama-ollama_clientpy)
 - [Document-Level Input (`api_util/xml_to_md.py`)](#document-level-input-api_utilxml_to_mdpy)
 - [Visually-Rich Document Input (`api_util/doc_to_visual_md.py`)](#visually-rich-document-input-api_utildoc_to_visual_mdpy)
+- [Born-Digital PDF/DOCX → JSON (`api_util/digital_to_json.py`)](#born-digital-pdfdocx--json-api_utildigital_to_jsonpy)
 - [🖥 Model Registry](#-model-registry)
 - [📁 Inputs and Outputs](#-inputs-and-outputs)
 - [📐 Document Understanding benchmark (`sample_stratify.py` + `bench_compare.py`)](#-document-understanding-benchmark-sample_stratifypy--bench_comparepy)
@@ -72,12 +73,15 @@ python3 api_util/flexiconv_convert.py input.docx --out-dir TEITOK_IN/   # -> TEI
 ```
 flexiconv's TEITOK has no sentences: the reader turns it into one row per text line (PAGE XML,
 hOCR, ALTO) or per paragraph/heading (plain formats), with no lemmas or tags.
-*(Optional) For visually-rich Markdown from DOCX / PDF inputs
-([`api_util/doc_to_visual_md.py`](api_util/doc_to_visual_md.py), see
-[below](#visually-rich-document-input-api_utildoc_to_visual_mdpy)):*
+*(Optional) For DOCX / PDF inputs — the `atrium_document` JSON converter and the visually-rich
+Markdown rendered from it ([`api_util/digital_to_json.py`](api_util/digital_to_json.py),
+[`api_util/doc_to_visual_md.py`](api_util/doc_to_visual_md.py), see
+[below](#born-digital-pdfdocx--json-api_utildigital_to_jsonpy)):*
 ```bash
-pip install -r requirements_docmd.txt        # python-docx + pdfplumber (MIT)
-# Optional OCR path for scanned / curve-only PDFs additionally needs the system Tesseract binary:
+pip install -r requirements_digital.txt           # light engine: pdfplumber, pypdfium2, python-docx, jsonschema
+pip install -r requirements_digital_docling.txt   # optional heavy engine (--engine docling): Docling + torch
+pip install -r requirements_docmd.txt             # optional, deprecated: --ocr (Tesseract) and --legacy
+# The --ocr path additionally needs the system Tesseract binary:
 #   apt-get install tesseract-ocr tesseract-ocr-ces
 ```
 4. Review and update [`llm_config.txt`](llm_config.txt) 📎 — the only required change is
@@ -247,9 +251,10 @@ Two input modes, dispatched by file extension:
 | `.pdf`, `.docx`        | Whole-document | document (auto-converted to visually-rich `.md` first) |
 
 `.pdf`/`.docx` files in `INPUT_DIR` are **auto-converted** to visually-rich Markdown on the fly
-(via [`api_util/doc_to_visual_md.py`](api_util/doc_to_visual_md.py) 📎 — cached under a
-`_visual_md_cache/` subdir) and then processed document-level; add `--ocr` to transcribe scanned
-pages. `.md`/`.txt` input (rendered by [`api_util/xml_to_md.py`](api_util/xml_to_md.py) 📎 from
+(via [`api_util/doc_to_visual_md.py`](api_util/doc_to_visual_md.py) 📎, which goes through the
+`atrium_document` JSON route — cached under a `_visual_md_cache/` subdir, re-rendered when the
+source, the converter, `--ocr` or `DIGITAL_ENGINE` changes) and then processed document-level;
+set `DIGITAL_ENGINE=docling` for the heavy PDF engine, add `--ocr` to transcribe scanned pages. `.md`/`.txt` input (rendered by [`api_util/xml_to_md.py`](api_util/xml_to_md.py) 📎 from
 TEITOK/ALTO, or by the converter above — see [below](#visually-rich-document-input-api_utildoc_to_visual_mdpy))
 can optionally be sent as a file attachment with `--attach-as-file` rather than inlined as message
 text; support for this varies by model/provider and falls back silently to inlined text where
@@ -296,43 +301,114 @@ relative to the ALTO PrintSpace (`BBOX_ORIGIN=printspace`), the page's `DOC_META
 ## Visually-Rich Document Input (`api_util/doc_to_visual_md.py`)
 
 Converts **DOCX** and **PDF** inputs into the same page-sectioned Markdown, additionally recording
-as many **visual-layout cues** as the source exposes — page borders, canvas size, block bounding
-boxes, fonts, colours/highlights, alignment, tables, headers/footers — as **HTML comments**
-(issue [#10](https://github.com/ufal/atrium-llm-enrich/issues/10)). The cues are invisible to a
-Markdown renderer, plain text to the LLM, and token-cheap; the full taxonomy lives in
-[`api_util/layout_md.py`](api_util/layout_md.py) 📎 (`CUE_SCHEMA`). This makes annotated Markdown the
-single LLM input format across every source — PDF, DOCX, and TEITOK/ALTO (via `xml_to_md.py
+as many **visual-layout cues** as the source exposes — page borders, canvas size, line bounding
+boxes, headings, emphasis, tables, running headers/footers, footnotes — as Markdown and **HTML
+comments** (issue [#10](https://github.com/ufal/atrium-llm-enrich/issues/10)). The cues are
+invisible to a Markdown renderer, plain text to the LLM, and token-cheap; the full taxonomy lives
+in [`api_util/layout_md.py`](api_util/layout_md.py) 📎 (`CUE_SCHEMA`). This makes annotated Markdown
+the single LLM input format across every source — PDF, DOCX, and TEITOK/ALTO (via `xml_to_md.py
 --format layout`) — with PAGE/ALTO/TEITOK kept as the spatial source of truth
 (issue [#11](https://github.com/ufal/atrium-llm-enrich/issues/11)).
 
+**One route.** A PDF or DOCX goes through the
+[born-digital JSON converter](#born-digital-pdfdocx--json-api_utildigital_to_jsonpy) and is then
+rendered by [`api_util/json_to_md.py`](api_util/json_to_md.py) 📎 — the same record the pipeline
+keeps, so the Markdown the model reads cannot differ from it (issue
+[#18](https://github.com/ufal/atrium-llm-enrich/issues/18)). The older direct converters
+(`docx_to_md.py`, `pdf_to_md.py`) are **deprecated**: `--ocr` still uses `pdf_to_md.py`'s Tesseract
+path, and `--legacy` reaches them for A/B checks.
+
 ```bash
-pip install -r requirements_docmd.txt        # python-docx + pdfplumber (MIT)
+pip install -r requirements_digital.txt
 
 # Standalone pre-convert — or just drop the .pdf/.docx into INPUT_DIR and let the client auto-convert.
 python3 api_util/doc_to_visual_md.py report.docx --output INPUT_DIR/report.md
-python3 api_util/doc_to_visual_md.py report.pdf  --output INPUT_DIR/report.md --ocr
+python3 api_util/doc_to_visual_md.py report.pdf  --output INPUT_DIR/report.md
+python3 api_util/doc_to_visual_md.py report.pdf  --output INPUT_DIR/report.md --engine docling
+python3 api_util/doc_to_visual_md.py report.pdf  --output INPUT_DIR/report.md --ocr   # Tesseract
 ```
 
 A snippet of the output:
 
 ```markdown
-## Page 1
+## Page i
 
-<!-- DOC_META: size=612x792pt, orientation=portrait -->
-<!-- BBOX: [72, 58, 196, 76] --> <!-- FONT: size=18pt, family="Times" -->
-Výzkum lokality
-<!-- PAGE_BREAK: pg_2 -->
+<!-- DOC_META: size=612.0x792.0pt -->
+<!-- HEADER_START -->
+Zprava o vyzkumu Horni Mez
+<!-- HEADER_END -->
+
+<!-- BBOX: [72, 64, 388, 80] -->
+### Hradiste u Horni Mezi: zachranny vyzkum
+
+<!-- BBOX: [72, 138, 357, 168] -->
+| Vrstva | Mocnost | Nalezy |
+| --- | --- | --- |
+| Ornice | 30 cm | keramika |
+<!-- PAGE_BREAK: pg_ii -->
 ```
 
-- **PDF classes.** Digital-born pages are extracted directly (with a decode-sanity check that
-  catches subset fonts decoding Czech diacritics wrongly). Scanned / curve-only pages have no
-  trustworthy text layer: by default they are flagged `<!-- NEEDS_OCR: pg_N (…) -->`; with `--ocr`
-  they are rendered and transcribed with **Tesseract `ces`** (permissive, zero-GPU), tagged
-  `<!-- OCR: engine=tesseract, lang=ces -->`. The OCR requires the system Tesseract binary and
-  `pytesseract` (see Setup); without them the pages simply stay flagged.
+- **Headings** render one level below the page sections (`###` for a level-1 heading), so they
+  never compete with the `## Page N` markers the citation locator reads. Whole-line bold/italic
+  render as `**…**`/`*…*`; running headers and footers inside `HEADER_*`/`FOOTER_*` cues;
+  footnotes as `[^n]:` definitions at the end of their page; tables as GFM.
+- **PDF classes.** Digital-born pages are extracted directly, with a decode-sanity check that
+  catches subset fonts decoding Czech diacritics wrongly and text layers of replacement
+  characters. A page with no text layer (a scan, text drawn as curves) is flagged
+  `<!-- NEEDS_OCR: pg_N (…) -->`; with `--ocr` it is rendered and transcribed with **Tesseract
+  `ces`** instead (deprecated path; needs the system binary and `pytesseract`). A PDF that is a
+  prior OCR run (invisible text over page images) is not born-digital and is refused — its
+  originator is alto-postprocess (`--method text-lines`).
 - **Page-level citations.** The document-level schema returns a `page` field per extracted passage,
   read from the nearest `<!-- PAGE_BREAK: pg_N -->` / `## Page N` marker — enabling
-  `[Source: <doc_id>, Page N]`-style provenance.
+  `[Source: <doc_id>, Page N]`-style provenance. PDF page labels (`i`, `ii`, `A-1`) are the page
+  names.
+
+## Born-Digital PDF/DOCX → JSON (`api_util/digital_to_json.py`)
+
+Turns a digital-born PDF or DOCX into an `atrium_document` record (the ecosystem's JSON plane,
+issue [#13](https://github.com/ufal/atrium-llm-enrich/issues/13)) as the `digital-convert`
+originator: it writes `source` (`origin` `digital-born-pdf` / `digital-born-docx`), `pages`,
+`lines`, `content` and `tables`, and every other stage accretes onto that record. Published as
+`ghcr.io/ufal/atrium-llm-enrich-digital` (Docker target `digital`).
+
+```bash
+python3 api_util/digital_to_json.py report.pdf --document-json-out report.document.json
+python3 api_util/digital_to_json.py report.docx --document-json prev.document.json --document-json-out next.document.json
+python3 api_util/digital_to_json.py report.pdf --engine docling --paradata-dir paradata/
+```
+
+| Layout cue                    | PDF (light engine)                                  | DOCX                                                     | Record field                                   |
+|-------------------------------|-----------------------------------------------------|----------------------------------------------------------|------------------------------------------------|
+| Pages                         | PDF pages, named by `/PageLabels`                   | explicit, section and Word's last rendered page breaks   | `pages[]` (`page`, `page_index`)               |
+| Text blocks / paragraphs      | vertical gaps, per column                           | one per paragraph, one per table cell                    | `lines[].group_id`                             |
+| Reading order                 | words, columns (column-major), headers first        | document order; text boxes after their anchor            | `lines[]` order                                |
+| Headings                      | font size against the body size                     | outline level, then style name (`Heading N`, `Nadpis N`) | `lines[].style.heading_level`                  |
+| Bold / italic                 | font name                                           | run → character style → paragraph style                  | `lines[].style.bold` / `.italic`               |
+| Running header / footer       | margin lines repeated across pages, page numbers    | each section's header and footer                         | `lines[].style.region`                         |
+| Footnotes                     | — (Docling engine: yes)                             | footnotes and endnotes                                   | `lines[].style.region = footnote`              |
+| Tables                        | ruled tables (Docling engine: any)                  | tables, merged cells                                     | `tables[]` + `cells[].group_id`                |
+| Bounding boxes, page size     | exact, points, top-left origin                      | none (a DOCX has no geometry)                            | `lines[].bbox`, `pages[].canvas`               |
+| Untrustworthy text            | mojibake, replacement characters, no text layer     | —                                                        | `lines[].categ = Garbage`, `pages[].needs_ocr` |
+
+- **Engines.** `--engine light` (default; `requirements_digital.txt`: pdfplumber, pypdfium2,
+  python-docx, jsonschema — permissive, no models, no network). `--engine docling` (opt-in, PDF
+  only; `requirements_digital_docling.txt`): Docling's layout and table models decide reading
+  order, headings, furniture, footnotes and tables on complex pages, and the light engine's lines
+  keep their exact geometry. It needs the model weights: `docling-tools models download layout
+  tableformer -o DIR` and `DOCLING_ARTIFACTS_PATH=DIR` (the Docker target `digital-docling` does
+  this at build time; it is built locally, not published). OCR stays off in both engines.
+- **DOCX page breaks.** `--docx-page-breaks auto` (default: explicit breaks, section breaks and
+  Word's `lastRenderedPageBreak`, the rules alto-postprocess uses), `explicit`, or `none`. Tracked
+  insertions are read, deletions are not; a package without the main part's content type (which
+  python-docx refuses) is repaired in memory.
+- **Output gate.** A record that fails the field-ownership round trip or the JSON Schema is never
+  written. `provenance.license` is the union of the components the run used (`para_config.txt`):
+  MIT for the light engine. The Docling engine adds TableFormer's CDLA-Permissive-2.0, which the
+  shared licence table does not rank yet.
+- **Exit codes.** `0` written · `2` a dependency (or Docling's models) missing, with advice · `3`
+  not a born-digital PDF/DOCX (unsupported format, legacy `.doc`, an OCR-layer PDF) · `4` corrupt,
+  encrypted, or over the ZIP limits. `--paradata-dir DIR` also writes the run's paradata record.
 
 ## 🖥 Model Registry
 
@@ -569,7 +645,8 @@ OUTPUT_DIR = bench_results
 
 ## 🐳 Docker
 
-Three build targets, layered so each installs only the deps it needs:
+Build targets, layered so each installs only the deps it needs (`api` and `digital` are described
+above; `digital-docling` is the heavy converter, built locally only):
 
 ```bash
 # Local, transformers/vLLM — heavy GPU stack (torch, transformers, vLLM, bitsandbytes)
@@ -580,6 +657,12 @@ docker run --gpus all -v "$PWD/data_samples:/app/data_samples" atrium-llm-enrich
 docker build --target remote -t atrium-llm-enrich:remote .
 docker run -e OPENROUTER_API_KEY atrium-llm-enrich:remote openrouter_client.py --input sample.csv --model <model>
 docker run atrium-llm-enrich:remote ollama_client.py --host http://host.docker.internal:11434 --input sample.csv --model qwen2.5:7b
+
+# Born-digital PDF/DOCX -> atrium_document JSON — light (published as -digital) and heavy
+docker build --target digital -t atrium-llm-enrich:digital .
+docker run --rm -v "$PWD:/data" atrium-llm-enrich:digital /data/report.pdf --document-json-out /data/report.document.json
+docker build --target digital-docling -t atrium-llm-enrich:digital-docling .   # downloads Docling's models
+docker run --rm -v "$PWD:/data" atrium-llm-enrich:digital-docling /data/report.pdf --engine docling --document-json-out /data/report.document.json
 ```
 
 > [!NOTE]

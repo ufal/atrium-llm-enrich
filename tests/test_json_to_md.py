@@ -310,3 +310,230 @@ def test_page_ordinals_falls_back_to_document_order(tmp_path):
         [{"page": "cover"}, {"page": "iv"}], [{"page": "iv"}, {"page": "extra"}]
     )
     assert ordinals == {"cover": 1, "iv": 2, "extra": 3}
+
+
+# ── Issue #18: the layout-cue box — style, regions and tables reach the Markdown ──
+#
+# `lines[].style` and `tables[]` were written by digital-convert and read by nothing
+# (#10 G3). Each test below is one cue, rendered from a hand-built record, so the
+# expected Markdown is reviewable.
+
+
+def test_heading_levels_render_inside_the_page_sections(tmp_path):
+    """Headings sit under `## Page N`: level 1 is `###`, and none can pass for a page
+    marker the citation locator reads."""
+    path = _write_record(
+        tmp_path,
+        pages=[{"page": "1"}],
+        lines=[
+            {
+                "page": "1",
+                "line": 0,
+                "text": "Zpráva",
+                "group_id": "p0",
+                "style": {"heading_level": 1},
+            },
+            {
+                "page": "1",
+                "line": 1,
+                "text": "Sonda",
+                "group_id": "p1",
+                "style": {"heading_level": 2},
+            },
+            {
+                "page": "1",
+                "line": 2,
+                "text": "Deep",
+                "group_id": "p2",
+                "style": {"heading_level": 6},
+            },
+            {"page": "1", "line": 3, "text": "Body.", "group_id": "p3"},
+        ],
+    )
+    md = json_to_md.convert(path)
+    assert "\n### Zpráva\n" in md and "\n#### Sonda\n" in md and "\n###### Deep\n" in md
+    assert "## Zpráva" not in md.replace("### Zpráva", "")
+
+
+def test_whole_line_emphasis_renders(tmp_path):
+    path = _write_record(
+        tmp_path,
+        pages=[{"page": "1"}],
+        lines=[
+            {"page": "1", "line": 0, "text": "Bold", "group_id": "a", "style": {"bold": True}},
+            {"page": "1", "line": 1, "text": "Italic", "group_id": "b", "style": {"italic": True}},
+            {
+                "page": "1",
+                "line": 2,
+                "text": "Both",
+                "group_id": "c",
+                "style": {"bold": True, "italic": True},
+            },
+            {"page": "1", "line": 3, "text": "a * b", "group_id": "d", "style": {"bold": True}},
+        ],
+    )
+    md = json_to_md.convert(path)
+    assert "**Bold**" in md and "*Italic*" in md and "***Both***" in md
+    assert "a * b" in md and "**a * b**" not in md
+
+
+def test_regions_render_as_cues_in_page_order(tmp_path):
+    """Header first, body, footnotes as `[^n]:`, footer last — whatever the line order."""
+    path = _write_record(
+        tmp_path,
+        pages=[{"page": "1"}],
+        lines=[
+            {"page": "1", "line": 0, "text": "Body.", "group_id": "p0"},
+            {"page": "1", "line": 1, "text": "Strana 1", "style": {"region": "page_footer"}},
+            {
+                "page": "1",
+                "line": 2,
+                "text": "A note.",
+                "group_id": "fn3",
+                "style": {"region": "footnote"},
+            },
+            {"page": "1", "line": 3, "text": "Running head", "style": {"region": "page_header"}},
+        ],
+    )
+    md = json_to_md.convert(path)
+    order = [
+        md.index(s)
+        for s in (
+            "HEADER_START",
+            "Running head",
+            "HEADER_END",
+            "Body.",
+            "[^3]: A note.",
+            "FOOTER_START",
+            "Strana 1",
+            "FOOTER_END",
+        )
+    ]
+    assert order == sorted(order)
+
+
+def test_table_renders_as_gfm_where_its_first_cell_was(tmp_path):
+    path = _write_record(
+        tmp_path,
+        pages=[{"page": "1"}],
+        lines=[
+            {"page": "1", "line": 0, "text": "Before.", "group_id": "p0"},
+            {"page": "1", "line": 1, "text": "Nálezy", "group_id": "t0-r0c0"},
+            {"page": "1", "line": 2, "text": "Keramika", "group_id": "t0-r1c0"},
+            {"page": "1", "line": 3, "text": "12", "group_id": "t0-r1c1"},
+            {"page": "1", "line": 4, "text": "ks", "group_id": "t0-r1c1"},
+            {"page": "1", "line": 5, "text": "After.", "group_id": "p1"},
+        ],
+        tables=[
+            {
+                "table_id": "t0",
+                "page": "1",
+                "n_rows": 2,
+                "n_cols": 2,
+                "group_id": "t0",
+                "cells": [
+                    {"row": 0, "col": 0, "is_header": True, "group_id": "t0-r0c0", "colspan": 2},
+                    {"row": 0, "col": 1, "is_header": True, "group_id": "t0-r0c0"},
+                    {"row": 1, "col": 0, "group_id": "t0-r1c0"},
+                    {"row": 1, "col": 1, "group_id": "t0-r1c1"},
+                ],
+            }
+        ],
+    )
+    md = json_to_md.convert(path)
+    assert "| Nálezy |  |\n| --- | --- |\n| Keramika | 12 ks |" in md
+    assert md.index("Before.") < md.index("| Nálezy") < md.index("After.")
+    assert md.count("Keramika") == 1, "cell text must not also render as loose lines"
+
+
+def test_table_explicit_cell_lines_win_over_group_id(tmp_path):
+    path = _write_record(
+        tmp_path,
+        pages=[{"page": "1"}],
+        lines=[
+            {"page": "1", "line": 0, "text": "A", "group_id": "g"},
+            {"page": "1", "line": 1, "text": "B", "group_id": "g"},
+        ],
+        tables=[
+            {
+                "table_id": "t9",
+                "page": "1",
+                "n_rows": 1,
+                "n_cols": 2,
+                "cells": [
+                    {"row": 0, "col": 0, "lines": [{"page": "1", "line": 0}]},
+                    {"row": 0, "col": 1, "lines": [{"page": "1", "line": 1}]},
+                ],
+            }
+        ],
+    )
+    assert "| A | B |" in json_to_md.convert(path)
+
+
+def test_table_that_joins_no_line_leaves_the_lines_alone(tmp_path):
+    """The ALTO path writes tables without cell group_ids: nothing to join, nothing moves."""
+    lines = [{"page": "1", "line": 1, "text": "Row text."}]
+    plain = json_to_md.convert(
+        _write_record(tmp_path, doc_id="A", pages=[{"page": "1"}], lines=lines)
+    )
+    with_table = json_to_md.convert(
+        _write_record(
+            tmp_path,
+            doc_id="A",
+            pages=[{"page": "1"}],
+            lines=lines,
+            tables=[
+                {
+                    "table_id": "t0",
+                    "page": "1",
+                    "n_rows": 1,
+                    "n_cols": 1,
+                    "cells": [{"row": 0, "col": 0}],
+                }
+            ],
+        )
+    )
+    assert with_table == plain
+
+
+def test_line_less_needs_ocr_page_still_gets_its_section_and_cue(tmp_path):
+    """G1: a scanned page inside a born-digital PDF vanished from the Markdown."""
+    path = _write_record(
+        tmp_path,
+        pages=[
+            {"page": "1"},
+            {
+                "page": "2",
+                "needs_ocr": True,
+                "needs_ocr_reason": "no extractable text layer: 1 image",
+            },
+            {"page": "3"},
+        ],
+        lines=[
+            {"page": "1", "line": 0, "text": "Text page."},
+            {"page": "3", "line": 0, "text": "After."},
+        ],
+    )
+    md = json_to_md.convert(path)
+    assert "## Page 2" in md and "NEEDS_OCR: pg_2 (no extractable text layer: 1 image)" in md
+    assert md.index("Text page.") < md.index("## Page 2") < md.index("After.")
+
+
+def test_all_pages_needing_ocr_render_their_cues_rather_than_raise(tmp_path):
+    path = _write_record(
+        tmp_path, pages=[{"page": "1", "needs_ocr": True, "needs_ocr_reason": "scan"}], lines=[]
+    )
+    md = json_to_md.convert(path)
+    assert "## Page 1" in md and "NEEDS_OCR: pg_1 (scan)" in md
+
+
+def test_render_record_matches_convert(tmp_path):
+    record = {
+        "schema_version": "1.0",
+        "doc_id": "CTX01",
+        "pages": [{"page": "1"}],
+        "lines": [{"page": "1", "line": 0, "text": "Same.", "style": {"heading_level": 1}}],
+    }
+    path = tmp_path / "CTX01.document.json"
+    path.write_text(json.dumps(record), encoding="utf-8")
+    assert json_to_md.render_record(record, title="CTX01") == json_to_md.convert(path)

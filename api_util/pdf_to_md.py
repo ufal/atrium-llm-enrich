@@ -17,6 +17,11 @@ subset fonts lack a ``/ToUnicode`` map extracts *garbled* text; a lightweight
 Uses **pdfplumber** (MIT: word/char bounding boxes, font names/sizes, tables),
 imported lazily so the base install never requires it — mirroring
 ``flexiconv_convert.py``'s ``*_available()`` pattern.
+
+**Deprecated (Issue #18 PR 7, 2026-09-25).** ``doc_to_visual_md`` now renders PDFs through
+the JSON route (``digital_to_json`` → ``json_to_md``). This module stays for ``--ocr`` — the
+repo's only OCR, until ``needs_ocr`` pages go to the OCR originator (#10 plan §10 Phase 3) —
+and for ``--legacy`` A/B checks.
 """
 
 from __future__ import annotations

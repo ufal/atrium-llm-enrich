@@ -47,6 +47,28 @@ services:
     #   docker compose --profile digital run --rm llm-enrich-digital \
     #     /data/report.pdf --document-json-out /data/report.document.json
 
+  # The heavy, opt-in engine (Docling layout + table models). Built locally, never
+  # pulled: the Dockerfile's `digital-docling` stage is not a published target, and its
+  # build downloads the model weights from the Hugging Face Hub.
+  #   docker compose --profile digital-docling run --rm llm-enrich-digital-docling \
+  #     /data/report.pdf --engine docling --document-json-out /data/report.document.json
+  llm-enrich-digital-docling:
+    profiles: [digital-docling]
+    image: atrium-llm-enrich-digital-docling:local
+    build:
+      context: .
+      target: digital-docling
+      args:
+        ATRIUM_RUNNER_IMAGE: atrium-llm-enrich-digital-docling:local
+        ATRIUM_RUNNER_REPO: https://github.com/ufal/atrium-llm-enrich
+        ATRIUM_RUNNER_REF: ${ATRIUM_RUNNER_REF:-dev}
+    environment:
+      ATRIUM_RUNNER_IMAGE: atrium-llm-enrich-digital-docling:local
+      ATRIUM_RUNNER_REPO: https://github.com/ufal/atrium-llm-enrich
+      ATRIUM_RUNNER_REF: ${ATRIUM_RUNNER_REF:-dev}
+    volumes:
+      - ./data:/data
+
   llm-enrich-llm:
     profiles: [llm]
     image: ghcr.io/ufal/atrium-llm-enrich:${ATRIUM_VERSION:-dev}-llm

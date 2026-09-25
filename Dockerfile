@@ -114,19 +114,11 @@ CMD ["openrouter_client.py", "--help"]
 # all. Merging them would put a PDF parser in the image whose whole selling point
 # is being the torch-free API client.
 #
-# NOTE ON THE MANIFEST: requirements_digital.txt currently also declares `docling`
-# and `docx2python`, which NOTHING SHIPPED IMPORTS — digital_to_json.py imports
-# pdfplumber (line ~427) and docx (line ~496) lazily, and jsonschema arrives via
-# atrium_document.validate_document(). They are left in the manifest because the
-# licence posture documented there is load-bearing (accretion rule 5 merges
-# component licences into provenance.license for every digital-born document, so
-# the MIT-only stack is a deliberate constraint, not a preference) and dropping a
-# name from that file without also dropping its para_config.txt [components] row
-# would make ParadataLogger record it as UNKNOWN — which para_licenses treats as
-# maximally restrictive. Splitting a runtime subset out of the manifest is the
-# right fix and is a licence-review change, not a Dockerfile one; until then this
-# stage installs the declared manifest so the image matches what para_config.txt
-# claims is in it.
+# The image carries the LIGHT engine only — requirements_digital.txt: pdfplumber,
+# pypdfium2, python-docx, jsonschema, all permissive, no models, no network. Until
+# 2026-09-25 it also installed `docling` and `docx2python`, which nothing shipped
+# imports; docling alone brings torch and the CUDA libraries, several GB, into an image
+# whose converter never loads them. The opt-in heavy engine is its own stage below.
 # ---------------------------------------------------------------------------
 FROM base AS digital
 
@@ -134,6 +126,40 @@ USER root
 COPY requirements_digital.txt ./
 RUN pip install -r requirements_digital.txt
 RUN chown -R atrium:atrium /app
+USER atrium
+
+ENTRYPOINT ["python", "api_util/digital_to_json.py"]
+CMD ["--help"]
+
+
+# ---------------------------------------------------------------------------
+# Digital-born converter, heavy engine — built on demand, NOT published
+#
+#   docker build --target digital-docling -t atrium-llm-enrich-digital-docling .
+#   docker run --rm -v "$PWD:/data" atrium-llm-enrich-digital-docling \
+#       /data/report.pdf --engine docling --document-json-out /data/report.document.json
+#
+# `--engine docling` (api_util/digital_docling.py): Docling's layout and table models
+# decide reading order, headings, furniture and tables on complex PDFs; the light
+# engine's lines keep their geometry. Not in docker.yml's build-targets on purpose: a
+# torch image of several GB on every push, for an opt-in engine.
+#
+# The model weights are downloaded HERE, at build time — the build needs the Hugging
+# Face Hub, the running container does not — into /opt/docling-models, which
+# DOCLING_ARTIFACTS_PATH names. TableFormer's weights are CDLA-Permissive-2.0: see
+# requirements_digital_docling.txt for what that does to provenance.license.
+#
+# Declared before `llm` so that an untargeted `docker build` still builds the last
+# stage, `api`.
+# ---------------------------------------------------------------------------
+FROM digital AS digital-docling
+
+USER root
+COPY requirements_digital_docling.txt ./
+RUN pip install -r requirements_digital_docling.txt \
+    && docling-tools models download layout tableformer -o /opt/docling-models \
+    && chown -R atrium:atrium /opt/docling-models
+ENV DOCLING_ARTIFACTS_PATH=/opt/docling-models
 USER atrium
 
 ENTRYPOINT ["python", "api_util/digital_to_json.py"]

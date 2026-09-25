@@ -13,6 +13,11 @@ it — mirroring ``flexiconv_convert.py``'s ``*_available()`` pattern. Output
 matches ``xml_to_md.py``'s house style (``# <doc-id>`` title, ``## Page N``
 sections) so the whole-document system prompt's page-locator instructions
 resolve against real anchors.
+
+**Deprecated (Issue #18 PR 7, 2026-09-25).** ``doc_to_visual_md`` now renders DOCX through
+the JSON route (``digital_to_json`` → ``json_to_md``), which also reads tracked insertions,
+section breaks, Word's rendered page breaks and packages python-docx refuses; this module is
+reachable only with ``--legacy`` and is kept for A/B checks until it is deleted.
 """
 
 from __future__ import annotations

@@ -29,10 +29,30 @@ repository_fallback = https://github.com/ufal/atrium-llm-enrich
 #
 # All "conditional": a run only touches the libraries the input format needs, and
 # none of them is loaded by the LLM enrichment path at all.
-docling     = MIT ; conditional ; digital-born structure extraction (PDF + DOCX)
-pdfplumber  = MIT ; conditional ; digital-born PDF geometry (char/word/line bboxes, fonts)
-python-docx = MIT ; conditional ; DOCX paragraph/run/table/style structure
-docx2python = MIT ; conditional ; DOCX fallback for headers/footers/core-properties
+#
+# 2026-09-25: api_util/digital_to_json.py now LOGS what it uses (license_detail_for()).
+# Until then nothing called log_component() on this path, so every digital-born record
+# carried the CC BY-NC 4.0 default whatever these rows said. The light engine's rows are
+# the libraries that parse the file (pdfminer.six under pdfplumber; pypdfium2 for page
+# labels and the OCR-layer census; lxml under python-docx) plus jsonschema, which gates
+# every record. docx2python is gone: nothing ever imported it.
+pdfplumber   = MIT          ; conditional ; digital-born PDF words, geometry, fonts, ruled tables
+pdfminer.six = MIT          ; conditional ; PDF parser under pdfplumber
+pypdfium2    = Apache-2.0   ; conditional ; PDF page labels + text render mode (OCR-layer census)
+python-docx  = MIT          ; conditional ; DOCX package, table grids
+lxml         = BSD-3-Clause ; conditional ; DOCX WordprocessingML walk (under python-docx)
+jsonschema   = MIT          ; conditional ; digital-convert's output gate (validate_document)
+#
+# Heavy engine (`--engine docling`, requirements_digital_docling.txt; PDF only). The two
+# model rows are the weights Docling downloads, and they are licensed separately from its
+# MIT code. TableFormer's weights are CDLA-Permissive-2.0, which para_licenses.py (vendored
+# from the hub, byte-identity enforced) does not rank yet — so a docling run's record reads
+# an unranked licence, treated as most restrictive, until the hub adds it. Recorded rather
+# than rounded to Apache-2.0: the licence field is only worth something if it is true.
+docling              = MIT                 ; conditional ; heavy PDF engine: layout + table structure
+docling-parse        = MIT                 ; conditional ; Docling's PDF backend
+docling-layout-heron = Apache-2.0          ; conditional ; layout model weights (docling-project/docling-layout-heron)
+docling-tableformer  = CDLA-Permissive-2.0 ; conditional ; table-structure model weights (docling-project/docling-models)
 #
 # ── flexiconv (optional; api_util/flexiconv_convert.py, vendored from nlp-enrich) ─
 # Declares GPL-3.0-or-later in its pyproject.toml (checked at the pinned v0.3.10; the

@@ -5,9 +5,11 @@
 # visually-rich Markdown need these. Both are permissive (MIT), matching the
 # license pressure noted in para_config.txt.
 #
-# Legacy MD-era stack (Issue #10). Superseded by Issue #18's direct-to-JSON
-# converter (api_util/digital_to_json.py, requirements_digital.txt) once that
-# lands; kept here and functional until PR 7 of #18 formally deprecates it.
+# Legacy MD-era stack (Issue #10), DEPRECATED since 2026-09-25 (#18 PR 7). The default
+# route of doc_to_visual_md.py — and so of the clients' PDF/DOCX auto-convert — is now the
+# JSON route (digital_to_json -> json_to_md): install requirements_digital.txt for it.
+# This file serves only what that route does not do yet: `--ocr` (Tesseract, below) and
+# `--legacy` (the direct converters, kept for A/B checks until they are deleted).
 python-docx   # DOCX reader (MIT) — styles, fonts, tables, headers/footers
 pdfplumber    # digital-born PDF reader (MIT) — word/char bboxes, fonts, tables (pulls pypdfium2)
 

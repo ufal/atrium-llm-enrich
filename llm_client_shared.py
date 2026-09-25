@@ -25,6 +25,7 @@ prompt over there, mirror the change here.
 import csv
 import enum
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -874,13 +875,49 @@ def prepare_document_input(path: Path, cache_dir: Optional[Path] = None, ocr: bo
             "instead -- see SKILL.md for the accepted inputs."
         ) from exc
 
+    engine = os.environ.get("DIGITAL_ENGINE", "light").strip().lower() or "light"
+    stamp = _visual_md_stamp(path, ocr=ocr, engine=engine)
     cache = Path(cache_dir) if cache_dir else path.parent / "_visual_md_cache"
     cache.mkdir(parents=True, exist_ok=True)
     out = cache / f"{_markdown_cache_stem(path)}.md"
-    if out.exists() and out.stat().st_mtime >= path.stat().st_mtime:
+    meta = out.with_name(out.name + ".meta.json")
+    if out.exists() and _read_stamp(meta) == stamp:
         return out
-    out.write_text(convert_to_visual_md(path, ocr=ocr), encoding="utf-8")
+    if path.name.lower().endswith(DOCUMENT_JSON_SUFFIX):
+        rendered = convert_to_visual_md(path, ocr=ocr)
+    else:
+        rendered = convert_to_visual_md(path, ocr=ocr, engine=engine)
+    out.write_text(rendered, encoding="utf-8")
+    meta.write_text(json.dumps(stamp, sort_keys=True), encoding="utf-8")
     return out
+
+
+def _visual_md_stamp(path: Path, ocr: bool, engine: str) -> Dict[str, Any]:
+    """What a cached rendering depends on (#10 G8).
+
+    The cache used to be valid whenever the ``.md`` was newer than the source, so a
+    converter change, a switch of route or engine, or asking for ``--ocr`` after a plain run
+    all served the old Markdown. The converter's version is read from the module rather
+    than duplicated here; without the module (the skill branch) the caller has already
+    failed above.
+    """
+    from api_util import doc_to_visual_md  # noqa: PLC0415  (lazy, like the converter)
+
+    stat = path.stat()
+    return {
+        "converter": getattr(doc_to_visual_md, "CONVERTER_VERSION", "unknown"),
+        "engine": engine,
+        "ocr": bool(ocr),
+        "source_size": stat.st_size,
+        "source_mtime_ns": stat.st_mtime_ns,
+    }
+
+
+def _read_stamp(meta: Path) -> Optional[Dict[str, Any]]:
+    try:
+        return json.loads(meta.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
 
 
 #: The four outcomes one llm-enrich pass over one document can have.

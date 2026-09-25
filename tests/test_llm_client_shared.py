@@ -405,7 +405,7 @@ def test_prepare_document_input_converts_and_caches(tmp_path, monkeypatch):
 
     calls = []
 
-    def fake_convert(path, ocr=False):
+    def fake_convert(path, ocr=False, **_kwargs):
         calls.append((str(path), ocr))
         return f"# {Path(path).stem}\n\n## Page 1\n\nbody\n"
 
@@ -422,10 +422,36 @@ def test_prepare_document_input_converts_and_caches(tmp_path, monkeypatch):
     assert out.read_text(encoding="utf-8").startswith("# report")
     assert len(calls) == 1
 
-    # Idempotent: cached .md newer than source \u2192 no re-conversion.
+    # Idempotent: same source, same converter, same options → no re-conversion.
     out2 = llm_client_shared.prepare_document_input(src)
     assert out2 == out
     assert len(calls) == 1
+
+
+def test_prepare_document_input_cache_follows_converter_engine_and_ocr(tmp_path, monkeypatch):
+    """#10 G8: the cache used to be valid whenever the .md was newer than the source, so a
+    new converter, another engine or asking for --ocr after a plain run served stale Markdown."""
+    import api_util.doc_to_visual_md as dv
+    import llm_client_shared
+
+    calls = []
+
+    def fake_convert(path, ocr=False, engine="light", **_kwargs):
+        calls.append((ocr, engine))
+        return f"# {engine} {ocr}\n"
+
+    monkeypatch.setattr(dv, "convert_to_visual_md", fake_convert)
+    src = tmp_path / "report.pdf"
+    src.write_bytes(b"%PDF-1.4 dummy")
+
+    llm_client_shared.prepare_document_input(src)
+    llm_client_shared.prepare_document_input(src, ocr=True)
+    monkeypatch.setenv("DIGITAL_ENGINE", "docling")
+    out = llm_client_shared.prepare_document_input(src, ocr=True)
+    monkeypatch.setattr(dv, "CONVERTER_VERSION", "next")
+    llm_client_shared.prepare_document_input(src, ocr=True)
+    assert calls == [(False, "light"), (True, "light"), (True, "docling"), (True, "docling")]
+    assert out.name == "report.md", "the cache NAME is what canonical_doc_id() reads"
 
 
 # ── config quoting + vocabulary guards (2026-08-19) ──────────────────────────

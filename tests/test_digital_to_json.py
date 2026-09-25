@@ -513,3 +513,397 @@ def test_docx_degenerate_table_is_left_out(tmp_path):
     doc = d2j.extract_docx(str(path))
     assert doc.pages[0].tables == []
     assert [line.text for line in doc.all_lines()] == ["only text"]
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Issue #18 layout cues + the #10 §9 gap register (2026-09-25)
+# ──────────────────────────────────────────────────────────────────────────────
+#
+# One test per gap the measurement found on the JSON route, each against the fixture
+# built to reproduce it (tests/fixtures/digital/make_fixtures.py), plus the Layer B rules
+# the switch of the auto-convert to this route needed (P9, P10) and the provenance fix.
+
+
+def test_french_and_italian_text_is_not_condemned_as_mojibake():
+    """P10: `è`, `ù`, `ì`, `ò` are the four misread letters AND ordinary French/Italian.
+
+    alto-postprocess's guard (text_formats.mojibake_line): no shared Czech letter, or a
+    French-only one, and the line is not CP1250 read as CP1252."""
+    for text in ("très complète et où", "è così perché più", "Voilà trois fenêtres très complètes"):
+        report = d2j.decode_sanity(text)
+        assert report.suspicious >= 2
+        assert not report.is_garbage, text
+
+
+def test_a_czech_line_that_also_holds_a_correct_diacritic_is_not_mojibake():
+    """`ě` cannot come out of a CP1250→CP1252 misread, so its presence clears the line."""
+    assert not d2j.decode_sanity("sondì èíslo a správně sondě").is_garbage
+
+
+def test_replacement_characters_make_a_line_garbage():
+    """P9: the check legacy pdf_to_md had and the JSON route did not."""
+    report = d2j.decode_sanity("Zpr��va o sond� ��slo")
+    assert report.is_undecodable and report.is_garbage
+    page = d2j.DigitalPage(page="1", page_index=1)
+    page.lines = [d2j.DigitalLine(page="1", line=0, text="Zpr��va ���")]
+    d2j.normalize(
+        d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page])
+    )
+    assert page.needs_ocr and "garbled text layer" in page.needs_ocr_reason
+
+
+def test_condemned_page_condemns_its_single_misread_lines():
+    """G6: 2 of garbled.pdf's 3 bad lines used to render (one misread each)."""
+    page = d2j.DigitalPage(page="1", page_index=1)
+    page.lines = [
+        d2j.DigitalLine(page="1", line=0, text="Zpráva o sondì èíslo 3."),
+        d2j.DigitalLine(page="1", line=1, text="Nalezeny høeby a zlomky keramiky."),
+        d2j.DigitalLine(page="1", line=2, text="Vrstva ornice mìla mocnost 30 cm."),
+        d2j.DigitalLine(page="1", line=3, text="Clean line without any accents."),
+    ]
+    d2j.normalize(
+        d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page])
+    )
+    assert [ln.categ for ln in page.lines] == ["Garbage", "Garbage", "Garbage", None]
+
+
+def test_a_single_misread_on_a_clean_page_still_stands():
+    page = d2j.DigitalPage(page="1", page_index=1)
+    page.lines = [d2j.DigitalLine(page="1", line=0, text="Vrstva ornice, srov. italsky città.")]
+    d2j.normalize(
+        d2j.DigitalDocument(doc_id="D", origin=d2j.ORIGIN_PDF, media_type="", pages=[page])
+    )
+    assert page.lines[0].categ is None and not page.needs_ocr
+
+
+def test_line_less_page_has_no_score_and_a_scan_is_flagged():
+    """G1: an image-only page was scored Clear/1.0 and vanished."""
+    scan = d2j.DigitalPage(page="2", page_index=2, text_layer=d2j.TEXT_LAYER_NONE, images=1)
+    blank = d2j.DigitalPage(page="3", page_index=3, text_layer=d2j.TEXT_LAYER_BLANK)
+    for page in (scan, blank):
+        d2j.assess_page(page)
+        assert page.quality_score is None and page.quality_band is None
+    assert scan.needs_ocr and scan.needs_ocr_reason.startswith("no extractable text layer")
+    assert not blank.needs_ocr and blank.needs_ocr_reason == ""
+
+
+def test_group_ids_are_unique_across_pages_and_split_on_column_and_region():
+    lines = [
+        d2j.DigitalLine(
+            page="1", line=0, text="head", bbox=[72, 20, 200, 29], region="page_header"
+        ),
+        d2j.DigitalLine(page="1", line=1, text="left", bbox=[72, 100, 200, 112]),
+        d2j.DigitalLine(page="1", line=2, text="left2", bbox=[72, 114, 200, 126]),
+        d2j.DigitalLine(page="1", line=3, text="right", bbox=[324, 100, 450, 112], column=1),
+    ]
+    d2j.assign_group_ids(lines, prefix="p1-")
+    groups = [ln.group_id for ln in lines]
+    assert groups[1] == groups[2]
+    assert len(set(groups)) == 3 and all(g.startswith("p1-") for g in groups)
+
+
+def test_region_lives_in_style_and_furniture_stays_out_of_content(tmp_path):
+    page = d2j.DigitalPage(page="1", page_index=1, width=612.0, height=792.0)
+    page.lines = [
+        d2j.DigitalLine(
+            page="1", line=0, text="Running head", bbox=[72, 20, 200, 29], region="page_header"
+        ),
+        d2j.DigitalLine(page="1", line=1, text="Body text.", bbox=[72, 100, 200, 112]),
+        d2j.DigitalLine(
+            page="1", line=2, text="A footnote.", bbox=[72, 700, 200, 709], region="footnote"
+        ),
+        d2j.DigitalLine(
+            page="1", line=3, text="7", bbox=[300, 760, 305, 769], region="page_footer"
+        ),
+    ]
+    doc = d2j.normalize(
+        d2j.DigitalDocument(
+            doc_id="R",
+            origin=d2j.ORIGIN_PDF,
+            media_type="application/pdf",
+            pages=[page],
+            sha256="b" * 64,
+            filename="R.pdf",
+        )
+    )
+    record, _, _ = to_record_in(tmp_path, doc)
+    data = record.to_dict()
+    regions = [ln.get("style", {}).get("region") for ln in data["lines"]]
+    assert regions == ["page_header", None, "footnote", "page_footer"]
+    assert data["content"]["text"] == "Body text.\nA footnote."
+
+
+def test_sniffing_is_by_content_not_extension(tmp_path):
+    renamed = tmp_path / "report.txt"
+    renamed.write_bytes(b"%PDF-1.4\n...")
+    assert d2j.sniff(str(renamed)) == "pdf"
+    legacy = tmp_path / "old.doc"
+    legacy.write_bytes(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + b"\0" * 64)
+    with pytest.raises(d2j.DigitalInputError) as info:
+        d2j.sniff(str(legacy))
+    assert info.value.reason == "legacy_office_unsupported" and info.value.exit_code == 3
+    encrypted = tmp_path / "locked.docx"
+    encrypted.write_bytes(
+        b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1" + "EncryptedPackage".encode("utf-16-le")
+    )
+    with pytest.raises(d2j.DigitalInputError) as info:
+        d2j.sniff(str(encrypted))
+    assert info.value.reason == "encrypted" and info.value.exit_code == 4
+
+
+def test_cli_exit_codes_name_the_problem(tmp_path, capsys):
+    """P15: a ValueError used to escape main() as a traceback."""
+    stray = tmp_path / "notes.txt"
+    stray.write_text("hello", encoding="utf-8")
+    assert d2j.main([str(stray)]) == 3
+    assert "unsupported" in capsys.readouterr().err
+    broken = tmp_path / "broken.docx"
+    broken.write_bytes(b"PK\x03\x04 not really a zip")
+    assert d2j.main([str(broken)]) == 4
+
+
+def test_cli_exposes_the_engine_and_page_break_flags():
+    help_text = d2j.build_parser().format_help()
+    for flag in ("--engine", "--docx-page-breaks", "--paradata-dir", "--document-json-out"):
+        assert flag in help_text
+
+
+def test_license_detail_reflects_the_components_used():
+    """P11: nothing on this path ever logged a component, so every digital-born record
+    carried the CC BY-NC 4.0 default. The light stack is permissive — and says so now."""
+    detail = d2j.license_detail_for(["pdfplumber", "pdfminer.six", "pypdfium2", "jsonschema"])
+    assert detail is not None
+    assert detail["effective_license"] in ("MIT", "Apache-2.0")
+    assert not detail.get("unknown_licenses")
+
+
+def test_heavy_engine_licence_is_recorded_truthfully():
+    """TableFormer's weights are CDLA-Permissive-2.0; para_licenses does not rank it yet, so
+    the record must say so rather than round it to Apache-2.0 (hub follow-up)."""
+    detail = d2j.license_detail_for(["pdfplumber", "docling", "docling-tableformer"])
+    assert "CDLA-Permissive-2.0" in (
+        detail.get("unknown_licenses") or [detail["effective_license"]]
+    )
+
+
+def test_pdf_words_are_separated_and_columns_read_in_order(digital_fixtures):
+    """G2: words glued (`MALASTRANA'SMFF`) and two columns merged into one line."""
+    pytest.importorskip("pdfplumber")
+    doc = d2j.normalize(d2j.extract_pdf(str(digital_fixtures / "two_column.pdf")))
+    texts = [ln.text for ln in doc.pages[0].lines]
+    assert "Sonda II odkryla val." in texts, "kerned words must come out separated"
+    assert texts.index("Konec leveho sloupce.") < texts.index("Pravy sloupec zacina zde.")
+    assert not any("zde." in t and "val." in t for t in texts), "columns merged into one line"
+
+
+def test_pdf_page_labels_furniture_and_headings(digital_fixtures):
+    pytest.importorskip("pdfplumber")
+    doc = d2j.normalize(d2j.extract_pdf(str(digital_fixtures / "two_column.pdf")))
+    assert [p.page for p in doc.pages] == ["i", "ii"] and [p.page_index for p in doc.pages] == [
+        1,
+        2,
+    ]
+    first = doc.pages[0].lines
+    assert first[0].region == "page_header" and first[-1].region == "page_footer"
+    title = next(ln for ln in first if ln.text.startswith("Hradiste"))
+    assert title.heading_level == 1 and title.bold
+
+
+def test_pdf_ruled_table_reaches_tables_and_lines(digital_fixtures):
+    """P14: legacy pdf_to_md emitted ruled tables; the JSON route did not."""
+    pytest.importorskip("pdfplumber")
+    doc = d2j.extract_pdf(str(digital_fixtures / "table.pdf"))
+    grid = doc.pages[0].tables[0]
+    assert (grid.n_rows, grid.n_cols) == (2, 3)
+    by_group = {ln.group_id: ln.text for ln in doc.pages[0].lines if ln.group_id}
+    assert [by_group[c["group_id"]] for c in grid.cells] == [
+        "Vrstva",
+        "Mocnost",
+        "Nalezy",
+        "Ornice",
+        "30 cm",
+        "keramika",
+    ]
+    assert all(len(c["bbox"]) == 4 for c in grid.cells)
+
+
+def test_text_less_pages_are_flagged_with_what_they_draw(digital_fixtures):
+    """G1, and alto-postprocess #31's rule: every PDF page without text is `none`. The reason
+    separates a scan (it draws an image) from a page that draws nothing a parser can see."""
+    pytest.importorskip("pdfplumber")
+    doc = d2j.normalize(d2j.extract_pdf(str(digital_fixtures / "image_only.pdf")))
+    text, scan, empty = doc.pages
+    assert not text.needs_ocr
+    assert scan.needs_ocr and "draws 1 image(s)" in scan.needs_ocr_reason
+    assert empty.needs_ocr and "draws nothing a parser can see" in empty.needs_ocr_reason
+    for page in (scan, empty):
+        assert page.needs_ocr_reason.startswith("no extractable text layer")
+        assert page.quality_score is None
+
+
+def test_layout_frames_are_not_tables(digital_fixtures):
+    """A ruled grid round the whole page (sample.pdf's page frames) is not a table: its
+    words stay in the reading-order flow instead of becoming one giant cell each."""
+    pytest.importorskip("pdfplumber")
+    from api_util import digital_pdf
+
+    class _Table:
+        def __init__(self, bbox):
+            self.bbox = bbox
+
+    frame = _Table((0, 0, 612, 792))
+    cell = (100.0, 100.0, 300.0, 120.0)
+    word = {"x0": 110, "x1": 150, "top": 104, "bottom": 116}
+    area = 612.0 * 792.0
+    assert not digital_pdf._plausible_table(frame, {(0, 0): cell}, [word], area)
+    small = _Table((100, 100, 500, 160))
+    real = {
+        (0, 0): cell,
+        (0, 1): (300.0, 100.0, 500.0, 120.0),
+        (1, 0): (100.0, 120.0, 300.0, 140.0),
+    }
+    assert not digital_pdf._plausible_table(small, real, [], area), "no text at all"
+    assert digital_pdf._plausible_table(small, {(0, 0): cell}, [word], area)
+
+
+def test_ocr_layer_pdf_is_refused_as_not_born_digital(digital_fixtures, tmp_path):
+    """G7: invisible text over page images is OCR output — alto-postprocess's to originate."""
+    pytest.importorskip("pdfplumber")
+    with pytest.raises(d2j.DigitalInputError) as info:
+        d2j.extract(str(digital_fixtures / "ocr_layer.pdf"))
+    assert info.value.reason == "ocr_text_layer"
+    assert d2j.main([str(digital_fixtures / "ocr_layer.pdf"), "--out-dir", str(tmp_path)]) == 3
+    assert list(tmp_path.glob("*.document.json")) == []
+
+
+def test_docx_pages_follow_explicit_section_and_rendered_breaks(digital_fixtures):
+    """G3: a DOCX was always one page. The rules are alto-postprocess #31's (`auto`)."""
+    pytest.importorskip("docx")
+    doc = d2j.extract_docx(str(digital_fixtures / "rich.docx"))
+    assert len(doc.pages) == 4
+    page_of = {ln.text: ln.page for ln in doc.all_lines()}
+    assert page_of["Druhá strana začíná zde."] == "2"  # pageBreakBefore
+    assert page_of["Text třetí strany"] == "3"  # nextPage section break
+    assert page_of["pokračuje na čtvrté."] == "4"  # lastRenderedPageBreak mid-paragraph
+    explicit = d2j.extract_docx(str(digital_fixtures / "rich.docx"), page_breaks="explicit")
+    assert len(explicit.pages) == 3
+    assert len(d2j.extract_docx(str(digital_fixtures / "rich.docx"), page_breaks="none").pages) == 1
+    minimal = d2j.extract_docx(str(digital_fixtures / "minimal.docx"))
+    assert [p.page for p in minimal.pages] == ["1", "2"]
+
+
+def test_docx_tracked_changes_fields_and_text_boxes(digital_fixtures):
+    """G5: insertions kept, deletions dropped; field codes skipped; a text box once."""
+    pytest.importorskip("docx")
+    texts = [ln.text for ln in d2j.extract_docx(str(digital_fixtures / "rich.docx")).all_lines()]
+    assert "Nalezena bronzová spona, viz katalog." in texts
+    assert not any("železný nůž" in t for t in texts)
+    assert "Strana 1" in texts and not any("PAGE" in t for t in texts)
+    assert texts.count("Poznámka v rámečku.") == 1
+
+
+def test_docx_headings_emphasis_and_paragraph_groups(digital_fixtures):
+    pytest.importorskip("docx")
+    lines = {
+        ln.text: ln for ln in d2j.extract_docx(str(digital_fixtures / "rich.docx")).all_lines()
+    }
+    assert lines["Hradiště u Horní Mezi"].heading_level == 1  # Title, by name
+    assert lines["Průběh výzkumu"].heading_level == 2  # "Nadpis 2", localized name
+    assert lines["Dílčí závěr"].heading_level == 3  # direct outline level 2
+    assert lines["Sonda II"].bold and lines["Sonda II"].heading_level is None  # character style
+    assert lines["První řádek"].group_id == lines["Druhý řádek"].group_id  # one paragraph
+    assert lines["Sonda II"].group_id != lines["Průběh výzkumu"].group_id
+
+
+def test_docx_furniture_and_footnotes_are_placed_and_labelled(digital_fixtures):
+    pytest.importorskip("docx")
+    doc = d2j.extract_docx(str(digital_fixtures / "rich.docx"))
+    first, second = doc.pages[0].lines, doc.pages[1].lines
+    assert first[0].region == "page_header" and first[0].text.startswith("Archeologický ústav")
+    note = next(ln for ln in first if ln.region == "footnote")
+    assert note.text == "Katalog nálezů je uložen v archivu." and note.group_id == "fn1"
+    assert second[-1].region == "page_footer" and second[-1].text == "Strana 1"
+    headers = [ln for ln in doc.all_lines() if ln.region == "page_header"]
+    assert len(headers) == 1, "the linked second section must not repeat the header"
+
+
+def test_docx_without_the_main_override_opens(digital_fixtures):
+    """G4: python-docx refuses it ("not a Word file"); the package relationship still
+    names the main part, so the content type is repaired in memory."""
+    docx = pytest.importorskip("docx")
+    with pytest.raises(ValueError, match="not a Word file"):
+        docx.Document(str(digital_fixtures / "bare.docx"))
+    doc = d2j.extract_docx(str(digital_fixtures / "bare.docx"))
+    assert "Zpráva o sondě" in [ln.text for ln in doc.all_lines()]
+    assert doc.sha256 == d2j.sha256_file(str(digital_fixtures / "bare.docx"))
+
+
+def test_every_fixture_converts_to_a_valid_record(digital_fixtures, tmp_path):
+    """The Layer D gate over every digital fixture except the refused OCR layer."""
+    pytest.importorskip("pdfplumber")
+    pytest.importorskip("docx")
+    pytest.importorskip("jsonschema")
+    for name in sorted(p.name for p in digital_fixtures.iterdir()):
+        if name == "ocr_layer.pdf":
+            continue
+        out = tmp_path / f"{name}.document.json"
+        d2j.convert(str(digital_fixtures / name), out_path=str(out))
+        data = json.loads(out.read_text(encoding="utf-8"))
+        assert data["source"]["origin"] in (d2j.ORIGIN_PDF, d2j.ORIGIN_DOCX), name
+        assert data["provenance"]["license"] in ("MIT", "Apache-2.0", "BSD-3-Clause"), name
+
+
+def test_paradata_dir_writes_the_paradata_half_of_the_pair(digital_fixtures, tmp_path):
+    pytest.importorskip("pdfplumber")
+    pytest.importorskip("jsonschema")
+    out = tmp_path / "m.document.json"
+    d2j.convert(
+        str(digital_fixtures / "minimal.pdf"),
+        out_path=str(out),
+        paradata_dir=str(tmp_path / "para"),
+    )
+    [paradata] = list((tmp_path / "para").glob("*_digital-convert.json"))
+    para = json.loads(paradata.read_text(encoding="utf-8"))
+    record = json.loads(out.read_text(encoding="utf-8"))
+    contributor = record["provenance"]["contributors"][-1]
+    assert contributor["paradata_ref"] == paradata.name
+    assert contributor["run_id"] == para["run_id"]
+    assert para["statistics"]["successfully_processed"] == 1
+    assert {c["name"] for c in para["license_detail"]["components"]} >= {"pdfplumber", "jsonschema"}
+
+
+def test_docx_table_without_a_grid_and_a_bad_outline_level_survive(tmp_path):
+    """python-docx's `Table.columns` raises without `w:tblGrid`; the old walk crashed there
+    and a guarded one would have dropped the table's text. A malformed `w:outlineLvl` is
+    ignored rather than raising."""
+    docx = pytest.importorskip("docx")
+    import io
+    import re
+    import zipfile
+
+    from docx.oxml import parse_xml
+
+    document = docx.Document()
+    table = document.add_table(rows=1, cols=2)
+    table.cell(0, 0).text, table.cell(0, 1).text = "A", "B"
+    paragraph = document.add_paragraph("x")
+    paragraph._p.get_or_add_pPr().append(
+        parse_xml(
+            '<w:outlineLvl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+            'w:val="bogus"/>'
+        )
+    )
+    buffer = io.BytesIO()
+    document.save(buffer)
+    path = tmp_path / "nogrid.docx"
+    with zipfile.ZipFile(io.BytesIO(buffer.getvalue())) as src, zipfile.ZipFile(path, "w") as dst:
+        for info in src.infolist():
+            data = src.read(info)
+            if info.filename == "word/document.xml":
+                data = re.sub(rb"<w:tblGrid>.*?</w:tblGrid>", b"", data)
+            dst.writestr(info, data)
+
+    doc = d2j.extract_docx(str(path))
+    assert [ln.text for ln in doc.all_lines()] == ["A", "B", "x"]
+    assert [(t.n_rows, t.n_cols) for t in doc.pages[0].tables] == [(1, 2)]
+    assert doc.all_lines()[-1].heading_level is None

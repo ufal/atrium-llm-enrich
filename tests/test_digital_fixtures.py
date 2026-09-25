@@ -102,13 +102,14 @@ def test_generator_is_deterministic(make_fixtures):
         assert first[name] == second[name], f"{name} is not byte-reproducible"
 
 
-def test_docx_is_not_deflated(blobs):
+@pytest.mark.parametrize("name", ["minimal.docx", "rich.docx", "bare.docx"])
+def test_docx_is_not_deflated(blobs, name):
     """DEFLATE output depends on the linked zlib, so a byte-pinned zip must be STORED.
 
     Guards the specific regression: switching back to ZIP_DEFLATED would still produce a
     valid .docx and still pass a same-machine `--verify`, then drift on a zlib upgrade.
     """
-    with zipfile.ZipFile(io.BytesIO(blobs["minimal.docx"])) as zf:
+    with zipfile.ZipFile(io.BytesIO(blobs[name])) as zf:
         for info in zf.infolist():
             assert info.compress_type == zipfile.ZIP_STORED, info.filename
             assert info.create_system == 3, f"{info.filename}: create_system must be pinned"
@@ -178,7 +179,18 @@ def test_canonical_manifest_path_is_independent_of_outdir(make_fixtures, tmp_pat
 # ── the fixtures are structurally real ───────────────────────────────────────
 
 
-@pytest.mark.parametrize("name", ["minimal.pdf", "enrichable.pdf", "garbled.pdf"])
+@pytest.mark.parametrize(
+    "name",
+    [
+        "minimal.pdf",
+        "enrichable.pdf",
+        "garbled.pdf",
+        "image_only.pdf",
+        "two_column.pdf",
+        "ocr_layer.pdf",
+        "table.pdf",
+    ],
+)
 def test_pdf_xref_offsets_resolve(blobs, name):
     """Every xref entry must point at its own `N 0 obj`, or a real parser rejects the file.
 
@@ -275,3 +287,48 @@ def test_minimal_docx_opens_and_carries_the_documented_structure(blobs, tmp_path
 
     # Fixed dates, or the fixture would not be reproducible.
     assert document.core_properties.created.year == 1980
+
+
+# ── the #10 §9 parity fixtures (2026-09-25) ──────────────────────────────────
+
+
+def test_parity_pdfs_carry_the_constructions_they_are_named_for(blobs):
+    """Each fixture reproduces ONE failure; a fixture that stopped doing so would make the
+    test that uses it pass vacuously."""
+    image_only = blobs["image_only.pdf"]
+    assert b"/Count 3" in image_only and image_only.count(b"/Im1 Do") == 1
+    two_column = blobs["two_column.pdf"]
+    assert b"/PageLabels << /Nums [0 << /S /r >>] >>" in two_column
+    assert b"-400" in two_column and b"] TJ" in two_column, "kerned words without spaces"
+    assert b"/Helvetica-Bold" in two_column
+    ocr_layer = blobs["ocr_layer.pdf"]
+    assert ocr_layer.count(b"3 Tr") == 2 and ocr_layer.count(b"/Im1 Do") == 2
+    assert blobs["table.pdf"].count(b" l S") == 7, "3 horizontal + 4 vertical rules"
+
+
+def test_rich_docx_carries_the_documented_structure(blobs):
+    with zipfile.ZipFile(io.BytesIO(blobs["rich.docx"])) as zf:
+        body = zf.read("word/document.xml").decode("utf-8")
+        names = set(zf.namelist())
+    assert {"word/footnotes.xml", "word/header1.xml", "word/footer1.xml"} <= names
+    for construction in (
+        "<w:ins ",
+        "<w:delText>",
+        "<w:pageBreakBefore/>",
+        '<w:type w:val="nextPage"/>',
+        "<w:lastRenderedPageBreak/>",
+        "<mc:Fallback>",
+        '<w:gridSpan w:val="2"/>',
+        '<w:footnoteReference w:id="1"/>',
+        '<w:outlineLvl w:val="2"/>',
+    ):
+        assert construction in body, construction
+
+
+def test_bare_docx_lacks_only_the_main_override(blobs):
+    docx = pytest.importorskip("docx", reason="python-docx is an optional digital-stack dep")
+    with zipfile.ZipFile(io.BytesIO(blobs["bare.docx"])) as zf:
+        types = zf.read("[Content_Types].xml").decode("utf-8")
+    assert "/word/document.xml" not in types and "/word/styles.xml" in types
+    with pytest.raises(ValueError, match="not a Word file"):
+        docx.Document(io.BytesIO(blobs["bare.docx"]))

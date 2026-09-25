@@ -1,4 +1,9 @@
 {
+  "bare.docx": {
+    "bytes": 4319,
+    "note": "minimal.docx without the document.xml Override — G4 lenient open",
+    "sha256": "a318e43b12d74dba569a3e76d0164214d4ae175915996fd96a82fa2fbf951a86"
+  },
   "enrichable.pdf": {
     "bytes": 884,
     "note": "1 page, diacritic-free Czech archaeology — the LLM stage's input",
@@ -9,6 +14,11 @@
     "note": "WinAnsi declared over cp1250, no /ToUnicode — must trip decode-sanity",
     "sha256": "f985edd2a1f886e3f0f37a381b5aff3736d01e0f8f031febd08a8e927a09fcde"
   },
+  "image_only.pdf": {
+    "bytes": 1474,
+    "note": "text page + image-only page + blank page — G1 needs_ocr",
+    "sha256": "7acef68b9931450e209e43ac7842cbc1f7f44ee929ab34ff90861cf9274c8e34"
+  },
   "minimal.docx": {
     "bytes": 4455,
     "note": "heading + 2 paragraphs + 2x2 table + explicit page break",
@@ -18,5 +28,25 @@
     "bytes": 1039,
     "note": "2 pages, 3 text blocks, no diacritics — happy path for bbox + group_id",
     "sha256": "a1a820cec34892d05880fb22a0b900acd3eede535869aed4c6732b0e83cddece"
+  },
+  "ocr_layer.pdf": {
+    "bytes": 1303,
+    "note": "page image + invisible (3 Tr) text on both pages — G7 OCR layer",
+    "sha256": "fe1a3a2dce800f9c5c8b80c3cbec55abe6d8a4a175cf8abdc1b6451ea1269cc2"
+  },
+  "rich.docx": {
+    "bytes": 8678,
+    "note": "title/localized headings, ins/del, footnote, text box, header/footer, 4 pages",
+    "sha256": "80bbacf81970663749bb8ead8ad9ccec3b2e944b0b29b643250f9b69a2156477"
+  },
+  "table.pdf": {
+    "bytes": 1391,
+    "note": "ruled 3x2 table between two paragraphs",
+    "sha256": "be2a766c9ea46db00b1825aef5fa819f98a3473505fc8d509512d19b4a83ffbd"
+  },
+  "two_column.pdf": {
+    "bytes": 1976,
+    "note": "2 pages, 2 columns, title, running header, page-number footer, roman labels",
+    "sha256": "a9c19d72c8a13ab5f5c8761beb39cd88c6d8abba80f566ee57f11361de107310"
   }
 }

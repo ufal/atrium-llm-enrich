@@ -300,6 +300,30 @@ Dev logs: #10 (answer posted), #11 (the 08-02 validation task and its state; the
   fast suite with the hub's new `atrium_document.py`/`.schema.json`/`atrium_vocab.py` swapped in: 923 passed, as before.
   Not pushed: files delivered in chat.
 
+## 2026-09-25 (later): #18 finished in the working tree — layout cues, one route, #10's G1–G8
+
+* **Asked (K4TEL):** make llm-enrich contain everything #18 needs; light libraries by default, a heavyweight method on
+  request; research the sibling repos first (all six `test` HEADs fetched); fix every problem found; deliver full files
+  in chat with the repo path in the file name.
+* **Decided in session:** Docling as the opt-in heavy engine (TableFormer's CDLA-Permissive-2.0 logged as is);
+  `lines[].style.region` for page furniture and footnotes (additive); switch the route, delete nothing.
+* **Done** ([`plans/18.plan.md`](plans/18.plan.md) §0e, [`plans/10.plan.md`](plans/10.plan.md) §11): Layer A split
+  into `api_util/digital_pdf.py` (words, columns, ruled tables, headings, running headers/footers, `/PageLabels`,
+  pypdfium2 census), `digital_docx.py` (pages as alto-postprocess #31 counts them, tracked changes, lenient package,
+  headings, headers/footers, footnotes), `digital_docling.py` (`--engine docling`) over `digital_ir.py`; Layer B garble,
+  foreign-letter and condemned-page rules; OCR-layer PDFs refused; content sniffing, exit codes 2/3/4, `build_record()`,
+  `--paradata-dir`; `json_to_md` renders headings, emphasis, header/footer cues, footnotes, GFM tables and text-less
+  pages; `doc_to_visual_md` goes through the JSON route (`--legacy`, `--ocr` reach the deprecated converters); cache
+  sidecar. Six new fixtures, `tests/test_digital_parity.py`, `tests/test_digital_docling.py`.
+* **Problems fixed on the way:** digital-born records never carried their components' licence (CC BY-NC 4.0 default;
+  now MIT); the `-digital` image installed docling (torch) and docx2python unused (requirements split, new
+  `digital-docling` stage, not published); `.docm`/`.dotx` never opened; stale manifest-path and licence claims in the
+  #18 plan and `digital_born/README.md`.
+* `pytest -m "not slow"`: 1013 passed, 19 environment-only skips; `ruff` clean; fixtures and vendored files unchanged
+  against the manifest and the hub. Docling's live run not verified here (model download 403); its mapping is tested.
+  **Not pushed: files delivered in chat.** Hub follow-ups: rank CDLA-Permissive-2.0 in `para_licenses.py`, declare
+  `style.region` in the canonical schema, add DOCX and two-column stages to `e2e-digital-smoke.yml`.
+
 ---
 _Timeline index refreshed 2026-09-07 against live `test`/`main` HEAD, the `CONTRIBUTING.md` changelog table, and
 open-issue state via the GitHub API; header and the 2026-09-24 entries refreshed 2026-09-24 against `test` `122915c`, then `c1ad762`, and after the push against `08dff48` (with the 09-07 → 09-17 gap filled). Nothing removed from the issues themselves (per hub #29); this file is a
