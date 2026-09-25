@@ -5,9 +5,10 @@ card, published by GitHub Pages at <https://ufal.github.io/atrium-llm-enrich/>.
 
 * The **code** lives on [`main`](https://github.com/ufal/atrium-llm-enrich/tree/main).
 * The **documentation** lives in the ATRIUM hub site at
-  <https://ufal.github.io/atrium-project/tools/llm-enrich/>, assembled from this repository's own
-  `README.md`, `CONTRIBUTING.md` and `agent_dev_logs/DEVLOG.md`. Nothing is copied
-  here &mdash; see [`atrium-project` issue #57](https://github.com/ufal/atrium-project/issues/57).
+  <https://ufal.github.io/atrium-project/workflows/llm-enrich/>, written from this repository's own
+  `README.md`, `CONTRIBUTING.md` and `agent_dev_logs/DEVLOG.md`, which stay the full
+  manual. Nothing is copied here &mdash; see
+  [`atrium-project` issue #57](https://github.com/ufal/atrium-project/issues/57).
 
 ## What is in here
 
@@ -34,3 +35,5 @@ half-drawn by a slow third-party image host.
 One-time, needs repository admin: **Settings &rarr; Pages &rarr; Build and deployment
 &rarr; Source: Deploy from a branch &rarr; Branch: `gh-pages` / `/ (root)`**.
 See `PAGES_SETUP.md` in the hub repository for the full note.
+
+_Generated 2026-09-25 for issue #57._
