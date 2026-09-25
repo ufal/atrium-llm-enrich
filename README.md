@@ -426,6 +426,21 @@ has no offload path; for over-VRAM models the supported answer is `BACKEND=vllm`
   quality: the quality bands of the line filter do not apply to it, only the length rules — it
   used to count as 0.0, i.e. "Trash", so a `.teitok.xml` input enriched nothing. The output
   record then carries `"quality_score": null`.
+* **TEITOK input, in short.** TEITOK is the TEI-based XML of the TEITOK corpus platform. The ATRIUM
+  files come from atrium-nlp-enrich, which writes them in its format 2 (`teitok-2`), or from
+  flexiconv. This repo only reads them: line-level through `teitok_read.py`, whole documents through
+  `xml_to_md.py`. What the format is built on, how nlp-enrich composes a file from its line table,
+  UDPipe, NameTag and the ALTO layout, which tools write or read TEITOK and what each keeps, and the
+  pitfalls are in atrium-nlp-enrich's README, section
+  [TEITOK XML — Unified Output Format](https://github.com/ufal/atrium-nlp-enrich#teitok-xml--unified-output-format).
+  In format 2 the pages are the document's own: one `<pb/>` per page of the layout, in order
+  (`pb@n` is the line table's page label when it has one, else the page's number), and a sentence
+  that runs over a page break is split there, so `page_num` and the `## Page N` headings follow the
+  scan. Files written by nlp-enrich v0.21.0 or earlier started a new "page" at every ~900-word UDPipe
+  request chunk, so their page numbers do not match the scan. The format stamp (`appInfo`
+  `version="teitok-2"`) did not change with the fix: such a file is told apart only by the date of
+  its `<change type="converted">` (or by a missing stamp, if it is older still). Regenerate such
+  files with nlp-enrich before relying on their page numbers.
 * **Input (remote/lightweight-local, document-level):** `.md`/`.txt` (from
   [`api_util/xml_to_md.py`](api_util/xml_to_md.py) 📎), or `.pdf`/`.docx` auto-converted to
   visually-rich Markdown by [`api_util/doc_to_visual_md.py`](api_util/doc_to_visual_md.py) 📎.

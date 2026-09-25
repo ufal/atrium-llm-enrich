@@ -1,7 +1,7 @@
 # 📓 atrium-llm-enrich — agent_dev_logs/DEVLOG.md (timeline index)
 > _LLM-driven enrichment of archaeological documents (local multi-GPU + remote-as-a-service). 6 open
-> issues (#10, #11, #13, #18, #24, #25); #8 closed. `test` HEAD `c1ad762` (2026-09-24, issue exports) · **v0.7.0**
-> (2026-09-16). The 2026-09-24 round-4 fixes are delivered as files and not yet on `test`._
+> issues (#10, #11, #13, #18, #24, #25); #8 closed. `test` = `main` = `08dff48` (2026-09-24) · **v0.7.0**
+> (2026-09-16, `f7b0ecf`). The 2026-09-24 round-4 fixes are on `test` (`951db5e`), not yet released._
 > _Per-issue detail: `digests/{id}.digest.md` · `plans/{id}.plan.md` · `issues/` exports
 > (source of truth). Cross-repo/hub history (DU benchmark hub#22, this repo's spin-out from
 > hub#24) lives in `ufal/atrium-project/agent_dev_logs/DEVLOG.md` (deduplicated out of this file).
@@ -208,6 +208,20 @@ avoid already caught and fixed. The active thread is the vocabulary/prompt align
 repo has no issue of its own for that work, so its state should be read alongside nlp-enrich's DEVLOG rather than
 this repo's issue tracker. #24 (olmOCR) is a fresh, unstarted lead on the still-deferred OCR path from #10.
 
+## 2026-09-07 → 2026-09-17 (added 2026-09-24 from the changelog and commit subjects)
+
+* **v0.6.3** (`2f2ebe2`, 09-07): born-digital `enrichment`-block parity (CLI and API agree when a consulted-but-empty
+result still contributes a block; hub #49); Docker `HEALTHCHECK` and graceful `SIGTERM` for Kubernetes (hub #55). Its
+changelog row says it closes #18; the issue stayed open (see `digests/18.digest.md`).
+* **Hub standards rolled in** (09-08 → 09-15): SKOS view of the vocabulary (hub #51), RO-Crate module (hub #54),
+`$PORT`/`HOST` (hub #58), `.env.example` + env contract (hub #60), logging contract (hub #61), 12-factor GHA edits, a
+Docker test for GHA, `flexiconv` pinned to `@v0.3.10` (hub #62; it had resolved to the default branch).
+* **v0.7.0** (`f7b0ecf`, 09-16): `entities[].pid` populated for the first time (`vocab_manager.concept_index()` /
+`resolve_pid()`, `amcr` and `aat` only, merged as the `pid` field alone so nlp-enrich's rows survive); `union.skos.ttl`
+from the raw harvest; all four SKOS mapping relations harvested; TEATER `quotes[]` as `dcterms:source`.
+* **#25 opened** (09-17): archivatorium as a VLM OCR backend for #10's render+OCR path — see
+[`digests/25.digest.md`](digests/25.digest.md). uvicorn bump (#26) on 09-23.
+
 ## 2026-09-23
 
 * **TEITOK / flexiconv (nlp-enrich #9/#10/#28 umbrella, Stage 5; branch `claude/inspiring-cerf-2gdtd1`, local).**
@@ -236,7 +250,7 @@ this repo's issue tracker. #24 (olmOCR) is a fresh, unstarted lead on the still-
   * The hub's `agent_dev_logs/{digests,plans}/13.*` held this repo's #13 design (hub #13 is the CAA paper); the design
     content moved into [`digests/13.digest.md`](digests/13.digest.md) §2, and the hub pair was rewritten.
   * #10 and #13 digests/plans refreshed; fixes are planned with nlp-enrich's round 4 (#13 plan P5).
-* **TEITOK round 4 — implemented the same day (#13 plan P5; delivered as files, not yet on `test`).**
+* **TEITOK round 4 — implemented the same day (#13 plan P5; delivered as files, then pushed as `951db5e`).**
   * `llm_client_shared.row_quality()` / `llm_utils._row_quality()`: a missing quality score is "unknown" (None) and
     skips the quality bands; the output record carries `"quality_score": null`; both GPU call sites pass it;
     `tests/conftest.py`'s `stub_llm` no longer patches the filter. TEITOK input now enriches its rows.
@@ -251,10 +265,25 @@ this repo's issue tracker. #24 (olmOCR) is a fresh, unstarted lead on the still-
   * `pytest -m "not slow"`: 947 passed, 18 environment-only skips; `ruff` clean.
 * **#10** — stranak asked (09-23 22:56) which route to Markdown to take: markitdown, flexiconv or the custom
   converters. The digest and plan (§9) carry a draft answer from the code and the §5 measurements (flexiconv writes
-  no Markdown; markitdown keeps no layout cues); the decision and the reply are the user's.
-* #25 (archivatorium as a VLM OCR backend) was opened on 09-17 and has no digest/plan yet; not part of this round.
+  no Markdown; markitdown keeps no layout cues); the decision and the reply are the user's. _(Decided and posted the same day, 11:20 — next entry.)_
+* #25 (archivatorium as a VLM OCR backend) was opened on 09-17 and had no digest/plan yet _(written in round 5, next entry)_.
+
+
+## 2026-09-24 (later): round 4 on `test`; #10 answered; round 5 — dev logs and README
+
+* **Pushed:** `951db5e` (round 4: TEITOK input enriched again, GPU path fixed, re-vendored reader, `xml_to_md` page
+model) and `08dff48` (#10 digest and plan: the G1–G8 gap register and the work plan); `test` = `main`, CI green. The hub's
+E2E ran with it the same day (run 35990199050, green, format 2) and so did the digital-born smoke (35990199010).
+* **#10 answered on the issue** (11:20, 5813071038): c) our converters, kept narrow to the JSON route and one cue layer;
+b) flexiconv for the TEITOK side; not a) markitdown. Next: close G1–G8, switch the clients' auto-convert to the JSON
+route, delete the legacy converters.
+* **Round 5 (dev logs and docs only here):** README *TEITOK input, in short* (where the format and its composition are
+described, format 2's page model, how to recognise files with UDPipe-chunk pages); CONTRIBUTING Unreleased row.
+Dev logs: #10 (answer posted), #11 (the 08-02 validation task and its state; the "nothing lost" criterion re-scoped),
+#13 (pushed), #18 (converter shipped in v0.6.0; three of four boxes done, layout cues open), #24 (milestone, sibling
+#25), **new #25 pair**; milestones relabelled on 2026-09-08 are in every pair.
 
 ---
 _Timeline index refreshed 2026-09-07 against live `test`/`main` HEAD, the `CONTRIBUTING.md` changelog table, and
-open-issue state via the GitHub API; header and the 2026-09-24 entries refreshed 2026-09-24 against `test` `122915c`, then `c1ad762`. Nothing removed from the issues themselves (per hub #29); this file is a
+open-issue state via the GitHub API; header and the 2026-09-24 entries refreshed 2026-09-24 against `test` `122915c`, then `c1ad762`, and after the push against `08dff48` (with the 09-07 → 09-17 gap filled). Nothing removed from the issues themselves (per hub #29); this file is a
 derived reading aid in `agent_dev_logs/`._
