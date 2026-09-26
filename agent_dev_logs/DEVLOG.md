@@ -1,7 +1,8 @@
 # 📓 atrium-llm-enrich — agent_dev_logs/DEVLOG.md (timeline index)
 > _LLM-driven enrichment of archaeological documents (local multi-GPU + remote-as-a-service). 6 open
-> issues (#10, #11, #13, #18, #24, #25); #8 closed. `test` = `main` = `08dff48` (2026-09-24) · **v0.7.0**
-> (2026-09-16, `f7b0ecf`). The 2026-09-24 round-4 fixes are on `test` (`951db5e`), not yet released._
+> issues (#10, #11, #13, #18, #24, #25); #8 closed. `test` = `main` = `c3575f5` (2026-09-25) · **v0.7.0**
+> (2026-09-16, `f7b0ecf`). Everything since — the 2026-09-24 round-4 fixes and the 2026-09-25 #18 converter — is on
+> `test`, not yet released._
 > _Per-issue detail: `digests/{id}.digest.md` · `plans/{id}.plan.md` · `issues/` exports
 > (source of truth). Cross-repo/hub history (DU benchmark hub#22, this repo's spin-out from
 > hub#24) lives in `ufal/atrium-project/agent_dev_logs/DEVLOG.md` (deduplicated out of this file).
@@ -323,6 +324,30 @@ Dev logs: #10 (answer posted), #11 (the 08-02 validation task and its state; the
   against the manifest and the hub. Docling's live run not verified here (model download 403); its mapping is tested.
   **Not pushed: files delivered in chat.** Hub follow-ups: rank CDLA-Permissive-2.0 in `para_licenses.py`, declare
   `style.region` in the canonical schema, add DOCX and two-column stages to `e2e-digital-smoke.yml`.
+
+## 2026-09-25 (round 2): #18's hub follow-ups, the re-vendor, and the sibling docs
+
+* **Asked (K4TEL):** fetch `test` (`c3575f5`: the #18 round as delivered, tables re-padded) and deliver the cross-repo
+  work left; issue comments as raw Markdown in chat.
+* **Hub (delivered as files):**
+  * `para_licenses.py` ranks CDLA-Permissive-2.0 at 1.
+  * The canonical schema declares `lines[].style.region` as a closed enum: the first additive change after the freeze
+    tag `doc-schema-v1`.
+  * `e2e_assert.py --expect-layout`.
+  * `e2e-digital-smoke.yml` Cases 4–6 (`rich.docx`, `two_column.pdf`, `ocr_layer.pdf` → exit 3). They are gated on
+    the image's `--help` because `main` already has the new fixtures while `:latest` is v0.7.0.
+  * `document_schema.md` changelog and `quality_score` fix; docs-site page marked unreleased.
+* **Here (after `scripts/revendor_shared.sh`):**
+  * The vendored schema, `para_licenses.py` and `tests/test_para_licenses.py`.
+  * `test_heavy_engine_licence_is_recorded_truthfully` now pins MIT with nothing unknown, and fails against the old
+    `para_licenses.py`.
+  * The "not ranked yet" and "hub follow-up" text is removed from `para_config.txt`,
+    `requirements_digital_docling.txt`, the README and `digital_ir.py`.
+  * `CONTRIBUTING.md` Unreleased; [`plans/18.plan.md`](plans/18.plan.md) §0f.
+* **alto-postprocess:** `docs/text_inputs.md`, `text_split.py` and `document_hook.py` no longer say this converter reads
+  a DOCX as one page or has no column detection or mojibake guard.
+* `pytest -m "not slow"`: 1016 passed, 19 environment-only skips (+3: the new licence cases); `ruff` clean; fixtures
+  `--verify` clean. **Not pushed: files delivered in chat.**
 
 ---
 _Timeline index refreshed 2026-09-07 against live `test`/`main` HEAD, the `CONTRIBUTING.md` changelog table, and

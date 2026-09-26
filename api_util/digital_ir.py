@@ -20,12 +20,12 @@ from typing import Any, Dict, List, Optional, Tuple
 
 #: `lines[].style.region` values this converter writes (Issue #18, 2026-09-25).
 #:
-#: The schema has no field for page furniture, and `lines[].style` is an object with
-#: `additionalProperties: true` that only `digital-convert` writes — so a `region` key inside
-#: it is an additive optional field under the hub's versioning rule 1 (no bump), and needs no
-#: new ownership grant. Absent means body text. Declaring the key in the canonical schema's
-#: `style.properties` is a hub follow-up; until then its contract is stated here and in
-#: `api_util/json_to_md.py`, its one consumer.
+#: `lines[].style` is an object only `digital-convert` writes, so a `region` key inside it
+#: needed no new ownership grant, and was additive under the hub's versioning rule 1. The
+#: canonical schema declares it since 2026-09-25 as a CLOSED enum of exactly these three
+#: values (hub `docs/document_schema.md`, changelog 2026-09-25): a new value here must be
+#: added there first, or the output gate refuses the record. Absent means body text. Its one
+#: consumer is `api_util/json_to_md.py`.
 REGION_HEADER = "page_header"
 REGION_FOOTER = "page_footer"
 REGION_FOOTNOTE = "footnote"

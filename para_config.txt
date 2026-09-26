@@ -46,9 +46,10 @@ jsonschema   = MIT          ; conditional ; digital-convert's output gate (valid
 # Heavy engine (`--engine docling`, requirements_digital_docling.txt; PDF only). The two
 # model rows are the weights Docling downloads, and they are licensed separately from its
 # MIT code. TableFormer's weights are CDLA-Permissive-2.0, which para_licenses.py (vendored
-# from the hub, byte-identity enforced) does not rank yet — so a docling run's record reads
-# an unranked licence, treated as most restrictive, until the hub adds it. Recorded rather
-# than rounded to Apache-2.0: the licence field is only worth something if it is true.
+# from the hub, byte-identity enforced) ranks with MIT since 2026-09-25: it places no terms
+# on Results, the output of a computation over the data. So a docling run's record resolves
+# to MIT, and lists this row as it is. Recorded rather than rounded to Apache-2.0: the
+# licence field is only worth something if it is true.
 docling              = MIT                 ; conditional ; heavy PDF engine: layout + table structure
 docling-parse        = MIT                 ; conditional ; Docling's PDF backend
 docling-layout-heron = Apache-2.0          ; conditional ; layout model weights (docling-project/docling-layout-heron)

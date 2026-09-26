@@ -405,7 +405,7 @@ python3 api_util/digital_to_json.py report.pdf --engine docling --paradata-dir p
 - **Output gate.** A record that fails the field-ownership round trip or the JSON Schema is never
   written. `provenance.license` is the union of the components the run used (`para_config.txt`):
   MIT for the light engine. The Docling engine adds TableFormer's CDLA-Permissive-2.0, which the
-  shared licence table does not rank yet.
+  shared licence table ranks with MIT (no terms on the output), so its records say MIT too.
 - **Exit codes.** `0` written · `2` a dependency (or Docling's models) missing, with advice · `3`
   not a born-digital PDF/DOCX (unsupported format, legacy `.doc`, an OCR-layer PDF) · `4` corrupt,
   encrypted, or over the ZIP limits. `--paradata-dir DIR` also writes the run's paradata record.

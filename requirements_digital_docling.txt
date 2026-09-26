@@ -22,8 +22,8 @@
 # LICENCES (para_config.txt [components], accretion rule 5): docling / docling-parse MIT,
 # docling-layout-heron weights Apache-2.0, TableFormer weights (docling-project/
 # docling-models) CDLA-Permissive-2.0. para_licenses.py — vendored from the hub, byte-identity
-# enforced — does not rank CDLA-Permissive-2.0 yet, so a docling run's record reports it as an
-# unranked licence (treated as most restrictive) until the hub adds it. Verified 2026-09-25
+# enforced — ranks CDLA-Permissive-2.0 with MIT since 2026-09-25 (no terms on Results), so a
+# docling run's record resolves to MIT, the same as the light engine's. Verified 2026-09-25
 # against PyPI and the Hub model cards.
 
 -r requirements_digital.txt

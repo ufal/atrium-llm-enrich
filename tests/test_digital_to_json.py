@@ -678,12 +678,24 @@ def test_license_detail_reflects_the_components_used():
 
 
 def test_heavy_engine_licence_is_recorded_truthfully():
-    """TableFormer's weights are CDLA-Permissive-2.0; para_licenses does not rank it yet, so
-    the record must say so rather than round it to Apache-2.0 (hub follow-up)."""
-    detail = d2j.license_detail_for(["pdfplumber", "docling", "docling-tableformer"])
-    assert "CDLA-Permissive-2.0" in (
-        detail.get("unknown_licenses") or [detail["effective_license"]]
-    )
+    """TableFormer's weights are CDLA-Permissive-2.0, recorded as that — never rounded to
+    Apache-2.0. The hub's para_licenses ranks it with MIT since 2026-09-25 (it places no
+    terms on Results); before that it resolved as unknown, which reads as non-commercial and
+    share-alike, and every `--engine docling` record claimed both."""
+    components = [
+        "pdfplumber",
+        "docling",
+        "docling-parse",
+        "docling-layout-heron",
+        "docling-tableformer",
+    ]
+    detail = d2j.license_detail_for(components)
+    assert detail is not None
+    licences = {c["name"]: c["license"] for c in detail["components"]}
+    assert licences["docling-tableformer"] == "CDLA-Permissive-2.0"
+    assert not detail.get("unknown_licenses")
+    assert detail["effective_license"] == "MIT"
+    assert detail["is_non_commercial"] is False and detail["is_share_alike"] is False
 
 
 def test_pdf_words_are_separated_and_columns_read_in_order(digital_fixtures):
