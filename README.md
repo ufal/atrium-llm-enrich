@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+> **This repository is archived and split into two:**
+> * keyword extraction → **[ufal/atrium-keyword-extract](https://github.com/ufal/atrium-keyword-extract)**
+> * everything else (born-digital documents, conversion) → **[ufal/atrium-digital-convert](https://github.com/ufal/atrium-digital-convert)**
+>
+> New issues, pull requests and releases go there. The old images `ghcr.io/ufal/atrium-llm-enrich*` stay published for consumers that pin them.
+> Records written by this tool keep the program id `llm-enrich`; the ATRIUM contract accepts it next to `keyword-extract`.
+
 <p align="center">
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" title="Python Version"></a>
   <a href="https://github.com/vllm-project/vllm"><img src="https://img.shields.io/badge/backend-transformers%20%7C%20vLLM-orange.svg" title="Local backends"></a>
