@@ -28,4 +28,4 @@
 
 -r requirements_digital.txt
 
-docling-slim[format-pdf,models-local,convert-core,cli]==2.130.0   # MIT
+docling-slim[format-pdf,models-local,convert-core,cli]==2.133.0   # MIT
